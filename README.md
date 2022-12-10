@@ -1,5 +1,5 @@
-# Destiny 2 Ability Cooldowns
-This repository contains a (hopefully) up-to-date collection of ability cooldowns that can be easily parsed by 3rd party applications.
+# Destiny 2 Character Stats
+This repository contains a (hopefully) up-to-date collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications.
 
 ## Disclaimer
 - This collection accounts for aspects overriding ability cooldown times but not for exotic armor pieces as they are a lot more volatile comparatively speaking.
