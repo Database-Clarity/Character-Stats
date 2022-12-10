@@ -1,4 +1,4 @@
-# Destiny-Ability-Cooldowns
+# Destiny 2 Ability Cooldowns
 This repository contains a (hopefully) up-to-date collection of ability cooldowns that can be easily parsed by 3rd party applications.
 
 ## Disclaimer
