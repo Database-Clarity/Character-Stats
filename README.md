@@ -7,7 +7,7 @@ This repository contains a (hopefully) up-to-date collection of ability cooldown
 
 ## Contributing
 If you notice any inaccuracies in the dataset I'm using, feel free to fork this repository and create a Pull Request with the changes.
-Otherwise, feel free to contact me on Discord (Stardust#9037) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
+Otherwise, feel free to contact me on Discord (`Stardust#9037`) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting Policy
 I would appreciate it if you linked back to this repository if you decided to use this data in any apps you happen to be working on.
