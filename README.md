@@ -8,7 +8,7 @@ This repository contains a (hopefully) up-to-date collection of ability cooldown
 ## Usage of the Provided Data
 You can easily access the provided data at the following URLs:
 - With Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo.json`
-- Without Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo-NoIndent.json`
+- Without Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo-NI.json`
 
 ## Contributing
 If you notice any inaccuracies in the dataset I'm using, feel free to fork this repository and create a Pull Request with the changes.
