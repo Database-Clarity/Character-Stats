@@ -1,5 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema",
+    "$id": "https://github.com/StardustD2/Destiny-2-Character-Stats/blob/main/schema.json",
     "definitions": {
         "CharacterStats": {
             "type": "object",
@@ -71,6 +72,8 @@
                     "items": {
                         "type": "integer"
                     },
+                    "minItems": 11,
+                    "maxItems": 11,
                     "description": "Array index represents the Character Stat tier. Cooldowns are in seconds."
                 }
             },
@@ -90,6 +93,8 @@
                     "type": "array",
                     "items": {
                         "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11,
                         "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
@@ -97,6 +102,8 @@
                     "type": "array",
                     "items": {
                         "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11,
                         "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
@@ -104,6 +111,8 @@
                     "type": "array",
                     "items": {
                         "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11,
                         "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
@@ -129,7 +138,9 @@
                 "TimeToFullHP": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11
                     },
                     "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal to full HP."
                 },
@@ -155,6 +166,8 @@
                     "items": {
                         "type": "integer"
                     },
+                    "minItems": 11,
+                    "maxItems": 11,
                     "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. ('Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game."
                 },
                 "DamageResistance": {
@@ -162,6 +175,8 @@
                     "items": {
                         "type": "integer"
                     },
+                    "minItems": 11,
+                    "maxItems": 11,
                     "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance at each tier."
                 },
                 "FlinchResistance": {
@@ -169,6 +184,8 @@
                     "items": {
                         "type": "integer"
                     },
+                    "minItems": 11,
+                    "maxItems": 11,
                     "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance at each tier."
                 },
                 "Abilities": {
