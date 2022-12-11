@@ -1,0 +1,179 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema",
+    "definitions": {
+        "CharacterStats": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Mobility": {
+                    "$ref": "#/definitions/Mobility"
+                },
+                "Resilience": {
+                    "$ref": "#/definitions/Resilience"
+                },
+                "Recovery": {
+                    "$ref": "#/definitions/Recovery"
+                },
+                "Discipline": {
+                    "$ref": "#/definitions/Discipline"
+                },
+                "Intellect": {
+                    "$ref": "#/definitions/Discipline"
+                },
+                "Strength": {
+                    "$ref": "#/definitions/Discipline"
+                }
+            },
+            "required": [
+                "Discipline",
+                "Intellect",
+                "Mobility",
+                "Recovery",
+                "Resilience",
+                "Strength"
+            ],
+            "title": "CharacterStats"
+        },
+        "Discipline": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                }
+            },
+            "required": [
+                "Abilities"
+            ],
+            "title": "Discipline"
+        },
+        "Ability": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Hash": {
+                    "type": "integer"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Override": {
+                    "type": "boolean"
+                },
+                "Cooldowns": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": [
+                "Cooldowns",
+                "Hash",
+                "Name",
+                "Override"
+            ],
+            "title": "Ability"
+        },
+        "Mobility": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "WalkingSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "StrafeSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "CrouchSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                }
+            },
+            "required": [
+                "Abilities",
+                "CrouchSpeed",
+                "StrafeSpeed",
+                "WalkingSpeed"
+            ],
+            "title": "Mobility"
+        },
+        "Recovery": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "TimeToFullHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                }
+            },
+            "required": [
+                "Abilities",
+                "TimeToFullHP"
+            ],
+            "title": "Recovery"
+        },
+        "Resilience": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "TotalHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "DamageResistance": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "FlinchResistance": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                }
+            },
+            "required": [
+                "Abilities",
+                "DamageResistance",
+                "FlinchResistance",
+                "TotalHP"
+            ],
+            "title": "Resilience"
+        }
+    }
+}
