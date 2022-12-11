@@ -6,10 +6,10 @@ This repository contains a (hopefully) up-to-date collection of ability cooldown
 - Cooldown times might be 1-2 seconds off in some instances due to how these numbers are calculated. There's really nothing to be done about it.
 
 ## Usage of the Provided Data
-You can easily access the provided data at the following URLs:
-- With Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo.json`
-- Without Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo-NI.json`
-You can also find the JSON schema here: `https://stardustd2.github.io/Destiny-2-Character-Stats/schema.json`
+-You can easily access the provided data at the following URLs:
+  - With Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo.json`
+  - Without Indentation: `https://stardustd2.github.io/Destiny-2-Character-Stats/CharacterStatInfo-NI.json`
+- You can also find the JSON schema here: `https://stardustd2.github.io/Destiny-2-Character-Stats/schema.json`
 
 ## Contributing
 If you notice any inaccuracies in the dataset I'm using, feel free to fork this repository and create a Pull Request with the changes.
