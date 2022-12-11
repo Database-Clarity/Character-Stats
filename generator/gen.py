@@ -1,6 +1,6 @@
-import json 
-import math 
-from copy import deepcopy 
+import json
+import math
+from copy import deepcopy
 
 # Reads user input
 with open('./generator/Source Content.json') as f:
