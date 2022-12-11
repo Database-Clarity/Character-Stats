@@ -236,7 +236,7 @@
         },
         {
             "Hash": 2642597904,
-            "Name": "Bleak Watcher",
+            "Name": "Bleak Watcher - Stasis Aspect",
             "Tier": 2,
             "Override": true
         },
@@ -542,12 +542,6 @@
     "ChargeRateScalars": [0.80, 0.88, 0.96, 1.00, 1.20, 1.40, 1.60, 1.80, 2.00, 2.20, 2.60],
     "Abilities": [
         {
-            "Hash": 1563930741,
-            "Name": "Howl Of The Storm - Aspect",
-            "Tier": 1,
-            "Override": true
-        },
-        {
             "Hash": 2543177538,
             "Name": "Penumbral Blast",
             "Tier": 1,
@@ -618,12 +612,6 @@
             "Name": "Thunderclap",
             "Tier": 4,
             "Override": false
-        },
-        {
-            "Hash": 2984351206,
-            "Name": "Consecration - Aspect",
-            "Tier": 4,
-            "Override": true
         },
         {
             "Hash": 852252788,
