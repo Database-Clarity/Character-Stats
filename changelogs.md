@@ -7,7 +7,7 @@
 
 ## v0.2 - December 11, 2022
 
-- Added `/gen` with source files and generator Python code
+- Added `/gen` folder with source files and generator Python code
 - Improved specificity in JSON schema
 - Added global update tracking in `update.json`
 
