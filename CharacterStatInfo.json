@@ -664,7 +664,7 @@
             },
             {
                 "Hash": 2642597904,
-                "Name": "Bleak Watcher",
+                "Name": "Bleak Watcher - Stasis Aspect",
                 "Override": true,
                 "Cooldowns": [
                     190,
@@ -1517,24 +1517,6 @@
     "Strength": {
         "Abilities": [
             {
-                "Hash": 1563930741,
-                "Name": "Howl Of The Storm - Aspect",
-                "Override": true,
-                "Cooldowns": [
-                    142,
-                    129,
-                    118,
-                    113,
-                    95,
-                    81,
-                    71,
-                    63,
-                    57,
-                    52,
-                    44
-                ]
-            },
-            {
                 "Hash": 2543177538,
                 "Name": "Penumbral Blast",
                 "Override": false,
@@ -1736,24 +1718,6 @@
                 "Hash": 2708585279,
                 "Name": "Thunderclap",
                 "Override": false,
-                "Cooldowns": [
-                    113,
-                    103,
-                    94,
-                    90,
-                    75,
-                    65,
-                    57,
-                    50,
-                    45,
-                    41,
-                    35
-                ]
-            },
-            {
-                "Hash": 2984351206,
-                "Name": "Consecration - Aspect",
-                "Override": true,
                 "Cooldowns": [
                     113,
                     103,
