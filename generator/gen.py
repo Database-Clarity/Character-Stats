@@ -1,5 +1,6 @@
 import json
 import math
+import time
 from copy import deepcopy
 
 # Reads user input
@@ -35,3 +36,8 @@ with open('CharacterStatInfo.json', 'w') as f:
     json.dump(data, f, indent=4)
 with open('CharacterStatInfo-NI.json', 'w') as f:
     json.dump(data, f)
+
+# Update Checker
+with open('update.json', 'w') as f:
+    version = {"lastUpdate": time.time_ns()}
+    json.dump(version, f)
