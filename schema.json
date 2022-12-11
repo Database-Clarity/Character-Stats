@@ -55,19 +55,23 @@
             "additionalProperties": false,
             "properties": {
                 "Hash": {
-                    "type": "integer"
+                    "type": "integer",
+                    "description": "D2 Manifest InventoryItem hash"
                 },
                 "Name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "For organization purposes only. Does not necessarily match the InventoryItem entry name from the D2 Manifest."
                 },
                 "Override": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Whether this item will override the cooldowns of other equipped items"
                 },
                 "Cooldowns": {
                     "type": "array",
                     "items": {
                         "type": "integer"
-                    }
+                    },
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds."
                 }
             },
             "required": [
@@ -85,19 +89,22 @@
                 "WalkingSpeed": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
                 "StrafeSpeed": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
                 "CrouchSpeed": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
                     }
                 },
                 "Abilities": {
@@ -123,7 +130,8 @@
                     "type": "array",
                     "items": {
                         "type": "number"
-                    }
+                    },
+                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal to full HP."
                 },
                 "Abilities": {
                     "type": "array",
@@ -146,19 +154,22 @@
                     "type": "array",
                     "items": {
                         "type": "integer"
-                    }
+                    },
+                    "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. ('Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game."
                 },
                 "DamageResistance": {
                     "type": "array",
                     "items": {
                         "type": "integer"
-                    }
+                    },
+                    "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance at each tier."
                 },
                 "FlinchResistance": {
                     "type": "array",
                     "items": {
                         "type": "integer"
-                    }
+                    },
+                    "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance at each tier."
                 },
                 "Abilities": {
                     "type": "array",
