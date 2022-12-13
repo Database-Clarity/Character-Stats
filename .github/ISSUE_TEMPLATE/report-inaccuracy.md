@@ -1,34 +1,17 @@
+---
 name: Report Inaccuracy
-description: Create a report to let me know I got something wrong.
-title: "[Something] is wrong with [something]"
-labels: [Invalid]
-assignees: 'StardustD2'
-body:
-- type: markdown
-  attributes:
-    value: |
-      Thanks for taking the time to fill out this report! To save us both time, please note that cooldown inaccuracies in the ~1s range will be ignored as they are artifacts of the method used to calculate them.
-- type: dropdown
-  attributes:
-    label: Type of Inaccuracy
-    description: Select the appropriate type of inaccuracy you've noticed. 
-    options:
-      - Incorrect Cooldown
-      - Missing Entry
-      - Hash/Name Mismatch
-      - Other
-  validations:
-    required: true
-- type: input
-  attributes:
-    label: Inaccuracy Details
-    description: Briefly describe the specific inaccuracy you've found.
-    placeholder: ex. The cooldown of Firebolt Grenades should be 20 seconds shorter at base.
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: Sources/Proof of Inaccuracy
-    description: Go into more detail on the issue if needed and back up your claim(s) with a trustworthy source. Screenshots of the in-game UI or personal testing will suffice if reproducable. Provide any additional context you deem necessary.
-  validations:
-    required: true
+about: Create a report to let me know I got something wrong.
+title: "[Something] is wrong with [something], plz fix"
+labels: invalid
+assignees: ''
+
+---
+
+**Describe the Issue**
+A clear and concise description of what the problem is and what is assumed to be the correct value. Please note that inaccuracies in the ~1s range will be ignored as they are artifacts of the method used to calculate them.
+
+**Attach Screenshots**
+Please attach a screenshot to your report for clarity of the communication.
+
+**Additional context**
+Add any other context about the problem here.
