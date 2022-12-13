@@ -1,4 +1,4 @@
-name: Report Inaccuracy
+name: Report an Issue
 description: Create a report to let me know I got something wrong.
 title: "[Something] is wrong with [something]"
 labels: Invalid
@@ -11,8 +11,8 @@ body:
         Thanks for taking the time to fill out this report! To save us both time, please note that cooldown inaccuracies in the ~1s range will be ignored as they are artifacts of the method used to calculate them.
   - type: dropdown
     attributes:
-      label: Type of Inaccuracy
-      description: Select the appropriate type of inaccuracy you've noticed. 
+      label: Type of Issue
+      description: Select the appropriate type of issue you've noticed. 
       options:
         - Incorrect Cooldown
         - Missing Entry
@@ -22,14 +22,14 @@ body:
       required: true
   - type: input
     attributes:
-      label: Inaccuracy Details
-      description: Briefly describe the specific inaccuracy you've found.
+      label: Issue Details
+      description: Briefly describe the specific issue you've found with the information provided.
       placeholder: ex. The cooldown of [X] is 19 seconds shorter.
     validations:
       required: true
   - type: textarea
     attributes:
-      label: Sources/Proof of Inaccuracy
+      label: Sources and Proof
       description: Go into more detail on the issue if needed and back up your claim(s) with a trustworthy source. Screenshots of the in-game UI or personal testing will suffice if reproducable. Provide any additional context you deem necessary.
     validations:
       required: true
