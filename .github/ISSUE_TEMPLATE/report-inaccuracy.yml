@@ -24,7 +24,7 @@ body:
     attributes:
       label: Inaccuracy Details
       description: Briefly describe the specific inaccuracy you've found.
-      placeholder: ex. The cooldown of Firebolt Grenades should be 20 seconds shorter at base.
+      placeholder: ex. The cooldown of [X] is 19 seconds shorter.
     validations:
       required: true
   - type: textarea
