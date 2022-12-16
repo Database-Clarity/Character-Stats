@@ -13,7 +13,7 @@ This repository contains a (hopefully) up-to-date collection of ability cooldown
   - With Indentation: `https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo.json`
   - Without Indentation: `https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo-NI.json`
 - You can find the JSON schema here with added documentation:
-`https://Database-Clarity.github.io/Character-Stats/schema.json`
+  `https://Database-Clarity.github.io/Character-Stats/schema.json`
 
 ## Report Issues/Inaccuracies
 
