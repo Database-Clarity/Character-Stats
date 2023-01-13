@@ -77,24 +77,6 @@
                 ]
             },
             {
-                "Hash": 2816982785,
-                "Name": "Gambler's Dodge - Void",
-                "Override": false,
-                "Cooldowns": [
-                    55,
-                    48,
-                    43,
-                    38,
-                    35,
-                    32,
-                    30,
-                    28,
-                    24,
-                    22,
-                    19
-                ]
-            },
-            {
                 "Hash": 3636300855,
                 "Name": "Gambler's Dodge - Solar",
                 "Override": false,
@@ -131,26 +113,26 @@
                 ]
             },
             {
-                "Hash": 426473316,
-                "Name": "Marksman's Dodge - Arc",
+                "Hash": 2816982785,
+                "Name": "Gambler's Dodge - Void",
                 "Override": false,
                 "Cooldowns": [
-                    42,
-                    37,
-                    33,
-                    29,
-                    27,
-                    25,
-                    23,
-                    21,
-                    19,
-                    17,
-                    15
+                    55,
+                    48,
+                    43,
+                    38,
+                    35,
+                    32,
+                    30,
+                    28,
+                    24,
+                    22,
+                    19
                 ]
             },
             {
-                "Hash": 2816982784,
-                "Name": "Marksman's Dodge - Void",
+                "Hash": 426473316,
+                "Name": "Marksman's Dodge - Arc",
                 "Override": false,
                 "Cooldowns": [
                     42,
@@ -187,6 +169,24 @@
             {
                 "Hash": 3933525366,
                 "Name": "Marksman's Dodge - Stasis",
+                "Override": false,
+                "Cooldowns": [
+                    42,
+                    37,
+                    33,
+                    29,
+                    27,
+                    25,
+                    23,
+                    21,
+                    19,
+                    17,
+                    15
+                ]
+            },
+            {
+                "Hash": 2816982784,
+                "Name": "Marksman's Dodge - Void",
                 "Override": false,
                 "Cooldowns": [
                     42,
@@ -300,8 +300,8 @@
                 ]
             },
             {
-                "Hash": 2722641740,
-                "Name": "Towering Barricade - Void",
+                "Hash": 3260056808,
+                "Name": "Towering Barricade - Stasis",
                 "Override": false,
                 "Cooldowns": [
                     58,
@@ -318,8 +318,8 @@
                 ]
             },
             {
-                "Hash": 3260056808,
-                "Name": "Towering Barricade - Stasis",
+                "Hash": 2722641740,
+                "Name": "Towering Barricade - Void",
                 "Override": false,
                 "Cooldowns": [
                     58,
@@ -372,8 +372,8 @@
                 ]
             },
             {
-                "Hash": 2722641741,
-                "Name": "Rally Barricade - Void",
+                "Hash": 3260056809,
+                "Name": "Rally Barricade - Stasis",
                 "Override": false,
                 "Cooldowns": [
                     46,
@@ -390,8 +390,8 @@
                 ]
             },
             {
-                "Hash": 3260056809,
-                "Name": "Rally Barricade - Stasis",
+                "Hash": 2722641741,
+                "Name": "Rally Barricade - Void",
                 "Override": false,
                 "Cooldowns": [
                     46,
@@ -443,8 +443,62 @@
         ],
         "Abilities": [
             {
-                "Hash": 2979486801,
-                "Name": "Phoenix Dive",
+                "Hash": 25156514,
+                "Name": "Empowering Rift - Arc",
+                "Override": false,
+                "Cooldowns": [
+                    118,
+                    103,
+                    92,
+                    82,
+                    75,
+                    69,
+                    64,
+                    59,
+                    52,
+                    46,
+                    41
+                ]
+            },
+            {
+                "Hash": 2979486802,
+                "Name": "Empowering Rift - Solar",
+                "Override": false,
+                "Cooldowns": [
+                    118,
+                    103,
+                    92,
+                    82,
+                    75,
+                    69,
+                    64,
+                    59,
+                    52,
+                    46,
+                    41
+                ]
+            },
+            {
+                "Hash": 3492047640,
+                "Name": "Empowering Rift - Stasis",
+                "Override": false,
+                "Cooldowns": [
+                    118,
+                    103,
+                    92,
+                    82,
+                    75,
+                    69,
+                    64,
+                    59,
+                    52,
+                    46,
+                    41
+                ]
+            },
+            {
+                "Hash": 2209081648,
+                "Name": "Empowering Rift - Void",
                 "Override": false,
                 "Cooldowns": [
                     118,
@@ -463,24 +517,6 @@
             {
                 "Hash": 25156515,
                 "Name": "Healing Rift - Arc",
-                "Override": false,
-                "Cooldowns": [
-                    118,
-                    103,
-                    92,
-                    82,
-                    75,
-                    69,
-                    64,
-                    59,
-                    52,
-                    46,
-                    41
-                ]
-            },
-            {
-                "Hash": 2209081649,
-                "Name": "Healing Rift - Void",
                 "Override": false,
                 "Cooldowns": [
                     118,
@@ -533,8 +569,8 @@
                 ]
             },
             {
-                "Hash": 25156514,
-                "Name": "Empowering Rift - Arc",
+                "Hash": 2209081649,
+                "Name": "Healing Rift - Void",
                 "Override": false,
                 "Cooldowns": [
                     118,
@@ -551,44 +587,8 @@
                 ]
             },
             {
-                "Hash": 2209081648,
-                "Name": "Empowering Rift - Void",
-                "Override": false,
-                "Cooldowns": [
-                    118,
-                    103,
-                    92,
-                    82,
-                    75,
-                    69,
-                    64,
-                    59,
-                    52,
-                    46,
-                    41
-                ]
-            },
-            {
-                "Hash": 2979486802,
-                "Name": "Empowering Rift - Solar",
-                "Override": false,
-                "Cooldowns": [
-                    118,
-                    103,
-                    92,
-                    82,
-                    75,
-                    69,
-                    64,
-                    59,
-                    52,
-                    46,
-                    41
-                ]
-            },
-            {
-                "Hash": 3492047640,
-                "Name": "Empowering Rift - Stasis",
+                "Hash": 2979486801,
+                "Name": "Phoenix Dive",
                 "Override": false,
                 "Cooldowns": [
                     118,
@@ -624,24 +624,6 @@
                     91,
                     83,
                     70
-                ]
-            },
-            {
-                "Hash": 1399217,
-                "Name": "Glacier Grenade",
-                "Override": false,
-                "Cooldowns": [
-                    190,
-                    173,
-                    159,
-                    152,
-                    127,
-                    109,
-                    95,
-                    85,
-                    76,
-                    70,
-                    59
                 ]
             },
             {
@@ -681,80 +663,26 @@
                 ]
             },
             {
+                "Hash": 1399217,
+                "Name": "Glacier Grenade",
+                "Override": false,
+                "Cooldowns": [
+                    190,
+                    173,
+                    159,
+                    152,
+                    127,
+                    109,
+                    95,
+                    85,
+                    76,
+                    70,
+                    59
+                ]
+            },
+            {
                 "Hash": 1399219,
                 "Name": "Coldsnap Grenade",
-                "Override": false,
-                "Cooldowns": [
-                    152,
-                    138,
-                    127,
-                    121,
-                    101,
-                    87,
-                    76,
-                    68,
-                    61,
-                    55,
-                    47
-                ]
-            },
-            {
-                "Hash": 1016030582,
-                "Name": "Vortex Grenade",
-                "Override": false,
-                "Cooldowns": [
-                    152,
-                    138,
-                    127,
-                    121,
-                    101,
-                    87,
-                    76,
-                    68,
-                    61,
-                    55,
-                    47
-                ]
-            },
-            {
-                "Hash": 1514173218,
-                "Name": "Scatter Grenade",
-                "Override": false,
-                "Cooldowns": [
-                    152,
-                    138,
-                    127,
-                    121,
-                    101,
-                    87,
-                    76,
-                    68,
-                    61,
-                    55,
-                    47
-                ]
-            },
-            {
-                "Hash": 1547656727,
-                "Name": "Magnetic Grenade",
-                "Override": false,
-                "Cooldowns": [
-                    152,
-                    138,
-                    127,
-                    121,
-                    101,
-                    87,
-                    76,
-                    68,
-                    61,
-                    55,
-                    47
-                ]
-            },
-            {
-                "Hash": 2265076177,
-                "Name": "Suppressor Grenade",
                 "Override": false,
                 "Cooldowns": [
                     152,
@@ -789,8 +717,8 @@
                 ]
             },
             {
-                "Hash": 2216698406,
-                "Name": "Solar Grenade",
+                "Hash": 2994412667,
+                "Name": "Lightning Grenade",
                 "Override": false,
                 "Cooldowns": [
                     152,
@@ -807,8 +735,8 @@
                 ]
             },
             {
-                "Hash": 2994412667,
-                "Name": "Lightning Grenade",
+                "Hash": 1547656727,
+                "Name": "Magnetic Grenade",
                 "Override": false,
                 "Cooldowns": [
                     152,
@@ -843,6 +771,24 @@
                 ]
             },
             {
+                "Hash": 1514173218,
+                "Name": "Scatter Grenade",
+                "Override": false,
+                "Cooldowns": [
+                    152,
+                    138,
+                    127,
+                    121,
+                    101,
+                    87,
+                    76,
+                    68,
+                    61,
+                    55,
+                    47
+                ]
+            },
+            {
                 "Hash": 146194908,
                 "Name": "Skip Grenade",
                 "Override": false,
@@ -861,39 +807,57 @@
                 ]
             },
             {
-                "Hash": 2809141585,
-                "Name": "Void Wall",
+                "Hash": 2216698406,
+                "Name": "Solar Grenade",
                 "Override": false,
                 "Cooldowns": [
-                    132,
-                    120,
-                    110,
-                    105,
-                    88,
-                    75,
-                    66,
-                    59,
-                    53,
-                    48,
-                    41
+                    152,
+                    138,
+                    127,
+                    121,
+                    101,
+                    87,
+                    76,
+                    68,
+                    61,
+                    55,
+                    47
                 ]
             },
             {
-                "Hash": 3969294337,
-                "Name": "Thermite Grenade",
+                "Hash": 2265076177,
+                "Name": "Suppressor Grenade",
                 "Override": false,
                 "Cooldowns": [
-                    132,
-                    120,
-                    110,
-                    105,
-                    88,
-                    75,
-                    66,
-                    59,
-                    53,
-                    48,
-                    41
+                    152,
+                    138,
+                    127,
+                    121,
+                    101,
+                    87,
+                    76,
+                    68,
+                    61,
+                    55,
+                    47
+                ]
+            },
+            {
+                "Hash": 1016030582,
+                "Name": "Vortex Grenade",
+                "Override": false,
+                "Cooldowns": [
+                    152,
+                    138,
+                    127,
+                    121,
+                    101,
+                    87,
+                    76,
+                    68,
+                    61,
+                    55,
+                    47
                 ]
             },
             {
@@ -933,26 +897,44 @@
                 ]
             },
             {
-                "Hash": 1255073825,
-                "Name": "Void Spike",
+                "Hash": 3969294337,
+                "Name": "Thermite Grenade",
                 "Override": false,
                 "Cooldowns": [
-                    114,
-                    104,
-                    95,
-                    91,
-                    76,
-                    65,
-                    57,
-                    51,
-                    46,
-                    42,
-                    35
+                    132,
+                    120,
+                    110,
+                    105,
+                    88,
+                    75,
+                    66,
+                    59,
+                    53,
+                    48,
+                    41
                 ]
             },
             {
-                "Hash": 2946990961,
-                "Name": "Tripmine Grenade",
+                "Hash": 2809141585,
+                "Name": "Void Wall",
+                "Override": false,
+                "Cooldowns": [
+                    132,
+                    120,
+                    110,
+                    105,
+                    88,
+                    75,
+                    66,
+                    59,
+                    53,
+                    48,
+                    41
+                ]
+            },
+            {
+                "Hash": 2909720723,
+                "Name": "Flashbang Grenade",
                 "Override": false,
                 "Cooldowns": [
                     114,
@@ -987,8 +969,26 @@
                 ]
             },
             {
-                "Hash": 2909720723,
-                "Name": "Flashbang Grenade",
+                "Hash": 2946990961,
+                "Name": "Tripmine Grenade",
+                "Override": false,
+                "Cooldowns": [
+                    114,
+                    104,
+                    95,
+                    91,
+                    76,
+                    65,
+                    57,
+                    51,
+                    46,
+                    42,
+                    35
+                ]
+            },
+            {
+                "Hash": 1255073825,
+                "Name": "Void Spike",
                 "Override": false,
                 "Cooldowns": [
                     114,
@@ -1171,26 +1171,8 @@
                 ]
             },
             {
-                "Hash": 375052469,
-                "Name": "Golden Gun: Deadshot",
-                "Override": false,
-                "Cooldowns": [
-                    801,
-                    710,
-                    637,
-                    556,
-                    528,
-                    502,
-                    479,
-                    458,
-                    444,
-                    432,
-                    427
-                ]
-            },
-            {
-                "Hash": 375052468,
-                "Name": "Golden Gun: Marksman",
+                "Hash": 119041299,
+                "Name": "Fists Of Havoc",
                 "Override": false,
                 "Cooldowns": [
                     801,
@@ -1225,8 +1207,26 @@
                 ]
             },
             {
-                "Hash": 119041299,
-                "Name": "Fists Of Havoc",
+                "Hash": 375052469,
+                "Name": "Golden Gun: Deadshot",
+                "Override": false,
+                "Cooldowns": [
+                    801,
+                    710,
+                    637,
+                    556,
+                    528,
+                    502,
+                    479,
+                    458,
+                    444,
+                    432,
+                    427
+                ]
+            },
+            {
+                "Hash": 375052468,
+                "Name": "Golden Gun: Marksman",
                 "Override": false,
                 "Cooldowns": [
                     801,
@@ -1607,8 +1607,8 @@
                 ]
             },
             {
-                "Hash": 2716335210,
-                "Name": "Disorienting Blow",
+                "Hash": 1470370539,
+                "Name": "Celestial Fire",
                 "Override": false,
                 "Cooldowns": [
                     125,
@@ -1625,8 +1625,8 @@
                 ]
             },
             {
-                "Hash": 1470370539,
-                "Name": "Celestial Fire",
+                "Hash": 2716335210,
+                "Name": "Disorienting Blow",
                 "Override": false,
                 "Cooldowns": [
                     125,
@@ -1697,42 +1697,6 @@
                 ]
             },
             {
-                "Hash": 2708585277,
-                "Name": "Seismic Strike",
-                "Override": false,
-                "Cooldowns": [
-                    113,
-                    103,
-                    94,
-                    90,
-                    75,
-                    65,
-                    57,
-                    50,
-                    45,
-                    41,
-                    35
-                ]
-            },
-            {
-                "Hash": 2708585279,
-                "Name": "Thunderclap",
-                "Override": false,
-                "Cooldowns": [
-                    113,
-                    103,
-                    94,
-                    90,
-                    75,
-                    65,
-                    57,
-                    50,
-                    45,
-                    41,
-                    35
-                ]
-            },
-            {
                 "Hash": 852252788,
                 "Name": "Hammer Strike",
                 "Override": false,
@@ -1787,8 +1751,8 @@
                 ]
             },
             {
-                "Hash": 852252789,
-                "Name": "Throwing Hammer",
+                "Hash": 2299867342,
+                "Name": "Pocket Singularity",
                 "Override": false,
                 "Cooldowns": [
                     113,
@@ -1805,8 +1769,8 @@
                 ]
             },
             {
-                "Hash": 2299867342,
-                "Name": "Pocket Singularity",
+                "Hash": 2708585277,
+                "Name": "Seismic Strike",
                 "Override": false,
                 "Cooldowns": [
                     113,
@@ -1861,6 +1825,42 @@
             {
                 "Hash": 1139822081,
                 "Name": "Snare Bomb",
+                "Override": false,
+                "Cooldowns": [
+                    113,
+                    103,
+                    94,
+                    90,
+                    75,
+                    65,
+                    57,
+                    50,
+                    45,
+                    41,
+                    35
+                ]
+            },
+            {
+                "Hash": 852252789,
+                "Name": "Throwing Hammer",
+                "Override": false,
+                "Cooldowns": [
+                    113,
+                    103,
+                    94,
+                    90,
+                    75,
+                    65,
+                    57,
+                    50,
+                    45,
+                    41,
+                    35
+                ]
+            },
+            {
+                "Hash": 2708585279,
+                "Name": "Thunderclap",
                 "Override": false,
                 "Cooldowns": [
                     113,

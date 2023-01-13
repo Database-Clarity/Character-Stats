@@ -1,35 +1,31 @@
 import json
-import math
 import time
-from copy import deepcopy
+from CharacterStatDefs import *
 
 # Reads user input
 with open('./generator/Source Content.json') as f:
     data = json.load(f)
 
-# Dumps input with final formatting
-with open('./generator/Formatted Source.json', 'w') as f:
+while (True):
+    print("Would you like to add additional entries to the database?\n0 - No.\n1 - Yes.")
+    if (input("Enter your choice: ") == '0'):
+        break
+    print("Please select the character stat category you would like to add an ability to:\n1 - Mobility\n2 - Resilience\n3 - Recovery\n4 - Discipline\n5 - Intellect\n6 - Strength")
+    characterStatArrayIndex = int(input("The selected category: ")) - 1
+    selectedCharacterStat = characterStatNameArray[characterStatArrayIndex]
+    data[selectedCharacterStat]['Abilities'].append(generateNewAbility())
+
+# Sorts the abilities by their base cooldown in descending order and alphabetically 
+for charStat in characterStatNameArray:
+    data[charStat]['Abilities'].sort(key = lambda k: (-k['BaseCooldown'], k['Name']))
+
+# Dumps input with updates
+with open('./generator/Source Content.json', 'w') as f:
     json.dump(data, f, indent=4)
 
-# Iterates through a Character Stat dictionary and remove all entries with Charge Rate and Tier information.
-# Generates a "Cooldowns" property for each ability that contains an integer array of cooldown times at each tier. 
-def iterateDict(paramDict):
-    for ability in data[paramDict]['Abilities']:
-        regenTime = data[paramDict]['Tiers'][str(ability['Tier'])]
-        array = deepcopy(data[paramDict]['ChargeRateScalars'])
-        for i in range(11):
-            array[i] = math.ceil(1/array[i] * regenTime)
-        ability.update({"Cooldowns": array})
-        del ability['Tier']
-    del data[paramDict]['ChargeRateScalars'], data[paramDict]['Tiers']
-
-# Input cleanup, Cooldown generation.
-iterateDict('Mobility')
-iterateDict('Resilience')
-iterateDict('Recovery')
-iterateDict('Discipline')
-iterateDict('Intellect')
-iterateDict('Strength')
+# Generates cooldowns for each tier and removes information that's no longer useful.
+for i in characterStatNameArray:
+    iterateDict(data, i)
 
 # Output dump
 with open('CharacterStatInfo.json', 'w') as f:
