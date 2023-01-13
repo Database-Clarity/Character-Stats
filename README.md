@@ -1,6 +1,6 @@
 # Destiny 2 Character Stats
 
-This repository contains a (hopefully) up-to-date collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications.
+This repository contains an up-to-date (hopefully) collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications.
 
 ## Disclaimer
 
