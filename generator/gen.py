@@ -20,7 +20,11 @@ while (True):
         print("Ability addition aborted.\n")
 
 if(int(input("Would you like to implement these changes? (0 - No, 1 - Yes) ")) == 0):
-    print("Changes discarded. Run complete.")
+    print("Dumping changes to 'temp.json'.")
+    with open('./generator/temp.json', 'w') as f:
+        json.dump(data, f, indent=4)
+    print("Dump complete, discarding changes.")
+    print("Run complete.")
     quit()
 
 # Sorts the abilities by their base cooldown in descending order and alphabetically 
