@@ -6,10 +6,15 @@ characterStatNameArray = ['Mobility','Resilience','Recovery','Discipline','Intel
 # Returns a new ability entry from user input.
 def generateNewAbility():
     newAbility = {}
-    newAbility.update({"Hash": int(input("Input the inventoryItem hash: "))})
-    newAbility.update({"Name": input("Input the name of the ability: ")})
-    newAbility.update({"BaseCooldown": int(input("Input the base (T3) cooldown of the ability (in seconds): "))})
-    newAbility.update({"Override": bool(int(input("Does this ability override the cooldowns of other selected abilities? (0 - No, 1 - Yes)\nOverride: ")))})
+    while (True):
+        newAbility.update({"Hash": int(input("Input the inventoryItem hash: "))})
+        newAbility.update({"Name": input("Input the name of the ability: ")})
+        newAbility.update({"BaseCooldown": int(input("Input the base (T3) cooldown of the ability (in seconds): "))})
+        newAbility.update({"Override": bool(input("Does this ability override the cooldowns of other selected abilities? (0 - No, 1 - Yes)\nOverride: "))})
+        print("Are these values accurate?\n", newAbility, "\n0 - No, 1 - Yes")
+        if (int(input())):
+            break
+        newAbility.clear()
     return newAbility
 
 

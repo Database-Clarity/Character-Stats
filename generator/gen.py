@@ -7,7 +7,7 @@ with open('./generator/Source Content.json') as f:
     data = json.load(f)
 
 while (True):
-    print("Would you like to add additional entries to the database?\n0 - No.\n1 - Yes.")
+    print("Would you like to add additional entries to the database?\n0 - No\n1 - Yes")
     if (input("Enter your choice: ") == '0'):
         break
     print("Please select the character stat category you would like to add an ability to:\n1 - Mobility\n2 - Resilience\n3 - Recovery\n4 - Discipline\n5 - Intellect\n6 - Strength")
