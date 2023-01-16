@@ -32,14 +32,14 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
   - The "Abilities" member of each Character Stat object contains an array of objects with the following members:
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
-    - Override - boolean: if true, it means that this item will override the cooldown of your currently equipped ability.
+    - Override - boolean: if true, this item overrides the cooldown of your currently equipped ability.
     - Cooldowns - number array: the cooldown of an ability at each tier of the character stat.
 - Mobility
   - Walking/Strafe/Crouch Speed - number array: represents your movement speeds for each scenario in meters per second at each tier of Mobility.
 - Resilience
   - TotalHP - number array: represents the total HP (70 health + shields) of your character at each tier of Resilience.
-  - DamageResistance - number array: represents the % damage resistance you receive in PVE at each tier of Resilience.
-  - FlinchResistance - number array: represents the % flinch resistance you receive in PVE at each tier of Resilience.
+  - DamageResistance - number array: represents the % damage resistance you receive **in PVE** at each tier of Resilience.
+  - FlinchResistance - number array: represents the % flinch resistance you receive at each tier of Resilience.
 - Recovery
   - TimeToFullHP - number array: represents how long it would take to regenerate from 0 to full HP at each tier of Recovery.
 
