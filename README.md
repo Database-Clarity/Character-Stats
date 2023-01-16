@@ -23,7 +23,7 @@ Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can 
 
 I would appreciate it if you linked back to this repository if you decided to use this data in any apps you happen to be working on. But it's not required so basically do whatever you want with it.
 
-## Document Information
+## Database Information
 
 Most of what I go over here is included in the `shema.json` file but here's a quick rundown on what's included in this database:
 
