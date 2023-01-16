@@ -16,12 +16,32 @@ This repository contains an up-to-date (hopefully) collection of ability cooldow
 
 ## Report Issues/Inaccuracies
 
-If you notice any inaccuracies in the dataset I'm using, feel free to file an issue in the Issues tab and fill the template form out.
+If you notice any inaccuracies in the dataset I'm using, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill the template form out.
 Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting Policy
 
 I would appreciate it if you linked back to this repository if you decided to use this data in any apps you happen to be working on. But it's not required so basically do whatever you want with it.
+
+## Document Information
+
+Most of what I go over here is included in the `shema.json` file but here's a quick rundown on what's included in this database:
+
+- All Character Stats
+  - The array index always indicates the tier of the character stat. "Tier" means the largest multiple of 10 that is smaller than or equal to your displayed stat total.
+  - The "Abilities" member of each Character Stat object contains an array of objects with the following members:
+    - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
+    - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
+    - Override - boolean: if true, it means that this item will override the cooldown of your currently equipped ability.
+    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat.
+- Mobility
+  - Walking/Strafe/Crouch Speed - number array: represents your movement speeds for each scenario in meters per second at each tier of Mobility.
+- Resilience
+  - TotalHP - number array: represents the total HP (70 health + shields) of your character at each tier of Resilience.
+  - DamageResistance - number array: represents the % damage resistance you receive in PVE at each tier of Resilience.
+  - FlinchResistance - number array: represents the % flinch resistance you receive in PVE at each tier of Resilience.
+- Recovery
+  - TimeToFullHP - number array: represents how long it would take to regenerate from 0 to full HP at each tier of Recovery.
 
 ## Credits
 
