@@ -41,7 +41,9 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
   - DamageResistance - number array: represents the % damage resistance you receive **in PVE** at each tier of Resilience.
   - FlinchResistance - number array: represents the % flinch resistance you receive at each tier of Resilience.
 - Recovery
-  - TimeToFullHP - number array: represents how long it would take to regenerate from 0 to full HP at each tier of Recovery.
+  - TimeToFullHP - number array: represents how long it would take to regenerate from 0 to full HP at each tier of Recovery in seconds.
+
+In addition to the main database, I have also included an `update.json` file with the timestamp of the last update made to the database. This might be useful if your app caches the data and could help avoid fetching the whole database every time.
 
 ## Credits
 
