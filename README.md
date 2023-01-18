@@ -33,7 +33,7 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
     - Override - boolean: if true, this item overrides the cooldown of your currently equipped ability.
-    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat.
+    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat in seconds.
 - Mobility
   - Walking/Strafe/Crouch Speed - number array: represents your movement speeds for each scenario in meters per second at each tier of Mobility.
 - Resilience
