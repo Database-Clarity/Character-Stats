@@ -5,7 +5,7 @@ This repository contains an up-to-date (hopefully) collection of ability cooldow
 ## Disclaimer
 
 - This collection accounts for aspects overriding ability cooldown times but not for exotic armor pieces as they are a lot more volatile comparatively speaking. This repository was created to help alleviate the issues caused by Bungie's API not providing ability cooldown details despite them being in the in-game UI (for the most part).
-- Cooldown times might be 1-2 seconds off in some instances due to how these numbers are calculated. There's really nothing to be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times.
+- Cooldown times might be 1-2 seconds off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier.
 
 ## Usage of the Provided Data
 
