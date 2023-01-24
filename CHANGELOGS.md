@@ -1,5 +1,14 @@
 # Changelogs
 
+## v0.4.1 - January 24, 2023
+
+- Updated cooldown times for [patch 6.3.0.5](https://www.bungie.net/7/en/News/article/hotfix_6_3_0_5)
+  - Towering Barricade base cooldown increased from 40s to 48s.
+  - Rally Barricade base cooldown increased from 32s to 38s.
+  - Thruster base cooldown increased from 30s to 36s.
+  - Marksman's Dodge base cooldown increased from 29s to 34s.
+  - Gambler's Dodge base cooldown increased from 38s to 46s.
+
 ## v0.4 - January 13, 2023
 
 - An update can now be aborted.
