@@ -62,49 +62,49 @@
             {
                 "Hash": 426473317,
                 "Name": "Gambler's Dodge - Arc",
-                "BaseCooldown": 38,
+                "BaseCooldown": 46,
                 "Override": false
             },
             {
                 "Hash": 3636300855,
                 "Name": "Gambler's Dodge - Solar",
-                "BaseCooldown": 38,
+                "BaseCooldown": 46,
                 "Override": false
             },
             {
                 "Hash": 3933525367,
                 "Name": "Gambler's Dodge - Stasis",
-                "BaseCooldown": 38,
+                "BaseCooldown": 46,
                 "Override": false
             },
             {
                 "Hash": 2816982785,
                 "Name": "Gambler's Dodge - Void",
-                "BaseCooldown": 38,
+                "BaseCooldown": 46,
                 "Override": false
             },
             {
                 "Hash": 426473316,
                 "Name": "Marksman's Dodge - Arc",
-                "BaseCooldown": 29,
+                "BaseCooldown": 34,
                 "Override": false
             },
             {
                 "Hash": 3636300854,
                 "Name": "Marksman's Dodge - Solar",
-                "BaseCooldown": 29,
+                "BaseCooldown": 34,
                 "Override": false
             },
             {
                 "Hash": 3933525366,
                 "Name": "Marksman's Dodge - Stasis",
-                "BaseCooldown": 29,
+                "BaseCooldown": 34,
                 "Override": false
             },
             {
                 "Hash": 2816982784,
                 "Name": "Marksman's Dodge - Void",
-                "BaseCooldown": 29,
+                "BaseCooldown": 34,
                 "Override": false
             }
         ]
@@ -172,55 +172,55 @@
             {
                 "Hash": 489583096,
                 "Name": "Towering Barricade - Arc",
-                "BaseCooldown": 40,
+                "BaseCooldown": 48,
                 "Override": false
             },
             {
                 "Hash": 2495523340,
                 "Name": "Towering Barricade - Solar",
-                "BaseCooldown": 40,
+                "BaseCooldown": 48,
                 "Override": false
             },
             {
                 "Hash": 3260056808,
                 "Name": "Towering Barricade - Stasis",
-                "BaseCooldown": 40,
+                "BaseCooldown": 48,
                 "Override": false
             },
             {
                 "Hash": 2722641740,
                 "Name": "Towering Barricade - Void",
-                "BaseCooldown": 40,
+                "BaseCooldown": 48,
                 "Override": false
             },
             {
                 "Hash": 489583097,
                 "Name": "Rally Barricade - Arc",
-                "BaseCooldown": 32,
+                "BaseCooldown": 38,
                 "Override": false
             },
             {
                 "Hash": 2495523341,
                 "Name": "Rally Barricade - Solar",
-                "BaseCooldown": 32,
+                "BaseCooldown": 38,
                 "Override": false
             },
             {
                 "Hash": 3260056809,
                 "Name": "Rally Barricade - Stasis",
-                "BaseCooldown": 32,
+                "BaseCooldown": 38,
                 "Override": false
             },
             {
                 "Hash": 2722641741,
                 "Name": "Rally Barricade - Void",
-                "BaseCooldown": 32,
+                "BaseCooldown": 38,
                 "Override": false
             },
             {
                 "Hash": 489583098,
                 "Name": "Thruster",
-                "BaseCooldown": 30,
+                "BaseCooldown": 36,
                 "Override": false
             }
         ]
