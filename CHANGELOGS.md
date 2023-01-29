@@ -1,13 +1,18 @@
 # Changelogs
 
+## v0.4.2 - January 29, 2023
+
+- Updated the override cooldown of the Bastion aspect
+- Updated charge rate scaling of class abilities for improved accuracy
+
 ## v0.4.1 - January 24, 2023
 
 - Updated cooldown times for [patch 6.3.0.5](https://www.bungie.net/7/en/News/article/hotfix_6_3_0_5)
-  - Towering Barricade base cooldown increased from 40s to 48s.
-  - Rally Barricade base cooldown increased from 32s to 38s.
-  - Thruster base cooldown increased from 30s to 36s.
-  - Marksman's Dodge base cooldown increased from 29s to 34s.
-  - Gambler's Dodge base cooldown increased from 38s to 46s.
+  - Towering Barricade base cooldown increased from 40s to 48s
+  - Rally Barricade base cooldown increased from 32s to 38s
+  - Thruster base cooldown increased from 30s to 36s
+  - Marksman's Dodge base cooldown increased from 29s to 34s
+  - Gambler's Dodge base cooldown increased from 38s to 46s
 
 ## v0.4 - January 13, 2023
 
