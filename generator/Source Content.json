@@ -109,7 +109,7 @@
                 "BaseCooldown": 29
             }
         ],
-        "Scalars": []
+        "Overrides": []
     },
     "Resilience": {
         "TotalHP": [
@@ -221,7 +221,7 @@
                 "BaseCooldown": 48
             }
         ],
-        "Scalars": [
+        "Overrides": [
             {
                 "Hash": 1602994569,
                 "Name": "Bastion - Void Aspect",
@@ -229,6 +229,7 @@
                     2722641741,
                     2722641740
                 ],
+                "BaseCooldown": 0,
                 "Scalar": 2.0
             }
         ]
@@ -317,7 +318,7 @@
                 "BaseCooldown": 55
             }
         ],
-        "Scalars": []
+        "Overrides": []
     },
     "Discipline": {
         "ChargeRateScalars": [
@@ -475,7 +476,7 @@
                 "BaseCooldown": 152
             }
         ],
-        "Scalars": [
+        "Overrides": [
             {
                 "Hash": 2642597904,
                 "Name": "Bleak Watcher - Stasis Aspect",
@@ -484,7 +485,8 @@
                     1399216,
                     1399219
                 ],
-                "Scalar": 2.0
+                "BaseCooldown": 152,
+                "Scalar": 1.0
             }
         ]
     },
@@ -639,7 +641,7 @@
                 "BaseCooldown": 556
             }
         ],
-        "Scalars": []
+        "Overrides": []
     },
     "Strength": {
         "ChargeRateScalars": [
@@ -782,6 +784,6 @@
                 "BaseCooldown": 100
             }
         ],
-        "Scalars": []
+        "Overrides": []
     }
 }

@@ -1,5 +1,12 @@
 # Changelogs
 
+## v1.1 - March 9, 2023 - Hotfix
+
+- Renamed the `Scalars` member of the Character Stat objects to `Override` 
+- Added a `Cooldowns` member to `Override` objects that will override the cooldowns of the items listed in the `Requirements` array before the `Scalar` is applied
+  - This `Cooldowns` array is identical to the ones in `Ability` objects
+  - Will contain 11 `0`s if not in use for an override
+
 ## v1.0 - March 9, 2023 
 
 - Updated base cooldown times and ability recharge rate scaling for [patch 7.0.0.1](https://www.bungie.net/7/en/News/article/update_7_0_0_1)
