@@ -1,5 +1,16 @@
 # Changelogs
 
+## v1.0 - March 9, 2023 
+
+- Updated base cooldown times and ability recharge rate scaling for [patch 7.0.0.1](https://www.bungie.net/7/en/News/article/update_7_0_0_1)
+  - New charge rate scaling can be found in the source file: `/generator/Source Content.json`
+    - Super regeneration scaling is untouched post-Lightfall
+- Updated PvE damage resistance scaling for patch 7.0.0.1
+- Sorting now ignores cooldown times and is entirely alphabetical
+- Removed the `Override` property from abilities and introduced a new `Scalars` member of the Character Stat objects as a replacement
+  - More info can be found in `schema.json`
+  - This opens up the possibility of adding Exotic Armor pieces in the future but the multipliers require implementation 
+
 ## v0.4.2 - January 29, 2023
 
 - Updated the override cooldown of the Bastion aspect

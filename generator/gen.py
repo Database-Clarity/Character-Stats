@@ -27,10 +27,10 @@ if(int(input("Would you like to implement these changes? (0 - No, 1 - Yes) ")) =
     print("Run complete.")
     quit()
 
-# Sorts the abilities by their base cooldown in descending order and alphabetically 
+# Sorts the abilities alphabetically 
 print("Updating source files.")
 for charStat in characterStatNameArray:
-    data[charStat]['Abilities'].sort(key = lambda k: (-k['BaseCooldown'], k['Name']))
+    data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
 
 # Dumps input with updates
 with open('./generator/Source Content.json', 'w') as f:

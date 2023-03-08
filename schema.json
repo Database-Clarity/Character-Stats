@@ -16,13 +16,13 @@
                     "$ref": "#/definitions/Recovery"
                 },
                 "Discipline": {
-                    "$ref": "#/definitions/Discipline"
+                    "$ref": "#/definitions/Generic"
                 },
                 "Intellect": {
-                    "$ref": "#/definitions/Discipline"
+                    "$ref": "#/definitions/Generic"
                 },
                 "Strength": {
-                    "$ref": "#/definitions/Discipline"
+                    "$ref": "#/definitions/Generic"
                 }
             },
             "required": [
@@ -35,7 +35,7 @@
             ],
             "title": "CharacterStats"
         },
-        "Discipline": {
+        "Generic": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
@@ -44,12 +44,19 @@
                     "items": {
                         "$ref": "#/definitions/Ability"
                     }
+                },
+                "Scalars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Scalar"
+                    }
                 }
             },
             "required": [
-                "Abilities"
+                "Abilities",
+                "Scalars"
             ],
-            "title": "Discipline"
+            "title": "Generic"
         },
         "Ability": {
             "type": "object",
@@ -57,11 +64,11 @@
             "properties": {
                 "Hash": {
                     "type": "integer",
-                    "description": "D2 Manifest InventoryItem hash"
+                    "description": "D2 Manifest inventoryItem hash"
                 },
                 "Name": {
                     "type": "string",
-                    "description": "For organization purposes only. Does not necessarily match the InventoryItem entry name from the D2 Manifest."
+                    "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
                 },
                 "Override": {
                     "type": "boolean",
@@ -84,6 +91,39 @@
                 "Override"
             ],
             "title": "Ability"
+        },
+        "Scalar": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Hash": {
+                    "type": "integer",
+                    "description": "D2 Manifest inventoryItem hash"
+                },
+                "Name": {
+                    "type": "string",
+                    "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                },
+                "Requirements": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "minItems": 1,
+                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so. (These are usually also the same ability but for the different subclasses, hence you should NOT be able to have more than one equipped at once)"
+                },
+                "Scalar": {
+                    "type": "number",
+                    "description": "A multiplier to the cooldown time of the abilities listed in the 'Requirements' array. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Armor)."
+                }
+            },
+            "required": [
+                "Hash",
+                "Name",
+                "Requirements",
+                "Scalar"
+            ],
+            "title": "Scalar"
         },
         "Mobility": {
             "type": "object",
@@ -121,10 +161,17 @@
                     "items": {
                         "$ref": "#/definitions/Ability"
                     }
+                },
+                "Scalars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Scalar"
+                    }
                 }
             },
             "required": [
                 "Abilities",
+                "Scalars",
                 "CrouchSpeed",
                 "StrafeSpeed",
                 "WalkingSpeed"
@@ -149,10 +196,17 @@
                     "items": {
                         "$ref": "#/definitions/Ability"
                     }
+                },
+                "Scalars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Scalar"
+                    }
                 }
             },
             "required": [
                 "Abilities",
+                "Scalars",
                 "TimeToFullHP"
             ],
             "title": "Recovery"
@@ -193,10 +247,17 @@
                     "items": {
                         "$ref": "#/definitions/Ability"
                     }
+                },
+                "Scalars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Scalar"
+                    }
                 }
             },
             "required": [
                 "Abilities",
+                "Scalars",
                 "DamageResistance",
                 "FlinchResistance",
                 "TotalHP"
