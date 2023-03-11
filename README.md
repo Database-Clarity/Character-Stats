@@ -53,8 +53,8 @@ In addition to the main database, I have also included an `update.json` file wit
 - lastBreakingChange - integer: timestamp of the last breaking change made to the database.
 - legacyRootDirectory - string: root directory where the last version of the database can be found from before the last breaking change was introduced.
   - Example usage:
-    - update.json contains the following: `"legacyRootDirectory": "https://database-clarity.github.io/Character-Stats/legacy-content/v1.1"`
-    - You can access the legacy files from version 1.1 through `[rootDirectory]/CharacterStatInfo.json` and `[rootDirectory]/CharacterStatInfo-NI.json`
+    - update.json contains the following for the `legacyRootDirectory`: `https://database-clarity.github.io/Character-Stats/legacy-content/v1.1`
+    - You can access the legacy files from version 1.1 through `[legacyRootDirectory]/CharacterStatInfo.json` and `[legacyRootDirectory]/CharacterStatInfo-NI.json`
 
 ## Credits
 
