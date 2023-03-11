@@ -122,8 +122,12 @@
                     "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object. Contains 11 0s if not in use."
                 },
                 "Scalar": {
-                    "type": "number",
-                    "description": "A multiplier to the cooldown time of the abilities listed in the 'Requirements' array. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Armor)."
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1,
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets)."
                 }
             },
             "required": [

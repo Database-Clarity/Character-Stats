@@ -1,5 +1,16 @@
 # Changelogs
 
+## v1.2 - March 9, 2023 - Breaking Change
+
+- Replaced the `Scalar` `number` member of the `Override` objects with an array of `number`s that are specific to each member of the `Requirements` array's listed abilities
+  - More info about this change can be found in [schema.json](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json)
+  - This should allow for more freedom when dealing with separate scaling rules based on the ability equipped
+- [update.json](https://github.com/Database-Clarity/Character-Stats/blob/master/update.json) now includes additional helpful information for handling breaking changes
+  - Added new `lastBreakingChange` value that holds the timestamp of the last introduced breaking change
+  - Added new `legacyRootDirectory` value that holds the root directory of where source files from before the last breaking change can be found
+    - More info about this can be found in [README.md](https://github.com/Database-Clarity/Character-Stats/blob/master/README.md)
+  - Note: I have no plans of making a habit out of breaking changes but just wanted to set up a more robust system for dealing with them if they are deemed necessary in the future
+
 ## v1.1 - March 9, 2023 - Hotfix
 
 - Renamed the `Scalars` member of the Character Stat objects to `Override` 

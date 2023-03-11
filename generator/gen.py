@@ -3,7 +3,7 @@ import time
 from CharacterStatDefs import *
 
 # Reads user input
-with open('./generator/Source Content.json') as f:
+with open('./generator/SourceContent.json') as f:
     data = json.load(f)
 
 while (True):
@@ -33,7 +33,7 @@ for charStat in characterStatNameArray:
     data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
 
 # Dumps input with updates
-with open('./generator/Source Content.json', 'w') as f:
+with open('./generator/SourceContent.json', 'w') as f:
     json.dump(data, f, indent=4)
 
 # Generates cooldowns for each tier and removes information that's no longer useful.
@@ -48,8 +48,17 @@ with open('CharacterStatInfo-NI.json', 'w') as f:
     json.dump(data, f)
 
 # Update Checker
-print("Updating database version to current.")
-with open('update.json', 'w') as f:
-    version = {"lastUpdate": time.time_ns()}
-    json.dump(version, f)
+update = {
+    "lastUpdate": time.time_ns(),
+    "lastBreakingChange": 0,
+    "legacyRootDirectory": ""
+}
+
+if (bool(input("Does the update include breaking changes? (0 - No, 1 - Yes) ")) == True):
+    update["lastBreakingChange"] = update["lastUpdate"]
+    update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + input("Please provide the root directory of where the legacy version of the database can be found:\n    https://database-clarity.github.io/Character-Stats/legacy-content/")
+
+with open('update.json', "w") as f:
+    json.dump(update, f)
+
 print("Changes implemented. Run complete.")

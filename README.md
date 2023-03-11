@@ -38,7 +38,7 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
     - Requirements - number array: the `inventoryItem` hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so. (These are usually also the same ability but for the different subclasses, hence you should not be able to have more than one equipped at once)
     - Cooldowns - number array: an override to the cooldown time of the abilities listed in the `Requirements`. Identical to the Cooldowns array of the `Ability` objects. Array will contain 11 0s if this is not in use.
-    - Scalar - number: a multiplier to the cooldown time of the abilities listed in the `Requirements` array. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Armor).
+    - Scalar - number array: a multiplier to the cooldown time of the abilities listed in the `Requirements` array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Armor).
 - Mobility
   - Walking/Strafe/Crouch Speed - number array: represents your movement speeds for each scenario in meters per second at each tier of Mobility.
 - Resilience
@@ -48,7 +48,13 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
 - Recovery
   - TimeToFullHP - number array: represents how long it would take to regenerate from 0 to full HP at each tier of Recovery in seconds.
 
-In addition to the main database, I have also included an `update.json` file with the timestamp of the last update made to the database. This might be useful if your app caches the data and could help avoid fetching the whole database every time.
+In addition to the main database, I have also included an `update.json` file with the following:
+- lastUpdate - integer: timestamp of the last update made to the database.
+- lastBreakingChange - integer: timestamp of the last breaking change made to the database.
+- legacyRootDirectory - string: root directory where the last version of the database can be found from before the last breaking change was introduced.
+  - Example usage:
+    - update.json contains the following: `"legacyRootDirectory": "https://database-clarity.github.io/Character-Stats/legacy-content/v1.1"`
+    - You can access the legacy files from version 1.1 through `[rootDirectory]/CharacterStatInfo.json` and `[rootDirectory]/CharacterStatInfo-NI.json`
 
 ## Credits
 
