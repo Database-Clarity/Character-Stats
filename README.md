@@ -1,6 +1,6 @@
 # Destiny 2 Character Stats
 
-This repository contains an up-to-date (hopefully) collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications.
+This repository contains an up-to-date (usually) collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications. This also includes support for Aspects and Exotics changing the base cooldowns of certain abilities.
 
 ## Disclaimer
 
@@ -53,7 +53,8 @@ In addition to the main database, I have also included an `update.json` file wit
 - lastBreakingChange - integer: timestamp of the last breaking change made to the database.
 - legacyRootDirectory - string: root directory where the last version of the database can be found from before the last breaking change was introduced.
   - Example usage:
-    - update.json contains the following for the `legacyRootDirectory`: `https://database-clarity.github.io/Character-Stats/legacy-content/v1.1`
+    - update.json contains the following for the `legacyRootDirectory`:
+      <br>`https://database-clarity.github.io/Character-Stats/legacy-content/v1.1`
     - You can access the legacy files from version 1.1 through `[legacyRootDirectory]/CharacterStatInfo.json` and `[legacyRootDirectory]/CharacterStatInfo-NI.json`
 
 ## Credits

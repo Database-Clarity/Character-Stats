@@ -48,13 +48,11 @@ with open('CharacterStatInfo-NI.json', 'w') as f:
     json.dump(data, f)
 
 # Update Checker
-update = {
-    "lastUpdate": time.time_ns(),
-    "lastBreakingChange": 0,
-    "legacyRootDirectory": ""
-}
+with open('update.json', "r") as f:
+    update = json.load(f)
+update["lastUpdate"] = time.time_ns()
 
-if (bool(input("Does the update include breaking changes? (0 - No, 1 - Yes) ")) == True):
+if (int(input("Does the update include breaking changes? (0 - No, 1 - Yes) ")) == 1):
     update["lastBreakingChange"] = update["lastUpdate"]
     update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + input("Please provide the root directory of where the legacy version of the database can be found:\n    https://database-clarity.github.io/Character-Stats/legacy-content/")
 
