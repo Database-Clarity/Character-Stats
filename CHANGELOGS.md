@@ -1,6 +1,11 @@
 # Changelogs
 
-## v1.2 - March 9, 2023 - Breaking Change
+## v1.2.1 - March 12, 2023
+
+- Updated Charge Rate scaling for Titan Class Abilities to better represent testing results
+- Updated Scalars provided by the "Bastion - Void Aspect" override to better represent testing results
+
+## v1.2.0 - March 9, 2023 - Breaking Change
 
 - Replaced the `Scalar` `number` member of the `Override` objects with an array of `number`s that are specific to each member of the `Requirements` array's listed abilities
   - More info about this change can be found in [schema.json](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json)
@@ -11,14 +16,14 @@
     - More info about this can be found in [README.md](https://github.com/Database-Clarity/Character-Stats/blob/master/README.md)
   - Note: I have no plans of making a habit out of breaking changes but just wanted to set up a more robust system for dealing with them if they are deemed necessary in the future
 
-## v1.1 - March 9, 2023 - Hotfix
+## v1.1.0 - March 9, 2023 - Hotfix
 
 - Renamed the `Scalars` member of the Character Stat objects to `Override` 
 - Added a `Cooldowns` member to `Override` objects that will override the cooldowns of the items listed in the `Requirements` array before the `Scalar` is applied
   - This `Cooldowns` array is identical to the ones in `Ability` objects
   - Will contain 11 `0`s if not in use for an override
 
-## v1.0 - March 9, 2023 
+## v1.0.0 - March 9, 2023 
 
 - Updated base cooldown times and ability recharge rate scaling for [patch 7.0.0.1](https://www.bungie.net/7/en/News/article/update_7_0_0_1)
   - New charge rate scaling can be found in the source file: `/generator/Source Content.json`
@@ -43,25 +48,25 @@
   - Marksman's Dodge base cooldown increased from 29s to 34s
   - Gambler's Dodge base cooldown increased from 38s to 46s
 
-## v0.4 - January 13, 2023
+## v0.4.0 - January 13, 2023
 
 - An update can now be aborted.
   - This dumps the changes you've made to `/generator/dump.json`
 - Added a way to add new abilities to the database without editing the JSON source file directly
 - Abilities in each category are now sorted by their base cooldowns (descending) and alphabetically (ascending)
 
-## v0.3 - January 13, 2023
+## v0.3.0 - January 13, 2023
 
 - Removed 'Ability Tiers' from source file (replaced with per-ability base cooldowns)
 - Reworked conversion
 - Renamed `/gen` folder to `/generator`
 
-## v0.2 - December 11, 2022
+## v0.2.0 - December 11, 2022
 
 - Added `/gen` folder with source files and generator Python code
 - Improved specificity in JSON schema
 - Added global update tracking in `update.json`
 
-## v0.1 - December 10, 2022
+## v0.1.0 - December 10, 2022
 
 - Initial Release
