@@ -2,7 +2,7 @@
 
 ## v1.3.0 - March 15, 2023 - Breaking Change
 
-- Renamed `Cooldowns` member of `Override` objects with `CooldownOverride` (Breaking)
+- Renamed `Cooldowns` member of `Override` objects with `CooldownOverride`
 - Added `FlatIncrease` member to `Override` objects
   - More info about this can be found in [schema.json](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json)
 
