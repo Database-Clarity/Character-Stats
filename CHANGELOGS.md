@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.3.0 - March 15, 2023 - Breaking Change
+
+- Renamed `Cooldowns` member of `Override` objects with `CooldownOverride` (Breaking)
+- Added `FlatIncrease` member to `Override` objects
+  - More info about this can be found in [schema.json](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json)
+
 ## v1.2.1 - March 12, 2023
 
 - Updated Charge Rate scaling for Titan Class Abilities to better represent testing results

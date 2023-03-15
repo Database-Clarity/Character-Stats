@@ -112,7 +112,7 @@
                     "minItems": 1,
                     "description": "The inventoryItem hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so. (These are usually also the same ability but for the different subclasses, hence you should NOT be able to have more than one equipped at once)"
                 },
-                "Cooldowns": {
+                "CooldownOverride": {
                     "type": "array",
                     "items": {
                         "type": "integer"
@@ -127,15 +127,24 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets)."
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). Factored in after 'CooldownOverride's."
+                },
+                "FlatIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1,
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
                 }
             },
             "required": [
                 "Hash",
                 "Name",
                 "Requirements",
-                "Cooldowns",
-                "Scalar"
+                "CooldownOverride",
+                "Scalar",
+                "FlatIncrease"
             ],
             "title": "Override"
         },

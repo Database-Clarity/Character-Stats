@@ -229,10 +229,14 @@
                     2722641741,
                     2722641740
                 ],
-                "BaseCooldown": 0,
+                "CooldownOverride": 0,
                 "Scalar": [
                     2.104,
                     2.0823
+                ],
+                "FlatIncrease": [
+                    0,
+                    0
                 ]
             }
         ]
@@ -488,10 +492,14 @@
                     1399216,
                     1399219
                 ],
-                "BaseCooldown": 152,
+                "CooldownOverride": 152,
                 "Scalar": [
                     1.0,
                     1.0
+                ],
+                "FlatIncrease": [
+                    0,
+                    0
                 ]
             }
         ]
