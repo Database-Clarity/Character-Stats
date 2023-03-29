@@ -6,6 +6,7 @@ This repository contains an up-to-date (usually) collection of ability cooldowns
 
 - This collection accounts for aspects overriding ability cooldown times but not for exotic armor pieces as they are a lot more volatile comparatively speaking. This repository was created to help alleviate the issues caused by Bungie's API not providing ability cooldown details despite them being in the in-game UI (for the most part).
 - Cooldown times might be 1-2 seconds off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier.
+- While cooldowns are displayed with rounding to 2 decimal places, I strongly recommend rounding to a whole number for displaying them.
 
 ## Usage of the Provided Data
 
@@ -16,7 +17,7 @@ This repository contains an up-to-date (usually) collection of ability cooldowns
 
 ## Report Issues/Inaccuracies
 
-If you notice any inaccuracies in the dataset I'm using, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill the template form out.
+If you notice any inaccuracies in the dataset I'm using, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
 Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting Policy
@@ -32,11 +33,11 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
   - The `Abilities` member of each `Character Stat` object contains an array of objects with the following members:
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
-    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat in seconds. Rounded to 1 decimal point.
+    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat in seconds. Rounded to 2 decimal points but it's strongly recommended to round to a whole number for display.
   - The `Overrides` member of each `Character Stat` object contains an array of objects with the following members:
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
-    - Requirements - number array: the `inventoryItem` hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so. (These are usually also the same ability but for the different subclasses, hence you should not be able to have more than one equipped at once)
+    - Requirements - number array: the `inventoryItem` hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so.
     - CooldownOverride - number array: an override to the cooldown time of the abilities listed in the `Requirements`. Identical to the Cooldowns array of the `Ability` objects. Array will contain 11 0s if this is not in use.
     - Scalar - number array: a multiplier to the cooldown time of the abilities listed in the `Requirements` array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Armor). Factored in after `CooldownOverride`s.
     - FlatIncrease - a flat increase to the cooldown time of the abilities listed in the `Requirements` array at the same array index. This applies to the cooldown time at every tier and is factored in after `CooldownOverride`s and `Scalar`s.

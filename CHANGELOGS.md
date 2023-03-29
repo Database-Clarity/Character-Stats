@@ -7,8 +7,9 @@
 
 ## v1.4.0 - March 29, 2023 - (Slightly) Breaking Change
 
-- Cooldown times in `Override` and `Ability` members of Character Stats are now rounded to 1 decimal point for improved accuracy when additional scaling is applied on top (such as an Override)
+- Cooldown times in `Override` and `Ability` members of Character Stats are now rounded to 2 decimal points for improved accuracy when additional scaling is applied on top (such as an Override)
   - Updated `schema.json` and `README.md`to reflect this change 
+  - I still strongly suggest rounding the final cooldown numbers when displaying them
 - Added all missing sources of Cooldown Overrides that are based on subclass configuration
 
 ## v1.3.0 - March 15, 2023 - Breaking Change
