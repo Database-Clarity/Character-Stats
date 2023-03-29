@@ -81,7 +81,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 1 decimal point."
                 }
             },
             "required": [
@@ -119,7 +119,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object. Contains 11 0s if not in use."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 1 decimal point. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object. Contains 11 0s if not in use."
                 },
                 "Scalar": {
                     "type": "array",

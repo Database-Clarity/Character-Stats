@@ -1,8 +1,15 @@
 # Changelogs
 
-## v1.4 - March 29, 2023
+## v1.4.1 - March 29, 2023
 
-- 
+- Added Exotic Armor sources of Cooldown Overrides
+  - Currently includes: Icefall Mantle, Hoarfrost-Z, Citan's Ramparts
+
+## v1.4.0 - March 29, 2023 - (Slightly) Breaking Change
+
+- Cooldown times in `Override` and `Ability` members of Character Stats are now rounded to 1 decimal point for improved accuracy when additional scaling is applied on top (such as an Override)
+  - Updated `schema.json` and `README.md`to reflect this change 
+- Added all missing sources of Cooldown Overrides that are based on subclass configuration
 
 ## v1.3.0 - March 15, 2023 - Breaking Change
 

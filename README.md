@@ -32,7 +32,7 @@ Most of what I go over here is included in the `shema.json` file but here's a qu
   - The `Abilities` member of each `Character Stat` object contains an array of objects with the following members:
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.
-    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat in seconds.
+    - Cooldowns - number array: the cooldown of an ability at each tier of the character stat in seconds. Rounded to 1 decimal point.
   - The `Overrides` member of each `Character Stat` object contains an array of objects with the following members:
     - Hash - number: the hash represents the `inventoryItem` hash of an ability (or other overriding item like an aspect).
     - Name - string: the name of the ability. This is used for tracking purposes and doesn't necessarily match the name from the D2 manifest.

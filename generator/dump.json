@@ -45,8 +45,8 @@
             0.95,
             1,
             1.1,
-            1.225,
-            1.31,
+            1.2,
+            1.3,
             1.4,
             1.5,
             1.6,
@@ -109,7 +109,25 @@
                 "BaseCooldown": 29
             }
         ],
-        "Scalars": []
+        "Overrides": [
+            {
+                "Hash": 4249729126,
+                "Name": "Ensnaring Slam - Strand Aspect",
+                "Requirements": [
+                    1282157891,
+                    1282157890
+                ],
+                "CooldownOverride": 0,
+                "Scalar": [
+                    1.0,
+                    1.0
+                ],
+                "FlatIncrease": [
+                    6,
+                    6
+                ]
+            }
+        ]
     },
     "Resilience": {
         "TotalHP": [
@@ -159,10 +177,10 @@
             1.05,
             1.1,
             1.2,
-            1.287,
-            1.383,
-            1.523,
-            1.667
+            1.3,
+            1.4,
+            1.55,
+            1.7
         ],
         "Abilities": [
             {
@@ -221,7 +239,7 @@
                 "BaseCooldown": 48
             }
         ],
-        "Scalars": [
+        "Overrides": [
             {
                 "Hash": 1602994569,
                 "Name": "Bastion - Void Aspect",
@@ -229,7 +247,69 @@
                     2722641741,
                     2722641740
                 ],
-                "Scalar": 2.0
+                "CooldownOverride": 0,
+                "Scalar": [
+                    2.104,
+                    2.0823
+                ],
+                "FlatIncrease": [
+                    0,
+                    0
+                ]
+            },
+            {
+                "Hash": 1190497097,
+                "Name": "Citan's Ramparts - Exotic Arms",
+                "Requirements": [
+                    2722641740,
+                    2087010645,
+                    3260056808,
+                    2495523340,
+                    489583096
+                ],
+                "CooldownOverride": 0,
+                "Scalar": [
+                    1.7,
+                    1.7,
+                    1.7,
+                    1.7,
+                    1.7
+                ],
+                "FlatIncrease": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "Hash": 1322544481,
+                "Name": "Hoarfrost-Z - Exotic Chest",
+                "Requirements": [
+                    3260056809
+                ],
+                "CooldownOverride": 48,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
+            },
+            {
+                "Hash": 1467044898,
+                "Name": "Icefall Mantle - Exotic Arns",
+                "Requirements": [
+                    3260056808
+                ],
+                "CooldownOverride": 38,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
             }
         ]
     },
@@ -317,7 +397,7 @@
                 "BaseCooldown": 55
             }
         ],
-        "Scalars": []
+        "Overrides": []
     },
     "Discipline": {
         "ChargeRateScalars": [
@@ -475,16 +555,23 @@
                 "BaseCooldown": 152
             }
         ],
-        "Scalars": [
+        "Overrides": [
             {
                 "Hash": 2642597904,
                 "Name": "Bleak Watcher - Stasis Aspect",
                 "Requirements": [
-                    1399217,
                     1399216,
                     1399219
                 ],
-                "Scalar": 2.0
+                "CooldownOverride": 0,
+                "Scalar": [
+                    2.375,
+                    1.255
+                ],
+                "FlatIncrease": [
+                    0,
+                    0
+                ]
             }
         ]
     },
@@ -504,16 +591,6 @@
         ],
         "Abilities": [
             {
-                "Hash": 3574662354,
-                "Name": "Bladefury",
-                "BaseCooldown": 556
-            },
-            {
-                "Hash": 2463983862,
-                "Name": "Silkstrike",
-                "BaseCooldown": 556
-            },
-            {
                 "Hash": 3769507633,
                 "Name": "Arc Staff",
                 "BaseCooldown": 556
@@ -522,6 +599,11 @@
                 "Hash": 375052471,
                 "Name": "Blade Barrage",
                 "BaseCooldown": 455
+            },
+            {
+                "Hash": 3574662354,
+                "Name": "Bladefury",
+                "BaseCooldown": 556
             },
             {
                 "Hash": 2747500760,
@@ -609,6 +691,11 @@
                 "BaseCooldown": 455
             },
             {
+                "Hash": 2463983862,
+                "Name": "Silkstrike",
+                "BaseCooldown": 556
+            },
+            {
                 "Hash": 2722573682,
                 "Name": "Spectral Blades",
                 "BaseCooldown": 556
@@ -639,7 +726,7 @@
                 "BaseCooldown": 556
             }
         ],
-        "Scalars": []
+        "Overrides": []
     },
     "Strength": {
         "ChargeRateScalars": [
@@ -656,16 +743,6 @@
             2.0
         ],
         "Abilities": [
-            {
-                "Hash": 1680616210,
-                "Name": "Threaded Spike",
-                "BaseCooldown": 125
-            },
-            {
-                "Hash": 4094417246,
-                "Name": "Frenzied Blade",
-                "BaseCooldown": 114
-            },
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
@@ -700,6 +777,11 @@
                 "Hash": 2716335210,
                 "Name": "Disorienting Blow",
                 "BaseCooldown": 100
+            },
+            {
+                "Hash": 4094417246,
+                "Name": "Frenzied Blade",
+                "BaseCooldown": 114
             },
             {
                 "Hash": 852252788,
@@ -762,6 +844,11 @@
                 "BaseCooldown": 90
             },
             {
+                "Hash": 1680616210,
+                "Name": "Threaded Spike",
+                "BaseCooldown": 125
+            },
+            {
                 "Hash": 852252789,
                 "Name": "Throwing Hammer",
                 "BaseCooldown": 90
@@ -782,6 +869,21 @@
                 "BaseCooldown": 100
             }
         ],
-        "Scalars": []
+        "Overrides": [
+            {
+                "Hash": 4194622037,
+                "Name": "Tempest Strike - Arc Aspect",
+                "Requirements": [
+                    2716335211
+                ],
+                "CooldownOverride": 90,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
+            }
+        ]
     }
 }

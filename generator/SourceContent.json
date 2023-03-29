@@ -256,6 +256,60 @@
                     0,
                     0
                 ]
+            },
+            {
+                "Hash": 1190497097,
+                "Name": "Citan's Ramparts - Exotic Arms",
+                "Requirements": [
+                    2722641740,
+                    2087010645,
+                    3260056808,
+                    2495523340,
+                    489583096
+                ],
+                "CooldownOverride": 0,
+                "Scalar": [
+                    1.7,
+                    1.7,
+                    1.7,
+                    1.7,
+                    1.7
+                ],
+                "FlatIncrease": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "Hash": 1322544481,
+                "Name": "Hoarfrost-Z - Exotic Chest",
+                "Requirements": [
+                    3260056809
+                ],
+                "CooldownOverride": 48,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
+            },
+            {
+                "Hash": 1467044898,
+                "Name": "Icefall Mantle - Exotic Arns",
+                "Requirements": [
+                    3260056808
+                ],
+                "CooldownOverride": 38,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
             }
         ]
     },
