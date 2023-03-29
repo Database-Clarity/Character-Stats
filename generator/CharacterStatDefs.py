@@ -23,7 +23,7 @@ def iterateDict(paramDict, characterStatName):
     for ability in paramDict[characterStatName]['Abilities']:
         array = deepcopy(paramDict[characterStatName]['ChargeRateScalars'])
         for i in range(11):
-            array[i] = round(1/array[i] * ability['BaseCooldown'])
+            array[i] = round(1/array[i] * ability['BaseCooldown'],1)
         ability.update({"Cooldowns": array})
         del ability['BaseCooldown']
     for override in paramDict[characterStatName]['Overrides']:
@@ -32,6 +32,6 @@ def iterateDict(paramDict, characterStatName):
             if (override['CooldownOverride'] == 0):
                 array[i] = 0
                 continue
-            array[i] = round(1/array[i] * override['CooldownOverride'])
+            array[i] = round(1/array[i] * override['CooldownOverride'],1)
         override.update({"CooldownOverride": array})
     del paramDict[characterStatName]['ChargeRateScalars']

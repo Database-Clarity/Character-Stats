@@ -109,7 +109,25 @@
                 "BaseCooldown": 29
             }
         ],
-        "Overrides": []
+        "Overrides": [
+            {
+                "Hash": 4249729126,
+                "Name": "Ensnaring Slam - Strand Aspect",
+                "Requirements": [
+                    1282157891,
+                    1282157890
+                ],
+                "CooldownOverride": 0,
+                "Scalar": [
+                    1.0,
+                    1.0
+                ],
+                "FlatIncrease": [
+                    6,
+                    6
+                ]
+            }
+        ]
     },
     "Resilience": {
         "TotalHP": [
@@ -488,14 +506,13 @@
                 "Hash": 2642597904,
                 "Name": "Bleak Watcher - Stasis Aspect",
                 "Requirements": [
-                    1399217,
                     1399216,
                     1399219
                 ],
-                "CooldownOverride": 152,
+                "CooldownOverride": 0,
                 "Scalar": [
-                    1.0,
-                    1.0
+                    2.375,
+                    1.255
                 ],
                 "FlatIncrease": [
                     0,
@@ -798,6 +815,21 @@
                 "BaseCooldown": 100
             }
         ],
-        "Overrides": []
+        "Overrides": [
+            {
+                "Hash": 4194622037,
+                "Name": "Tempest Strike - Arc Aspect",
+                "Requirements": [
+                    2716335211
+                ],
+                "CooldownOverride": 90,
+                "Scalar": [
+                    1.0
+                ],
+                "FlatIncrease": [
+                    0
+                ]
+            }
+        ]
     }
 }
