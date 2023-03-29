@@ -1,11 +1,11 @@
 # Destiny 2 Character Stats
 
 This repository contains an up-to-date (usually) collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications. This also includes support for Aspects and Exotics changing the base cooldowns of certain abilities.
+All the data stored here was intended for use by 3rd party apps willing to implement them in place of Bungie's own outdated information on Character Stats. This includes cooldown times as well as every other kind of useful information that is available from community research.
 
 ## Disclaimer
 
-- This collection accounts for aspects overriding ability cooldown times but not for exotic armor pieces as they are a lot more volatile comparatively speaking. This repository was created to help alleviate the issues caused by Bungie's API not providing ability cooldown details despite them being in the in-game UI (for the most part).
-- Cooldown times might be 1-2 seconds off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier.
+- Cooldown times might be ~1 second off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier.
 - While cooldowns are displayed with rounding to 2 decimal places, I strongly recommend rounding to a whole number for displaying them.
 
 ## Usage of the Provided Data
