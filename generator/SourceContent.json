@@ -751,7 +751,7 @@
             {
                 "Hash": 1232050830,
                 "Name": "Ball Lightning",
-                "BaseCooldown": 100
+                "BaseCooldown": 114
             },
             {
                 "Hash": 2708585276,
@@ -766,7 +766,7 @@
             {
                 "Hash": 1232050831,
                 "Name": "Chain Lightning",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 2716335211,
@@ -811,7 +811,7 @@
             {
                 "Hash": 2299867342,
                 "Name": "Pocket Singularity",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 4016776973,
@@ -841,7 +841,7 @@
             {
                 "Hash": 1139822081,
                 "Name": "Snare Bomb",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 1680616210,
@@ -851,12 +851,12 @@
             {
                 "Hash": 852252789,
                 "Name": "Throwing Hammer",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 2708585279,
                 "Name": "Thunderclap",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 4016776975,
@@ -876,7 +876,7 @@
                 "Requirements": [
                     2716335211
                 ],
-                "CooldownOverride": 90,
+                "CooldownOverride": 91,
                 "Scalar": [
                     1.0
                 ],
