@@ -9,6 +9,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to fill out this report! To save us both time, please note that cooldown inaccuracies in the ~1s range will be ignored as they are artifacts of the method used to calculate them.
+        HOWEVER, this error tolerance only applies to cooldown times outside of the Base Cooldown (T3, 4th number in array). If you notice inaccuracies with the Base Cooldowns, definitely do report them.
   - type: dropdown
     attributes:
       label: Type of Issue
