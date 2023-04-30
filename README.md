@@ -8,13 +8,6 @@ All the data stored here was intended for use by 3rd party apps willing to imple
 - Cooldown times might be ~1 second off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier. (This does not apply to Base (T3) Cooldowns, inaccuracies with those are not acceptable)
 - While cooldowns are displayed with rounding to 2 decimal places for improved accuracy when combining them with `Overrides`, I strongly recommend rounding to a whole number when displaying them.
 
-## Usage of the Provided Data
-
-- You can easily access the provided data at the following URLs:
-  - With Indentation: <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo.json>
-  - Without Indentation: <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo-NI.json>
-- You can find the JSON schema here with added documentation: <https://Database-Clarity.github.io/Character-Stats/schema.json>
-
 ## Report Issues/Inaccuracies
 
 If you notice any inaccuracies in the dataset I'm using, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
@@ -23,6 +16,13 @@ Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can 
 ## Crediting Policy
 
 I would appreciate it if you linked back to this repository if you decided to use this data in any apps you happen to be working on. But it's not required so basically do whatever you want with it.
+
+## Usage of the Provided Data
+
+- You can easily access the provided data at the following URLs:
+  - With Indentation: <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo.json>
+  - Without Indentation: <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo-NI.json>
+- You can find the JSON schema here with added documentation: <https://Database-Clarity.github.io/Character-Stats/schema.json>
 
 ## Database Information
 
