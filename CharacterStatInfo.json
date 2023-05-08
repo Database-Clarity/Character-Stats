@@ -1317,8 +1317,35 @@
                     0
                 ],
                 "Scalar": [
-                    2.375,
+                    2.38,
                     1.255
+                ],
+                "FlatIncrease": [
+                    0,
+                    0
+                ]
+            },
+            {
+                "Hash": 2169905051,
+                "Name": "Renewal Grasps - Exotic Arms",
+                "Requirements": [
+                    1399216
+                ],
+                "CooldownOverride": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "Scalar": [
+                    2.38
                 ],
                 "FlatIncrease": [
                     0,

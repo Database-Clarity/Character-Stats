@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.4.2 - May 8, 2023
+
+- Added Renewal Grasps Cooldown Override
+- Improved Cooldown Override Scalar accuracy of the Bleak Watcher Aspect
+
 ## v1.4.1 - March 29, 2023
 
 - Added Exotic Armor sources of Cooldown Overrides
