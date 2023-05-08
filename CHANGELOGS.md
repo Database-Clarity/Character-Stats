@@ -1,5 +1,12 @@
 # Changelogs
 
+## Upcoming - Breaking Change
+
+- Retired `CooldownOverride` member of `Override` objects
+  - This serves the same purpose as the `Scalar` member in a less practical and reliable way
+- Added `MultiChargeScalar` member to `Ability` objects
+  - This will help represent Strand melee abilities gaining faster cooldowns with already charged ability charges
+
 ## v1.4.2 - May 8, 2023
 
 - Added Renewal Grasps Cooldown Override
