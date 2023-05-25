@@ -85,7 +85,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the Cooldowns member of abilities by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges."
+                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the Cooldowns member of abilities by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges. (Therefore, if this property is present, it is to be assumed that the ability only has a single charge by default)"
                 }
             },
             "required": [
