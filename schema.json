@@ -77,7 +77,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is STRONGLY recommended to round them to an integer."
                 },
                 "ChargeBasedScaling": {
                     "type": "array",
@@ -85,7 +85,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the Cooldowns member of abilities by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges. (Therefore, if this property is present, it is to be assumed that the ability only has a single charge by default)"
+                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the Cooldowns member of abilities by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges. (Therefore, if this property is absent, it is to be assumed that the ability only has a single charge by default)"
                 }
             },
             "required": [
