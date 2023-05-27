@@ -1,11 +1,21 @@
 # Changelogs
 
-## Upcoming - Breaking Change
+## v1.5.0 - Breaking Change
 
-- Retired `CooldownOverride` member of `Override` objects
-  - This serves the same purpose as the `Scalar` member in a less practical and reliable way
-- Added `MultiChargeScalar` member to `Ability` objects
-  - This will help represent Strand melee abilities gaining faster cooldowns with already charged ability charges
+### Schema/Database Structure updates and improvements
+- `CooldownOverride`, `Scalar`, and `FlatIncrease` properties of `Override` objects are no longer required to all be present
+  - Now, only one of the 3 mentioned properties **has to** be present but more may still be present present on an `Override` object at once
+- Fully migrated property explanations from `README.md` to `scema.json`
+- Added data usage/display recommendations to properties in `schema.json`
+- Added optional `ChargeBasedScaling` number array property to `Ability` objects
+  - This represents how certain abilities charge faster/slower depending on the number of stored ability charges. (Currently present on 'Arcane Needle' and 'Frenzied Blade')
+  - The length of the array also serves to store the number of charges an ability has intrinsically. (Naturally, in the case of the ability not having any ChargeBasedScaling, this will be an array of `1`s)
+- Fixed up the generally just outdated/incorrect parts of the schema.
+
+### Mischellaneous Changes
+- Reworked `README.md` from being an info dump to only store relevant information to help people get started.
+- Slightly changed the crediting policy to prohibit "abusing my generosity". Nothing changes for those with any form of basic decency.
+- Improved example for handling breaking changes.
 
 ## v1.4.2 - May 8, 2023
 
