@@ -26,12 +26,12 @@ def iterateDict(paramDict, characterStatName):
             array[i] = round(1/array[i] * ability['BaseCooldown'],2)
         ability.update({"Cooldowns": array})
         del ability['BaseCooldown']
+
     for override in paramDict[characterStatName]['Overrides']:
-        array = deepcopy(paramDict[characterStatName]['ChargeRateScalars'])
-        for i in range(11):
-            if (override['CooldownOverride'] == 0):
-                array[i] = 0
-                continue
-            array[i] = round(1/array[i] * override['CooldownOverride'],2)
-        override.update({"CooldownOverride": array})
+        if 'CooldownOverride' in override: # checks if 'CooldownOverride' property is present
+            array = deepcopy(paramDict[characterStatName]['ChargeRateScalars'])
+            for i in range(11):
+                array[i] = round(1/array[i] * override['CooldownOverride'],2)
+            override.update({"CooldownOverride": array})
+
     del paramDict[characterStatName]['ChargeRateScalars']

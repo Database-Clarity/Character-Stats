@@ -70,10 +70,6 @@
                     "type": "string",
                     "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
                 },
-                "Override": {
-                    "type": "boolean",
-                    "description": "Whether this item will override the cooldowns of other equipped items"
-                },
                 "Cooldowns": {
                     "type": "array",
                     "items": {
@@ -81,14 +77,21 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is STRONGLY recommended to round them to an integer."
+                },
+                "ChargeBasedScaling": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1,
+                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the Cooldowns member of abilities by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges. (Therefore, if this property is absent, it is to be assumed that the ability only has a single charge by default)"
                 }
             },
             "required": [
                 "Cooldowns",
                 "Hash",
-                "Name",
-                "Override"
+                "Name"
             ],
             "title": "Ability"
         },
@@ -127,7 +130,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). Factored in after 'CooldownOverride's."
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If 'CooldownOverride' property is specified: 'Scalar's are factored in after 'CooldownOverride's."
                 },
                 "FlatIncrease": {
                     "type": "array",
@@ -135,16 +138,13 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. If 'CooldownOverride' or 'Scalar' property is specified: Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
                 }
             },
-            "required": [
-                "Hash",
-                "Name",
-                "Requirements",
-                "CooldownOverride",
-                "Scalar",
-                "FlatIncrease"
+            "anyOf": [
+                {"required": ["Hash", "Name", "Requirements", "CooldownOverride"]},
+                {"required": ["Hash", "Name", "Requirements", "Scalar"]},
+                {"required": ["Hash", "Name", "Requirements", "FlatIncrease"]}
             ],
             "title": "Override"
         },
@@ -158,7 +158,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "StrafeSpeed": {
@@ -167,7 +167,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "CrouchSpeed": {
@@ -176,7 +176,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second."
+                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "Abilities": {
@@ -185,16 +185,16 @@
                         "$ref": "#/definitions/Ability"
                     }
                 },
-                "Scalars": {
+                "Overrides": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Scalar"
+                        "$ref": "#/definitions/Override"
                     }
                 }
             },
             "required": [
                 "Abilities",
-                "Scalars",
+                "Overrides",
                 "CrouchSpeed",
                 "StrafeSpeed",
                 "WalkingSpeed"
@@ -212,7 +212,7 @@
                         "minItems": 11,
                         "maxItems": 11
                     },
-                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal to full HP."
+                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding beyond 1 decimal place is not recommended."
                 },
                 "Abilities": {
                     "type": "array",
@@ -220,16 +220,16 @@
                         "$ref": "#/definitions/Ability"
                     }
                 },
-                "Scalars": {
+                "Overrides": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Scalar"
+                        "$ref": "#/definitions/Override"
                     }
                 }
             },
             "required": [
                 "Abilities",
-                "Scalars",
+                "Overrides",
                 "TimeToFullHP"
             ],
             "title": "Recovery"
@@ -245,7 +245,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. ('Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game."
+                    "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. 'Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
                 },
                 "DamageResistance": {
                     "type": "array",
@@ -254,7 +254,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance at each tier."
+                    "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance granted *IN PVE* at each tier."
                 },
                 "FlinchResistance": {
                     "type": "array",
@@ -263,7 +263,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance at each tier."
+                    "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance granted at each tier."
                 },
                 "Abilities": {
                     "type": "array",
@@ -271,16 +271,16 @@
                         "$ref": "#/definitions/Ability"
                     }
                 },
-                "Scalars": {
+                "Overrides": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Scalar"
+                        "$ref": "#/definitions/Override"
                     }
                 }
             },
             "required": [
                 "Abilities",
-                "Scalars",
+                "Overrides",
                 "DamageResistance",
                 "FlinchResistance",
                 "TotalHP"
