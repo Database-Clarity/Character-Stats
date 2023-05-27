@@ -16,7 +16,7 @@ Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can 
 
 ## Crediting and Usage Policy
 
-- Do NOT claim to be the creator/curator of this database or its contents. This includes purposefully showing the data in a way leads people to think you may be the maintainer of this data.
+**Do NOT claim to be the creator/curator of this database or its contents. This includes purposefully showing the data in a way leads people to think you may be the maintainer of this data.**
 
 That's really about it, I don't ask for anything else. As long as you don't break that rule, please feel free to use whatever info is stored here for your projects.
 
