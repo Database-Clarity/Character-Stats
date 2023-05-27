@@ -271,9 +271,8 @@
                 "Requirements": [
                     3260056809
                 ],
-                "CooldownOverride": 48,
                 "Scalar": [
-                    1.0
+                    1.2631578947
                 ]
             },
             {
@@ -282,9 +281,8 @@
                 "Requirements": [
                     3260056808
                 ],
-                "CooldownOverride": 38,
                 "Scalar": [
-                    1.0
+                    0.7916666667
                 ]
             }
         ]
@@ -540,7 +538,7 @@
                     1399219
                 ],
                 "Scalar": [
-                    2.38,
+                    1.6703296703,
                     1.255
                 ]
             },
@@ -551,7 +549,7 @@
                     1399216
                 ],
                 "Scalar": [
-                    2.38
+                    1.6703296703
                 ]
             }
         ]
@@ -727,7 +725,12 @@
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
-                "BaseCooldown": 91
+                "BaseCooldown": 91,
+                "ChargeBasedScaling": [
+                    1,
+                    1,
+                    1
+                ]
             },
             {
                 "Hash": 1232050830,
@@ -762,7 +765,12 @@
             {
                 "Hash": 4094417246,
                 "Name": "Frenzied Blade",
-                "BaseCooldown": 114
+                "BaseCooldown": 114,
+                "ChargeBasedScaling": [
+                    1,
+                    1,
+                    1
+                ]
             },
             {
                 "Hash": 852252788,
@@ -847,7 +855,11 @@
             {
                 "Hash": 1341767667,
                 "Name": "Withering Blade",
-                "BaseCooldown": 100
+                "BaseCooldown": 100,
+                "ChargeBasedScaling": [
+                    1,
+                    1
+                ]
             }
         ],
         "Overrides": [
@@ -857,12 +869,8 @@
                 "Requirements": [
                     2716335211
                 ],
-                "CooldownOverride": 91,
                 "Scalar": [
-                    1.0
-                ],
-                "FlatIncrease": [
-                    0
+                    2.275
                 ]
             }
         ]
