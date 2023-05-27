@@ -20,7 +20,7 @@ Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can 
 
 That's really about it, I don't ask for anything else. As long as you don't break that rule, please feel free to use whatever info is stored here for your projects.
 
-Though, I would certainly appreciate it if you linked back to this repository and to [Clarity's Ko-Fi page](https://ko-fi.com/d2clarity). But it's not required so .
+Though, I would certainly appreciate it if you linked back to this repository and to [Clarity's Ko-Fi page](https://ko-fi.com/d2clarity). But it's not required so it's entirely up to you.
 
 ## Recommended Access Paths
 
