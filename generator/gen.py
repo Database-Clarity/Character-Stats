@@ -5,6 +5,7 @@ import customtkinter as ctk
 from CTkScrollableDropdown import *
 from CharacterStatDefs import *
 from shutil import copy
+from os import makedirs
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -701,7 +702,7 @@ def submitChanges():
     def insertLog(logText: str):
         '''Inserts logText into the log text box and appends a newline.'''
         logs.configure(state='normal')
-        logs.insert("end",logText)
+        logs.insert("end",logText+'\n')
         logs.configure(state='disabled')
 
     def implementChanges():
@@ -709,6 +710,32 @@ def submitChanges():
         insertLog("Sorting Abilities and Overrides alphabetically.")
         for charStat in characterStatNameArray:
             data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
+            data[charStat]['Overrides'].sort(key = lambda k: (k['Name']))
+        # Update Tracker
+        with open('update.json', "r") as f:
+            update = json.load(f)
+        update["lastUpdate"] = time.time_ns()
+        # Breaking Change handling
+        if breakingChangeCheckBox.get():
+            insertLog("Handling Breaking Changes.")
+            version_dialog = ctk.CTkInputDialog(text="Enter the last version number before this breaking change:", title="Breaking Change Handler")
+            answer = version_dialog.get_input()
+            if answer == '':
+                print('eurbfguhjerbgikusaerhbngiuk\neyhbnguieyrbgurjresibnguesn\nhsieg\nbnushe')
+                errorPopup("Input Error", "Please provide a valid version number when prompted.")
+                logs.configure(state="normal")
+                logs.delete(1.0, "end")
+                logs.configure(state="disabled")
+                return
+            insertLog("Copying legacy files to specified directory.")
+            makedirs(f"legacy-content\{answer}")
+            copy('CharacterStatInfo-NI.json',f'legacy-content\{answer}\CharacterStatInfo-NI.json')
+            copy('CharacterStatInfo.json',f'legacy-content\{answer}\CharacterStatInfo.json')
+            update["lastBreakingChange"] = update["lastUpdate"]
+            update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + answer
+        insertLog("Generating update.json.")
+        with open('update.json', "w") as f:
+            json.dump(update, f)
         # Dumps input with updates
         insertLog("Updating source file with the changes.")
         with open('./generator/SourceContent.json', 'w') as f:
@@ -723,26 +750,10 @@ def submitChanges():
             json.dump(data, f, indent=4)
         with open('CharacterStatInfo-NI.json', 'w') as f:
             json.dump(data, f)
-        # Update Tracker
-        with open('update.json', "r") as f:
-            update = json.load(f)
-        update["lastUpdate"] = time.time_ns()
-        # Breaking Change handling
-        if breakingChangeCheckBox.get():
-            insertLog("Handling Breaking Changes.")
-            dialog = ctk.CTkInputDialog(text="Enter the last version number before this breaking change:", title="Breaking Change Handler")
-            text = dialog.get_input()
-            insertLog("Copying legacy files to specified directory.")
-            copy('CharacterStatInfo-NI.json',f'legacy-content\{text}\CharacterStatInfo-NI.json')
-            copy('CharacterStatInfo.json',f'legacy-content\{text}\CharacterStatInfo.json')
-            update["lastBreakingChange"] = update["lastUpdate"]
-            update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + text
-        insertLog("Generating update.json.")
-        with open('update.json', "w") as f:
-            json.dump(update, f)
         insertLog("Changes implemented. Run complete.")
+        submitChangesButton.configure(command=lambda: submit_popup.destroy(), text="Exit")
 
-    logs = ctk.CTkTextbox(submit_popup, corner_radius=10, wrap='word',  )
+    logs = ctk.CTkTextbox(submit_popup, corner_radius=10, wrap='word')
     logs.pack(padx=20, pady=(20,10), fill="x", expand=True)
     logs.configure(state='disabled')
 
