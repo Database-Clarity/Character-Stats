@@ -721,7 +721,6 @@ def submitChanges():
             version_dialog = ctk.CTkInputDialog(text="Enter the last version number before this breaking change:", title="Breaking Change Handler")
             answer = version_dialog.get_input()
             if answer == '':
-                print('eurbfguhjerbgikusaerhbngiuk\neyhbnguieyrbgurjresibnguesn\nhsieg\nbnushe')
                 errorPopup("Input Error", "Please provide a valid version number when prompted.")
                 logs.configure(state="normal")
                 logs.delete(1.0, "end")
@@ -765,9 +764,6 @@ def submitChanges():
         json.dump(data, f, indent=4)
     insertLog("Dump complete. Click the Continue button to proceed with the changes.")
     submitChangesButton.configure(state="normal")
-
-    
-
 
 #region App/Variable Initialization and Window Config
 app = ctk.CTk()
@@ -889,49 +885,4 @@ submitButton = ctk.CTkButton(sidebar2, anchor='center', text="Commit Changes", f
 submitButton.grid(row=3, column=0, padx=25, pady=(0,20), sticky="EW")
 #endregion
 
-
-
 app.mainloop()
-
-
-# if(int(input("Would you like to implement these changes? (0 - No, 1 - Yes) ")) == 0):
-#     print("Dumping changes to 'dump.json'.")
-#     with open('./generator/dump.json', 'w') as f:
-#         json.dump(data, f, indent=4)
-#     print("Dump complete, discarding changes.")
-#     print("Run complete.")
-#     quit()
-
-# # Sorts the abilities alphabetically 
-# print("Updating source files.")
-# for charStat in characterStatNameArray:
-#     data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
-
-# # Dumps input with updates
-# with open('./generator/SourceContent.json', 'w') as f:
-#     json.dump(data, f, indent=4)
-
-# # Generates cooldowns for each tier and removes information that's no longer useful.
-# print("Generating cooldown information.")
-# for i in characterStatNameArray:
-#     iterateDict(data, i)
-
-# # Output dump
-# with open('CharacterStatInfo.json', 'w') as f:
-#     json.dump(data, f, indent=4)
-# with open('CharacterStatInfo-NI.json', 'w') as f:
-#     json.dump(data, f)
-
-# # Update Checker
-# with open('update.json', "r") as f:
-#     update = json.load(f)
-# update["lastUpdate"] = time.time_ns()
-
-# if (int(input("Does the update include breaking changes? (0 - No, 1 - Yes) ")) == 1):
-#     update["lastBreakingChange"] = update["lastUpdate"]
-#     update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + input("Please provide the root directory of where the legacy version of the database can be found:\n    https://database-clarity.github.io/Character-Stats/legacy-content/")
-
-# with open('update.json', "w") as f:
-#     json.dump(update, f)
-
-# print("Changes implemented. Run complete.")
