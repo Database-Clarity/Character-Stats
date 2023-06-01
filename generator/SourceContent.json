@@ -243,8 +243,8 @@
                     2722641740
                 ],
                 "Scalar": [
-                    2.104,
-                    2.0823
+                    2.1052631579,
+                    2.0833333333
                 ]
             },
             {
@@ -539,7 +539,7 @@
                 ],
                 "Scalar": [
                     1.6703296703,
-                    1.255
+                    1.2561983471
                 ]
             },
             {
@@ -727,9 +727,9 @@
                 "Name": "Arcane Needle",
                 "BaseCooldown": 91,
                 "ChargeBasedScaling": [
-                    1,
-                    1,
-                    1
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             {
@@ -767,9 +767,9 @@
                 "Name": "Frenzied Blade",
                 "BaseCooldown": 114,
                 "ChargeBasedScaling": [
-                    1,
-                    1,
-                    1
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             {
@@ -857,8 +857,8 @@
                 "Name": "Withering Blade",
                 "BaseCooldown": 100,
                 "ChargeBasedScaling": [
-                    1,
-                    1
+                    1.0,
+                    1.0
                 ]
             }
         ],

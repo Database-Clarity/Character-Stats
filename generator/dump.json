@@ -117,11 +117,6 @@
                     1282157891,
                     1282157890
                 ],
-                "CooldownOverride": 0,
-                "Scalar": [
-                    1.0,
-                    1.0
-                ],
                 "FlatIncrease": [
                     6,
                     6
@@ -247,14 +242,9 @@
                     2722641741,
                     2722641740
                 ],
-                "CooldownOverride": 0,
                 "Scalar": [
-                    2.104,
-                    2.0823
-                ],
-                "FlatIncrease": [
-                    0,
-                    0
+                    2.1052631579,
+                    2.0833333333
                 ]
             },
             {
@@ -267,20 +257,12 @@
                     2495523340,
                     489583096
                 ],
-                "CooldownOverride": 0,
                 "Scalar": [
                     1.7,
                     1.7,
                     1.7,
                     1.7,
                     1.7
-                ],
-                "FlatIncrease": [
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
                 ]
             },
             {
@@ -289,12 +271,8 @@
                 "Requirements": [
                     3260056809
                 ],
-                "CooldownOverride": 48,
                 "Scalar": [
-                    1.0
-                ],
-                "FlatIncrease": [
-                    0
+                    1.2631578947
                 ]
             },
             {
@@ -303,12 +281,8 @@
                 "Requirements": [
                     3260056808
                 ],
-                "CooldownOverride": 38,
                 "Scalar": [
-                    1.0
-                ],
-                "FlatIncrease": [
-                    0
+                    0.7916666667
                 ]
             }
         ]
@@ -563,14 +537,19 @@
                     1399216,
                     1399219
                 ],
-                "CooldownOverride": 0,
                 "Scalar": [
-                    2.375,
-                    1.255
+                    1.6703296703,
+                    1.2561983471
+                ]
+            },
+            {
+                "Hash": 2169905051,
+                "Name": "Renewal Grasps - Exotic Arms",
+                "Requirements": [
+                    1399216
                 ],
-                "FlatIncrease": [
-                    0,
-                    0
+                "Scalar": [
+                    1.6703296703
                 ]
             }
         ]
@@ -746,12 +725,17 @@
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
-                "BaseCooldown": 91
+                "BaseCooldown": 91,
+                "ChargeBasedScaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
             },
             {
                 "Hash": 1232050830,
                 "Name": "Ball Lightning",
-                "BaseCooldown": 100
+                "BaseCooldown": 114
             },
             {
                 "Hash": 2708585276,
@@ -766,7 +750,7 @@
             {
                 "Hash": 1232050831,
                 "Name": "Chain Lightning",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 2716335211,
@@ -781,7 +765,12 @@
             {
                 "Hash": 4094417246,
                 "Name": "Frenzied Blade",
-                "BaseCooldown": 114
+                "BaseCooldown": 114,
+                "ChargeBasedScaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
             },
             {
                 "Hash": 852252788,
@@ -811,7 +800,7 @@
             {
                 "Hash": 2299867342,
                 "Name": "Pocket Singularity",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 4016776973,
@@ -841,7 +830,7 @@
             {
                 "Hash": 1139822081,
                 "Name": "Snare Bomb",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 1680616210,
@@ -851,12 +840,12 @@
             {
                 "Hash": 852252789,
                 "Name": "Throwing Hammer",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 2708585279,
                 "Name": "Thunderclap",
-                "BaseCooldown": 90
+                "BaseCooldown": 91
             },
             {
                 "Hash": 4016776975,
@@ -866,7 +855,11 @@
             {
                 "Hash": 1341767667,
                 "Name": "Withering Blade",
-                "BaseCooldown": 100
+                "BaseCooldown": 100,
+                "ChargeBasedScaling": [
+                    1.0,
+                    1.0
+                ]
             }
         ],
         "Overrides": [
@@ -876,12 +869,8 @@
                 "Requirements": [
                     2716335211
                 ],
-                "CooldownOverride": 90,
                 "Scalar": [
-                    1.0
-                ],
-                "FlatIncrease": [
-                    0
+                    2.275
                 ]
             }
         ]
