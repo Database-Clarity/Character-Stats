@@ -25,12 +25,14 @@ def getValues(dictionary: dict): # currently unused kekw
 
 def changed1st(choice):
     '''Updates 2nd and 3rd dropdowns as well as text boxes if 1st one was updated'''
+    dropdown1.set(choice)
     newDropdown2 = getProperties(data[choice])
-    dropdown2.configure(values=newDropdown2)
+    dropdown2contents.configure(values=newDropdown2)
     dropdown2.set(newDropdown2[0])
     changed2nd(newDropdown2[0])
 def changed2nd(choice):
     '''Updates 3rd dropdown (and/or populates editor) if 2nd one was updated'''
+    dropdown2.set(choice)
     if (choice == "Abilities" or choice == "Overrides"):
         if (len(data[dropdown1.get()][choice]) > 0):
             newValues = []
@@ -791,18 +793,21 @@ sidebar.grid(row=0, column=0, rowspan=4, sticky="nsew")
 sidebar.grid_rowconfigure(4, weight=1)
 sidebar.columnconfigure(0, weight=1)
 
-dropdown1 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, dynamic_resizing=False, values=getProperties(data), corner_radius=10, command=changed1st,
-                              font=ctk.CTkFont(weight="bold",size=14))
+dropdown1 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=getProperties(data), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown1.grid(row=0, column=0, columnspan=2, padx=20, pady=(20, 0), sticky="ew", ipadx=10)
+dropdown2contents = CTkScrollableDropdownFrame(dropdown1, values=getProperties(data), resize=False, command=changed1st,
+                                               font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
-dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, dynamic_resizing=False, values=getProperties(data[getProperties(data)[0]]), corner_radius=10, command=changed2nd,
-                              font=ctk.CTkFont(weight="bold",size=14))
+dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=getProperties(data[getProperties(data)[0]]), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown2.grid(row=1, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
+dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=getProperties(data[getProperties(data)[0]]), resize=False, command=changed2nd,
+                                               font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
+
 
 dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=250, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
                             font=ctk.CTkFont(weight="bold",size=14))
 dropdown3.grid(row=2, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
-dropdown3contents = CTkScrollableDropdown(dropdown3, values=[dropdown3invalid], state="disabled", frame_corner_radius=10, resize=False, height=400, command=changed3rd,
+dropdown3contents = CTkScrollableDropdownFrame(dropdown3, values=[dropdown3invalid], state="disabled", frame_corner_radius=10, resize=False, height=400, command=changed3rd,
                                           font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 contextBox1 = ctk.CTkTextbox(sidebar, corner_radius=10, wrap='word', state='disabled')
