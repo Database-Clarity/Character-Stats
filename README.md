@@ -12,7 +12,7 @@ All the data stored here is intended for use by 3rd party apps willing to implem
 ## Report Issues/Inaccuracies
 
 If you notice any inaccuracies in the dataset, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
-Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
+Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting and Usage Policy
 
