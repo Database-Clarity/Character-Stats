@@ -171,7 +171,7 @@
                 "items": {
                     "type": "number"
                 },
-                "description": "Numbers are provided in Damage Resist percentages and represent the Damage Resistance the super provied inside PvP. If the array is empty, the DR value is still unknown. If the array only contains one value, it represents the passive DR of the super. If other values are present, check the condition array for the conditions of each of them."
+                "description": "Numbers are provided in Damage Resist percentages and represent the Damage Resistance the super provied inside PvP. If the array is empty, the DR value is still unknown. If the array only contains one value, it represents the passive DR of the super. If the value is -9999, the value is still unknown (workaround that allows only inputting one of the PvE or PvP values. If other values are present, check the condition array for the conditions of each of them."
             },
             "PvEDamageResistance": {
                 "type": "array",
@@ -302,7 +302,7 @@
                         "minItems": 11,
                         "maxItems": 11
                     },
-                    "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                    "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
                 },
                 "ShieldRegenDelay": {
                     "type": "array",
@@ -320,7 +320,7 @@
                         "minItems": 11,
                         "maxItems": 11
                     },
-                    "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of total health determined by Resilience). Rounding is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
+                    "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of total health determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
                 },
                 "Abilities": {
                     "type": "array",

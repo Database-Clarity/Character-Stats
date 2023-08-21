@@ -3,18 +3,19 @@ import time
 import re
 import customtkinter as ctk
 from CTkScrollableDropdown import *
-from CharacterStatDefs import *
 from shutil import copy
 from os import makedirs
+from copy import deepcopy
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
 
-#region Read Source Json and save a backup
+# Read Source Json and save a backup
 with open('./generator/SourceContent.json') as f:
     data = json.load(f)
 backup = deepcopy(data)
-#endregion
+
+characterStatNameArray = ["Mobility","Resilience","Recovery","Discipline","Intellect","Strength"]
 
 def getProperties(dictionary: dict):
     '''Returns Dictionary Keys of input dictionary'''
@@ -461,8 +462,8 @@ def retrieveSuperAbility(pHash:str,pName:str,pBaseCD:str,pPvPDR:str,pPvEDR:str, 
             loaded = json.loads(pDRCondition)
             if type(loaded) == list:
                     superAbility["DRCondition"] = loaded
-            else: return {"Hash": -1, "Name": "DRCondition input was invalid. Please provide an array of strings (array can be left empty)."}
-        else: return {"Hash": -1, "Name": "DRCondition could not be parsed. Please provide an array of strings (array can be left empty)."}
+            else: return {"Hash": -1, "Name": "DRCondition input was invalid. Please provide an array of strings (array can be left empty). Each condition must be in \"quotation marks\""}
+        else: return {"Hash": -1, "Name": "DRCondition could not be parsed. Please provide an array of strings (array can be left empty). Each condition must be in \"quotation marks\""}
     if len(superAbility["PvPDamageResistance"]) == len(superAbility["PvEDamageResistance"]) == len(superAbility["DRCondition"]):
         None
     else: return {"Hash": -1, "Name": "Ensure that the PvPDamageResistance, PvEDamageResistance, and DRCondition arrays are of the same length."}
@@ -858,6 +859,34 @@ def addNewItem():
         popupValue6.pack(padx=25, anchor="center", fill="x")
     submitEntry = ctk.CTkButton(popup, text="Submit", command=destroyPopup, font=ctk.CTkFont(size=14,weight="bold"))
     submitEntry.pack(padx=20, pady=20, ipadx=10, fill="y")
+
+def iterateDict(paramDict, characterStatName):
+    '''
+    Iterates through a Character Stat dictionary and remove all entries with Charge Rate and cooldown information.
+    Generates a "Cooldowns" property for each ability and override that contains an integer array of cooldown times at each tier. 
+    '''
+    if characterStatName != "Intellect":
+        for ability in paramDict[characterStatName]["Abilities"]:
+            array = deepcopy(paramDict[characterStatName]["ChargeRateScalars"])
+            for i in range(11):
+                array[i] = round(1/array[i] * ability["BaseCooldown"],2)
+            ability.update({"Cooldowns": array})
+            del ability["BaseCooldown"]
+    else:
+        for ability in paramDict["Intellect"]["SuperAbilities"]:
+            array = deepcopy(paramDict["Intellect"]["ChargeRateScalars"])
+            for i in range(11):
+                array[i] = round(1/array[i] * ability["BaseCooldown"],2)
+            ability.update({"Cooldowns": array})
+            del ability["BaseCooldown"]
+
+    for override in paramDict[characterStatName]["Overrides"]:
+        if "CooldownOverride" in override: # checks if "CooldownOverride" property is present
+            array = deepcopy(paramDict[characterStatName]["ChargeRateScalars"])
+            for i in range(11):
+                array[i] = round(1/array[i] * override["CooldownOverride"],2)
+            override.update({"CooldownOverride": array})
+    del paramDict[characterStatName]["ChargeRateScalars"]
 def submitChanges():
     '''Brings up a TopLevel window for committing updates with a read-only log window.'''
     submit_popup = ctk.CTkToplevel()
@@ -880,9 +909,15 @@ def submitChanges():
         # Sorts the abilities alphabetically 
         insertLog("Sorting Abilities and Overrides alphabetically.")
         for charStat in characterStatNameArray:
-            data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
+            if charStat != "Intellect":
+                data[charStat]['Abilities'].sort(key = lambda k: (k['Name']))
+            else:
+                data[charStat]['SuperAbilities'].sort(key = lambda k: (k['Name']))
             data[charStat]['Overrides'].sort(key = lambda k: (k['Name']))
-        data["Intellect"]['SuperAbilities'].sort(key = lambda k: (k['Name']))
+        # Dumps input with updates
+        insertLog("Updating source file with the changes.")
+        with open('./generator/SourceContent.json', 'w') as f:
+            json.dump(data, f, indent=4)
         # Update Tracker
         with open('update.json', "r") as f:
             update = json.load(f)
@@ -907,14 +942,10 @@ def submitChanges():
         insertLog("Generating update.json.")
         with open('update.json', "w") as f:
             json.dump(update, f)
-        # Dumps input with updates
-        insertLog("Updating source file with the changes.")
-        with open('./generator/SourceContent.json', 'w') as f:
-            json.dump(data, f, indent=4)
         # Generates cooldowns for each tier and removes information that's no longer useful.
         insertLog("Generating cooldown information.")
-        for i in characterStatNameArray:
-            iterateDict(data, i)
+        for stat in characterStatNameArray:
+            iterateDict(data, stat)
         # Output dump
         insertLog("Exporting updated database files.")
         with open('CharacterStatInfo.json', 'w') as f:
