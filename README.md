@@ -12,11 +12,11 @@ All the data stored here is intended for use by 3rd party apps willing to implem
 ## Report Issues/Inaccuracies
 
 If you notice any inaccuracies in the dataset, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
-Otherwise, feel free to contact me on Discord `@Stardust#9037` as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
+Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://d2clarity.page.link/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting and Usage Policy
 
-**Do NOT claim to be the creator/curator of this database or its contents. This includes purposefully showing the data in a way leads people to think you may be the maintainer of this data.**
+**Do NOT claim to be the creator/curator of this database or its contents. This includes purposefully showing the data in a way that leads people to think you may be the maintainer of this data.**
 
 That's really about it, I don't ask for anything else. As long as you don't break that rule, please feel free to use whatever info is stored here for your projects.
 
@@ -25,7 +25,7 @@ Though, I would certainly appreciate it if you linked back to this repository an
 ## Recommended Access Paths
 
 - Main Database contents:
-  - With Indentation (human readable):
+  - With Indentation (human-readable):
   <br> <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo.json>
   - Without Indentation (smaller file size): 
   <br> <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo-NI.json>
@@ -36,7 +36,7 @@ Though, I would certainly appreciate it if you linked back to this repository an
 
 ## Database Information
 
-Vital information about the database structure and what each property stored in it represents can be founds in the `shema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
+Vital information about the database structure and what each property stored in it represents can be found in the `shema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
 
 In addition to the main database the `update.json` contains the following:
 - `lastUpdate` - integer: timestamp of the last update made to the database.
