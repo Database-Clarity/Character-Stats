@@ -1022,11 +1022,11 @@
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
-                "BaseCooldown": 91,
+                "BaseCooldown": 91.0,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.0,
-                    1.0
+                    1.33,
+                    2.0
                 ]
             },
             {
@@ -1062,11 +1062,11 @@
             {
                 "Hash": 4094417246,
                 "Name": "Frenzied Blade",
-                "BaseCooldown": 114,
+                "BaseCooldown": 114.0,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.0,
-                    1.0
+                    1.25,
+                    1.5
                 ]
             },
             {

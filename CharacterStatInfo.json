@@ -2002,8 +2002,8 @@
                 "Name": "Arcane Needle",
                 "ChargeBasedScaling": [
                     1.0,
-                    1.0,
-                    1.0
+                    1.33,
+                    2.0
                 ],
                 "Cooldowns": [
                     113.75,
@@ -2126,8 +2126,8 @@
                 "Name": "Frenzied Blade",
                 "ChargeBasedScaling": [
                     1.0,
-                    1.0,
-                    1.0
+                    1.25,
+                    1.5
                 ],
                 "Cooldowns": [
                     142.5,
