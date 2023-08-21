@@ -153,21 +153,7 @@ def populateEditor():
     resetEditor()
     charStat = dropdown1.get()
     currentState = dropdown2.get()
-    if (
-        currentState == "WalkingSpeed" or
-        currentState == "StrafeSpeed" or
-        currentState == "CrouchSpeed" or
-        currentState == "TimeToFullHP" or
-        currentState == "TotalHP" or
-        currentState == "DamageResistance" or
-        currentState == "FlinchResistance" or
-        currentState == "ChargeRateScalars"
-        ):
-        property1.configure(text=currentState)
-        value1.configure(state='normal')
-        value1.insert(1.0, json.dumps(data[charStat][currentState]))
-        configureDeleteButton(charStat,currentState)
-    elif currentState == "Abilities":
+    if currentState == "Abilities":
         abilityOverride = returnIndexByName(dropdown3.get(),data[charStat][currentState])
         property1.configure(text="Hash")
         value1.configure(state='normal')
@@ -209,6 +195,11 @@ def populateEditor():
         if ("FlatIncrease" in data[charStat][currentState][abilityOverride]):
             value6.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["FlatIncrease"]))
         configureDeleteButton(charStat,currentState,data[charStat][currentState][abilityOverride]["Hash"])
+    else:
+        property1.configure(text=currentState)
+        value1.configure(state='normal')
+        value1.insert(1.0, json.dumps(data[charStat][currentState]))
+        configureDeleteButton(charStat,currentState)
 
 def clearContext():
     '''Clears context box menu.'''
@@ -236,7 +227,7 @@ def abilityContext(charStat: str):
         errorPopup("There were problems when parsing the input.",abilityDict["Name"])
         return
     selectedCooldown = abilityDict["BaseCooldown"]
-    minuteSecond = str(selectedCooldown//60) + ':' + str(selectedCooldown % 60)
+    minuteSecond = str(int(selectedCooldown//60)) + ':' + str(round(selectedCooldown % 60))
     counter = 0
     nameList = []
     for ability in data[charStat]["Abilities"]:
@@ -406,6 +397,10 @@ def updateAbilityOrOverride(charStat: str, currentState: str, abilityOverride: d
     for item in changedItemList:
         if "Hash" in item:
             if item["Hash"] == change["Hash"]:
+                item = change
+                changedItems.update_item(change)
+                changed2nd(currentState)
+                changed3rd(abilityOverride["Name"])
                 return
     changedItemList.append(change)
     changedItems.add_item(change)
@@ -482,8 +477,8 @@ def updateItem():
         updateMisc(charStat,currentState,item)
     populateContext()
 
-def restoreOriginalData(charStat: str, charStatProperty: str, hash = None) -> bool:
-    '''Restores Original Data from backup database if it was present at the time of launching the program.'''
+def restoreOriginalData(charStat: str, charStatProperty: str, hash: int = None) -> bool:
+    '''Restores Original Data from backup database if it was present at the time of launching the program. Returns True on success and False if there is no backup to restore from.'''
     if charStatProperty == "Abilities" or charStatProperty == "Overrides":
         if hash == None:
             errorPopup("Input Error","Ability or Override item was selected but no hash was provided. Please provide a valid hash.")
@@ -511,7 +506,7 @@ def restoreOriginalData(charStat: str, charStatProperty: str, hash = None) -> bo
     populateContext()
     return True
 
-def openDirect(charStat: str, charStatProperty: str, abilityOrOverrideName: str = None):
+def openDirect(charStat: str, charStatProperty: str, abilityOrOverrideName: int = None):
     '''Directly sets the editor to the item specified in the input parameters.'''
     dropdown1.set(charStat)
     changed1st(charStat)
@@ -529,45 +524,70 @@ class ScrollableChangeListFrame(ctk.CTkScrollableFrame):
         self.radiobutton_variable = ctk.StringVar()
         self.label_list = []
         self.button_list = []
+        self.hash_list = []
 
     def add_item(self, item: dict):
+        '''Appends an item to the Change List Frame'''
         label = ctk.CTkLabel(self, text=item["Name"], compound="left", padx=5, anchor="w", cursor="hand2")
         label.grid(row=len(self.label_list), column=0, pady=(0, 10), sticky="w")
-        
         label.bind("<Button-1>", lambda e: openDirect(item["CharStat"], item["CharStatProperty"], item["Name"]))
-
-        button = ctk.CTkButton(self, text="Reset", width=50, command=lambda: self.remove_item(item))
+        button = ctk.CTkButton(self, text="Reset", width=50, command=lambda: self.__reset_item(item))
         button.grid(row=len(self.button_list), column=1, pady=(0, 10), padx=5)
-
+        button.configure()
+        
         self.label_list.append(label)
         self.button_list.append(button)
+        if item["Hash"]:
+            self.hash_list.append(item["Hash"])
+        else:
+            self.hash_list.append(int(-1*len(self.label_list))) 
+    
+    def update_item(self, change: dict):
+        '''Updates the name of an existing item in the list. Only works with Ability and Override items.'''
+        for label, hash in zip(self.label_list, self.hash_list):
+            if change["Hash"] == hash:
+                label.configure(text=change["Name"])
+                label.unbind("<Button-1>")
+                label.bind("<Button-1>", lambda e: openDirect(change["CharStat"], change["CharStatProperty"], change["Name"]))
 
-    def delete_item(self, item: dict):
-        dict_index = returnIndexByHash(item["Hash"],data[item["CharStat"]][item["CharStatProperty"]])
-        for label, button in zip(self.label_list, self.button_list):
-            if item["Name"] == label.cget("text"):
-                label.destroy()
-                button.destroy()
-                self.label_list.remove(label)
-                self.button_list.remove(button)
-        data[item["CharStat"]][item["CharStatProperty"]].pop(dict_index)
-        changed2nd(item["CharStatProperty"])
 
-    def remove_item(self, item: dict):
-        for label, button in zip(self.label_list, self.button_list):
-            if item["Name"] == label.cget("text"):
+    def __reset_item(self, item: dict): 
+        '''If the item already existed before the changes made in the session, it resets it to the stored backup. If it's a newly added item, it switches the reset button to a Delete button that deletes the item entirely.'''
+        for label, button, hash in zip(self.label_list, self.button_list, self.hash_list):
+            if item["Hash"] == hash:
                 if restoreOriginalData(item["CharStat"],item["CharStatProperty"],item["Hash"]):
                     label.destroy()
                     button.destroy()
                     self.label_list.remove(label)
                     self.button_list.remove(button)
+                    self.hash_list.remove(hash)
                 else:
                     # restoreOriginalData can only return False if the CharStatProperty is either Abilities or Overrides
                     # in case it returns False, the item to be removed is newly added and so doesn't have a backup
                     # since this is the case, we can change the Restore button to a Delete button with the corresponding code
-                    button.configure(text="Delete", command=lambda: self.delete_item(item))
-                openDirect(item["CharStat"], item["CharStatProperty"], item["Name"])
+                    button.configure(text="Delete", command=lambda: self.__delete_item(item))
                 return
+            elif item["Name"] == label.cget("text"):
+                restoreOriginalData(item["CharStat"],item["CharStatProperty"],item["Hash"])
+                label.destroy()
+                button.destroy()
+                self.label_list.remove(label)
+                self.button_list.remove(button)
+                self.hash_list.remove(hash)
+            openDirect(item["CharStat"], item["CharStatProperty"], item["Hash"])
+
+    def __delete_item(self, item: dict):
+        '''Used exclusively inside __reset_item. Deletes newly added Ability or Override items that don't have a backup from before this session.'''
+        dict_index = returnIndexByHash(item["Hash"],data[item["CharStat"]][item["CharStatProperty"]])
+        for label, button, hash in zip(self.label_list, self.button_list, self.hash_list):
+            if item["Hash"] == hash:
+                label.destroy()
+                button.destroy()
+                self.label_list.remove(label)
+                self.button_list.remove(button)
+                self.hash_list.remove(hash)
+        data[item["CharStat"]][item["CharStatProperty"]].pop(dict_index)
+        changed2nd(item["CharStatProperty"])
 
 def addNewItem():
     '''Brings up a dialog to input required properties and then opens it up in the editor.'''

@@ -158,7 +158,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
+                        "description": "Represents how fast you can walk (not sprint) forward in meters per second. Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "StrafeSpeed": {
@@ -167,7 +167,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
+                        "description": "Represents how fast you can walk side-to-side and backwards in meters per second (85% of Walking Speed). Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "CrouchSpeed": {
@@ -176,7 +176,7 @@
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11,
-                        "description": "Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
+                        "description": "Represents how fast you can move while crouching in meters per second (55% of Walking Speed). Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
                     }
                 },
                 "Abilities": {
@@ -205,14 +205,50 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "TimeToFullHP": {
+                "TotalRegenTime": {
                     "type": "array",
                     "items": {
                         "type": "number",
                         "minItems": 11,
                         "maxItems": 11
                     },
-                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding beyond 1 decimal place is not recommended."
+                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding is not recommended."
+                },
+                "HealthRegenDelay": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11
+                    },
+                    "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your total health alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
+                },
+                "HealthRegenSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11
+                    },
+                    "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                },
+                "ShieldRegenDelay": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11
+                    },
+                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended."
+                },
+                "ShieldRegenSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minItems": 11,
+                        "maxItems": 11
+                    },
+                    "description": "Array index represents the Recovery tier. The numbers representhow many seconds it takes. Rounding is not recommended."
                 },
                 "Abilities": {
                     "type": "array",
@@ -230,7 +266,11 @@
             "required": [
                 "Abilities",
                 "Overrides",
-                "TimeToFullHP"
+                "TotalRegenTime",
+                "HealthRegenDelay",
+                "HealthRegenTime",
+                "ShieldRegenDelay",
+                "ShieldRegenTime"
             ],
             "title": "Recovery"
         },
