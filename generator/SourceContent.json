@@ -620,141 +620,222 @@
             1.29,
             1.307
         ],
-        "Abilities": [
+        "SuperAbilities": [
             {
                 "Hash": 3769507633,
                 "Name": "Arc Staff",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [10],
+                "PvEDamageResistance": [10],
+                "DRCondition": ["Josh"]
             },
             {
                 "Hash": 375052471,
                 "Name": "Blade Barrage",
-                "BaseCooldown": 455
+                "BaseCooldown": 455,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 3574662354,
                 "Name": "Bladefury",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2747500760,
                 "Name": "Burning Maul",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1081893461,
                 "Name": "Chaos Reach",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2274196886,
                 "Name": "Daybreak",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 119041299,
                 "Name": "Fists Of Havoc",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 3769507632,
                 "Name": "Gathering Storm",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2021620139,
                 "Name": "Glacial Quake",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 375052469,
                 "Name": "Golden Gun: Deadshot",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 375052468,
                 "Name": "Golden Gun: Marksman",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2747500761,
                 "Name": "Hammer of Sol",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1885339915,
                 "Name": "Needle Storm",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1656118682,
                 "Name": "Nova Bomb: Cataclysm",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1656118681,
                 "Name": "Nova Bomb: Vortex",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1656118680,
                 "Name": "Nova Warp",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 4260353952,
                 "Name": "Sentinel Shield",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2722573683,
                 "Name": "Shadowshot: Deadfall",
-                "BaseCooldown": 455
+                "BaseCooldown": 455,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2722573681,
                 "Name": "Shadowshot: Moebius Quiver",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2625980631,
                 "Name": "Silence and Squal",
-                "BaseCooldown": 455
+                "BaseCooldown": 455,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2463983862,
                 "Name": "Silkstrike",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2722573682,
                 "Name": "Spectral Blades",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 1081893460,
                 "Name": "Stormtrance",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 119041298,
                 "Name": "Thundercrash",
-                "BaseCooldown": 500
+                "BaseCooldown": 500,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 4260353953,
                 "Name": "Ward of Dawn",
-                "BaseCooldown": 417
+                "BaseCooldown": 417,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 2274196887,
                 "Name": "Well of Radiance",
-                "BaseCooldown": 417
+                "BaseCooldown": 417,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             },
             {
                 "Hash": 3683904166,
                 "Name": "Winter's Wrath",
-                "BaseCooldown": 556
+                "BaseCooldown": 556,
+                "PvPDamageResistance": [],
+                "PvEDamageResistance": [],
+                "DRCondition": []
             }
         ],
         "Overrides": []
