@@ -528,7 +528,7 @@
             {
                 "Hash": 146194908,
                 "Name": "Skip Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 105.0
             },
             {
                 "Hash": 2216698406,
@@ -573,7 +573,7 @@
             {
                 "Hash": 2809141585,
                 "Name": "Void Wall",
-                "BaseCooldown": 152
+                "BaseCooldown": 121.0
             },
             {
                 "Hash": 1016030582,

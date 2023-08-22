@@ -15,6 +15,8 @@
 - Removed *Renewal Grasp* Cooldown Override
 - Increased *Towering Barricade* cooldown from 48 to 70 seconds
 - Increased *Thundercrash* cooldown from 500 to 556 seconds
+- Reduced *Skip Grenade* cooldown from 121 to 105 seconds
+- Reduced *Voidwall Grenade* cooldown from 152 to 121 seconds
 - Added now known values for `ChargeBasedScaling` to *Arcane Needle* and *Frenzied Blade*
 
 ### Other Changes
