@@ -28,6 +28,7 @@ def changed1st(choice):
     '''Updates 2nd and 3rd dropdowns as well as text boxes if 1st one was updated'''
     dropdown1.set(choice)
     newDropdown2 = getProperties(data[choice])
+    newDropdown2.pop(0)
     dropdown2contents.configure(values=newDropdown2)
     dropdown2.set(newDropdown2[0])
     changed2nd(newDropdown2[0])
@@ -219,9 +220,14 @@ def populateEditor():
             value6.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["FlatIncrease"]))
         configureDeleteButton(charStat,currentState,data[charStat][currentState][abilityOverride]["Hash"])
     else:
-        property1.configure(text=currentState)
-        value1.configure(state='normal')
-        value1.insert(1.0, json.dumps(data[charStat][currentState]))
+        if "Array" in data[charStat][currentState]:
+            property1.configure(text=currentState)
+            value1.configure(state='normal')
+            value1.insert(1.0, json.dumps(data[charStat][currentState]["Array"]))
+        else: 
+            property1.configure(text=currentState)
+            value1.configure(state='normal')
+            value1.insert(1.0, json.dumps(data[charStat][currentState]))
         configureDeleteButton(charStat,currentState)
 
 def clearContext():
@@ -501,9 +507,9 @@ def updateAbilityOrOverride(charStat: str, currentState: str, abilityOverride: d
     changed3rd(abilityOverride["Name"])
 def updateMisc(charStat: str, currentState: str, miscInfo: list):
     '''Updates Miscellaneous Info (WalkingSpeed/FlinchResistance/etc.) to miscInfo.'''
-    if data[charStat][currentState] == miscInfo:
+    if data[charStat][currentState]["Array"] == miscInfo:
         return
-    data[charStat][currentState] = miscInfo
+    data[charStat][currentState]["Array"] = miscInfo
     # Updates Changed Items list
     change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": None, "Name": currentState}
     for item in changedItemList:
@@ -918,28 +924,27 @@ def submitChanges():
         insertLog("Updating source file with the changes.")
         with open('./generator/SourceContent.json', 'w') as f:
             json.dump(data, f, indent=4)
-        # Update Tracker
+        # Update Tracker Start
         with open('update.json', "r") as f:
             update = json.load(f)
-        update["lastUpdate"] = time.time_ns()
+        currentSchemaVersion = update["schemaVersion"]
         # Breaking Change handling
         if breakingChangeCheckBox.get():
             insertLog("Handling Breaking Changes.")
-            version_dialog = ctk.CTkInputDialog(text="Enter the last version number before this breaking change:", title="Breaking Change Handler")
+            version_dialog = ctk.CTkInputDialog(text="Enter the new schema version for this update:", title="Breaking Change Handler")
             answer = version_dialog.get_input()
-            if answer == '':
-                errorPopup("Input Error", "Please provide a valid version number when prompted.")
+            if not re.match(r"^\d+\.\d+$",answer):
+                errorPopup("Input Error", "Please provide a valid version number when prompted. Version numbers consist of one major and one minor version number separated by a '.' character. Example: 1.7")
                 logs.configure(state="normal")
                 logs.delete(1.0, "end")
                 logs.configure(state="disabled")
                 return
-            insertLog("Copying legacy files to specified directory.")
-            makedirs(f"legacy-content\{answer}")
-            copy('CharacterStatInfo-NI.json',f'legacy-content\{answer}\CharacterStatInfo-NI.json')
-            copy('CharacterStatInfo.json',f'legacy-content\{answer}\CharacterStatInfo.json')
-            update["lastBreakingChange"] = update["lastUpdate"]
-            update["legacyRootDirectory"] = "https://database-clarity.github.io/Character-Stats/legacy-content/" + answer
+            insertLog("Creating directory for the new schema version.")
+            makedirs(f"versions\{answer}")
+            update["schemaVersion"] = answer
+            currentSchemaVersion = answer
         insertLog("Generating update.json.")
+        update["lastUpdate"] = time.time_ns()
         with open('update.json', "w") as f:
             json.dump(update, f)
         # Generates cooldowns for each tier and removes information that's no longer useful.
@@ -948,9 +953,9 @@ def submitChanges():
             iterateDict(data, stat)
         # Output dump
         insertLog("Exporting updated database files.")
-        with open('CharacterStatInfo.json', 'w') as f:
+        with open(f'./versions/{currentSchemaVersion}/CharacterStatInfo.json', 'w') as f:
             json.dump(data, f, indent=4)
-        with open('CharacterStatInfo-NI.json', 'w') as f:
+        with open(f'./versions/{currentSchemaVersion}/CharacterStatInfo-NI.json', 'w') as f:
             json.dump(data, f)
         insertLog("Changes implemented. Run complete.")
         submitChangesButton.configure(command=lambda: submit_popup.destroy(), text="Exit")
@@ -999,11 +1004,12 @@ dropdown1.grid(row=0, column=0, columnspan=2, padx=20, pady=(20, 0), sticky="ew"
 dropdown2contents = CTkScrollableDropdownFrame(dropdown1, values=getProperties(data), resize=False, command=changed1st,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
-dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=getProperties(data[getProperties(data)[0]]), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
+initialDropdown2Values = getProperties(data[getProperties(data)[0]])
+initialDropdown2Values.pop(0)
+dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=initialDropdown2Values, corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown2.grid(row=1, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
-dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=getProperties(data[getProperties(data)[0]]), resize=False, command=changed2nd,
+dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, command=changed2nd,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
-
 
 dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=250, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
                             font=ctk.CTkFont(weight="bold",size=14))
