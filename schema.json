@@ -35,10 +35,17 @@
             ],
             "title": "CharacterStats"
         },
+        "Description": {
+            "type": "string",
+            "description": "Contains a locale ID that you can use to grab the description for the item in your selected language. The ID is provided in a [key].[value] format where there can be an arbitrary number of keys (though it'll be 2-3 at most). Then you can use these keys and values to query the './locale/[language code].json' files for the desired description."
+        },
         "Generic": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "Description": {
+                    "$ref": "#/definitions/Description"
+                },
                 "Abilities": {
                     "type": "array",
                     "items": {
@@ -54,7 +61,8 @@
             },
             "required": [
                 "Abilities",
-                "Overrides"
+                "Overrides",
+                "Description"
             ],
             "title": "Generic"
         },
@@ -183,7 +191,7 @@
             "DRCondition": {
                 "type": "array",
                 "items": {
-                    "type": "string"
+                    "$ref": "#/definitions/Description"
                 },
                 "description": "Array length matches the length of the DamageResistance arrays. This property can be ignored when the length of the arrays is 1 as that represents the passive DR of the Super that doesn't have a condition. The array contains the condition for each Damage Resist value at the same index in the DamageResistance arrays. Unfortunately, there is no way to realistically account for all the different conditions without using simple text for it so these will be succinct descriptions instead of item hashes or the like."
             },
@@ -201,6 +209,9 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "Description": {
+                    "$ref": "#/definitions/Description"
+                },
                 "SuperAbilities": {
                     "type": "array",
                     "items": {
@@ -224,31 +235,61 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "WalkingSpeed": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11,
-                        "description": "Represents how fast you can walk (not sprint) forward in meters per second. Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
+                "Description": {
+                    "$ref": "#/definitions/Description"
+                },
+                "WalkSpeed": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Represents how fast you can walk (not sprint) forward in meters per second. Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
+                        }
                     }
                 },
                 "StrafeSpeed": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11,
-                        "description": "Represents how fast you can walk side-to-side and backwards in meters per second (85% of Walking Speed). Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Represents how fast you can walk side-to-side and backwards in meters per second (85% of Walking Speed). Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
+                        }
                     }
                 },
                 "CrouchSpeed": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11,
-                        "description": "Represents how fast you can move while crouching in meters per second (55% of Walking Speed). Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Represents how fast you can move while crouching in meters per second (55% of Walking Speed). Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
+                        }
                     }
                 },
                 "Abilities": {
@@ -269,7 +310,8 @@
                 "Overrides",
                 "CrouchSpeed",
                 "StrafeSpeed",
-                "WalkingSpeed"
+                "WalkSpeed",
+                "Description"
             ],
             "title": "Mobility"
         },
@@ -277,50 +319,98 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "Description": {
+                    "$ref": "#/definitions/Description"
+                },
                 "TotalRegenTime": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11
-                    },
-                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding is not recommended."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding is not recommended."
+                        }
+                    }
                 },
                 "HealthRegenDelay": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11
-                    },
-                    "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your total health alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your total health alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
+                        }
+                    }
                 },
                 "HealthRegenSpeed": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11
-                    },
-                    "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                        }
+                    }
                 },
                 "ShieldRegenDelay": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11
-                    },
-                    "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended. Good to know: Shield health is a 115-130 HP portion of total health determined by Resilience."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended. Good to know: Shield health is a 115-130 HP portion of total health determined by Resilience."
+                        }
+                    }
                 },
                 "ShieldRegenSpeed": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minItems": 11,
-                        "maxItems": 11
-                    },
-                    "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of total health determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of total health determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
+                        }
+                    }
                 },
                 "Abilities": {
                     "type": "array",
@@ -342,7 +432,8 @@
                 "HealthRegenDelay",
                 "HealthRegenTime",
                 "ShieldRegenDelay",
-                "ShieldRegenTime"
+                "ShieldRegenTime",
+                "Description"
             ],
             "title": "Recovery"
         },
@@ -350,32 +441,62 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "TotalHP": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    },
-                    "minItems": 11,
-                    "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. 'Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
+                "Description": {
+                    "$ref": "#/definitions/Description"
                 },
-                "DamageResistance": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    },
-                    "minItems": 11,
-                    "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance granted *IN PVE* at each tier."
+                "TotalHP": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. 'Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
+                        }
+                    }
+                },
+                "PvEDamageResistance": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance granted IN PVE at each tier."
+                        }
+                    }
                 },
                 "FlinchResistance": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    },
-                    "minItems": 11,
-                    "maxItems": 11,
-                    "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance granted at each tier."
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "Description": {
+                            "$ref": "#/definitions/Description"
+                        },
+                        "Array": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minItems": 11,
+                                "maxItems": 11
+                            },
+                            "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance granted at each tier."
+                        }
+                    }
                 },
                 "Abilities": {
                     "type": "array",
@@ -395,7 +516,8 @@
                 "Overrides",
                 "DamageResistance",
                 "FlinchResistance",
-                "TotalHP"
+                "TotalHP",
+                "Description"
             ],
             "title": "Resilience"
         }
