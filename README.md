@@ -27,7 +27,7 @@ Though, I would certainly appreciate it if you linked back to this repository an
 - Main Database contents:
   - With Indentation (human-readable):
   <br> <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo.json>
-  - Without Indentation (smaller file size): 
+  - Without Indentation (smaller file size):
   <br> <https://Database-Clarity.github.io/Character-Stats/CharacterStatInfo-NI.json>
 - JSON schema for the database with added documentation:
   <br> <https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json>
@@ -44,6 +44,7 @@ In addition to the main database the `update.json` contains the following:
 - `legacyRootDirectory` - string: root directory where the last version of the database can be found from before the last breaking change was introduced.
 
 Example usage for handling breaking changes:
+
 1. The `lastBreakingChange` property in the `update.json` file stores a newer timestamp compared to the locally cached `lastUpdate` value.
 2. The `legacyRootDirectory` property stores the following URL:
   <br>`https://database-clarity.github.io/Character-Stats/legacy-content/v1.1`
