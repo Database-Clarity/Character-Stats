@@ -1,5 +1,29 @@
 # Changelogs
 
+## v1.6.0 - Breaking Change (Sorry... again)
+
+### Schema/Database Structure Changes
+- Detailed explanations for the new structure and properties can be found in the `schema.json` file
+- `Intellect` no longer uses the generic `Ability` objects and now has its own `SuperAbility` object
+  - `SuperAbility` retains the `Hash`, `Name`, and `Cooldowns` properties
+  - Added `PvPDamageResistance`, `PvEDamageResistance`, and `DRCondition` properties to `SuperAbility` objects
+- `Recovery` had its `TimeToFullHP` property broken out into its sub-components but `TotalRegenTime` retains its previous functionality
+  - Added `TotalRegenTime`, `HealthRegenDelay`, `HealthRegenSpeed`, `ShieldRegenDelay`, and `ShieldRegenSpeed` properties to the `Recovery` object
+  - Displaying 'normal health' and 'shield health' separately might be helpful to help better explain these numbers, all the info you would need to do so is in the `schema.json` file
+
+### Season 22 Updates + Charge-Based Scaling Follow-Up
+- Removed *Renewal Grasp* Cooldown Override
+- Increased *Towering Barricade* cooldown from 48 to 70 seconds
+- Increased *Thundercrash* cooldown from 500 to 556 seconds
+- Reduced *Skip Grenade* cooldown from 121 to 105 seconds
+- Reduced *Voidwall Grenade* cooldown from 152 to 121 seconds
+- Added now known values for `ChargeBasedScaling` to *Arcane Needle* and *Frenzied Blade*
+
+### Other Changes
+- Added a mostly feature complete GUI for data editing
+  - Self-respecting programmers should avoid looking at the code for fear of heart attacks
+  - Ability to delete Abilities/Overrides/SuperAbilities still missing, will come with a future update
+
 ## v1.5.0 - Breaking Change
 
 ### Schema/Database Structure updates and improvements
