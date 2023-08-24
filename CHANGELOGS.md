@@ -4,19 +4,19 @@
 
 ### Schema/Database Structure Changes v1.7
 
-- Previous array-type properties of Character Stat objects have now been converted into objects themselves
+- Added new `Description` property to the schema (literally just a string)
+  - Contains a locale ID that can be used to get the localized description of the object it is under. These are designed to be used as a tooltip in apps.
+- Added `Description` property to all Character Stat objects
+- Previous number/int array-type properties of Character Stat objects (e.g. `FlinchResistance`) have now been converted into objects themselves
+  - These contain the previously available array in their `Array` property and have a newly added `Description` property
 - `WalkingSpeed` (now object) property of `Mobility` has been renamed to `WalkSpeed` for the sake of consistency
   - Decided I might as well finally make this change since this is a pretty large update anyway
 - `DamageResistance` (now object property) of `Resilience` has been renamed to `PvEDamageResistance` for clarity
-- Added new `Description` property to the schema (literally just a string)
-  - Contains a locale ID that can be used to get the localized description of the object it is under. These are designed to be used as a tooltip in apps.
-- Added `Description` property to all Character Stat and 'previously-array-type-properties-of-Character-Stat-objects' objects
-  - e.g. `WalkSpeed`, `TotalRegenTime`, `PvEDamageResistance`, etc.
 - `DRCondition` property of `SuperAbility` objects now uses the new `Description` property instead of a generic string
 
 ### New: Localization Support
 
-- `Description` strings will now be localized through Crowdin to every language currently supported in the D2 manifest (and will use the same language tags)
+- `Description` strings will now be localized through [Crowdin](https://crowdin.com/project/clarity-d2-character-stats) to every language currently supported in the D2 manifest (and will use the same language tags)
   - If your app has already established translators who are interested in helping with this effort, please direct them to our [Discord Server](https://url.d2clarity.com/discord).
   - These strings will not be updated nearly as often as our main perk info database and should remain fairly constant, so I don't expect this to be a significant workload.
 
