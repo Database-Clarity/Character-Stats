@@ -1,6 +1,41 @@
 {
-    "SuperDRCondition": {
-        "Passive": "Passively Active",
-        "GoldenGunMM1": "Requires the Knock 'Em Down Aspect"
+    "Mobility": {
+        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
+        "WalkSpeed": "How fast you can walk forward.",
+        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
+        "CrouchSpeed": "How fast you can move while crouching."
+    },
+    "Resilience": {
+        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also deceases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
+        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
+        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
+        "FlinchResistance": "How much passive Flinch Resistance you have."
+    },
+    "Recovery": {
+        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
+        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
+        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
+        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
+        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
+        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+    },
+    "Discipline": {
+        "Description": "Discipline governs your Grenade Ability cooldown."
+    },
+    "Intellect": {
+        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
+        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
+        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "DRCondition": {
+            "Passive": "Passively Active",
+            "CastAnimation": "Active during the Super Cast animation.",
+            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
+            "SpectralBlades1": "Active while Invisible",
+            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
+            "WellOfRadiance2": "Against any damage not dealth with a Primary Ammo Weapon"
+        }
+    },
+    "Strength": {
+        "Description": "Strength governs your Melee Ability cooldown."
     }
 }

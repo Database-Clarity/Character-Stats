@@ -1,8 +1,33 @@
 # Changelogs
 
-## v1.6.0 - Breaking Change (Sorry... again)
+## v1.7.0 - Breaking Change (Ugh) - [insert timestamp]
 
-### Schema/Database Structure Changes
+### Schema/Database Structure Changes v1.7
+
+- Previous array-type properties of Character Stat objects have now been converted into objects themselves
+- `WalkingSpeed` (now object) property of `Mobility` has been renamed to `WalkSpeed` for the sake of consistency
+  - Decided I might as well finally make this change this since this is a pretty large update anyway
+- `DamageResistance` (now object property) of `Resilience` has been renamed to `PvEDamageResistance` for clarity
+- Added new `Description` property to the schema (literally just a string)
+  - Contains a locale ID that can be used to get the localized description of the object it is under. These are designed to be used as a tooltip in apps.
+- Added `Description` property to all Character Stat and 'previously-array-type-properties-of-Character-Stat-objects' objects
+  - e.g. `WalkSpeed`, `TotalRegenTime`, `PvEDamageResistance`, etc.
+- `DRCondition` property of `SuperAbility` objects now uses the new `Description` property instead of a generic string
+
+### New: Localization Support
+
+- `Description` strings will now be localized through Crowdin to every language currently supported in the D2 manifest (and will use the same language tags)
+  - If your app has already established translators that are interested in helping with this effort, please direct them to our [Discord Server](https://url.d2clarity.com/discord).
+  - These strings will not be updated nearly as often as our main perk info database and the strings should remain fairly constant so I don't expect this to be a significant workload in any way.
+
+### Other Changes
+
+- *Icefall Mantle* now overrides *Rally Barricade* cooldowns to the cooldown of *Towering Barricade* (this one was SOOOO wrong)
+- Updated `README.md` to better reflect the current state of the database and provide a clearer example for breaking change handling
+
+## v1.6.0 - Breaking Change (Sorry... again) - August 23, 2023
+
+### Schema/Database Structure Changes v1.6
 
 - Detailed explanations for the new structure and properties can be found in the `schema.json` file
 - `Intellect` no longer uses the generic `Ability` objects and now has its own `SuperAbility` object

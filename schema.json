@@ -354,7 +354,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your total health alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
+                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your Total HP alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
                         }
                     }
                 },

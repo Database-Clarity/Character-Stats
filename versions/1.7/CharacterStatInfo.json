@@ -1334,7 +1334,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1360,7 +1360,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     655.15,
@@ -1386,7 +1386,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1412,7 +1412,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1438,7 +1438,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1464,7 +1464,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1490,7 +1490,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1516,7 +1516,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1542,7 +1542,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1570,8 +1570,8 @@
                     66
                 ],
                 "DRCondition": [
-                    "Passive",
-                    "Requires the Knock 'Em Down aspect"
+                    "Intellect.DRCondition.Passive",
+                    "Intellect.DRCondition.GoldenGunDeadShot1"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1597,7 +1597,7 @@
                     60
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1623,7 +1623,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1649,7 +1649,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1675,7 +1675,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1701,7 +1701,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1727,7 +1727,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1753,7 +1753,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1779,7 +1779,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     655.15,
@@ -1805,7 +1805,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     719.94,
@@ -1831,7 +1831,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     655.15,
@@ -1857,7 +1857,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1885,8 +1885,8 @@
                     90
                 ],
                 "DRCondition": [
-                    "While not Invisible",
-                    "While Invisible"
+                    "Intellect.DRCondition.Passive",
+                    "Intellect.DRCondition.SpectralBlades1"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1912,7 +1912,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1938,7 +1938,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
@@ -1958,16 +1958,13 @@
                 "Hash": 4260353953,
                 "Name": "Ward of Dawn",
                 "PvPDamageResistance": [
-                    0,
                     26.5
                 ],
                 "PvEDamageResistance": [
-                    -9999,
                     -9999
                 ],
                 "DRCondition": [
-                    "Once Super Cast animation concludes",
-                    "During Super Cast animation"
+                    "Intellect.DRCondition.CastAnimation"
                 ],
                 "Cooldowns": [
                     600.43,
@@ -1995,8 +1992,8 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Against Primary Ammo Weapon damage",
-                    "Against damage not dealth with a Primary Ammo Weapon"
+                    "Intellect.DRCondition.WellOfRadiance1",
+                    "Intellect.DRCondition.WellOfRadiance2"
                 ],
                 "Cooldowns": [
                     600.43,
@@ -2022,7 +2019,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ],
                 "Cooldowns": [
                     800.58,
