@@ -6,7 +6,7 @@
         "CrouchSpeed": "How fast you can move while crouching."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also deceases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
+        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
         "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
         "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
         "FlinchResistance": "How much passive Flinch Resistance you have."
@@ -32,7 +32,7 @@
             "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
             "SpectralBlades1": "Active while Invisible",
             "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealth with a Primary Ammo Weapon"
+            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
         }
     },
     "Strength": {
