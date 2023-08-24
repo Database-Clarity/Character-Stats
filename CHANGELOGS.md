@@ -6,7 +6,7 @@
 
 - Previous array-type properties of Character Stat objects have now been converted into objects themselves
 - `WalkingSpeed` (now object) property of `Mobility` has been renamed to `WalkSpeed` for the sake of consistency
-  - Decided I might as well finally make this change this since this is a pretty large update anyway
+  - Decided I might as well finally make this change since this is a pretty large update anyway
 - `DamageResistance` (now object property) of `Resilience` has been renamed to `PvEDamageResistance` for clarity
 - Added new `Description` property to the schema (literally just a string)
   - Contains a locale ID that can be used to get the localized description of the object it is under. These are designed to be used as a tooltip in apps.
@@ -17,10 +17,10 @@
 ### New: Localization Support
 
 - `Description` strings will now be localized through Crowdin to every language currently supported in the D2 manifest (and will use the same language tags)
-  - If your app has already established translators that are interested in helping with this effort, please direct them to our [Discord Server](https://url.d2clarity.com/discord).
-  - These strings will not be updated nearly as often as our main perk info database and the strings should remain fairly constant so I don't expect this to be a significant workload in any way.
+  - If your app has already established translators who are interested in helping with this effort, please direct them to our [Discord Server](https://url.d2clarity.com/discord).
+  - These strings will not be updated nearly as often as our main perk info database and should remain fairly constant, so I don't expect this to be a significant workload.
 
-### Other Changes
+### Other Changes v1.7
 
 - *Icefall Mantle* now overrides *Rally Barricade* cooldowns to the cooldown of *Towering Barricade* (this one was SOOOO wrong)
 - Updated `README.md` to better reflect the current state of the database and provide a clearer example for breaking change handling
@@ -46,7 +46,7 @@
 - Reduced *Void Wall* grenade cooldown from 152 to 121 seconds
 - Added now known values for `ChargeBasedScaling` to *Arcane Needle* and *Frenzied Blade*
 
-### Other Changes
+### Other Changes v1.6
 
 - Added a mostly feature complete GUI for data editing
   - Self-respecting programmers should avoid looking at the code for fear of heart attacks
