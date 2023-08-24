@@ -920,14 +920,17 @@ def submitChanges():
             else:
                 data[charStat]['SuperAbilities'].sort(key = lambda k: (k['Name']))
             data[charStat]['Overrides'].sort(key = lambda k: (k['Name']))
+        
         # Dumps input with updates
         insertLog("Updating source file with the changes.")
         with open('./generator/SourceContent.json', 'w') as f:
             json.dump(data, f, indent=4)
+        
         # Update Tracker Start
         with open('update.json', "r") as f:
             update = json.load(f)
         currentSchemaVersion = update["schemaVersion"]
+
         # Breaking Change handling
         if breakingChangeCheckBox.get():
             insertLog("Handling Breaking Changes.")
@@ -947,16 +950,19 @@ def submitChanges():
         update["lastUpdate"] = time.time_ns()
         with open('update.json', "w") as f:
             json.dump(update, f)
+
         # Generates cooldowns for each tier and removes information that's no longer useful.
         insertLog("Generating cooldown information.")
+        exportData = deepcopy(data)
         for stat in characterStatNameArray:
-            iterateDict(data, stat)
+            iterateDict(exportData, stat)
+        
         # Output dump
         insertLog("Exporting updated database files.")
         with open(f'./versions/{currentSchemaVersion}/CharacterStatInfo.json', 'w') as f:
-            json.dump(data, f, indent=4)
+            json.dump(exportData, f, indent=4)
         with open(f'./versions/{currentSchemaVersion}/CharacterStatInfo-NI.json', 'w') as f:
-            json.dump(data, f)
+            json.dump(exportData, f)
         insertLog("Changes implemented. Run complete.")
         submitChangesButton.configure(command=lambda: submit_popup.destroy(), text="Exit")
 
