@@ -354,7 +354,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: Health is a fixed 70 HP portion of your Total HP alongside 'Shields' which a 115-130 HP portion of total health determined by Resilience."
+                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: 'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields' which are a 115-130 HP portion of Total HP determined by Resilience."
                         }
                     }
                 },
@@ -372,7 +372,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers represent how fast your health regens after the delay. The numbers are provided in % of total health per second (total health is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                            "description": "Array index represents the Recovery tier. The numbers represent how fast your 'Health' regens after the delay. The numbers are provided in % of total 'Health' per second (total 'Health' is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
                         }
                     }
                 },
@@ -390,7 +390,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended. Good to know: Shield health is a 115-130 HP portion of total health determined by Resilience."
+                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended. Good to know: Shield health is a 115-130 HP portion of Total HP and is determined by Resilience."
                         }
                     }
                 },
@@ -408,7 +408,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of total health determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
+                            "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of Total HP and is determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
                         }
                     }
                 },

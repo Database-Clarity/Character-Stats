@@ -23,6 +23,7 @@
 ### Other Changes v1.7
 
 - *Icefall Mantle* now overrides *Rally Barricade* cooldowns to the cooldown of *Towering Barricade* (this one was SOOOO wrong)
+- Updated *Hoarfrost-Z* override scalar to correctly override to the new *Towering Barricade* cooldowns
 - Updated `README.md` to better reflect the current state of the database and provide a clearer example for breaking change handling
 
 ## v1.6.0 - Breaking Change (Sorry... again) - August 23, 2023
