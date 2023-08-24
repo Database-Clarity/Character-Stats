@@ -1,5 +1,7 @@
 # Destiny 2 Character Stats
 
+[![Crowdin](https://badges.crowdin.net/clarity-d2-character-stats/localized.svg)](https://crowdin.com/project/clarity-d2-character-stats)
+
 This repository contains an up-to-date (usually) collection of ability cooldowns as well as other benefits that character stats provide which can be easily parsed by 3rd party applications. This also includes support for Aspects and Exotics changing the base cooldowns of certain abilities among other things.
 
 All the data stored here is intended for use by 3rd party apps willing to implement them in place of Bungie's own outdated and incomplete information on Character Stats. This includes cooldown times as well as every other kind of useful information that is available from community research.
