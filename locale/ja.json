@@ -1,15 +1,15 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "可動性は、地上から行う初期ジャンプの高度と、歩行速度・しゃがみ歩き速度を上昇させます。\n\nダッシュ速度は8 m/sで固定であり、可動性の影響は受けません。\n\nまた、可動性はハンターのクラススキルのクールダウン速度を向上させます。",
+        "WalkSpeed": "前方への歩行速度",
+        "StrafeSpeed": "左右・後方への歩行速度",
+        "CrouchSpeed": "しゃがみ歩きの速度"
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "耐久力は\"シールド\"の容量を増加させ、PvEでのダメージ軽減率を向上させ、ダメージを受けた時のひるみを軽減させます。またステイシス凍結状態からの解放アクションを行った場合に受けるダメージが減少します。\n\n\"シールド\"は耐久力によって115から130の間で変化しますが、\"体力\"は70で固定です。\n\nまた、耐久力はタイタンのクラススキルのクールダウン速度を向上させます。",
+        "TotalHP": "キャラクターの最大HPを決定します。\n\n最大HPは70で固定の\"体力\"部分と、耐久力によって115から130の範囲で変動する\"シールド\"で構成されます。",
+        "PvEDamageResistance": "PvEアクティビティでのダメージ軽減率",
+        "FlinchResistance": "ダメージを受けた場合のひるみ軽減率"
     },
     "Recovery": {
         "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",

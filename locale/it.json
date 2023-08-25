@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "La Mobilità determina quanto in alto puoi saltare senza usare la tua abilità di salto. Determina anche la tua velocità di movimento mentre Cammini in avanti, di lato o da Accovacciato.\n\nLa Mobilità non ha effetto sulla velocità di Corsa in quanto è fissa ad 8 metri al secondo.\n\nLa Mobilità determina inoltre la velocità di recupero dell'Abilità di Classe dei Cacciatori.",
+        "WalkSpeed": "Quanto veloce puoi camminare in avanti.",
+        "StrafeSpeed": "Quanto veloce puoi muoverti lateralmente ed all'indietro.",
+        "CrouchSpeed": "Quanto veloce puoi muoverti mentre sei accovacciato."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "La Resilienza determina quanti Punti Vita il tuo 'Scudo' possiede, garantisce passivamente una Resistenza ai Danni in PvE, e fornisce in modo passivo Resistenza al Sussulto. Riduce anche il danno ricevuto quando ti liberi dal Congelamento Stasi.\n\nLa porzione di 'Scudo' va da 115 ai 130 Punti Vita da aggiungere alla porzione fissa di 'Salute' di 70 Punti Vita.\n\nLa Resilienza determina inoltre la velocità di recupero dell'Abilità di Classe dei Titani.",
+        "TotalHP": "Quanti Punti Vita il tuo personaggio ha in totale.\n\nI Punti Vita totali consistono in una porzione di 'Salute' fissa di 70 Punti Vita e una porzione di 'Scudo' che va da 115 a 130 Punti Vita che dipende dal tuo grado di Resilienza.",
+        "PvEDamageResistance": "Quanta Resistenza al Danno passiva hai nelle attività PvE.",
+        "FlinchResistance": "Quanta Resistenza al Sussulto passiva hai."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "Il Recupero determina il ritardo prima che la tua 'Salute' e 'Scudo' inizino a rigenerarsi cosi come anche quanto velocemente si rigenerano.\n\nIl Recupero determina inoltre la velocità di recupero dell'Abilità di Classe dei Stregoni.",
+        "TotalRegenTime": "Quanto tempo ci vuole per rigenerare completamente la tua 'Salute' e 'Scudo' a partire da 0 Punti Vita.",
+        "HealthRegenDelay": "Quanto tempo ci vuole per iniziare la rigenerazione della 'Salute' dopo aver subito dei danni.\n\nLa 'Salute' è una porzione fissa di 70 Punti Vita dei tuoi Punti Vita Totali insieme allo 'Scudo'.",
+        "HealthRegenSpeed": "Quanto velocemente la tua 'Salute' si rigenera quando il ritardo dopo aver subito danno è finito.",
+        "ShieldRegenDelay": "Quanto tempo ci vuole per il tuo 'Scudo' per iniziare a rigenerarsi dopo aver subito danno.\n\nLo 'Scudo' è una porzione che va da 115 a 130 Punti Vita dei tuoi Punti Vita Totali insieme alla 'Salute'.",
+        "ShieldRegenSpeed": "Quanto velocemente il tuo 'Scudo' si rigenera quando il ritardo dopo aver subito danno è finito."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "La Disciplina determina la velocità di recupero della tua Abilità Granata."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "L'Intelletto determina la velocità di recupero passiva della tua Super Abilità.\n\nLe Super Abilità con una velocità di recupero più lunga ricevono meno Energia della Super quando infliggono o ricevono Danno, cosi come quando effettuano Eliminazioni o Assist. Al contrario, le Super Abilità con una velocità di recupero più corta ricevono più Energia della Super dalle stesse azioni.",
+        "PvPDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvP.",
+        "PvEDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvE.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Passivamente Attivo",
+            "CastAnimation": "Attivo durante l'animazione della Super Abilità.",
+            "GoldenGunDeadShot1": "Passivamente Attivo con la Natura 'Colpo di Grazia'",
+            "SpectralBlades1": "Attivo quando Invisibile",
+            "WellOfRadiance1": "Contro i danni da Arma che usa Munizioni Primarie",
+            "WellOfRadiance2": "Contro qualsiasi danno non inflitto da un' Arma che usa Munizioni Primarie"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "La Forza determina la velocità di recupero della tua Abilità Corpo a Corpo."
     }
 }
