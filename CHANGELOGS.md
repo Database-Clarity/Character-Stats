@@ -1,6 +1,22 @@
 # Changelogs
 
-## v1.7.0 - Breaking Change (Ugh) - [insert timestamp]
+## v1.8.0 Breaking Change (I'm fine trust me) - [insert timestamp]
+
+### Schema/Database Structure Changes v1.8
+
+- `Requirements` properties of `Override` objects now support wildcards
+  - Inputting 0 in the `Requirements` array will select every ability from the Character Stat the Override is under (only works when the length of the `Requirements` array is 1)
+  - Inputting negative numbers in the `Requirements` array selects entire subclasses by their inventoryItem hash. The negative numbers are simply `-[hash]`.
+
+### Data Changes v1.8.0
+
+- Added *Mothkeeper's Wraps* override (uses the 0 wildcard)
+  - Overrides base grenade cooldown to 73 seconds
+- Updated *Citan's Ramparts* override to be a 1.724137931x Scalar
+- Updated *Bastion* override to a 1.4285714286x Scalar for Towering Barricade
+  - Cooldown unchanged from before the S22 patch at 100 second
+
+## v1.7.0 - Breaking Change (Ugh) - August 23, 2023
 
 ### Schema/Database Structure Changes v1.7
 
