@@ -14,7 +14,7 @@
   - Overrides base grenade cooldown to 73 seconds
 - Updated *Citan's Ramparts* override to be a 1.724137931x Scalar
 - Updated *Bastion* override to a 1.4285714286x Scalar for Towering Barricade
-  - Cooldown unchanged from before the S22 patch at 100 second
+  - Cooldown unchanged from before the S22 patch at 100 seconds
 
 ## v1.7.0 - Breaking Change (Ugh) - August 23, 2023
 
