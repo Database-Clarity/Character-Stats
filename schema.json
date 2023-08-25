@@ -130,7 +130,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object. Contains 11 0s if not in use."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object."
                 },
                 "Scalar": {
                     "type": "array",
@@ -138,7 +138,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If 'CooldownOverride' property is specified: 'Scalar's are factored in after 'CooldownOverride's."
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities (of a subclass) listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If 'CooldownOverride' property is specified: 'Scalar's are factored in after 'CooldownOverride's."
                 },
                 "FlatIncrease": {
                     "type": "array",
@@ -146,7 +146,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities listed in the 'Requirements' array at the same array index. If 'CooldownOverride' or 'Scalar' property is specified: Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
+                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities (of a subclass) listed in the 'Requirements' array at the same array index. If 'CooldownOverride' or 'Scalar' property is specified: Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
                 }
             },
             "anyOf": [
