@@ -388,10 +388,10 @@ def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,p
         return {"Hash": -1, "Name": "Name input was unspecified."}
     if is_json(pReqs) and type(json.loads(pReqs)) == list: # requirements array input
         reqList = json.loads(pReqs)
-        if all(is_int(x) and x > 0 for x in reqList):
+        if all(is_int(x) for x in reqList):
             override["Requirements"] = json.loads(pReqs)
         else:
-            return {"Hash": -1, "Name": "Requirements input was invalid. Please provide an array of positive integers."}
+            return {"Hash": -1, "Name": "Requirements input was invalid. Please provide an array of integer ability hashes. Input 0 to select every ability, input the hash of subclass multiplied by -1 to select abilities tied to a specific subclass."}
     else:
         return {"Hash": -1, "Name": "Requirements input could not be parsed."}
     listLength = len(override["Requirements"])

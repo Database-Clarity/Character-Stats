@@ -121,7 +121,7 @@
                         "type": "integer"
                     },
                     "minItems": 1,
-                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this Scalar. Any one of these will trigger its effect as only one is required to do so. (These are usually also the same ability but for the different subclasses, hence you should NOT be able to have more than one equipped at once)"
+                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this 'Override'. Only overrides 'Abilities' under the same Character Stat as the 'Override'. Any one of these will trigger its effect defined in the other 'Override' properties. Wildcards: if the requirements array only contains 1 item and it's a 0, any ability tied to this Character Stat will have its cooldown overwritten. Negative numbers in the array indicate filters, these will be the inventoryItem hashes of subclasses multiplied by -1. Any abilities tied to the given subclass will have their cooldowns overwritten."
                 },
                 "CooldownOverride": {
                     "type": "array",

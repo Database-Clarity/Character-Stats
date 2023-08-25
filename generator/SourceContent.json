@@ -638,6 +638,14 @@
                     1.6703296703,
                     1.2561983471
                 ]
+            },
+            {
+                "Hash": 3534173884,
+                "Name": "Mothkeeper's Wraps",
+                "Requirements": [
+                    0
+                ],
+                "CooldownOverride": 73
             }
         ]
     },
