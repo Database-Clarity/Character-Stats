@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "Mobilität bestimmt, wie hoch du springen kannst, ohne deine Sprungfähigkeit einzusetzen. Sie bestimmt auch deine Bewegungsgeschwindigkeit, wenn du gehst oder schleichst.\n\nMobilität hat jedoch keinen Einfluss auf die Sprintgeschwindigkeit, diese ist immer auf 8 Meter pro Sekunde festgelegt.\n\nMobilität bestimmt zusätzlich die Abklingzeit der Klassenfähigkeit von Jägern.",
+        "WalkSpeed": "Wie schnell du vorwärts laufen kannst.",
+        "StrafeSpeed": "Wie schnell du seit- und rückwärts laufen kannst.",
+        "CrouchSpeed": "Wie schnell du dich schleichend bewegen kannst."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "Belastbarkeit bestimmt, wie viele LP dein \"Schild\" habt, gewährt in PvE passive Schadensresistenz, und bietet passiven Widerstand gegen Zurückweichen. Außerdem verringert sie den Schaden, den du beim Ausbrechen aus Stasis-Frost erleidest.\n\nDein \"Schild\" macht einen Anteil von 115 bis 130 LP an deinen Gesamt-LP aus. Dazu kommt ein fester Anteil von 70 LP, die deine \"Gesundheit\" ausmachen.\n\nBelastbarkeit bestimmt auch die Abklingzeit der Klassenfähigkeiten von Titanen.",
+        "TotalHP": "Wie viele LP dein Charakter insgesamt hat.\n\nDeine gesamten LP bestehen aus deiner \"Gesundheit\", die immer 70 LP beträgt, und deinem \"Schild\", das je nach Belastbarkeit 115 bis 130 LP besitzt.",
+        "PvEDamageResistance": "Wie viel passive Schadensresistenz du in PvE-Aktivitäten hast.",
+        "FlinchResistance": "Wie viel passiven Zurückweichen-Widerstand du hast."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "Erholung regelt die Verzögerung, bevor deine \"Gesundheit\" und dein \"Schild\" anfangen, zu regenerieren, und wie schnell sie dies tun.\n\nErholung bestimmt auch die Abklingzeit der Klassenfähigkeit von Warlocks.",
+        "TotalRegenTime": "Wie lange es dauert, bis deine Gesundheit und dein Schild von 0 LP vollständig wieder regenerieren.",
+        "HealthRegenDelay": "Wie lange es dauert, bis du anfängst, \"Gesundheit\" zu regenerieren, nachdem du Schaden genommen hast.\n\n\"Gesundheit\" ist der Anteil deiner LP, der feste 70 LP ausmacht, neben deinem \"Schild\".",
+        "HealthRegenSpeed": "Wie schnell deine \"Gesundheit\" nach der Verzögerung regeneriert, nachdem du Schaden genommen hast.",
+        "ShieldRegenDelay": "Wie lange es dauert, bis du anfängst, dein \"Schild\" zu regenerieren, nachdem du Schaden genommen hast.\n\nDein \"Schild\" ist der Anteil deiner LP, der 115 bis 130 LP ausmacht, neben deiner \"Gesundheit\".",
+        "ShieldRegenSpeed": "Wie schnell dein \"Schild\" nach der Verzögerung regeneriert, nachdem du Schaden genommen hast."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "Disziplin regelt die Abklingzeit deiner Granaten-Fähigkeit."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "Intellekt regelt deine passive Abklingzeit von Super-Fähigkeiten.\n\nSuper-Fähigkeiten mit längeren Abklingzeiten erhalten weniger Super-Energie, wenn du Schaden verursachst oder einsteckst, sowie von Kills und Assists. Umgekehrt erhalten Super-Fähigkeiten mit kürzeren Abklingzeiten mehr Super-Energie aus den gleichen Aktionen.",
+        "PvPDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvP bietet.",
+        "PvEDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvE bietet.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Passiv",
+            "CastAnimation": "Aktiv, während du in deiner Super-Animation bist.",
+            "GoldenGunDeadShot1": "Passiv mit dem \"Mäh sie nieder\"-Aspekt",
+            "SpectralBlades1": "Aktiv während Unsichtbarkeit",
+            "WellOfRadiance1": "Gegen Primärwaffen-Schaden",
+            "WellOfRadiance2": "Gegen jeglichen Schaden, der nicht von einer Primärwaffe kommt"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "Stärke bestimmt die Abklingzeit deiner Nahkampf-Fähigkeit."
     }
 }
