@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "La Mobilité détermine la hauteur de saut sans utiliser votre compétence de saut. Cela détermine aussi votre vitesse de mouvement lorsque vous avancez en marchant, marchez sur le côté, ou vous déplacez accroupis.\n\nLa mobilité n'a aucun effet sur la Vitesse de Course, qui est fixe, à 8 mètres par seconde.\n\nLa mobilité détermine aussi le temps de recharge de la compétence de classe du Chasseur.",
-        "WalkSpeed": "A quelle vitesse vous pouvez avancer en marchant.",
-        "StrafeSpeed": "A quelle vitesse vous pouvez vous déplacez sur le côté et en reculant.",
-        "CrouchSpeed": "A quelle vitesse vous pouvez vous déplacez en étant accroupis."
+        "Description": "La Mobilité détermine la hauteur de saut sans utiliser votre compétence de saut. Elle détermine aussi votre vitesse de mouvement lorsque vous avancez en marchant, marchez sur le côté, ou vous déplacez accroupis.\n\nLa mobilité n'a aucun effet sur la Vitesse de Course, qui est fixe, à 8 mètres par seconde.\n\nLa mobilité détermine aussi le temps de recharge de la Compétence de Classe du Chasseur.",
+        "WalkSpeed": "La vitesse à laquelle vous avancez en marchant.",
+        "StrafeSpeed": "La vitesse à laquelle vous vous déplacez sur le côté et en reculant.",
+        "CrouchSpeed": "La vitesse à laquelle vous vous déplacez accroupis."
     },
     "Resilience": {
-        "Description": "La Résistance détermine combien de PV votre \"Bouclier\" possède, donne passivement de la Résistance aux Dégâts en JcE, ainsi qu'une résistance passive au tressaillement. Cela réduit aussi les dégâts reçus lorsque l'on sort du Gel de la Stase.\n\nLe \"Bouclier\" vaux entre 115 à 130 PV de votre total de PV, avec un montant fixe de 70 PV pour votre \"Vie\".\n\nLa Résistance détermine aussi la compétence de classe des Titans.",
-        "TotalHP": "Combien de PV totaux votre personnage possède.\n\nLe total des PV consiste en un mélange d'une portion de \"Vie\" de 70 PV et une portion de \"Bouclier\" qui dépend de votre niveau Résistance.",
-        "PvEDamageResistance": "Combien de Résistance passive aux Dégâts vous avez dans les activités JcE.",
-        "FlinchResistance": "Combien de résistance passive au tressaillement vous avez."
+        "Description": "La Résistance détermine combien de PV votre \"Bouclier\" possède, augmente votre Résistance aux Dégâts en JcE, et réduit l'amplitude des tressaillements lorsque vous essuyez des tirs. Elle réduit aussi les dégâts reçus lorsque l'on se libère du Gel de la Stase.\n\nLe \"Bouclier\" vaux entre 115 à 130 PV de votre total de PV, avec un montant fixe de 70 PV pour votre \"Vie\".\n\nLa Résistance détermine aussi le temps de recharge de la Compétence de Classe des Titans.",
+        "TotalHP": "Le total de PV que votre personnage possède.\n\nLe total des PV est composé d'une portion de \"Santé\" de 70 PV et d'une portion de \"Bouclier\" de 115 a 130 PV qui dépend de votre niveau de Résistance.",
+        "PvEDamageResistance": "La valeur de Résistance passive aux Dégâts que vous avez dans les activités JcE.",
+        "FlinchResistance": "La valeur de Résistance passive aux Tressaillements que vous avez."
     },
     "Recovery": {
-        "Description": "La Récupération détermine le délai avant que vos « points de vie » et « boucliers » ne commencent à se régénérer ainsi que la vitesse à laquelle ils se régénèrent.\n\nLa Récupération détermine également le temps de recharge de la capacité de classe des Arcanistes.",
-        "TotalRegenTime": "Combien de temps faut-il pour régénérer entièrement vos points de vie et vos boucliers à partir de 0 PV.",
-        "HealthRegenDelay": "Combien de temps prend votre « Santé » pour commencer à se régénérer après avoir reçu des dégâts.\n\nLa Santé est une portion fixée à 70 PV de vos PV Totaux aux côtés des \"Boucliers\".",
-        "HealthRegenSpeed": "A quelle vitesse votre 'Santé' se régénère une fois le délai de prise de dégâts terminé.",
-        "ShieldRegenDelay": "Combien de temps prend vos« Boucliers » pour commencer à se régénérer après avoir reçu des dégâts.\n\nLes boucliers sont une portion de 115 à 130 PV de vos PV totaux aux côtés de la 'Santé'.",
-        "ShieldRegenSpeed": "A quelle vitesse vos 'Boucliers' se régénère une fois le délai de prise de dégâts terminé."
+        "Description": "La Récupération détermine le délai avant que votre \"Santé\" et votre \"Bouclier\" ne commencent à se régénérer ainsi que la vitesse à laquelle ils se régénèrent.\n\nLa Récupération détermine également le temps de recharge de la Compétence de Classe des Arcanistes.",
+        "TotalRegenTime": "Le temps nécessaire pour régénérer entièrement votre \"Santé\" et votre \"Bouclier\" à partir de 0 PV.",
+        "HealthRegenDelay": "Le temps nécessaire pour que votre \"Santé\" commence à se régénérer après avoir reçu des dégâts.\n\nLa Santé est une portion fixée à 70 PV de vos PV Totaux, différente du \"Bouclier\".",
+        "HealthRegenSpeed": "La vitesse à laquelle votre \"Santé\" se régénère une fois le délai de prise de dégâts terminé.",
+        "ShieldRegenDelay": "Le temps nécessaire pour que votre \"Bouclier\" commence à se régénérer après avoir reçu des dégâts.\n\nLe \"Bouclier\" est une portion de 115 à 130 PV de vos PV totaux, différent de la \"Santé\".",
+        "ShieldRegenSpeed": "La vitesse à laquelle votre 'Bouclier' se régénère une fois le délai de prise de dégâts terminé."
     },
     "Discipline": {
-        "Description": "La Discipline détermine le temps de recharge de votre capacité de Grenade."
+        "Description": "La Discipline détermine le temps de recharge de votre Compétence de Grenade."
     },
     "Intellect": {
-        "Description": "L'Intelligence détermine le délai de récupération de votre Super capacité.\nLes Super capacités avec des temps de rechargement plus long reçoivent moins d'énergie de Super en faisant ou recevant des dégâts, ainsi qu'en faisant des Kills ou des Assistances. Inversement, les Super capacités avec des temps de recharge plus court reçoivent plus d'énergie de Super de ces mêmes actions.",
-        "PvPDamageResistance": "Combien de résistances aux dégâts fournis votre Super Capacité en JcJ.",
-        "PvEDamageResistance": "Combien de résistances aux dégâts fournis votre Super Capacité en JcE.",
+        "Description": "L'Intelligence détermine le temps de recharge de votre Compétence de Super.\n\nLes Compétences de Super avec des temps de rechargement plus long reçoivent moins d'énergie de Super en infligeant ou recevant des dégâts, de même pour les Kills et les Assistances. Inversement, les Compétences de Super avec des temps de recharge plus court reçoivent plus d'énergie de Super de ces mêmes actions.",
+        "PvPDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcJ.",
+        "PvEDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcE.",
         "DRCondition": {
             "Passive": "Passivement Actif",
             "CastAnimation": "Actif pendant l'animation de déclenchement du Super.",
             "GoldenGunDeadShot1": "Passivement actif avec l'aspect Assommez-les",
             "SpectralBlades1": "Actif lorsque Invisible",
-            "WellOfRadiance1": "Contre les dégâts des armes utilisant des munitions principales",
+            "WellOfRadiance1": "Contre les dégâts des armes utilisant des Munitions Principales",
             "WellOfRadiance2": "Contre tout les dégâts non fait par les armes utilisant des munitions principales"
         }
     },
     "Strength": {
-        "Description": "La force détermine la vitesse de régénération de la capacité de mêlée."
+        "Description": "La Force détermine le temps de recharge de la Compétence de Mêlée."
     }
 }
