@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "可動性は、地上から行う初期ジャンプの高度と、歩行速度・しゃがみ歩き速度を上昇させます。\n\nダッシュ速度は8 m/sで固定であり、可動性の影響は受けません。\n\nまた、可動性はハンターのクラススキルのクールダウン速度を向上させます。",
+        "Description": "可動性は、ジャンプスキル以外のジャンプ高度と、前方への歩行速度・左右と後方への歩行速度・しゃがみ歩き速度を決定する。\n\nダッシュ速度は8 m/sで固定であり可動性の影響を受けない。\n\nまた、可動性はハンターのクラススキルのクールダウン時間を決定する。",
         "WalkSpeed": "前方への歩行速度",
         "StrafeSpeed": "左右・後方への歩行速度",
         "CrouchSpeed": "しゃがみ歩きの速度"
     },
     "Resilience": {
-        "Description": "耐久力は\"シールド\"の容量を増加させ、PvEでのダメージ軽減率を向上させ、ダメージを受けた時のひるみを軽減させます。またステイシス凍結状態からの解放アクションを行った場合に受けるダメージが減少します。\n\n\"シールド\"は耐久力によって115から130の間で変化しますが、\"体力\"は70で固定です。\n\nまた、耐久力はタイタンのクラススキルのクールダウン速度を向上させます。",
-        "TotalHP": "キャラクターの最大HPを決定します。\n\n最大HPは70で固定の\"体力\"部分と、耐久力によって115から130の範囲で変動する\"シールド\"で構成されます。",
-        "PvEDamageResistance": "PvEアクティビティでのダメージ軽減率",
-        "FlinchResistance": "ダメージを受けた場合のひるみ軽減率"
+        "Description": "耐久力は、\"シールド\"の容量、PvEでのダメージ軽減率、被ダメージ時のひるみ軽減率を決定する。またステイシス凍結状態からの解放アクションを行った際に受けるダメージが減少する。\n\n最大HP内の\"シールド\"は耐久力によって115から130の範囲で変動するが、\"体力\"は70で固定となる。\n\nまた、耐久力はタイタンのクラススキルのクールダウン時間を決定する。",
+        "TotalHP": "キャラクターの最大HPを決定する。\n\n最大HPは70で固定の\"体力\"部分と、耐久力によって115から130の範囲で変動する\"シールド\"で構成される。",
+        "PvEDamageResistance": "PvEアクティビティで受けるダメージをどれだけ軽減できるか。",
+        "FlinchResistance": "被ダメージ時のひるみをどれだけ軽減できるか。"
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "回復力は\"体力\"と\"シールド\"の回復が開始されるまでの遅延と回復速度を決定する。\n\nまた、回復力はウォーロックのクラススキルのクールダウン時間を決定する。",
+        "TotalRegenTime": "HP0から\"体力\"と\"シールド\"が全回復するまでにかかる時間。",
+        "HealthRegenDelay": "被ダメージ後、\"体力\"の回復が開始されるまでの遅延時間。\n\n\"シールド\"とは異なり、最大HP内に占める\"体力\"は70で固定となる。",
+        "HealthRegenSpeed": "被ダメージ後の回復開始遅延が終了した後、どれだけ速く\"体力\"が回復するか。",
+        "ShieldRegenDelay": "被ダメージ後、\"シールド\"の回復が開始されるまでの遅延時間。\n\n\"体力\"とは異なり、最大HP内に占める\"シールド\"は115から130の間で変動する。",
+        "ShieldRegenSpeed": "被ダメージ後の回復開始遅延が終了した後、どれだけ速く\"シールド\"が回復するか。"
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "鍛錬はグレネードスキルのクールダウン時間を決定する。"
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "知性はスーパースキルのクールダウン時間を決定する。\n\nクールダウン時間が長いスーパースキルほど、与ダメージ・被ダメージ・キル・アシストによって得られるスーパーエネルギーの量は減少する。逆にクールダウンが短いスーパースキルほど同様の行動によって得られるスーパーエネルギーの量は増加する。",
+        "PvPDamageResistance": "PvPでスーパースキル使用中にどれだけダメージを軽減できるか。",
+        "PvEDamageResistance": "PvEでスーパースキル使用中にどれだけダメージを軽減できるか。",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "有効",
+            "CastAnimation": "スーパースキル発動アニメーション中に有効。",
+            "GoldenGunDeadShot1": "特性\"一網打尽\"使用時に有効",
+            "SpectralBlades1": "不可視化中に有効",
+            "WellOfRadiance1": "対メイン弾武器ダメージ",
+            "WellOfRadiance2": "対メイン弾武器以外のダメージ"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "腕力は近接スキルのクールダウン時間を決定する。"
     }
 }

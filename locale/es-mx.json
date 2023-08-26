@@ -1,6 +1,6 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
+        "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\n\nMovilidad también determina la velocidad de recarga de la habilidad de clase de los cazadores.",
         "WalkSpeed": "How fast you can walk forward.",
         "StrafeSpeed": "How fast you can move side-to-side and backwards.",
         "CrouchSpeed": "How fast you can move while crouching."
