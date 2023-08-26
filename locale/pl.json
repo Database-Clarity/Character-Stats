@@ -28,7 +28,7 @@
         "PvEDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvE.",
         "DRCondition": {
             "Passive": "Aktywna biernie",
-            "CastAnimation": "Aktywne podczas animacji superzdolności.",
+            "CastAnimation": "Aktywna podczas animacji superzdolności.",
             "GoldenGunDeadShot1": "Aktywna biernie z aspektem Eliminacja",
             "SpectralBlades1": "Aktywna podczas niewidzialności",
             "WellOfRadiance1": "Przeciwko obrażeniom zadawanym z głównej amunicji",

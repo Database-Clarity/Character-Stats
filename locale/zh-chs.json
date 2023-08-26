@@ -23,13 +23,13 @@
         "Description": "纪律影响你的手雷技能冷却。"
     },
     "Intellect": {
-        "Description": "智慧影响你超能技能的被动冷却。\n\n基础冷却时间较长地超能技能在受到伤害，打出伤害，以及获得击杀或助攻时所获得的超能技能能量更少。反之，基础冷却时间较短地超能技能则能从中获得更多超能能量。",
-        "PvPDamageResistance": "你在PvP中超能技能地伤害减免。",
-        "PvEDamageResistance": "你在PvE中超能技能地伤害减免。",
+        "Description": "智慧影响你超能技能的被动冷却。\n\n冷却时间较长的超能技能在打出伤害，受到伤害，以及获得击杀或助攻时所获得的超能技能能量更少。反之，冷却时间较短的超能技能则可以从相同的行动中获得更多超能能量。",
+        "PvPDamageResistance": "你的超能在PvP中提供多少伤害减免。",
+        "PvEDamageResistance": "你的超能在PvE中提供多少伤害减免。",
         "DRCondition": {
             "Passive": "被动触发",
             "CastAnimation": "在超能技能的激活动画期间触发。",
-            "GoldenGunDeadShot1": "由“击败他们”星相被动触发",
+            "GoldenGunDeadShot1": "“重击”星象生效期间被动触发",
             "SpectralBlades1": "隐形效果时触发",
             "WellOfRadiance1": "针对主弹药武器伤害",
             "WellOfRadiance2": "针对不涉及主弹药武器的伤害"

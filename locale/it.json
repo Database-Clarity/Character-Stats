@@ -31,7 +31,7 @@
             "CastAnimation": "Attivo durante l'animazione della Super Abilità.",
             "GoldenGunDeadShot1": "Passivamente Attivo con la Natura 'Colpo di Grazia'",
             "SpectralBlades1": "Attivo quando Invisibile",
-            "WellOfRadiance1": "Contro i danni da Arma che usa Munizioni Primarie",
+            "WellOfRadiance1": "Contro il danno da Arma che usa Munizioni Primarie",
             "WellOfRadiance2": "Contro qualsiasi danno non inflitto da un' Arma che usa Munizioni Primarie"
         }
     },

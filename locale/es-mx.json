@@ -1,9 +1,9 @@
 {
     "Mobility": {
         "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\n\nMovilidad también determina la velocidad de recarga de la habilidad de clase de los cazadores.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "WalkSpeed": "Qué tan rápido puedes caminar hacia adelante.",
+        "StrafeSpeed": "Qué tan rápido puedes moverte de lado a lado y hacia atrás.",
+        "CrouchSpeed": "Qué tan rápido te puedes mover agachado."
     },
     "Resilience": {
         "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
@@ -13,10 +13,10 @@
     },
     "Recovery": {
         "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
+        "TotalRegenTime": "How long it takes to fully regenerate your 'Health' and 'Shields' from 0 HP.",
+        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\n'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
         "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
+        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
         "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
     },
     "Discipline": {
