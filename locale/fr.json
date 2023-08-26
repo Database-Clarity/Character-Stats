@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "La Mobilité détermine la hauteur de saut sans utiliser votre compétence de saut. Cela détermine aussi votre vitesse de mouvement lorsque vous avancez en marchant, marchez sur le côté, ou vous déplacez accroupis.\n\nLa mobilité n'a aucun effet sur la Vitesse de Course, qui est fixe, à 8 mètres par seconde.\n\nLa mobilité détermine aussi le temps de recharge de la compétence de classe du Chasseur.",
+        "WalkSpeed": "A quelle vitesse vous pouvez avancer en marchant.",
+        "StrafeSpeed": "A quelle vitesse vous pouvez vous déplacez sur le côté et en reculant.",
+        "CrouchSpeed": "A quelle vitesse vous pouvez vous déplacez en étant accroupis."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "La Résistance détermine combien de PV votre \"Bouclier\" possède, donne passivement de la Résistance aux Dégâts en JcE, ainsi qu'une résistance passive au tressaillement. Cela réduit aussi les dégâts reçus lorsque l'on sort du Gel de la Stase.\n\nLe \"Bouclier\" vaux entre 115 à 130 PV de votre total de PV, avec un montant fixe de 70 PV pour votre \"Vie\".\n\nLa Résistance détermine aussi la compétence de classe des Titans.",
+        "TotalHP": "Combien de PV totaux votre personnage possède.\n\nLe total des PV consiste en un mélange d'une portion de \"Vie\" de 70 PV et une portion de \"Bouclier\" qui dépend de votre niveau Résistance.",
+        "PvEDamageResistance": "Combien de Résistance passive aux Dégâts vous avez dans les activités JcE.",
+        "FlinchResistance": "Combien de résistance passive au tressaillement vous avez."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "La Récupération détermine le délai avant que vos « points de vie » et « boucliers » ne commencent à se régénérer ainsi que la vitesse à laquelle ils se régénèrent.\n\nLa Récupération détermine également le temps de recharge de la capacité de classe des Arcanistes.",
+        "TotalRegenTime": "Combien de temps faut-il pour régénérer entièrement vos points de vie et vos boucliers à partir de 0 PV.",
+        "HealthRegenDelay": "Combien de temps prend votre « Santé » pour commencer à se régénérer après avoir reçu des dégâts.\n\nLa Santé est une portion fixée à 70 PV de vos PV Totaux aux côtés des \"Boucliers\".",
+        "HealthRegenSpeed": "A quelle vitesse votre 'Santé' se régénère une fois le délai de prise de dégâts terminé.",
+        "ShieldRegenDelay": "Combien de temps prend vos« Boucliers » pour commencer à se régénérer après avoir reçu des dégâts.\n\nLes boucliers sont une portion de 115 à 130 PV de vos PV totaux aux côtés de la 'Santé'.",
+        "ShieldRegenSpeed": "A quelle vitesse vos 'Boucliers' se régénère une fois le délai de prise de dégâts terminé."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "La Discipline détermine le temps de recharge de votre capacité de Grenade."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "L'Intelligence détermine le délai de récupération de votre Super capacité.\nLes Super capacités avec des temps de rechargement plus long reçoivent moins d'énergie de Super en faisant ou recevant des dégâts, ainsi qu'en faisant des Kills ou des Assistances. Inversement, les Super capacités avec des temps de recharge plus court reçoivent plus d'énergie de Super de ces mêmes actions.",
+        "PvPDamageResistance": "Combien de résistances aux dégâts fournis votre Super Capacité en JcJ.",
+        "PvEDamageResistance": "Combien de résistances aux dégâts fournis votre Super Capacité en JcE.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Passivement Actif",
+            "CastAnimation": "Actif pendant l'animation de déclenchement du Super.",
+            "GoldenGunDeadShot1": "Passivement actif avec l'aspect Assommez-les",
+            "SpectralBlades1": "Actif lorsque Invisible",
+            "WellOfRadiance1": "Contre les dégâts des armes utilisant des munitions principales",
+            "WellOfRadiance2": "Contre tout les dégâts non fait par les armes utilisant des munitions principales"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "La force détermine la vitesse de régénération de la capacité de mêlée."
     }
 }
