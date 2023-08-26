@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "敏捷影响在不使用跳跃技能的情况下可以跳跃的高度，以及步行，侧移或蹲伏的移动速度。\n\n移动速度对冲刺速度没有影响，冲刺速度固定为8米/秒。\n\n敏捷也影响猎人的闪身能力冷却。",
+        "WalkSpeed": "向前步行的移动速度",
+        "StrafeSpeed": "侧向以及向后的移动速度",
+        "CrouchSpeed": "蹲伏时的移动速度"
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "韧性影响总生命值中“护盾”的数值，在PvE给予被动地伤害减免，并且给予被动的武器退缩抗性。同时降低你在摆脱冰影冻结状态时所受到的伤害。\n\n在总生命值中，“护盾”的数值在115到130之间，而“基础生命”数值为固定的70。\n\n韧性同时影响泰坦的职业技能冷却。",
+        "TotalHP": "你的角色的总生命值。\n\n在总生命值中，“基础生命值”数值为固定的70，“护盾”的数值在115到130之间，这部分取决于你的韧性阶级。",
+        "PvEDamageResistance": "在PvE活动中的被动伤害减免。",
+        "FlinchResistance": "被动的武器退缩抗性。"
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "恢复影响你的“基础生命值”和“护盾”开始恢复前的延迟以及恢复的速度。\n\n恢复同时影响术士的职业技能冷却。",
+        "TotalRegenTime": "从0生命值完全恢复满”基础生命值“以及”护盾“所需要的时间。",
+        "HealthRegenDelay": "受到伤害后开始恢复“基础生命值”前的延迟。\n\n“基础生命值”数值占总生命值中固定的70，剩下的为“护盾”数值。",
+        "HealthRegenSpeed": "受到伤害后，延迟过后“基础生命值”的恢复速度。",
+        "ShieldRegenDelay": "你的“护盾”在遭受伤害后开始恢复所需的时间。\n\n在总生命值中，“护盾”的数值在为115到130之间。",
+        "ShieldRegenSpeed": "受到伤害后，延迟过后“护盾”的恢复速度。"
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "纪律影响你的手雷技能冷却。"
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "智慧影响你超能技能的被动冷却。\n\n基础冷却时间较长地超能技能在受到伤害，打出伤害，以及获得击杀或助攻时所获得的超能技能能量更少。反之，基础冷却时间较短地超能技能则能从中获得更多超能能量。",
+        "PvPDamageResistance": "你在PvP中超能技能地伤害减免。",
+        "PvEDamageResistance": "你在PvE中超能技能地伤害减免。",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "被动触发",
+            "CastAnimation": "在超能技能的激活动画期间触发。",
+            "GoldenGunDeadShot1": "由“击败他们”星相被动触发",
+            "SpectralBlades1": "隐形效果时触发",
+            "WellOfRadiance1": "针对主弹药武器伤害",
+            "WellOfRadiance2": "针对不涉及主弹药武器的伤害"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "力量影响你的近战技能冷却。"
     }
 }
