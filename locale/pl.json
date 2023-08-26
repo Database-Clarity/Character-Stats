@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "Mobilność decyduje o wysokości skoku bez aktywacji zdolności ruchu. Określa również prędkość podczas ruchu do przodu, na boki lub podczas kucania.\n\nMobilność nie ma wpływu na prędkość podczas sprintu, ponieważ jest ona stała, i wynosi 8 metrów na sekundę.\n\nMobilność wpływa również na czas odnowienia zdolności klasowej Łowcy.",
+        "WalkSpeed": "Jak szybko możesz iść do przodu.",
+        "StrafeSpeed": "Jak szybko możesz poruszać się na boki oraz do tyłu.",
+        "CrouchSpeed": "Jak szybko możesz poruszać się podczas kucania."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "Odporność decyduje o ilości HP, jaką posiada twoja 'Tarcza', zwiększa odporność na obrażenia w PvE, zapewnia pasywną odporność na drgania. Zmniejsza również obrażenia otrzymywane podczas uwalniania się ze Stazy.\n\n'Tarcza' posiada od 115 do 130 punktów twojego całkowitego zdrowia razem ze stałymi 70 punktami 'Zdrowia'.\n\nOdporność wpływa również na czas odnowienia zdolności klasowej Tytanów.",
+        "TotalHP": "Jak dużo HP twoja postać posiada.\n\nTwoje życie składa się ze stałych 70 punków 'Zdrowia' oraz od 115 do 130 punktów 'Tarczy', która zależna jest od twojego poziomu Odporności.",
+        "PvEDamageResistance": "Jak dużą posiadasz odporność na obrażenia w aktywnościach PvE.",
+        "FlinchResistance": "Jak dużą odporność na drgania posiadasz."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "Regeneracja decyduje o opóźnieniu, po którym twoje 'Zdrowie' i 'Tarcza' zaczynają regenerować się oraz jak szybko się regenerują.\n\nRegeneracja wpływa również na czas odnowienia zdolności klasowej Czarowników.",
+        "TotalRegenTime": "Jak długo zajmuje pełne odnowienie twojego Życia i Tarczy od 0 HP.",
+        "HealthRegenDelay": "Jak długo zajmuje rozpoczęcie regeneracji 'Zdrowia' po otrzymaniu obrażeń.\n\nZdrowie posiada stałe 70 HP twojego całkowitego Życia razem z 'Tarczą'.",
+        "HealthRegenSpeed": "Jak szybko twoje 'Zdrowie' regeneruje się po upływie opóźnienia po otrzymaniu obrażeń.",
+        "ShieldRegenDelay": "Jak długo zajmuje twojej 'Tarczy' rozpoczęcie regeneracji po otrzymaniu obrażeń.\n\nTarcza jest częścią od 115 do 130 HP twojego całkowitego Życia razem z 'Zdrowiem'.",
+        "ShieldRegenSpeed": "Jak szybko twoja 'Tarcza' regeneruje się po upływie opóźnienia po otrzymaniu obrażeń."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "Dyscyplina decyduje o czasie odnowienia twojego granatu."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "Intelekt decyduje o twojej pasywnej regeneracji twojej superzdolności.\n\nSuperzdolności z dłuższymi czasami odnowienia otrzymują mniej energii z zadawania lub otrzymywania obrażeń, jak również z wykonywania zabójstw lub asyst. Z drugiej strony superzdolności z krótszymi czasami odnowienia otrzymują więcej energii z tym samych działań.",
+        "PvPDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvP.",
+        "PvEDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvE.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Aktywna biernie",
+            "CastAnimation": "Aktywne podczas animacji superzdolności.",
+            "GoldenGunDeadShot1": "Aktywna biernie z aspektem Eliminacja",
+            "SpectralBlades1": "Aktywna podczas niewidzialności",
+            "WellOfRadiance1": "Przeciwko obrażeniom zadawanym z głównej amunicji",
+            "WellOfRadiance2": "Przeciwko jakimkolwiek obrażeniom niezadawanym przy pomocy broni używającej głównej amunicji"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "Siła wpływa na czas odnowienia twojej zdolności walki wręcz."
     }
 }
