@@ -6,36 +6,36 @@
         "CrouchSpeed": "Как быстро вы можете двигаться вприсядку."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "Стойкость определяет как много здоровья у ваших 'Щитов', дает пассивное сопротивление урону в PvE, и уменьшает отскок прицела при получении урона. Она так же уменьшает получаемый урон при вырывании из Стазиса.\n\n'Щиты' - это от 115 до 130 очков из общего количества очков жизни. Кроме них есть фиксированные 70 очков 'Здоровья'.\n\nСтойкость также определяет время отката классового умения Титанов.",
+        "TotalHP": "Общее количество очков жизни вашего персонажа.\n\nОбщее количество очков жизни состоит из фиксированной части - 70 очков 'Здоровья' и от 115 до 130 очков 'Щитов'. Количество зависит от уровня Стойкости.",
+        "PvEDamageResistance": "Сколько пассивного сопротивления урону у вас в PvE.",
+        "FlinchResistance": "Как много у вас пассивного сопротивления отскоку прицела при получении урона."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your Health and Shields from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\nHealth is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\nShields are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "Восстановление определяет задержку перед тем, как ваши 'Здоровье' и 'Щиты' начнут регенерировать, а так же скорость их регенерации.\n\nВосстановление так же влияет на скорость восстановления классовой способности Варлоков.",
+        "TotalRegenTime": "Сколько времени потребуется для полной регенерации вашего здоровья и щитов от 0.",
+        "HealthRegenDelay": "Сколько времени потребуется, чтобы началась регенерация 'Здоровья' после получения урона.\n\nЗдоровье - это фиксированные 70 очков из общего количества очков жизни. Оставшаяся часть - это 'Щиты'.",
+        "HealthRegenSpeed": "Как быстро ваше 'Здоровье' регенерирует после того, как закончится задержка после получения урона.",
+        "ShieldRegenDelay": "Сколько времени потребуется, чтобы началась регенерация 'Щитов' после получения урона.\n\nЩиты - это от 115 до 130 очков из общего количества очков жизни. Оставшаяся часть - это 'Здоровье'.",
+        "ShieldRegenSpeed": "Как быстро ваши 'Щиты' регенерируют после того, как закончится задержка после получения урона."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "Дисциплина определяет откат гранат."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "Интеллект определяет пассивное время восстановления Суперспособности.\n\nСуперспособности с большим временем отката получают меньше энергии от нанесения или получения урона, помощи при убийствах и самих убийствах. И наоборот, Суперспособности с меньшим временем отката получают больше энергии при этих действиях.",
+        "PvPDamageResistance": "Сколько сопротивляемости урону ваша Суперспособность дает вам в PvP.",
+        "PvEDamageResistance": "Сколько сопротивляемости урону ваша Суперспособность дает вам в PvE.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Работает пассивно",
+            "CastAnimation": "Активно во время анимации Суперспособности.",
+            "GoldenGunDeadShot1": "Работает пассивно с аспектом Бейте их",
+            "SpectralBlades1": "Работает во время невидимости",
+            "WellOfRadiance1": "Против урона от оружия на главных патронах",
+            "WellOfRadiance2": "Против урона, нанесенного не из оружия на главных патронах"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "Сила определяет откат умения ближнего боя."
     }
 }
