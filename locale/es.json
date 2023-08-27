@@ -6,7 +6,7 @@
         "CrouchSpeed": "Como de rápido puedes moverte agachado."
     },
     "Resilience": {
-        "Description": "La resistencia determina cuánto HP (puntos de salud) tienen tus \"escudos\", otorga resistencia pasiva al daño dentro del PvE y proporciona Resistencia al Estrmecimiento de forma pasiva. También disminuye el daño recibido al romper el congelamiento de Estasis.\n\n'Escudos' es una porción de 115 a 130 HP de tu HP total junto con una porción fija de 70 HP de 'Salud'.\n\nResistencia también determina la velocidad de recarga de la Habilidad de Clase de los Titanes.",
+        "Description": "La resistencia determina cuánto HP (puntos de salud) tienen tus \"escudos\", otorga resistencia pasiva al daño dentro del PvE y proporciona Resistencia al Estremecimiento de forma pasiva. También disminuye el daño recibido al romper el congelamiento de Estasis.\n\n'Escudos' es una porción de 115 a 130 HP de tu HP total junto con una porción fija de 70 HP de 'Salud'.\n\nResistencia también determina la velocidad de recarga de la Habilidad de Clase de los Titanes.",
         "TotalHP": "Cuánto HP (puntos de salud) total tiene tu personaje.\n\nHP Total consiste en una porción fija de 70 HP de 'Salud' y una porción de 115 a 130 HP de 'Escudos' que depende de tu nivel de Resistencia.",
         "PvEDamageResistance": "Cuánta Resistencia al Daño de forma pasiva tienes en actividades PvE.",
         "FlinchResistance": "Cuánta Resistencia al Estremecimiento de forma pasiva tienes."
@@ -14,9 +14,9 @@
     "Recovery": {
         "Description": "Recuperación determina el retraso antes de que tu 'Salud' y 'Escudos' comiencen a regenerarse, así como la velocidad de regeneración.\n\nRecuperación también determina la velocidad de recarga de la Habilidad de Clase de los Hechiceros.",
         "TotalRegenTime": "Cuánto tarda en regenerarse totalmente tu Salud y Escudos desde 0 HP.",
-        "HealthRegenDelay": "Cuánto tarda en empezar a regenerar 'Salud' después de recibir daño.\n\nSalud es una porción fija de 70 HP (Puntos de vida) de tu HP Total junto con los 'Escudos'.",
+        "HealthRegenDelay": "Cuánto tarda en empezar a regenerar 'Salud' después de recibir daño.\n\nSalud es una porción fija de 70 HP (Puntos de salud) de tu HP Total junto con los 'Escudos'.",
         "HealthRegenSpeed": "Como de rápido regeneras 'Salud' después de que termine el retraso por recibir daño.",
-        "ShieldRegenDelay": "Cuánto tardan tus 'Escudos' en empezar a regenerarse después de recibir daño.\n\nEscudos son una porción de 115 a 130 HP (Puntos de vida) de tu HP Total junto con la 'Salud'.",
+        "ShieldRegenDelay": "Cuánto tardan tus 'Escudos' en empezar a regenerarse después de recibir daño.\n\nEscudos son una porción de 115 a 130 HP (Puntos de salud) de tu HP Total junto con la 'Salud'.",
         "ShieldRegenSpeed": "Como de rápido regeneras tus 'Escudos' después de que termine el retraso por recibir daño."
     },
     "Discipline": {
