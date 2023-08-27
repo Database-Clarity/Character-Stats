@@ -6,10 +6,10 @@
         "CrouchSpeed": "Jak szybko możesz poruszać się podczas kucania."
     },
     "Resilience": {
-        "Description": "Odporność decyduje o ilości HP, jaką posiada twoja 'Tarcza', zwiększa odporność na obrażenia w PvE, zapewnia pasywną odporność na drgania. Zmniejsza również obrażenia otrzymywane podczas uwalniania się ze Stazy.\n\n'Tarcza' posiada od 115 do 130 punktów twojego całkowitego zdrowia razem ze stałymi 70 punktami 'Zdrowia'.\n\nOdporność wpływa również na czas odnowienia zdolności klasowej Tytanów.",
+        "Description": "Odporność decyduje o ilości HP, jaką posiada twoja 'Tarcza', zwiększa odporność na obrażenia w PvE, zapewnia pasywną odporność na odrzut wywołany otrzymywanymi obrażeniami. Zmniejsza również obrażenia otrzymywane podczas uwalniania się ze Stazy.\n\n'Tarcza' posiada od 115 do 130 punktów twojego całkowitego zdrowia razem ze stałymi 70 punktami 'Zdrowia'.\n\nOdporność wpływa również na czas odnowienia zdolności klasowej Tytanów.",
         "TotalHP": "Jak dużo HP twoja postać posiada.\n\nTwoje życie składa się ze stałych 70 punków 'Zdrowia' oraz od 115 do 130 punktów 'Tarczy', która zależna jest od twojego poziomu Odporności.",
         "PvEDamageResistance": "Jak dużą posiadasz odporność na obrażenia w aktywnościach PvE.",
-        "FlinchResistance": "Jak dużą odporność na drgania posiadasz."
+        "FlinchResistance": "Jak dużą odporność na odrzut wywołany otrzymywanymi obrażeniami posiadasz."
     },
     "Recovery": {
         "Description": "Regeneracja decyduje o opóźnieniu, po którym twoje 'Zdrowie' i 'Tarcza' zaczynają regenerować się oraz jak szybko się regenerują.\n\nRegeneracja wpływa również na czas odnowienia zdolności klasowej Czarowników.",
