@@ -6,15 +6,15 @@
         "CrouchSpeed": "Qué tan rápido te puedes mover agachado."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "La resistencia determina cuánto HP (puntos de salud) tienen tus \"escudos\", otorga resistencia pasiva al daño dentro del PvE y proporciona Resistencia al Estrmecimiento de forma pasiva. También disminuye el daño recibido al romper el congelamiento de Estasis.\n\nLos 'Escudos' es una porción de 115 a 130 HP de tu HP total junto con una porción fija de 70 HP de 'Salud'.\n\nLa Resistencia también determina la velocidad de recarga de la Habilidad de Clase de los Titanes.",
+        "TotalHP": "Cuánto HP (puntos de salud) total tiene tu personaje.\n\nHP Total consiste en una porción fija de 70 HP de 'Salud' y una porción de 115 a 130 HP de 'Escudos' que depende de tu nivel de Resistencia.",
+        "PvEDamageResistance": "Cuánta Resistencia al Daño de forma pasiva tienes en actividades PvE.",
+        "FlinchResistance": "Cuánta Resistencia al Estremecimiento de forma pasiva tienes."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your 'Health' and 'Shields' from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\n'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
+        "Description": "La Recuperación determina el retraso antes de que tu 'Salud' y 'Escudos' comiencen a regenerarse, así como la velocidad de regeneración.\n\nLa Recuperación también determina la velocidad de recarga de la Habilidad de Clase de los Hechiceros.",
+        "TotalRegenTime": "Cuanto se tarda en regenerar completamente tu 'Salud' y 'Escudos' desde 0 HP.",
+        "HealthRegenDelay": "Cuanto tiempo tarda en regenerar 'Salud' después de recibir daño.\n\n'Salud' es una porción fija de 70 HP de tu HP total junto a 'Escudos'.",
         "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
         "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
         "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
