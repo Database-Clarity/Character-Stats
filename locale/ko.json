@@ -1,9 +1,9 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Description": "기동성은 점프 능력을 사용하지 않은 점프의 높이에 관여합니다. 또한 앞, 옆, 웅크려 걷는 이동 속도를 결정합니다.\n\n기동성은 초당 8m의 속도를 가진 달리기 속도에는 영향을 미치지 않습니다.\n\n기동성은 헌터의 직업 능력 재사용 대기시간을 결정합니다.",
+        "WalkSpeed": "앞으로 얼마나 빨리 걸어갈 수 있는지.",
+        "StrafeSpeed": "뒤나 양옆으로 얼마나 빨리 움직일 수 있는지.",
+        "CrouchSpeed": "웅크린 채로 얼마나 빨리 움직일 수 있는지."
     },
     "Resilience": {
         "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
