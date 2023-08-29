@@ -1,41 +1,41 @@
 {
     "Mobility": {
-        "Description": "기동성은 점프 능력을 사용하지 않은 점프의 높이에 관여합니다. 또한 앞, 옆, 웅크려 걷는 이동 속도를 결정합니다.\n\n기동성은 초당 8m의 속도를 가진 달리기 속도에는 영향을 미치지 않습니다.\n\n기동성은 헌터의 직업 능력 재사용 대기시간을 결정합니다.",
-        "WalkSpeed": "앞으로 얼마나 빨리 걸어갈 수 있는지.",
-        "StrafeSpeed": "뒤나 양옆으로 얼마나 빨리 움직일 수 있는지.",
-        "CrouchSpeed": "웅크린 채로 얼마나 빨리 움직일 수 있는지."
+        "Description": "기동성은 점프 능력을 사용하지 않은 점프의 높이에 관여합니다. 또한 앞, 옆, 웅크려 걷는 이동 속도를 결정합니다.\n\n기동성은 초당 8m의 속도로 고정된 달리기 속도에는 영향을 미치지 않습니다.\n\n기동성은 헌터의 직업 능력 재사용 대기시간을 결정합니다.",
+        "WalkSpeed": "앞으로 걷는 속도.",
+        "StrafeSpeed": "뒤나 양옆으로 움직이는 속도",
+        "CrouchSpeed": "웅크린 채 움직이는 속도"
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
+        "Description": "생존력은 당신의 '보호막'의 HP와 피격 반동 저항, PvE에서의 받는 피해 감소 효과에 관여합니다. 또한 시공 얼음에서 탈출할 때 받는 피해도 감소시킵니다.\n\n'보호막'은 총 체력에서 고정된 '체력' 70과 함께 115~130만큼의 HP를 제공합니다.\n\n생존력은 타이탄의 직업 능력 재사용 대기시간을 결정합니다.",
+        "TotalHP": "수호자의 총 체력이 얼마인지.\n\n총 체력은 70HP의 '체력'과 생존력에 따라 115에서 130의 '보호막' HP로 구성되어 있습니다.",
+        "PvEDamageResistance": "PvE 활동에서의 피해 감소 효과.",
+        "FlinchResistance": "피격 반동 저항 효과."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your 'Health' and 'Shields' from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\n'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "회복력은 '체력'과 '보호막'이 회복을 시작하는데 걸리는 시간과 회복 속도에 관여합니다.\n\n회복력은 워록의 직업 능력 재사용 대기 시간을 결정합니다.",
+        "TotalRegenTime": "0 HP에서 '체력'과 '보호막'을 최대로 회복하는데 걸리는 시간.",
+        "HealthRegenDelay": "피해를 받은 후 '체력'의 회복을 시작하는데 걸리는 시간.\n\n'체력'은 총 체력에서 '보호막'을 제외한 고정된 70HP 분량입니다.",
+        "HealthRegenSpeed": "'체력'이 마지막 피해를 받은 이후 회복할 때의 회복 속도.",
+        "ShieldRegenDelay": "피해를 받은 후 '보호막'이 회복을 시작하는데 걸리는 시간.\n\n'보호막'은 총 체력에서 '체력'을 제외한 115~130 HP 분량입니다.",
+        "ShieldRegenSpeed": "'체력'이 마지막 피해를 받은 이후 회복할 때의 회복 속도."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "의지는 수류탄 재사용 대기시간을 결정합니다."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "지능은 궁극기 재사용 대기시간을 결정합니다.\n\n긴 재사용 대기시간을 가진 궁극기는 피해를 입거나 가할때, 처치나 처치 지원을 기록할 때 얻는 궁극기 에너지가 적습니다. 반대로 짧은 재사용 대기시간을 가진 궁극기는 같은 행동에서 더 많은 궁극기 에너지를 얻습니다.",
+        "PvPDamageResistance": "PvP에서 궁극기가 제공하는 피해 감소 효과.",
+        "PvEDamageResistance": "PvE에서 궁극기가 제공하는 피해 감소 효과.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "지속 효과",
+            "CastAnimation": "궁극기 시전 동작 중 활성화.",
+            "GoldenGunDeadShot1": "의식 상실 상 장착 중 활성화",
+            "SpectralBlades1": "투명 효과 중 활성화",
+            "WellOfRadiance1": "주무기 피해를 상대로",
+            "WellOfRadiance2": "주무기 피해를 제외한 피해를 대상으로"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "힘은 근접 능력 재사용 대기시간을 결정합니다."
     }
 }
