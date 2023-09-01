@@ -1,6 +1,6 @@
 {
     "Mobility": {
-        "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\n\nMovilidad también determina la velocidad de recarga de la habilidad de clase de los cazadores.",
+        "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\n\nMovilidad también determina la velocidad de recarga de la Habilidad de Clase de los Cazadores.",
         "WalkSpeed": "Qué tan rápido puedes caminar hacia adelante.",
         "StrafeSpeed": "Qué tan rápido puedes moverte de lado a lado y hacia atrás.",
         "CrouchSpeed": "Qué tan rápido te puedes mover agachado."
@@ -15,27 +15,27 @@
         "Description": "La Recuperación determina el retraso antes de que tu 'Salud' y 'Escudos' comiencen a regenerarse, así como la velocidad de regeneración.\n\nLa Recuperación también determina la velocidad de recarga de la Habilidad de Clase de los Hechiceros.",
         "TotalRegenTime": "Cuanto se tarda en regenerar completamente tu 'Salud' y 'Escudos' desde 0 HP.",
         "HealthRegenDelay": "Cuanto tiempo tarda en regenerar 'Salud' después de recibir daño.\n\n'Salud' es una porción fija de 70 HP de tu HP total junto a 'Escudos'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "HealthRegenSpeed": "La velocidad en la que tu 'Salud' se regenera una vez que el retraso por recibir daño se acaba.",
+        "ShieldRegenDelay": "Cuánto tardan tus 'Escudos' en empezar a regenerarse después de recibir daño.\n\n'Escudos' son una porción de 115 a 130 HP (Puntos de salud) de tu HP Total junto con la 'Salud'.",
+        "ShieldRegenSpeed": "Que tan rápido tus 'escudos' se regeneran una vez se haya acabado el retraso por recibir daño."
     },
     "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
+        "Description": "Disciplina determina el tiempo de enfriamiento de tu Habilidad de Granada."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
+        "Description": "Intelecto determina el tiempo de enfriamiento pasivo de tu superhabilidad.\n\nSúper habilidades con tiempos de enfriamiento más largos reciben menos Energía de Súper al infligir o recibir daño, así como al recibir bajas o ayudas. Por el contrario, las superhabilidades con tiempos de enfriamiento más cortos reciben más Energía de Súper de las mismas acciones.",
+        "PvPDamageResistance": "Cuanta Resistencia al Daño otorga tu Súper Habilidad en JcJ.",
+        "PvEDamageResistance": "Cuanta Resistencia al Daño otorga tu Súper Habilidad en PvE.",
         "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
+            "Passive": "Pasivamente Activo",
+            "CastAnimation": "Activo durante la animación de Lanzamiento de la Súper.",
+            "GoldenGunDeadShot1": "Pasivamente activo con el Aspecto Liquídalos",
+            "SpectralBlades1": "Activo mientras se está invisible",
+            "WellOfRadiance1": "Contra daño de Arma de Munición Principal",
+            "WellOfRadiance2": "Contra cualquier daño no causado por un Arma de Munición Principal"
         }
     },
     "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
+        "Description": "Fuerza determina el tiempo de enfriamiento de tu Habilidad de Cuerpo a Cuerpo."
     }
 }
