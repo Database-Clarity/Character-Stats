@@ -1,8 +1,50 @@
 # Changelogs
 
-## v1.6.0 - Breaking Change (Sorry... again)
+## v1.8.0 Breaking Change (I'm fine trust me) - [insert timestamp]
 
-### Schema/Database Structure Changes
+### Schema/Database Structure Changes v1.8
+
+- `Requirements` properties of `Override` objects now support wildcards
+  - Inputting 0 in the `Requirements` array will select every ability from the Character Stat the Override is under (only works when the length of the `Requirements` array is 1)
+  - Inputting negative numbers in the `Requirements` array selects entire subclasses by their inventoryItem hash. The negative numbers are simply `-[hash]`.
+
+### Data Changes v1.8.0
+
+- Added *Mothkeeper's Wraps* override (uses the 0 wildcard)
+  - Overrides base grenade cooldown to 73 seconds
+- Updated *Citan's Ramparts* override to be a 1.724137931x Scalar
+- Updated *Bastion* override to a 1.4285714286x Scalar for Towering Barricade
+  - Cooldown unchanged from before the S22 patch at 100 seconds
+
+## v1.7.0 - Breaking Change (Ugh) - August 23, 2023
+
+### Schema/Database Structure Changes v1.7
+
+- Added new `Description` property to the schema (literally just a string)
+  - Contains a locale ID that can be used to get the localized description of the object it is under. These are designed to be used as a tooltip in apps.
+- Added `Description` property to all Character Stat objects
+- Previous number/int array-type properties of Character Stat objects (e.g. `FlinchResistance`) have now been converted into objects themselves
+  - These contain the previously available array in their `Array` property and have a newly added `Description` property
+- `WalkingSpeed` (now object) property of `Mobility` has been renamed to `WalkSpeed` for the sake of consistency
+  - Decided I might as well finally make this change since this is a pretty large update anyway
+- `DamageResistance` (now object property) of `Resilience` has been renamed to `PvEDamageResistance` for clarity
+- `DRCondition` property of `SuperAbility` objects now uses the new `Description` property instead of a generic string
+
+### New: Localization Support
+
+- `Description` strings will now be localized through [Crowdin](https://crowdin.com/project/clarity-d2-character-stats) to every language currently supported in the D2 manifest (and will use the same language tags)
+  - If your app has already established translators who are interested in helping with this effort, please direct them to our [Discord Server](https://url.d2clarity.com/discord).
+  - These strings will not be updated nearly as often as our main perk info database and should remain fairly constant, so I don't expect this to be a significant workload.
+
+### Other Changes v1.7
+
+- *Icefall Mantle* now overrides *Rally Barricade* cooldowns to the cooldown of *Towering Barricade* (this one was SOOOO wrong)
+- Updated *Hoarfrost-Z* override scalar to correctly override to the new *Towering Barricade* cooldowns
+- Updated `README.md` to better reflect the current state of the database and provide a clearer example for breaking change handling
+
+## v1.6.0 - Breaking Change (Sorry... again) - August 23, 2023
+
+### Schema/Database Structure Changes v1.6
 
 - Detailed explanations for the new structure and properties can be found in the `schema.json` file
 - `Intellect` no longer uses the generic `Ability` objects and now has its own `SuperAbility` object
@@ -21,7 +63,7 @@
 - Reduced *Void Wall* grenade cooldown from 152 to 121 seconds
 - Added now known values for `ChargeBasedScaling` to *Arcane Needle* and *Frenzied Blade*
 
-### Other Changes
+### Other Changes v1.6
 
 - Added a mostly feature complete GUI for data editing
   - Self-respecting programmers should avoid looking at the code for fear of heart attacks

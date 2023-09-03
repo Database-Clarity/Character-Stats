@@ -1,44 +1,54 @@
 {
     "Mobility": {
-        "WalkingSpeed": [
-            5.0,
-            5.2,
-            5.4,
-            5.6,
-            5.8,
-            6.0,
-            6.2,
-            6.4,
-            6.6,
-            6.8,
-            7.0
-        ],
-        "StrafeSpeed": [
-            4.25,
-            4.42,
-            4.59,
-            4.76,
-            4.93,
-            5.1,
-            5.27,
-            5.44,
-            5.61,
-            5.78,
-            5.95
-        ],
-        "CrouchSpeed": [
-            2.75,
-            2.86,
-            2.97,
-            3.08,
-            3.19,
-            3.3,
-            3.41,
-            3.52,
-            3.63,
-            3.74,
-            3.85
-        ],
+        "Description": "Mobility.Description",
+        "WalkSpeed": {
+            "Description": "Mobility.WalkSpeed",
+            "Array": [
+                5.0,
+                5.2,
+                5.4,
+                5.6,
+                5.8,
+                6.0,
+                6.2,
+                6.4,
+                6.6,
+                6.8,
+                7.0
+            ]
+        },
+        "StrafeSpeed": {
+            "Description": "Mobility.StrafeSpeed",
+            "Array": [
+                4.25,
+                4.42,
+                4.59,
+                4.76,
+                4.93,
+                5.1,
+                5.27,
+                5.44,
+                5.61,
+                5.78,
+                5.95
+            ]
+        },
+        "CrouchSpeed": {
+            "Description": "Mobility.CrouchSpeed",
+            "Array": [
+                2.75,
+                2.86,
+                2.97,
+                3.08,
+                3.19,
+                3.3,
+                3.41,
+                3.52,
+                3.63,
+                3.74,
+                3.85
+            ]
+        },
         "ChargeRateScalars": [
             0.85,
             0.9,
@@ -125,45 +135,55 @@
         ]
     },
     "Resilience": {
-        "TotalHP": [
-            185,
-            186,
-            187,
-            188,
-            189,
-            190,
-            192,
-            194,
-            196,
-            198,
-            200
-        ],
-        "DamageResistance": [
-            0,
-            2,
-            3,
-            5,
-            9,
-            14,
-            17,
-            20,
-            24,
-            27,
-            30
-        ],
-        "FlinchResistance": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10
-        ],
+        "Description": "Resilience.Description",
+        "TotalHP": {
+            "Description": "Resilience.TotalHP",
+            "Array": [
+                185,
+                186,
+                187,
+                188,
+                189,
+                190,
+                192,
+                194,
+                196,
+                198,
+                200
+            ]
+        },
+        "PvEDamageResistance": {
+            "Description": "Resilience.PvEDamageResistance",
+            "Array": [
+                0,
+                2,
+                3,
+                5,
+                9,
+                14,
+                17,
+                20,
+                24,
+                27,
+                30
+            ]
+        },
+        "FlinchResistance": {
+            "Description": "Resilience.FlinchResistance",
+            "Array": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+            ]
+        },
         "ChargeRateScalars": [
             0.7,
             0.8,
@@ -244,7 +264,7 @@
                 ],
                 "Scalar": [
                     2.1052631579,
-                    2.0833333333
+                    1.4285714286
                 ]
             },
             {
@@ -258,11 +278,11 @@
                     489583096
                 ],
                 "Scalar": [
-                    1.7,
-                    1.7,
-                    1.7,
-                    1.7,
-                    1.7
+                    1.724137931,
+                    1.724137931,
+                    1.724137931,
+                    1.724137931,
+                    1.724137931
                 ]
             },
             {
@@ -272,87 +292,111 @@
                     3260056809
                 ],
                 "Scalar": [
-                    1.2631578947
+                    1.8421052632
                 ]
             },
             {
                 "Hash": 1467044898,
                 "Name": "Icefall Mantle - Exotic Arns",
                 "Requirements": [
-                    3260056808
+                    489583097,
+                    2495523341,
+                    3260056809,
+                    2087010644,
+                    2722641741
                 ],
                 "Scalar": [
-                    0.7916666667
+                    1.8421052632,
+                    1.8421052632,
+                    1.8421052632,
+                    1.8421052632,
+                    1.8421052632
                 ]
             }
         ]
     },
     "Recovery": {
-        "TotalRegenTime": [
-            9,
-            8.8,
-            8.6,
-            8.4,
-            8.2,
-            8.0,
-            7.8,
-            7.4,
-            7.0,
-            6.6,
-            6
-        ],
-        "HealthRegenDelay": [
-            3.25,
-            3.15,
-            3.05,
-            2.95,
-            2.85,
-            2.75,
-            2.65,
-            2.45,
-            2.25,
-            2.05,
-            1.75
-        ],
-        "HealthRegenSpeed": [
-            28.986,
-            29.851,
-            30.769,
-            31.746,
-            32.787,
-            33.898,
-            35.088,
-            37.736,
-            40.816,
-            44.444,
-            50
-        ],
-        "ShieldRegenDelay": [
-            5.5,
-            5.4,
-            5.3,
-            5.2,
-            5.1,
-            5,
-            4.9,
-            4.7,
-            4.5,
-            4.3,
-            4
-        ],
-        "ShieldRegenSpeed": [
-            28.571,
-            29.412,
-            30.303,
-            31.25,
-            32.258,
-            33.333,
-            34.483,
-            37.037,
-            40,
-            43.478,
-            50
-        ],
+        "Description": "Recovery.Description",
+        "TotalRegenTime": {
+            "Description": "Recovery.TotalRegenTime",
+            "Array": [
+                9,
+                8.8,
+                8.6,
+                8.4,
+                8.2,
+                8.0,
+                7.8,
+                7.4,
+                7.0,
+                6.6,
+                6
+            ]
+        },
+        "HealthRegenDelay": {
+            "Description": "Recovery.HealthRegenDelay",
+            "Array": [
+                3.25,
+                3.15,
+                3.05,
+                2.95,
+                2.85,
+                2.75,
+                2.65,
+                2.45,
+                2.25,
+                2.05,
+                1.75
+            ]
+        },
+        "HealthRegenSpeed": {
+            "Description": "Recovery.HealthRegenSpeed",
+            "Array": [
+                28.986,
+                29.851,
+                30.769,
+                31.746,
+                32.787,
+                33.898,
+                35.088,
+                37.736,
+                40.816,
+                44.444,
+                50
+            ]
+        },
+        "ShieldRegenDelay": {
+            "Description": "Recovery.ShieldRegenDelay",
+            "Array": [
+                5.5,
+                5.4,
+                5.3,
+                5.2,
+                5.1,
+                5,
+                4.9,
+                4.7,
+                4.5,
+                4.3,
+                4
+            ]
+        },
+        "ShieldRegenSpeed": {
+            "Description": "Recovery.ShieldRegenSpeed",
+            "Array": [
+                28.571,
+                29.412,
+                30.303,
+                31.25,
+                32.258,
+                33.333,
+                34.483,
+                37.037,
+                40,
+                43.478,
+                50
+            ]
+        },
         "ChargeRateScalars": [
             0.7,
             0.8,
@@ -426,6 +470,7 @@
         "Overrides": []
     },
     "Discipline": {
+        "Description": "Discipline.Description",
         "ChargeRateScalars": [
             0.8,
             0.88,
@@ -593,10 +638,19 @@
                     1.6703296703,
                     1.2561983471
                 ]
+            },
+            {
+                "Hash": 3534173884,
+                "Name": "Mothkeeper's Wraps",
+                "Requirements": [
+                    0
+                ],
+                "CooldownOverride": 73
             }
         ]
     },
     "Intellect": {
+        "Description": "Intellect.Description",
         "ChargeRateScalars": [
             0.6945,
             0.784,
@@ -622,7 +676,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -636,7 +690,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -650,7 +704,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -664,7 +718,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -678,7 +732,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -692,7 +746,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -706,7 +760,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -720,7 +774,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -734,7 +788,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -750,8 +804,8 @@
                     66
                 ],
                 "DRCondition": [
-                    "Passive",
-                    "Requires the Knock 'Em Down aspect"
+                    "Intellect.DRCondition.Passive",
+                    "Intellect.DRCondition.GoldenGunDeadShot1"
                 ]
             },
             {
@@ -765,7 +819,7 @@
                     60
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -779,7 +833,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -793,7 +847,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -807,7 +861,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -821,7 +875,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -835,7 +889,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -849,7 +903,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -863,7 +917,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -877,7 +931,7 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -891,7 +945,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -905,7 +959,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -921,8 +975,8 @@
                     90
                 ],
                 "DRCondition": [
-                    "While not Invisible",
-                    "While Invisible"
+                    "Intellect.DRCondition.Passive",
+                    "Intellect.DRCondition.SpectralBlades1"
                 ]
             },
             {
@@ -936,7 +990,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -950,7 +1004,7 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             },
             {
@@ -958,16 +1012,13 @@
                 "Name": "Ward of Dawn",
                 "BaseCooldown": 417.0,
                 "PvPDamageResistance": [
-                    0,
                     26.5
                 ],
                 "PvEDamageResistance": [
-                    -9999,
                     -9999
                 ],
                 "DRCondition": [
-                    "Once Super Cast animation concludes",
-                    "During Super Cast animation"
+                    "Intellect.DRCondition.CastAnimation"
                 ]
             },
             {
@@ -983,8 +1034,8 @@
                     -9999
                 ],
                 "DRCondition": [
-                    "Against Primary Ammo Weapon damage",
-                    "Against damage not dealth with a Primary Ammo Weapon"
+                    "Intellect.DRCondition.WellOfRadiance1",
+                    "Intellect.DRCondition.WellOfRadiance2"
                 ]
             },
             {
@@ -998,13 +1049,14 @@
                     90
                 ],
                 "DRCondition": [
-                    "Passive"
+                    "Intellect.DRCondition.Passive"
                 ]
             }
         ],
         "Overrides": []
     },
     "Strength": {
+        "Description": "Strength.Description",
         "ChargeRateScalars": [
             0.8,
             0.88,
