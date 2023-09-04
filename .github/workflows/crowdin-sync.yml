@@ -40,6 +40,7 @@ jobs:
                 done
           
           - name: Commit Translation Updates
+            if: steps.filter.outputs.changed
             uses: stefanzweifel/git-auto-commit-action@v4
             with:
                 commit_message: i18n Updates
