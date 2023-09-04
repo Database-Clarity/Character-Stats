@@ -37,6 +37,5 @@
     },
     "Strength": {
         "Description": "Strength governs your Melee Ability cooldown."
-    },
-    "Something": "Something but different."
+    }
 }
