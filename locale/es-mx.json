@@ -1,6 +1,6 @@
 {
     "Mobility": {
-        "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\nAAAAAAAAAAAAA\nMovilidad también determina la velocidad de recarga de la Habilidad de Clase de los Cazadores.",
+        "Description": "Movilidad determina la altura que puedes alcanzar sin utilizar tu habilidad de salto. También establece la velocidad del movimiento al caminar recto, lateralmente o al estar agachado.\n\nMovilidad no afecta tu velocidad al correr, esta velocidad está fija a 8 metros por segundo.\n\nMovilidad también determina la velocidad de recarga de la Habilidad de Clase de los Cazadores.",
         "WalkSpeed": "Qué tan rápido puedes caminar hacia adelante.",
         "StrafeSpeed": "Qué tan rápido puedes moverte de lado a lado y hacia atrás.",
         "CrouchSpeed": "Qué tan rápido te puedes mover agachado."
