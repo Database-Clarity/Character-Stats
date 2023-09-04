@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "locale/en.json"
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   synchronize-with-crowdin:
