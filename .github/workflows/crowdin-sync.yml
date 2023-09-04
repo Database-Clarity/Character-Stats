@@ -9,9 +9,6 @@ jobs:
   synchronize-with-crowdin:
     runs-on: ubuntu-latest
 
-    permissions:
-        contents: write
-
     steps:
           - name: Checkout 
             uses: actions/checkout@v3
@@ -26,10 +23,12 @@ jobs:
                 localization_branch_name: i18n
                 create_pull_request: true
                 pull_request_title: 'New Translations'
+                pull_request_body: 'New Crowdin translations via Crowdin GH Action'
+                pull_request_base_branch_name: 'master'
                 source: locale/en.json
                 translation: locale/%two_letters_code%.json
                 project_id: ${{ secrets.CROWDIN_PROJECT_ID }}
                 token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-                # pull_request_assignees: 'StardustD2'
+                pull_request_assignees: 'StardustD2'
             env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
