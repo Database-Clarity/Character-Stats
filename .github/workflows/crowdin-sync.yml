@@ -30,6 +30,13 @@ jobs:
                 token: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
             env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+          - name: Update Locales
+            run: |
+                allLocales=("en" "de" "es" "es-mx" "fr" "it" "ja" "ko" "pl" "pt-br" "ru" "zh-chs" "zh-cht")
+                for lang in ${allLocales[@]}; do
+                    jq -S . locale/$lang.json > locale/sorted_$lang.json && mv locale/sorted_$lang.json locale/$lang.json
+                done
           
           - name: Commit Translation Updates
             uses: stefanzweifel/git-auto-commit-action@v4
