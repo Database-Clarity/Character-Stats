@@ -2,7 +2,7 @@ name: Scheduled Crowdin Sync
 
 on:
     schedule:
-        - cron: '0 */12 * * *' # Sync every 12 hours - https://crontab.guru/#0_*/12_*_*_*
+        - cron: '0 17 * * */6' # Sync at 17:00 every Saturday - https://crontab.guru/#0_17_*_*_*/6
     workflow_dispatch: # For manually running the action
 
 jobs:
