@@ -6,6 +6,8 @@ This repository contains an up-to-date (usually) collection of ability cooldowns
 
 All the data stored here is intended for use by 3rd party apps willing to implement them in place of Bungie's own outdated and incomplete information on Character Stats. This includes cooldown times as well as every other kind of useful information that is available from community research.
 
+Currently used and trusted by [Destiny Item Manager](https://dim.gg/) and [D2ArmorPicker](https://d2armorpicker.com/).
+
 ## Disclaimer
 
 - Cooldown times might be ~1 second off in some instances due to how these numbers are calculated. There's really nothing that can be done about it due to the ungodly workload that would be required to maintain this database by manually checking cooldown times at each tier for each ability. (This does not apply to Base (T3) Cooldowns, inaccuracies with those are not acceptable)
@@ -22,7 +24,7 @@ Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. 
 
 That's really about it, I don't ask for anything else. As long as you don't break that rule, please feel free to use whatever info is stored here for your projects.
 
-Though, I would certainly appreciate it if you linked back to this repository and to [Clarity's Ko-Fi page](https://ko-fi.com/d2clarity). But it's not required so it's entirely up to you.
+However, I would certainly appreciate it if you linked back to this repository and [Clarity's Ko-Fi page](https://ko-fi.com/d2clarity). But it's not required so it's entirely up to you.
 
 ## Recommended Access Paths
 
