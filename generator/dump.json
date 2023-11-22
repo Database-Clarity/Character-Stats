@@ -528,7 +528,7 @@
             {
                 "Hash": 1399217,
                 "Name": "Glacier Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 121.0
             },
             {
                 "Hash": 2470512752,
@@ -635,8 +635,8 @@
                     1399219
                 ],
                 "Scalar": [
-                    1.6703296703,
-                    1.2561983471
+                    1.3296703297,
+                    1
                 ]
             },
             {
@@ -1010,7 +1010,7 @@
             {
                 "Hash": 4260353953,
                 "Name": "Ward of Dawn",
-                "BaseCooldown": 417.0,
+                "BaseCooldown": 455.0,
                 "PvPDamageResistance": [
                     26.5
                 ],
@@ -1024,7 +1024,7 @@
             {
                 "Hash": 2274196887,
                 "Name": "Well of Radiance",
-                "BaseCooldown": 417.0,
+                "BaseCooldown": 455.0,
                 "PvPDamageResistance": [
                     50,
                     40
