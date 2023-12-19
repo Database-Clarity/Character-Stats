@@ -96,27 +96,27 @@
             {
                 "Hash": 426473316,
                 "Name": "Marksman's Dodge - Arc",
-                "BaseCooldown": 29
+                "BaseCooldown": 28.5
             },
             {
                 "Hash": 3636300854,
                 "Name": "Marksman's Dodge - Solar",
-                "BaseCooldown": 29
+                "BaseCooldown": 28.5
             },
             {
                 "Hash": 3933525366,
                 "Name": "Marksman's Dodge - Stasis",
-                "BaseCooldown": 29
+                "BaseCooldown": 28.5
             },
             {
                 "Hash": 1282157891,
                 "Name": "Marksman's Dodge - Strand",
-                "BaseCooldown": 29
+                "BaseCooldown": 28.5
             },
             {
                 "Hash": 2816982784,
                 "Name": "Marksman's Dodge - Void",
-                "BaseCooldown": 29
+                "BaseCooldown": 28.5
             }
         ],
         "Overrides": [
@@ -1074,7 +1074,7 @@
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
-                "BaseCooldown": 91.0,
+                "BaseCooldown": 100.0,
                 "ChargeBasedScaling": [
                     1.0,
                     1.33,
