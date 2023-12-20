@@ -603,7 +603,7 @@
             {
                 "Hash": 4228170798,
                 "Name": "Threadling Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 121.0
             },
             {
                 "Hash": 2946990961,
