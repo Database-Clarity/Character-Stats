@@ -1,6 +1,33 @@
 # Changelogs
 
-## v1.8.0 Breaking Change (I'm fine trust me) - [insert timestamp]
+## v1.9.0 Breaking Change - March ??, 2024
+
+### Reworks and Deprecations
+
+- `TotalHp` property of `Resilience` has been deprecated in favor of `ShieldHP`.
+  - This is due to the Crucible sandbox overhauls that came with a change to guardian Health. Normal Health in core crucible modes was increased by 30 (going from 70 to 100) and thus the `TotalHP` property is no longer universally applicable to all parts of the game.
+  - You can still use the above numbers to display total health in different parts of the sandbox. The Momentum Control and Mayhem Crucible party modes as well as all of PVE still keep base guardian Health at 70 while all other crucible modes have it at 100.
+  - This information is reflected in the `Description` property of the new `ShieldHP` property of Resilience.
+- `DRCondition`, `PvPDamageResistance`, and `PvEDamageResistance` properties of `Intellect` have been deprecated as they are outside the scope of this project. This was a failed experiment and I'm rolling the change back.
+- `FlatIncrease` property of `Override` objects has been deprecated in favor of the `ChunkEnergyOverride` property.
+  - This is due to the mechanic behind this being more involved and separated between PVP and PVE. This will be covered in the core Clarity tooltips instead going forward.
+
+### New Additions
+
+- Added `ChunkEnergyScalar` property to `Ability` objects.
+  - This property is intented to show how an ability interacts with ability energy sources such as the Bomber class item mod. Abilities with longer cooldowns gain less energy from these sources and this property quantifies that.
+  - To our knowledge, `ChunkEnergyScalar`s are not a thing for Super abilities so this property will not be present on `SuperAbility` objects
+- Added `ChunkEnergyScalarDescription` properties to Character Stat objects with the exception of `Intellect`
+  - These are going to be the exact same for all of them and work in the same way as `Description` objects: they store the locale ID for the tooltip that explains what Chunk Energy Scalars are and how they work.
+- Added `ChunkEnergyOverride` property to `Override` objects — replacing `FlatIncrease`.
+  - This property is similar to the exising `CooldownOverride` property and is a direct replacement of the `ChunkEnergyScalar` property of the `Ability` objects under the same character stat.
+- Added `SuperTier` and `ActiveRegenScalar` properties to `SuperAbility` objects.
+  - Super Tiers are directly tied to the cooldowns of the supers but I feel it's worth surfacting this information to communicate that the tiers also influence the amount of Super Energy you gain from active super regeneration.
+  - The `SuperTier` property is just a user-focused but mostly irrelevant stat simply used to communicate where the `ActiveRegenScalar` property comes from. The `ActiveRegenScalar` property is the actually important part as it is what communicates to users how much benefit they gain from Active Super Regen (more on that below).
+- Added `SuperTierDescription` and `ActiveRegenScalarDescription` properties to the `Intellect` Character Stat object.
+  - Like the `ChunkEnergyScalarDescription` mentioned above, these are also more specific `Description` objects that store a locale ID with the explanation of what each of these stats are.
+
+## v1.8.0 Breaking Change (I'm fine trust me) - August 25, 2023
 
 ### Schema/Database Structure Changes v1.8
 

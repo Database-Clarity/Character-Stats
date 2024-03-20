@@ -37,34 +37,7 @@
         },
         "Description": {
             "type": "string",
-            "description": "Contains a locale ID that you can use to grab the description for the item in your selected language. The ID is provided in a [key].[value] format where there can be an arbitrary number of keys (though it'll be 2-3 at most). Then you can use these keys and values to query the './locale/[language code].json' files for the desired description."
-        },
-        "Generic": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
-                },
-                "Abilities": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Ability"
-                    }
-                },
-                "Overrides": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Override"
-                    }
-                }
-            },
-            "required": [
-                "Abilities",
-                "Overrides",
-                "Description"
-            ],
-            "title": "Generic"
+            "description": "Contains a locale ID that you can use to grab the description for the item in your selected language. The ID is provided in a [key].[value] format where there can be an arbitrary number of keys (though it'll be 2-3 at most). Then you can use these keys and values to query the <./locale/[language code].json> files for the desired description. These descriptions are intended to be surfaced to users of apps using the data in this repository and provide crucial context to the values shown to them."
         },
         "Ability": {
             "type": "object",
@@ -87,6 +60,10 @@
                     "maxItems": 11,
                     "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is STRONGLY recommended to round them to an integer."
                 },
+                "ChunkEnergyScalar": {
+                    "type": "number",
+                    "description": "Abilities receive different amounts of 'chunk energy' from things like mods and other sources depending on their base cooldown. So let's say an armor mod gives you 10% grenade energy when popping your class ability — you'd multiply that 10% by the number listed here to arrive at the final amount you'll actually receive."
+                },
                 "ChargeBasedScaling": {
                     "type": "array",
                     "items": {
@@ -97,9 +74,10 @@
                 }
             },
             "required": [
-                "Cooldowns",
                 "Hash",
-                "Name"
+                "Name",
+                "Cooldowns",
+                "ChunkEnergyScalar"
             ],
             "title": "Ability"
         },
@@ -121,7 +99,7 @@
                         "type": "integer"
                     },
                     "minItems": 1,
-                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this 'Override'. Only overrides 'Abilities' under the same Character Stat as the 'Override'. Any one of these will trigger its effect defined in the other 'Override' properties. Wildcards: if the requirements array only contains 1 item and it's a 0, any ability tied to this Character Stat will have its cooldown overwritten. Negative numbers in the array indicate filters, these will be the inventoryItem hashes of subclasses multiplied by -1. Any abilities tied to the given subclass will have their cooldowns overwritten."
+                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this <Override>. Only overrides <Abilities> under the same Character Stat as the <Override>. Any one of these will trigger its effect defined in the other <Override> properties. Wildcards: if the requirements array only contains 1 item and it's a 0, any ability tied to this Character Stat will have its cooldown overwritten. Negative numbers in the array indicate filters, these will be the inventoryItem hashes of subclasses multiplied by -1. Any abilities tied to the given subclass will have their cooldowns overwritten."
                 },
                 "CooldownOverride": {
                     "type": "array",
@@ -130,7 +108,7 @@
                     },
                     "minItems": 11,
                     "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Overrides the cooldowns of the items listed in the 'Requirements' array before the scalar is applied. Identical to the 'Cooldowns' array of the 'Ability' object."
+                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Overrides the cooldowns of the items listed in the <Requirements> array before the scalar is applied. Identical to the <Cooldowns> array of the <Ability> object."
                 },
                 "Scalar": {
                     "type": "array",
@@ -138,15 +116,15 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a multiplier to the cooldown time of the abilities (of a subclass) listed in the 'Requirements' array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If 'CooldownOverride' property is specified: 'Scalar's are factored in after 'CooldownOverride's."
+                    "description": "Length of the array is equal to the length of the <Requirements> array. Each item represents a multiplier to the cooldown time of the abilities (of a subclass) listed in the <Requirements> array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If <CooldownOverride> property is specified: <Scalar>s are factored in after <CooldownOverride>s."
                 },
-                "FlatIncrease": {
+                "ChunkEnergyOverride": {
                     "type": "array",
                     "items": {
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the 'Requirements' array. Each item represents a flat increase to the cooldown time of the abilities (of a subclass) listed in the 'Requirements' array at the same array index. If 'CooldownOverride' or 'Scalar' property is specified: Time is added to the cooldown times at every tier after 'CooldownOverride's and 'Scalar's have been applied."
+                    "description": "Length of the array is equal to the length of the <Requirements> array. Each item represents an override of the <ChunkEnergyScalar> property of the abilities (of a subclass) listed in the <Requirements> array at the same array index. If <CooldownOverride> or <Scalar> property is specified: Time is added to the cooldown times at every tier after <CooldownOverride>s and <Scalar>s have been applied."
                 }
             },
             "anyOf": [
@@ -155,6 +133,38 @@
                 {"required": ["Hash", "Name", "Requirements", "FlatIncrease"]}
             ],
             "title": "Override"
+        },
+        "Generic": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Description": {
+                    "$ref": "#/definitions/Description"
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                },
+                "Overrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Override"
+                    }
+                },
+                "ChunkEnergyScalarDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
+                }
+            },
+            "required": [
+                "Abilities",
+                "Overrides",
+                "Description",
+                "ChunkEnergyScalarDescription"
+            ],
+            "title": "Generic"
         },
         "SuperAbility":{
             "Hash": {
@@ -174,34 +184,20 @@
                 "maxItems": 11,
                 "description": "Array index represents the Intellect tier. Cooldowns are in seconds. Rounded to 2 decimal places. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is STRONGLY recommended to round them to an integer."
             },
-            "PvPDamageResistance": {
-                "type": "array",
-                "items": {
-                    "type": "number"
-                },
-                "description": "Numbers are provided in Damage Resist percentages and represent the Damage Resistance the super provied inside PvP. If the array is empty, the DR value is still unknown. If the array only contains one value, it represents the passive DR of the super. If the value is -9999, the value is still unknown (workaround that allows only inputting one of the PvE or PvP values. If other values are present, check the condition array for the conditions of each of them."
+            "SuperTier": {
+                "type": "integer",
+                "description": "This number represents the tier of the super ability and ranges from 1 to 5. Tier 1 recharges the slowest while Tier 5 recharges the fastest. Super tiers are a one-to-one translation of the base cooldowns of a super ability. This is mostly useless for all intents and purposes but does serve the purpose of influencing how much Super Energy you gain from active regen sources. It's an entirely optional value to surface for users but I thought it would be worth including alongside the ActiveRegenScalar property below — which is much more meaningful."
             },
-            "PvEDamageResistance": {
-                "type": "array",
-                "items": {
-                    "type": "number"
-                },
-                "description": "Same length as the PvPDamageResistance array and works the exact same way except it stores the DR values for PvE."
-            },
-            "DRCondition": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/definitions/Description"
-                },
-                "description": "Array length matches the length of the DamageResistance arrays. This property can be ignored when the length of the arrays is 1 as that represents the passive DR of the Super that doesn't have a condition. The array contains the condition for each Damage Resist value at the same index in the DamageResistance arrays. Unfortunately, there is no way to realistically account for all the different conditions without using simple text for it so these will be succinct descriptions instead of item hashes or the like."
+            "ActiveRegenScalar": {
+                "type": "number",
+                "description": "This number represents the scalar for how much benefit you get from active super regeneration with your super ability. This ranges from 0.8 for a Tier 1 super to 1.2 for a Tier 5 super. Active Regen refers to any source of super energy that isn't just passively waiting for it to recharge. So aside from the normal passive regen and other effects that are 'additional base super regen', these influence everything. Be it collecting orbs of power, killing enemies (including assists), taking and dealing damage, armor mods, this covers everything else."
             },
             "required": [
                 "Hash",
                 "Name",
                 "Cooldowns",
-                "PvPDamageResistance",
-                "PvEDamageResistance",
-                "DRCondition"
+                "SuperTier",
+                "ActiveRegenScalar"
             ],
             "title": "SuperAbility"
         },
@@ -223,12 +219,22 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
+                },
+                "SuperTierDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Super Tiers are in case you wish to surface this info to users. This is only a one part of the whole as the actual <SuperTier> numbers are tied to the <SuperAbility> objects in the <SuperAbilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <SuperAbility>."
+                },
+                "ActiveRegenScalarDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Active Super Regen Scalar are. This is only a one part of the whole as the actual <ActiveRegenScalar> numbers are tied to the <SuperAbility> objects in the <SuperAbilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <SuperAbility>."
                 }
             },
             "required": [
                 "SuperAbilities",
                 "Overrides",
-                "Description"
+                "Description",
+                "SuperTierDescription",
+                "ActiveRegenScalarDescription"
             ],
             "title": "Intellect"
         },
@@ -304,6 +310,10 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
+                },
+                "ChunkEnergyScalarDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
                 }
             },
             "required": [
@@ -312,7 +322,8 @@
                 "CrouchSpeed",
                 "StrafeSpeed",
                 "WalkSpeed",
-                "Description"
+                "Description",
+                "ChunkEnergyScalarDescription"
             ],
             "title": "Mobility"
         },
@@ -355,7 +366,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: 'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields' which are a 115-130 HP portion of Total HP determined by Resilience."
+                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: <Health> is a fixed 70 HP portion of your Total HP alongside <Shields> which are a 115-130 HP portion of Total HP determined by Resilience."
                         }
                     }
                 },
@@ -373,7 +384,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Recovery tier. The numbers represent how fast your 'Health' regens after the delay. The numbers are provided in % of total 'Health' per second (total 'Health' is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
+                            "description": "Array index represents the Recovery tier. The numbers represent how fast your <Health> regens after the delay. The numbers are provided in % of total <Health> per second (total <Health> is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
                         }
                     }
                 },
@@ -424,6 +435,10 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
+                },
+                "ChunkEnergyScalarDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
                 }
             },
             "required": [
@@ -434,7 +449,8 @@
                 "HealthRegenTime",
                 "ShieldRegenDelay",
                 "ShieldRegenTime",
-                "Description"
+                "Description",
+                "ChunkEnergyScalarDescription"
             ],
             "title": "Recovery"
         },
@@ -459,7 +475,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. 'Health' is a static 70 HP, the rest are what Bungie calls 'Shields' in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
+                            "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. <Health> is a static 70 HP, the rest are what Bungie calls <Shields> in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
                         }
                     }
                 },
@@ -510,15 +526,20 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
+                },
+                "ChunkEnergyScalarDescription": {
+                    "$ref": "#/definitions/Description",
+                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
                 }
             },
             "required": [
+                "Description",
+                "TotalHP",
+                "PvEDamageResistance",
+                "FlinchResistance",
                 "Abilities",
                 "Overrides",
-                "DamageResistance",
-                "FlinchResistance",
-                "TotalHP",
-                "Description"
+                "ChunkEnergyScalarDescription"
             ],
             "title": "Resilience"
         }
