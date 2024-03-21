@@ -23,16 +23,39 @@ def getProperties(dictionary: dict):
 def getValues(dictionary: dict): # currently unused kekw
     '''Returns Dictionary Values of input dictionary'''
     return list(dictionary.values())
+def is_json(myjson: any) -> bool:
+    if myjson is None:
+        return False
+    try:
+        json.loads(myjson)
+    except ValueError as e:
+        return False
+    return True
+def it_floats(element: any) -> bool:
+    if element is None: 
+        return False
+    try:
+        float(element)
+        return True
+    except ValueError:
+        return False
+def is_int(element: any) -> bool:
+    if element is None: 
+        return False
+    try:
+        int(element)
+        return True
+    except ValueError:
+        return False
 
-def changed1st(choice):
+def changedDropdown1(choice):
     '''Updates 2nd and 3rd dropdowns as well as text boxes if 1st one was updated'''
     dropdown1.set(choice)
     newDropdown2 = getProperties(data[choice])
-    newDropdown2.pop(0)
     dropdown2contents.configure(values=newDropdown2)
     dropdown2.set(newDropdown2[0])
-    changed2nd(newDropdown2[0])
-def changed2nd(choice):
+    changedDropdown2(newDropdown2[0])
+def changedDropdown2(choice):
     '''Updates 3rd dropdown (and/or populates editor) if 2nd one was updated'''
     dropdown2.set(choice)
     if (choice == "Abilities" or choice == "Overrides" or choice == "SuperAbilities"):
@@ -63,7 +86,7 @@ def changed2nd(choice):
         addNewItemButton.configure(state="disabled")
         clearContext()
         populateEditor()
-def changed3rd(choice):
+def changedDropdown3(choice):
     '''Updates text boxes if 3rd dropdown was updated'''
     dropdown3.set(re.search("^[^ ]*",choice).group(0))
     populateEditor()
@@ -85,30 +108,6 @@ def returnIndexByHash(abilityOverride: int, paramList: list) -> int:
             return i
         i+=1
     return -1
-def is_json(myjson: any) -> bool:
-    if myjson is None:
-        return False
-    try:
-        json.loads(myjson)
-    except ValueError as e:
-        return False
-    return True
-def it_floats(element: any) -> bool:
-    if element is None: 
-        return False
-    try:
-        float(element)
-        return True
-    except ValueError:
-        return False
-def is_int(element: any) -> bool:
-    if element is None: 
-        return False
-    try:
-        int(element)
-        return True
-    except ValueError:
-        return False
 
 def configureDeleteButton(charStat: str ,currentState: str, hash=0):
     '''Enables/Disables Delete Button depending on if the item is an Ability/Override or not.'''
@@ -167,11 +166,16 @@ def populateEditor():
         property3.configure(text="BaseCooldown")
         value3.configure(state='normal')
         value3.insert(1.0, data[charStat][currentState][abilityOverride]["BaseCooldown"])
-        property4.configure(text="ChargeBasedScaling")
+        property4.configure(text="ChunkEnergyScalar")
         value4.configure(state='normal')
+        if ("ChunkEnergyScalar" in data[charStat][currentState][abilityOverride]):
+            value4.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["ChunkEnergyScalar"]))
+        property5.configure(text="ChargeBasedScaling")
+        value5.configure(state='normal')
         if ("ChargeBasedScaling" in data[charStat][currentState][abilityOverride]):
-            value4.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["ChargeBasedScaling"]))
+            value5.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["ChargeBasedScaling"]))
         configureDeleteButton(charStat,currentState,data[charStat][currentState][abilityOverride]["Hash"])
+    
     elif currentState == "SuperAbilities":
         abilityOverride = returnIndexByName(dropdown3.get(),data[charStat][currentState])
         property1.configure(text="Hash")
@@ -184,16 +188,13 @@ def populateEditor():
         property3.configure(text="BaseCooldown")
         value3.configure(state='normal')
         value3.insert(1.0, data[charStat][currentState][abilityOverride]["BaseCooldown"])
-        property4.configure(text="PvPDamageResistance")
+        property4.configure(text="SuperTier")
         value4.configure(state='normal')
-        value4.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["PvPDamageResistance"]))
-        property5.configure(text="PvEDamageResistance")
+        value4.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["SuperTier"]))
+        property5.configure(text="ActiveRegenScalar")
         value5.configure(state='normal')
-        value5.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["PvEDamageResistance"]))
-        property6.configure(text="DR Condition")
-        value6.configure(state='normal')
-        value6.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["DRCondition"]))
-        configureDeleteButton(charStat,currentState,data[charStat][currentState][abilityOverride]["Hash"])
+        value5.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["ActiveRegenScalar"]))
+    
     elif currentState == "Overrides":
         abilityOverride = returnIndexByName(dropdown3.get(),data[charStat][currentState])
         property1.configure(text="Hash")
@@ -214,11 +215,12 @@ def populateEditor():
         value5.configure(state='normal')
         if ("Scalar" in data[charStat][currentState][abilityOverride]):
             value5.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["Scalar"]))
-        property6.configure(text="FlatIncrease")
+        property6.configure(text="ChunkEnergyOverride")
         value6.configure(state='normal')
-        if ("FlatIncrease" in data[charStat][currentState][abilityOverride]):
-            value6.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["FlatIncrease"]))
+        if ("ChunkEnergyOverride" in data[charStat][currentState][abilityOverride]):
+            value6.insert(1.0, json.dumps(data[charStat][currentState][abilityOverride]["ChunkEnergyOverride"]))
         configureDeleteButton(charStat,currentState,data[charStat][currentState][abilityOverride]["Hash"])
+    
     else:
         if "Array" in data[charStat][currentState]:
             property1.configure(text=currentState)
@@ -252,13 +254,14 @@ def abilityContext(charStat: str):
     p2 = value2.get(1.0,"end")[:-1]
     p3 = value3.get(1.0,"end")[:-1]
     p4 = value4.get(1.0,"end")[:-1]
+    p5 = value5.get(1.0,"end")[:-1]
     #endregion
-    abilityDict = retrieveAbility(p1,p2,p3,p4)
+    abilityDict = retrieveAbility(p1,p2,p3,p4,p5)
     if abilityDict["Hash"] < 0:
         errorPopup("There were problems when parsing the input.",abilityDict["Name"])
         return
     selectedCooldown = abilityDict["BaseCooldown"]
-    minuteSecond = str(int(selectedCooldown//60)) + ':' + str(round(selectedCooldown % 60))
+    minuteSecond = str(int(selectedCooldown//60)) + ':' + f"{round(selectedCooldown % 60):02d}"
     counter = 0
     nameList = []
     for ability in data[charStat]["Abilities"]:
@@ -328,9 +331,8 @@ def superAbilityContext(charStat: str):
     p3 = value3.get(1.0,"end")[:-1]
     p4 = value4.get(1.0,"end")[:-1]
     p5 = value5.get(1.0,"end")[:-1]
-    p6 = value6.get(1.0,"end")[:-1]
     #endregion
-    superAbilityDict = retrieveSuperAbility(p1,p2,p3,p4,p5,p6)
+    superAbilityDict = retrieveSuperAbility(p1,p2,p3,p4,p5)
     if superAbilityDict["Hash"] < 0:
         errorPopup("There were problems when parsing the input.",superAbilityDict["Name"])
         return
@@ -351,21 +353,29 @@ def superAbilityContext(charStat: str):
             contextBox1.insert("end",text=f" • {i}\n")
     contextBox1.configure(state="disabled")
 
-def retrieveAbility(pHash:str,pName:str,pBaseCD:str,pChargeBS:str):
-    '''Converts current editor state into an Ability object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
+def retrieveAbility(pHash:str,pName:str,pBaseCD:str,pChunkEnergyScalar:str,pChargeBS:str):
+    '''Converts input parameters into an Ability object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
     ability = {}
     if pHash and pHash.isdigit(): # hash input
         ability["Hash"] = int(pHash)
     else:
         return {"Hash": -1, "Name": "Hash input was invalid. Please provide a positive integer."}
+    ################
     if pName: # name input
         ability["Name"] = pName
     else:
         return {"Hash": -1, "Name": "Name input was unspecified."}
+    ################
     if pBaseCD and it_floats(pBaseCD) and float(pBaseCD) > 0:
         ability["BaseCooldown"] = round(float(pBaseCD),3)
     else:
         return {"Hash": -1, "Name": "Base cooldown input was invalid. Please provide a positive number."}
+    ################
+    if pChunkEnergyScalar and it_floats(pChunkEnergyScalar) and (1 >= float(pChunkEnergyScalar) > 0.1):
+        ability["ChunkEnergyScalar"] = round(float(pChunkEnergyScalar),3)
+    else:
+        return {"Hash": -1, "Name": "Chunk Energy Scalar input was invalid. Please provide a number between 0.1 and 1."}
+    ################
     if pChargeBS:
         if is_json(pChargeBS):
             loaded = json.loads(pChargeBS)
@@ -374,18 +384,21 @@ def retrieveAbility(pHash:str,pName:str,pBaseCD:str,pChargeBS:str):
             else: return {"Hash": -1, "Name": "ChargeBasedScaling input was invalid. Please provide an array of positive floats of at least 2 length or leave the input empty."}
         else: return {"Hash": -1, "Name": "ChargeBasedScaling could not be parsed. Please provide an array of positive floats of at least 2 length or leave the input empty."}
     return ability
-def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,pFlatIncrease:str):
-    '''Converts current editor state into an Ability object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
+
+def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,pChunkEnergyOverride:str):
+    '''Converts input parameters into an Ability object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
     # print(p1,p2,p3,p4,p5,p6)
     override = {}
     if pHash.isdigit(): # hash input
         override["Hash"] = int(pHash)
     else:
         return {"Hash": -1, "Name": "Hash input was invalid. Please provide a positive integer."}
+    ################
     if pName: # name input
         override["Name"] = pName
     else:
         return {"Hash": -1, "Name": "Name input was unspecified."}
+    ################
     if is_json(pReqs) and type(json.loads(pReqs)) == list: # requirements array input
         reqList = json.loads(pReqs)
         if all(is_int(x) for x in reqList):
@@ -395,12 +408,13 @@ def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,p
     else:
         return {"Hash": -1, "Name": "Requirements input could not be parsed."}
     listLength = len(override["Requirements"])
-
+    ################
     if pCDOverride: # cooldown override input
         if pCDOverride.isdigit():
             override["CooldownOverride"] = int(pCDOverride)
         else:
             return {"Hash": -1, "Name": "CooldownOverride input was invalid. Please provide a positive integer."}
+    ################
     if pScalar: # scalar input
         if is_json(pScalar):
             loaded = json.loads(pScalar)
@@ -416,64 +430,60 @@ def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,p
                 return {"Hash": -1, "Name": "Scalar input could not be parsed. Please provide an array of positive floats."}
         else:
             return {"Hash": -1, "Name": "Scalar input could not be parsed. Please provide an array of positive floats."}
-    if pFlatIncrease: # flat increase input
-        if is_json(pFlatIncrease):
-            loaded = json.loads(pFlatIncrease)
+    ################
+    if pChunkEnergyOverride: # chunk energy override input
+        if is_json(pChunkEnergyOverride):
+            loaded = json.loads(pChunkEnergyOverride)
             if type(loaded) == list:
                 if len(loaded) == listLength:
-                    if all(it_floats(x) for x in loaded):
+                    if all(it_floats(x) and ( 0.1 < x <= 1 ) for x in loaded):
                         override["FlatIncrease"] = loaded
                     else:
-                        return {"Hash": -1, "Name": "FlatIncrease input was invalid. Please provide an array of integers."}
+                        return {"Hash": -1, "Name": "ChunkEnergyOverride input was invalid. Please provide an array of numbers between 0.1 and 1."}
                 else:
-                    return {"Hash": -1, "Name": "FlatIncrease array length did not match Requirements array length."}
+                    return {"Hash": -1, "Name": "ChunkEnergyOverride array length did not match Requirements array length."}
             else:
-                return {"Hash": -1, "Name": "FlatIncrease input could not be parsed. Please provide an array of integers."}
+                return {"Hash": -1, "Name": "ChunkEnergyOverride input could not be parsed. Please provide an array of numbers between 0.1 and 1."}
         else:
-            return {"Hash": -1, "Name": "FlatIncrease input could not be parsed. Please provide an array of integers."}
-    if ("CooldownOverride" in override or "Scalar" in override or "FlatIncrease" in override):
+            return {"Hash": -1, "Name": "ChunkEnergyOverride input could not be parsed. Please provide an array of numbers between 0.1 and 1."}
+    ################
+    if ("CooldownOverride" in override or "Scalar" in override or "ChunkEnergyOverride" in override):
         return override
-    else: return {"Hash": -1, "Name": "Please specify at least one of CooldownOverride, Scalar, or FlatIncrease."}
-def retrieveSuperAbility(pHash:str,pName:str,pBaseCD:str,pPvPDR:str,pPvEDR:str, pDRCondition:str):
-    '''Converts current editor state into an SuperAbility object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
+    else: return {"Hash": -1, "Name": "Please specify at least one of CooldownOverride, Scalar, or ChunkEnergyOverride."}
+
+def retrieveSuperAbility(pHash:str,pName:str,pBaseCD:str,pSuperTier:str,pActiveRegenScalar:str):
+    '''Converts input parameters into an SuperAbility object. If checks fail, it returns -1 for the Hash and an error message in the Name property.'''
     superAbility = {}
     if pHash and pHash.isdigit(): # hash input
         superAbility["Hash"] = int(pHash)
     else:
         return {"Hash": -1, "Name": "Hash input was invalid. Please provide a positive integer."}
+    ################
     if pName: # name input
         superAbility["Name"] = pName
     else:
         return {"Hash": -1, "Name": "Name input was unspecified."}
+    ################
     if pBaseCD and it_floats(pBaseCD) and float(pBaseCD) > 0:
         superAbility["BaseCooldown"] = round(float(pBaseCD),3)
     else:
         return {"Hash": -1, "Name": "Base cooldown input was invalid. Please provide a positive number."}
-    if pPvPDR:
-        if is_json(pPvPDR):
-            loaded = json.loads(pPvPDR)
-            if type(loaded) == list:
-                    superAbility["PvPDamageResistance"] = loaded
-            else: return {"Hash": -1, "Name": "PvPDamageResistance input was invalid. Please provide an array of floats (array can be left empty)."}
-        else: return {"Hash": -1, "Name": "PvPDamageResistance could not be parsed. Please provide an array of floats (array can be left empty)."}
-    if pPvEDR:
-        if is_json(pPvEDR):
-            loaded = json.loads(pPvEDR)
-            if type(loaded) == list:
-                    superAbility["PvEDamageResistance"] = loaded
-            else: return {"Hash": -1, "Name": "PvEDamageResistance input was invalid. Please provide an array of floats (array can be left empty)."}
-        else: return {"Hash": -1, "Name": "PvEDamageResistance could not be parsed. Please provide an array of floats (array can be left empty)."}
-    if pDRCondition:
-        if is_json(pDRCondition):
-            loaded = json.loads(pDRCondition)
-            if type(loaded) == list:
-                    superAbility["DRCondition"] = loaded
-            else: return {"Hash": -1, "Name": "DRCondition input was invalid. Please provide an array of strings (array can be left empty). Each condition must be in \"quotation marks\""}
-        else: return {"Hash": -1, "Name": "DRCondition could not be parsed. Please provide an array of strings (array can be left empty). Each condition must be in \"quotation marks\""}
-    if len(superAbility["PvPDamageResistance"]) == len(superAbility["PvEDamageResistance"]) == len(superAbility["DRCondition"]):
-        None
-    else: return {"Hash": -1, "Name": "Ensure that the PvPDamageResistance, PvEDamageResistance, and DRCondition arrays are of the same length."}
+    ################
+    if pSuperTier and pSuperTier.isdigit():
+        if 0 < int(pSuperTier) < 6: 
+            superAbility["SuperTier"] = int(pSuperTier)
+        else: 
+            return {"Hash": -1, "Name": "SuperTier input was invalid. Please provide an integer between 1 and 5."}
+    else:
+        return {"Hash": -1, "Name": "SuperTier input was invalid. Please provide an integer between 1 and 5."}
+    ################
+    if pActiveRegenScalar and it_floats(pActiveRegenScalar) and 0 < float(pActiveRegenScalar) < 2:
+        superAbility["ActiveRegenScalar"] = float(pActiveRegenScalar)
+    else:
+        return {"Hash": -1, "Name": "ActiveRegenScalar input was invalid. Please provide a number between 0 and 2."}
+    
     return superAbility
+
 def retrieveMisc(p1):
     '''Converts current editor state into an Misc Info list.'''
     item = []
@@ -483,6 +493,7 @@ def retrieveMisc(p1):
         else: item = ["Input was invalid."]
     else: item = ["Input could not be parsed."]
     return item
+
 def updateAbilityOrOverride(charStat: str, currentState: str, abilityOverride: dict):
     '''Updates ability or override dict with matching Hash key in the main dictionary to abilityOverride.'''
     for item in data[charStat][currentState]:
@@ -498,13 +509,13 @@ def updateAbilityOrOverride(charStat: str, currentState: str, abilityOverride: d
             if item["Hash"] == change["Hash"]:
                 item = change
                 changedItems.update_item(change)
-                changed2nd(currentState)
-                changed3rd(abilityOverride["Name"])
+                changedDropdown2(currentState)
+                changedDropdown3(abilityOverride["Name"])
                 return
     changedItemList.append(change)
     changedItems.add_item(change)
-    changed2nd(currentState)
-    changed3rd(abilityOverride["Name"])
+    changedDropdown2(currentState)
+    changedDropdown3(abilityOverride["Name"])
 def updateMisc(charStat: str, currentState: str, miscInfo: list):
     '''Updates Miscellaneous Info (WalkingSpeed/FlinchResistance/etc.) to miscInfo.'''
     if data[charStat][currentState]["Array"] == miscInfo:
@@ -557,7 +568,7 @@ def updateItem():
     currentState = dropdown2.get()
     
     if (currentState == "Abilities"):
-        item = retrieveAbility(p1,p2,p3,p4)
+        item = retrieveAbility(p1,p2,p3,p4,p5)
         # If retrieveAbility's checks fail, it returns -1 for the Hash and the error message in the "Name" property
         if item["Hash"] < 0:
             errorPopup("There were problems when parsing the input.",item["Name"])
@@ -570,7 +581,7 @@ def updateItem():
             return
         updateAbilityOrOverride(charStat,currentState,item)
     elif (currentState == "SuperAbilities"):
-        item = retrieveSuperAbility(p1,p2,p3,p4,p5,p6)
+        item = retrieveSuperAbility(p1,p2,p3,p4,p5)
         if item["Hash"] < 0:
             errorPopup("There were problems when parsing the input.",item["Name"])
             return
@@ -600,14 +611,14 @@ def restoreOriginalData(charStat: str, charStatProperty: str, hash: int = None) 
         # Remove entry from Changed Items List
         if returnIndexByHash(hash,changedItemList) != -1:
             changedItemList.pop(returnIndexByHash(hash,changedItemList))
-            changed2nd(charStatProperty)
-            changed3rd(backup[charStat][charStatProperty][indexBackup]["Name"])
+            changedDropdown2(charStatProperty)
+            changedDropdown3(backup[charStat][charStatProperty][indexBackup]["Name"])
     else:
         data[charStat][charStatProperty] = deepcopy(backup[charStat][charStatProperty])
         # Remove entry from Changed Items List
         if returnIndexByName(charStatProperty,changedItemList) != -1:
             changedItemList.pop(returnIndexByName(charStatProperty,changedItemList))
-            changed2nd(charStatProperty)
+            changedDropdown2(charStatProperty)
     populateEditor()
     populateContext()
     return True
@@ -615,11 +626,11 @@ def restoreOriginalData(charStat: str, charStatProperty: str, hash: int = None) 
 def openDirect(charStat: str, charStatProperty: str, abilityOrOverrideName: int = None):
     '''Directly sets the editor to the item specified in the input parameters.'''
     dropdown1.set(charStat)
-    changed1st(charStat)
+    changedDropdown1(charStat)
     dropdown2.set(charStatProperty)
-    changed2nd(charStatProperty)
+    changedDropdown2(charStatProperty)
     if charStatProperty == "Abilities" or charStatProperty == "Overrides" or charStatProperty == "SuperAbilities":
-        changed3rd(abilityOrOverrideName)
+        changedDropdown3(abilityOrOverrideName)
 
 class ScrollableChangeListFrame(ctk.CTkScrollableFrame):
     def __init__(self, master, command=None, **kwargs):
@@ -693,7 +704,7 @@ class ScrollableChangeListFrame(ctk.CTkScrollableFrame):
                 self.button_list.remove(button)
                 self.hash_list.remove(hash)
         data[item["CharStat"]][item["CharStatProperty"]].pop(dict_index)
-        changed2nd(item["CharStatProperty"])
+        changedDropdown2(item["CharStatProperty"])
 
 def addNewItem():
     '''Brings up a dialog to input required properties and then opens it up in the editor.'''
@@ -757,8 +768,8 @@ def addNewItem():
     
     def destroyPopup(*_):
         if appendReturnItem():
-            changed2nd(currentState)
-            changed3rd(data[charStat][currentState][-1]["Name"])
+            changedDropdown2(currentState)
+            changedDropdown3(data[charStat][currentState][-1]["Name"])
             popup.destroy()
     
     if currentState == "Abilities":
@@ -781,11 +792,17 @@ def addNewItem():
                                    placeholder_text="Base (T3) Cooldown of the Ability")
         popupValue3.pack(padx=25, anchor="center", fill="x")
         #row4
-        popupProperty4 = ctk.CTkLabel(popup, text="Charge-Based Scaling (fill out if ability has multiple charges)", anchor="center")
+        popupProperty4 = ctk.CTkLabel(popup, text="Chunk Energy Scalar", anchor="center")
         popupProperty4.pack(padx=25, pady=(10,0), anchor="center")
         popupValue4 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
-                                   placeholder_text="Array with length equal the number of intrinsic ability charges. Array items are charge rate scalars.")
+                                   placeholder_text="A number between 0.1 and 1 that determines how much an ability benefits from Chunk Energy bonuses.")
         popupValue4.pack(padx=25, anchor="center", fill="x")
+        #row5
+        popupProperty5 = ctk.CTkLabel(popup, text="Charge-Based Scaling (fill out if ability has multiple charges)", anchor="center")
+        popupProperty5.pack(padx=25, pady=(10,0), anchor="center")
+        popupValue5 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
+                                   placeholder_text="Array with length equal the number of intrinsic ability charges. Array items are charge rate scalars.")
+        popupValue5.pack(padx=25, anchor="center", fill="x")
     elif currentState == "Overrides":
         input_popup_h = 460
         input_popup_offset_h = app_h/2 - input_popup_h/2
@@ -821,10 +838,10 @@ def addNewItem():
                                    placeholder_text="Requires an array of scalars of equal length to the Requirements array: [scalar1, scalar2, etc.]")
         popupValue5.pack(padx=25, anchor="center", fill="x")
         #row6
-        popupProperty6 = ctk.CTkLabel(popup, text="Flat Cooldown Increase", anchor="center")
+        popupProperty6 = ctk.CTkLabel(popup, text="Chunk Energy Scalar Override", anchor="center")
         popupProperty6.pack(padx=25, pady=(10,0), anchor="center")
         popupValue6 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
-                                   placeholder_text="Requires an array of nubmers of equal length to the Requirements array: [num1, num2, etc.]")
+                                   placeholder_text="Requires a number input between 0.1 and 1")
         popupValue6.pack(padx=25, anchor="center", fill="x")
     elif currentState == "SuperAbilities":
         #row1
@@ -846,23 +863,17 @@ def addNewItem():
                                    placeholder_text="Base (T3) Cooldown of the Super Ability")
         popupValue3.pack(padx=25, anchor="center", fill="x")
         #row4
-        popupProperty4 = ctk.CTkLabel(popup, text="PvP Damage Resistance", anchor="center")
+        popupProperty4 = ctk.CTkLabel(popup, text="Super Tier", anchor="center")
         popupProperty4.pack(padx=25, pady=(10,0), anchor="center")
         popupValue4 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
-                                   placeholder_text="Requires an array of Damage Resistance %\float values: [DR1, DR2, etc.]")
+                                   placeholder_text="Requires an integer between 1-5.")
         popupValue4.pack(padx=25, anchor="center", fill="x")
         #row5
-        popupProperty5 = ctk.CTkLabel(popup, text="PvE Damage Resistance", anchor="center")
+        popupProperty5 = ctk.CTkLabel(popup, text="Active Regen Scalar", anchor="center")
         popupProperty5.pack(padx=25, pady=(10,0), anchor="center")
         popupValue5 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
-                                   placeholder_text="Requires an array of Damage Resistance %\float values: [DR1, DR2, etc.]. Array must be of equal length to the PvP DR array.")
+                                   placeholder_text="Requires a number between 0 and 2.")
         popupValue5.pack(padx=25, anchor="center", fill="x")
-        #row6
-        popupProperty6 = ctk.CTkLabel(popup, text="DR Conditions", anchor="center")
-        popupProperty6.pack(padx=25, pady=(10,0), anchor="center")
-        popupValue6 = ctk.CTkEntry(popup, corner_radius=10, state='normal',
-                                   placeholder_text="Requires an array of Condition string values: [C1, C2, etc.]. Array must be of equal length to the PvP DR array.")
-        popupValue6.pack(padx=25, anchor="center", fill="x")
     submitEntry = ctk.CTkButton(popup, text="Submit", command=destroyPopup, font=ctk.CTkFont(size=14,weight="bold"))
     submitEntry.pack(padx=20, pady=20, ipadx=10, fill="y")
 
@@ -1007,20 +1018,20 @@ sidebar.columnconfigure(0, weight=1)
 
 dropdown1 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=getProperties(data), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown1.grid(row=0, column=0, columnspan=2, padx=20, pady=(20, 0), sticky="ew", ipadx=10)
-dropdown2contents = CTkScrollableDropdownFrame(dropdown1, values=getProperties(data), resize=False, command=changed1st,
+dropdown2contents = CTkScrollableDropdownFrame(dropdown1, values=getProperties(data), resize=False, command=changedDropdown1,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 initialDropdown2Values = getProperties(data[getProperties(data)[0]])
 initialDropdown2Values.pop(0)
 dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=initialDropdown2Values, corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown2.grid(row=1, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
-dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, command=changed2nd,
+dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, command=changedDropdown2,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=250, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
                             font=ctk.CTkFont(weight="bold",size=14))
 dropdown3.grid(row=2, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
-dropdown3contents = CTkScrollableDropdownFrame(dropdown3, values=[dropdown3invalid], state="disabled", frame_corner_radius=10, resize=False, height=400, command=changed3rd,
+dropdown3contents = CTkScrollableDropdownFrame(dropdown3, values=[dropdown3invalid], state="disabled", frame_corner_radius=10, resize=False, height=400, command=changedDropdown3,
                                           font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 contextBox1 = ctk.CTkTextbox(sidebar, corner_radius=10, wrap='word', state='disabled')
