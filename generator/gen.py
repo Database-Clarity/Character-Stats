@@ -990,6 +990,24 @@ def submitChanges():
     insertLog("Dump complete. Click the Continue button to proceed with the changes.")
     submitChangesButton.configure(state="normal")
 
+def scrollUp():
+    currentState = dropdown2.get()
+    if currentState == "Abilities" or currentState == "SuperAbilities" or currentState == "Overrides":
+        charStat = dropdown1.get()
+        selection = dropdown3.get()
+        index = returnIndexByName(selection,data[charStat][currentState])
+        if index > 0:
+            changedDropdown3(data[charStat][currentState][index-1]["Name"])
+def scrollDown():
+    currentState = dropdown2.get()
+    if currentState == "Abilities" or currentState == "SuperAbilities" or currentState == "Overrides":
+        charStat = dropdown1.get()
+        selection = dropdown3.get()
+        index = returnIndexByName(selection,data[charStat][currentState])
+        listLen = len(data[charStat][currentState])
+        if index < listLen-1:
+            changedDropdown3(data[charStat][currentState][index+1]["Name"])
+
 #region App/Variable Initialization and Window Config
 app = ctk.CTk()
 app.title("Destiny 2 Character Stats by Stardust")
@@ -1004,6 +1022,14 @@ app.geometry("%dx%d+%d+%d" % (app_w, app_h, app_offset_w, app_offset_h))
 app.grid_columnconfigure(2, weight=1)
 app.grid_columnconfigure(1, weight=2)
 app.grid_rowconfigure((0, 1, 2, 3), weight=1)
+
+# Mouse Wheel Ability Scroll Binding
+def mouse_wheel_binding(event):
+    if event.delta < 0: #Scroll Down
+        scrollDown()
+    else: #Scroll Up
+        scrollUp()
+app.bind("<Shift-MouseWheel>", mouse_wheel_binding)
 # Variable Initialization
 dropdown3invalid = "Select 'Abilities' or 'Overrides'"
 listIsEmpty = "The selected list is empty"
