@@ -1,6 +1,6 @@
 # Changelogs
 
-## v1.9.0 Breaking Change - March ??, 2024
+## v1.9.0 Breaking Change - March 22, 2024
 
 ### Reworks and Deprecations
 
