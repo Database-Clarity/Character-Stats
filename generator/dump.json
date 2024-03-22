@@ -1,6 +1,5 @@
 {
     "Mobility": {
-        "Description": "Mobility.Description",
         "WalkSpeed": {
             "Description": "Mobility.WalkSpeed",
             "Array": [
@@ -66,90 +65,90 @@
             {
                 "Hash": 3636300852,
                 "Name": "Acrobat's Dodge",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 426473317,
                 "Name": "Gambler's Dodge - Arc",
-                "BaseCooldown": 38
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 3636300855,
                 "Name": "Gambler's Dodge - Solar",
-                "BaseCooldown": 38
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 3933525367,
                 "Name": "Gambler's Dodge - Stasis",
-                "BaseCooldown": 38
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 1282157890,
                 "Name": "Gambler's Dodge - Strand",
-                "BaseCooldown": 38
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 2816982785,
                 "Name": "Gambler's Dodge - Void",
-                "BaseCooldown": 38
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 426473316,
                 "Name": "Marksman's Dodge - Arc",
-                "BaseCooldown": 28.5
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 3636300854,
                 "Name": "Marksman's Dodge - Solar",
-                "BaseCooldown": 28.5
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 3933525366,
                 "Name": "Marksman's Dodge - Stasis",
-                "BaseCooldown": 28.5
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 1282157891,
                 "Name": "Marksman's Dodge - Strand",
-                "BaseCooldown": 28.5
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 2816982784,
                 "Name": "Marksman's Dodge - Void",
-                "BaseCooldown": 28.5
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1
             }
         ],
-        "Overrides": [
-            {
-                "Hash": 4249729126,
-                "Name": "Ensnaring Slam - Strand Aspect",
-                "Requirements": [
-                    1282157891,
-                    1282157890
-                ],
-                "FlatIncrease": [
-                    6,
-                    6
-                ]
-            }
-        ]
+        "Overrides": [],
+        "Description": "Mobility.Description",
+        "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
+        "ChargeBasedScalingDescription": "ChargeBasedScaling"
     },
     "Resilience": {
-        "Description": "Resilience.Description",
-        "TotalHP": {
+        "ShieldHP": {
             "Description": "Resilience.TotalHP",
             "Array": [
-                185,
-                186,
-                187,
-                188,
-                189,
-                190,
-                192,
-                194,
-                196,
-                198,
-                200
+                115,
+                116,
+                117,
+                118,
+                119,
+                120,
+                122,
+                124,
+                126,
+                128,
+                130
             ]
         },
         "PvEDamageResistance": {
@@ -201,60 +200,84 @@
             {
                 "Hash": 489583097,
                 "Name": "Rally Barricade - Arc",
-                "BaseCooldown": 38
+                "BaseCooldown": 38,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 2495523341,
                 "Name": "Rally Barricade - Solar",
-                "BaseCooldown": 38
+                "BaseCooldown": 38,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 3260056809,
                 "Name": "Rally Barricade - Stasis",
-                "BaseCooldown": 38
+                "BaseCooldown": 38,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 2087010644,
                 "Name": "Rally Barricade - Strand",
-                "BaseCooldown": 38
+                "BaseCooldown": 38,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 2722641741,
                 "Name": "Rally Barricade - Void",
-                "BaseCooldown": 38
+                "BaseCooldown": 38,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 489583098,
                 "Name": "Thruster",
-                "BaseCooldown": 36
+                "BaseCooldown": 36,
+                "ChunkEnergyScalar": 1
             },
             {
                 "Hash": 489583096,
                 "Name": "Towering Barricade - Arc",
-                "BaseCooldown": 70.0
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2495523340,
                 "Name": "Towering Barricade - Solar",
-                "BaseCooldown": 70.0
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 3260056808,
                 "Name": "Towering Barricade - Stasis",
-                "BaseCooldown": 70.0
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2087010645,
                 "Name": "Towering Barricade - Strand",
-                "BaseCooldown": 70.0
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2722641740,
                 "Name": "Towering Barricade - Void",
-                "BaseCooldown": 70.0
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
             }
         ],
         "Overrides": [
+            {
+                "Hash": 90009855,
+                "Name": "Arbor Warden - Exotic Chest",
+                "Requirements": [
+                    489583098
+                ],
+                "ChunkEnergyOverride": [
+                    1
+                ],
+                "Scalar": [
+                    1.9444444444
+                ]
+            },
             {
                 "Hash": 1602994569,
                 "Name": "Bastion - Void Aspect",
@@ -265,6 +288,10 @@
                 "Scalar": [
                     2.1052631579,
                     1.4285714286
+                ],
+                "ChunkEnergyOverride": [
+                    0.5,
+                    0.5
                 ]
             },
             {
@@ -293,6 +320,9 @@
                 ],
                 "Scalar": [
                     1.8421052632
+                ],
+                "ChunkEnergyOverride": [
+                    1
                 ]
             },
             {
@@ -311,12 +341,21 @@
                     1.8421052632,
                     1.8421052632,
                     1.8421052632
+                ],
+                "ChunkEnergyOverride": [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
                 ]
             }
-        ]
+        ],
+        "Description": "Resilience.Description",
+        "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
+        "ChargeBasedScalingDescription": "ChargeBasedScaling"
     },
     "Recovery": {
-        "Description": "Recovery.Description",
         "TotalRegenTime": {
             "Description": "Recovery.TotalRegenTime",
             "Array": [
@@ -414,63 +453,76 @@
             {
                 "Hash": 25156514,
                 "Name": "Empowering Rift - Arc",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2979486802,
                 "Name": "Empowering Rift - Solar",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 3492047640,
                 "Name": "Empowering Rift - Stasis",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 383852321,
                 "Name": "Empowering Rift - Strand",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2209081648,
                 "Name": "Empowering Rift - Void",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 25156515,
                 "Name": "Healing Rift - Arc",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2979486803,
                 "Name": "Healing Rift - Solar",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 3492047641,
                 "Name": "Healing Rift - Stasis",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 383852320,
                 "Name": "Healing Rift - Strand",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2209081649,
                 "Name": "Healing Rift - Void",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2979486801,
                 "Name": "Phoenix Dive",
-                "BaseCooldown": 55
+                "BaseCooldown": 55.0,
+                "ChunkEnergyScalar": 0.8
             }
         ],
-        "Overrides": []
+        "Overrides": [],
+        "Description": "Recovery.Description",
+        "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
+        "ChargeBasedScalingDescription": "ChargeBasedScaling"
     },
     "Discipline": {
-        "Description": "Discipline.Description",
         "ChargeRateScalars": [
             0.8,
             0.88,
@@ -488,142 +540,170 @@
             {
                 "Hash": 1582574009,
                 "Name": "Arcbolt Grenade",
-                "BaseCooldown": 105
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 3232422679,
                 "Name": "Axion Bolt",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 1399219,
                 "Name": "Coldsnap Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 1399216,
                 "Name": "Duskfield Grenade",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
             },
             {
                 "Hash": 2202441959,
                 "Name": "Firebolt Grenade",
-                "BaseCooldown": 64
+                "BaseCooldown": 64.0,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 2909720723,
                 "Name": "Flashbang Grenade",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
             },
             {
                 "Hash": 4198689901,
                 "Name": "Flux Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 1013086087,
                 "Name": "Fusion Grenade",
-                "BaseCooldown": 73
+                "BaseCooldown": 73.0,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 1399217,
                 "Name": "Glacier Grenade",
-                "BaseCooldown": 121.0
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 2470512752,
                 "Name": "Grapple",
-                "BaseCooldown": 105
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.85
             },
             {
                 "Hash": 1841016428,
                 "Name": "Healing Grenade",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
             },
             {
                 "Hash": 2581086849,
                 "Name": "Incendiary Grenade",
-                "BaseCooldown": 105
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 2994412667,
                 "Name": "Lightning Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 1547656727,
                 "Name": "Magnetic Grenade",
-                "BaseCooldown": 105
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 1713935764,
                 "Name": "Pulse Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 1514173218,
                 "Name": "Scatter Grenade",
-                "BaseCooldown": 105
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 2809342386,
                 "Name": "Shackle Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 146194908,
                 "Name": "Skip Grenade",
-                "BaseCooldown": 105.0
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 2216698406,
                 "Name": "Solar Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             },
             {
                 "Hash": 2481624867,
                 "Name": "Storm Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 2265076177,
                 "Name": "Suppressor Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 3199702642,
                 "Name": "Swarm Grenade",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
             },
             {
                 "Hash": 3969294337,
                 "Name": "Thermite Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 4228170798,
                 "Name": "Threadling Grenade",
-                "BaseCooldown": 121.0
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 2946990961,
                 "Name": "Tripmine Grenade",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 1255073825,
                 "Name": "Void Spike",
-                "BaseCooldown": 121
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 2809141585,
                 "Name": "Void Wall",
-                "BaseCooldown": 121.0
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 1016030582,
                 "Name": "Vortex Grenade",
-                "BaseCooldown": 152
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
             }
         ],
         "Overrides": [
@@ -636,21 +716,30 @@
                 ],
                 "Scalar": [
                     1.3296703297,
-                    1
+                    1.0
+                ],
+                "ChunkEnergyOverride": [
+                    0.625,
+                    0.625
                 ]
             },
             {
                 "Hash": 3534173884,
-                "Name": "Mothkeeper's Wraps",
+                "Name": "Mothkeeper's Wraps - Exotic Arms",
                 "Requirements": [
                     0
                 ],
-                "CooldownOverride": 73
+                "CooldownOverride": 73,
+                "ChunkEnergyOverride": [
+                    1
+                ]
             }
-        ]
+        ],
+        "Description": "Discipline.Description",
+        "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
+        "ChargeBasedScalingDescription": "ChargeBasedScaling"
     },
     "Intellect": {
-        "Description": "Intellect.Description",
         "ChargeRateScalars": [
             0.6945,
             0.784,
@@ -669,394 +758,198 @@
                 "Hash": 3769507633,
                 "Name": "Arc Staff",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 375052471,
                 "Name": "Blade Barrage",
                 "BaseCooldown": 455.0,
-                "PvPDamageResistance": [
-                    49
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 3574662354,
                 "Name": "Bladefury",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    "Passive"
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 2747500760,
                 "Name": "Burning Maul",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 1081893461,
                 "Name": "Chaos Reach",
-                "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    50
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "BaseCooldown": 455.0,
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 2274196886,
                 "Name": "Daybreak",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 119041299,
                 "Name": "Fists Of Havoc",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 3769507632,
                 "Name": "Gathering Storm",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    49
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 2021620139,
                 "Name": "Glacial Quake",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    47
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 375052469,
                 "Name": "Golden Gun: Deadshot",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    0,
-                    15
-                ],
-                "PvEDamageResistance": [
-                    60,
-                    66
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive",
-                    "Intellect.DRCondition.GoldenGunDeadShot1"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 375052468,
                 "Name": "Golden Gun: Marksman",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    0
-                ],
-                "PvEDamageResistance": [
-                    60
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 2747500761,
                 "Name": "Hammer of Sol",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    51
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 1885339915,
                 "Name": "Needle Storm",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 1656118682,
                 "Name": "Nova Bomb: Cataclysm",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    49
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 1656118681,
                 "Name": "Nova Bomb: Vortex",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    49
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 1656118680,
                 "Name": "Nova Warp",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    51
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 4260353952,
                 "Name": "Sentinel Shield",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 2722573683,
                 "Name": "Shadowshot: Deadfall",
                 "BaseCooldown": 455.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 2722573681,
                 "Name": "Shadowshot: Moebius Quiver",
                 "BaseCooldown": 500.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 2625980631,
                 "Name": "Silence and Squal",
                 "BaseCooldown": 455.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 2463983862,
                 "Name": "Silkstrike",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    45
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 2722573682,
                 "Name": "Spectral Blades",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    47,
-                    48.5
-                ],
-                "PvEDamageResistance": [
-                    90,
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive",
-                    "Intellect.DRCondition.SpectralBlades1"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 1081893460,
                 "Name": "Stormtrance",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    50
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 119041298,
                 "Name": "Thundercrash",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    53
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             },
             {
                 "Hash": 4260353953,
                 "Name": "Ward of Dawn",
                 "BaseCooldown": 455.0,
-                "PvPDamageResistance": [
-                    26.5
-                ],
-                "PvEDamageResistance": [
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.CastAnimation"
-                ]
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 2274196887,
                 "Name": "Well of Radiance",
                 "BaseCooldown": 455.0,
-                "PvPDamageResistance": [
-                    50,
-                    40
-                ],
-                "PvEDamageResistance": [
-                    -9999,
-                    -9999
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.WellOfRadiance1",
-                    "Intellect.DRCondition.WellOfRadiance2"
-                ]
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
             },
             {
                 "Hash": 3683904166,
                 "Name": "Winter's Wrath",
                 "BaseCooldown": 556.0,
-                "PvPDamageResistance": [
-                    51
-                ],
-                "PvEDamageResistance": [
-                    90
-                ],
-                "DRCondition": [
-                    "Intellect.DRCondition.Passive"
-                ]
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
             }
         ],
-        "Overrides": []
+        "Overrides": [],
+        "Description": "Intellect.Description",
+        "SuperTierDescription": "Intellect.SuperTier",
+        "ActiveRegenScalarDescription": "Intellect.ActiveRegenScalar"
     },
     "Strength": {
-        "Description": "Strength.Description",
         "ChargeRateScalars": [
             0.8,
             0.88,
@@ -1079,37 +972,44 @@
                     1.0,
                     1.33,
                     2.0
-                ]
+                ],
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 1232050830,
                 "Name": "Ball Lightning",
-                "BaseCooldown": 114
+                "BaseCooldown": 114.0,
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 2708585276,
                 "Name": "Ballsitic Slam",
-                "BaseCooldown": 114
+                "BaseCooldown": 114.0,
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 1470370539,
                 "Name": "Celestial Fire",
-                "BaseCooldown": 112
+                "BaseCooldown": 112.0,
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 1232050831,
                 "Name": "Chain Lightning",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 2716335211,
                 "Name": "Combination Blow",
-                "BaseCooldown": 40
+                "BaseCooldown": 40.0,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 2716335210,
                 "Name": "Disorienting Blow",
-                "BaseCooldown": 100
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 4094417246,
@@ -1119,96 +1019,114 @@
                     1.0,
                     1.25,
                     1.5
-                ]
+                ],
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 852252788,
                 "Name": "Hammer Strike",
-                "BaseCooldown": 101
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 1470370538,
                 "Name": "Incinerator Snap",
-                "BaseCooldown": 83
+                "BaseCooldown": 83.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4016776972,
                 "Name": "Knife Trick",
-                "BaseCooldown": 82
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4016776974,
                 "Name": "Lightweight Knife",
-                "BaseCooldown": 100
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 2543177538,
                 "Name": "Penumbral Blast",
-                "BaseCooldown": 101
+                "BaseCooldown": 101.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 2299867342,
                 "Name": "Pocket Singularity",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4016776973,
                 "Name": "Proximity Explosive Knife",
-                "BaseCooldown": 111
+                "BaseCooldown": 111.0,
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 2708585277,
                 "Name": "Seismic Strike",
-                "BaseCooldown": 101
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4220332375,
                 "Name": "Shield Bash",
-                "BaseCooldown": 114
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4220332374,
                 "Name": "Shield Throw",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 2028772231,
                 "Name": "Shiver Strike",
-                "BaseCooldown": 113
+                "BaseCooldown": 114.0,
+                "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 1139822081,
                 "Name": "Snare Bomb",
-                "BaseCooldown": 91
+                "BaseCooldown": 90.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 1680616210,
                 "Name": "Threaded Spike",
-                "BaseCooldown": 125
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 852252789,
                 "Name": "Throwing Hammer",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 2708585279,
                 "Name": "Thunderclap",
-                "BaseCooldown": 91
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4016776975,
                 "Name": "Weighted Throwing Knife",
-                "BaseCooldown": 137
+                "BaseCooldown": 137.0,
+                "ChunkEnergyScalar": 0.6
             },
             {
                 "Hash": 1341767667,
                 "Name": "Withering Blade",
-                "BaseCooldown": 100,
+                "BaseCooldown": 100.0,
                 "ChargeBasedScaling": [
                     1.0,
                     1.0
-                ]
+                ],
+                "ChunkEnergyScalar": 0.8
             }
         ],
         "Overrides": [
@@ -1222,6 +1140,9 @@
                     2.275
                 ]
             }
-        ]
+        ],
+        "Description": "Strength.Description",
+        "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
+        "ChargeBasedScalingDescription": "ChargeBasedScaling"
     }
 }
