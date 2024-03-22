@@ -17,8 +17,8 @@
 - Added `ChunkEnergyScalar` property to `Ability` objects.
   - This property is intented to show how an ability interacts with ability energy sources such as the Bomber class item mod. Abilities with longer cooldowns gain less energy from these sources and this property quantifies that.
   - To our knowledge, `ChunkEnergyScalar`s are not a thing for Super abilities so this property will not be present on `SuperAbility` objects
-- Added `ChunkEnergyScalarDescription` properties to Character Stat objects with the exception of `Intellect`
-  - These are going to be the exact same for all of them and work in the same way as `Description` objects: they store the locale ID for the tooltip that explains what Chunk Energy Scalars are and how they work.
+- Added `ChunkEnergyScalarDescription` and `ChargeBasedScalingDescription` properties to Character Stat objects with the exception of `Intellect`
+  - These are going to be the exact same for all of them and work in the same way as `Description` objects: they store the locale ID for the tooltip that explains what Chunk Energy Scalars and Charge-Based Scaling respectively are and how these mechanics work.
 - Added `ChunkEnergyOverride` property to `Override` objects — replacing `FlatIncrease`.
   - This property is similar to the exising `CooldownOverride` property and is a direct replacement of the `ChunkEnergyScalar` property of the `Ability` objects under the same character stat.
 - Added `SuperTier` and `ActiveRegenScalar` properties to `SuperAbility` objects.
@@ -26,6 +26,19 @@
   - The `SuperTier` property is just a user-focused but mostly irrelevant stat simply used to communicate where the `ActiveRegenScalar` property comes from. The `ActiveRegenScalar` property is the actually important part as it is what communicates to users how much benefit they gain from Active Super Regen (more on that below).
 - Added `SuperTierDescription` and `ActiveRegenScalarDescription` properties to the `Intellect` Character Stat object.
   - Like the `ChunkEnergyScalarDescription` mentioned above, these are also more specific `Description` objects that store a locale ID with the explanation of what each of these stats are.
+
+### Data Changes
+
+- Removed *Ensnaring Slam* with the deprecation of `FlatIncrease` property of `Override` objects
+- Added *Arbor Warden* Override for the *Thruster* ability
+- Corrected *Grapple* cooldown from 105 to 82 seconds
+- Corrected *Chaos reach* cooldown from 556 to 455 seconds
+- Corrected *Hammer Strike* cooldown from 101 to 91 seconds
+- Corrected *Seismic Strike* cooldown from 101 to 91 seconds
+- Corrected *Shield Bash* cooldown from 114 to 91 seconds
+- Corrected *Shiver Strike* cooldown from 113 to 114 seconds
+- Corrected *Snare Bomb* cooldown from 91 to 90 seconds
+- Corrected *Threaded Spike* cooldown from 125 to 100 seconds
 
 ## v1.8.0 Breaking Change (I'm fine trust me) - August 25, 2023
 
