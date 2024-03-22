@@ -255,7 +255,7 @@
     },
     "Resilience": {
         "ShieldHP": {
-            "Description": "Resilience.TotalHP",
+            "Description": "Resilience.ShieldHP",
             "Array": [
                 115,
                 116,
