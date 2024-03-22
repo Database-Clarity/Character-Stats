@@ -1,29 +1,31 @@
 {
     "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second.\n\nMobility also determines the Class Ability cooldown of Hunters.",
+        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second, assuming no external Sprint Speed buffs.\n\nMobility also determines the Class Ability cooldown of Hunters.",
         "WalkSpeed": "How fast you can walk forward.",
         "StrafeSpeed": "How fast you can move side-to-side and backwards.",
         "CrouchSpeed": "How fast you can move while crouching."
     },
     "Resilience": {
-        "Description": "Resilience governs how much HP your 'Shields' have, grants passive Damage Resistance inside PvE, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside a fixed 70 HP portion of 'Health'.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "TotalHP": "How much total HP your character has.\n\nTotal HP consists of a fixed 70 HP portion of 'Health' and a 115 to 130 HP portion of 'Shields' that depends on your Resilience tier.",
+        "Description": "Resilience governs how much HP your <Shields> have, grants passive Damage Resistance in PvE activities, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\nResilience also determines the Class Ability cooldown of Titans.",
+        "ShieldHP": "How much HP your <Shields> have.\n\n<Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 everywhere else.",
         "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
         "FlinchResistance": "How much passive Flinch Resistance you have."
     },
     "Recovery": {
-        "Description": "Recovery governs the delay before your 'Health' and 'Shields' start regeneration as well as how fast they regenerate.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your 'Health' and 'Shields' from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating 'Health' after taking damage.\n\n'Health' is a fixed 70 HP portion of your Total HP alongside 'Shields'.",
-        "HealthRegenSpeed": "How fast your 'Health' regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your 'Shields' to start regenerating after taking damage.\n\n'Shields' are a 115 to 130 HP portion of your Total HP alongside 'Health'.",
-        "ShieldRegenSpeed": "How fast your 'Shields' regenerate once the delay after taking damage is over."
+        "Description": "Recovery governs the delay before your <Health> and <Shields> start regenerating after taking damage as well as the speed of the regeneration.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
+        "TotalRegenTime": "How long it takes to fully regenerate your <Health> and <Shields> from 0 HP.",
+        "HealthRegenDelay": "How long it takes to start regenerating <Health> after taking damage.",
+        "HealthRegenSpeed": "How fast your <Health> regenerates once the delay after taking damage is over.",
+        "ShieldRegenDelay": "How long it takes for your <Shields> to start regenerating after taking damage.",
+        "ShieldRegenSpeed": "How fast your <Shields> regenerate once the delay after taking damage is over."
     },
     "Discipline": {
         "Description": "Discipline governs your Grenade Ability cooldown."
     },
     "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.\n\nSuper Abilities with longer cooldowns receive less Super Energy from dealing or receiving Damage, as well as from getting Kills or Assists. Conversely, Super Abilities with shorter cooldowns receive more Super Energy from the same actions.",
+        "Description": "Intellect governs your passive Super Ability cooldown.",
+        "SuperTier": "Super Tiers are a simple categorization of Super Abilities into five tiers based on their cooldowns. Tier 5 Supers have the shortest cooldowns, and Tier 1 Supers have the longest.\n\nSuper Tiers also influence how much Super Energy you get from Active Super Regeneration, with higher tiers benefiting more from the mechanic.",
+        "ActiveRegenScalar": "Active Regen Scalars are tied to the tier of the Super Ability and influence how much Super Energy you get from Active Super Regeneration. These scalars range from 0.8 for Tier 1 Supers to 1.2 for Tier 5 Supers with Tier 3 being the baseline at 1.0.\n\nActive Super Regeneration refers to any Super Energy Gains from any source other than passive regeneration or perks that grant an additional percentage of your Base Super Regeneration Rate. These include scoring kills or assists, dealing or taking damage, collecting Orbs of Power, and perks that grant chunks of Super Energy.",
         "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
         "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "Strength governs your Melee Ability cooldown."
-    }
+    },
+    "ChunkEnergyScalar": "Chunk Energy Scalars are generally tied to the cooldowns of abilities and influence how much Ability Energy you get from perks that grant you a chunk of energy at once. For example, if a perk were to give you 100% Ability Energy and the Scalar was 0.6, you'd only receive 60% from it.\n\nGenerally, abilities with longer cooldowns within their category (e.g. Grenades) will have a lower scalar and thus will receive a lower percentage of the Ability Energy these perks grant.",
+    "ChargeBasedScaling": "Some abilities that intrinsically have multiple ability charges may recharge at a different rate depending on the number of Ability Charges you have stored up. So, the first ability charge may use the default Recharge Rate, but the second or third charge may recharge much faster."
 }
