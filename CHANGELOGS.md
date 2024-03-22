@@ -29,8 +29,8 @@
 
 ### Data Changes
 
-- Removed *Ensnaring Slam* with the deprecation of `FlatIncrease` property of `Override` objects
-- Added *Arbor Warden* Override for the *Thruster* ability
+- Removed *Ensnaring Slam* `Override` with the deprecation of the `FlatIncrease` property
+- Added *Arbor Warden* `Override` for the *Thruster* ability
 - Corrected *Grapple* cooldown from 105 to 82 seconds
 - Corrected *Chaos reach* cooldown from 556 to 455 seconds
 - Corrected *Hammer Strike* cooldown from 101 to 91 seconds
