@@ -264,17 +264,19 @@ def abilityContext(charStat: str):
     minuteSecond = str(int(selectedCooldown//60)) + ':' + f"{round(selectedCooldown % 60):02d}"
     counter = 0
     nameList = []
+    chunkEnergyScalars = []
     for ability in data[charStat]["Abilities"]:
         if ability["BaseCooldown"] == selectedCooldown:
             nameList.append(ability["Name"])
+            chunkEnergyScalars.append(ability["ChunkEnergyScalar"])
             counter+=1
     contextBox1.configure(state="normal")
     contextBox1.insert("end",f"Selected Cooldown Time: {selectedCooldown} ({minuteSecond})\n\n")
     contextBox1.insert("end",f"Number of Abilities with this cooldown: {counter}\n\n")
     if counter > 0:
-        contextBox1.insert("end",f"Abilities with matching cooldowns:\n")
-        for i in nameList:
-            contextBox1.insert("end",text=f" • {i}\n")
+        contextBox1.insert("end",f"Abilities with matching cooldowns in Chunk Energy Scalar — Name format:\n")
+        for (i, j) in zip(chunkEnergyScalars, nameList):
+            contextBox1.insert("end",text=f" • {i} — {j}\n")
     contextBox1.configure(state="disabled")
 def overrideContext(charStat: str):
     #region Loads editor info into p1-6 and removes \n closing characters
@@ -293,13 +295,10 @@ def overrideContext(charStat: str):
     reqLength = len(requirements)
     CDOverride = -1
     scalar = [1.0]*reqLength
-    flatIncrease = [0.0]*reqLength
     if "CooldownOverride" in overrideDict:
         CDOverride = overrideDict["CooldownOverride"]
     if "Scalar" in overrideDict:
         scalar = overrideDict["Scalar"]
-    if "FlatIncrease" in overrideDict:
-        flatIncrease = overrideDict["FlatIncrease"]
 
     reqList = [{0: None, 1: None, 2: None, 3: None}]*reqLength
     for ability in data[charStat]["Abilities"]:
@@ -310,7 +309,7 @@ def overrideContext(charStat: str):
                 baseCD = ability["BaseCooldown"]
                 if CDOverride != -1:
                     baseCD = CDOverride
-                scaledValue = round(baseCD * scalar[currentIndex] + flatIncrease[currentIndex], 3)
+                scaledValue = round(baseCD * scalar[currentIndex], 3)
                 reqList[currentIndex] = {0: i, 1: ability["Name"], 2: ability["BaseCooldown"], 3: scaledValue}
     
     counter = 0    
@@ -340,17 +339,21 @@ def superAbilityContext(charStat: str):
     minuteSecond = str(int(selectedCooldown//60)) + ':' + str(round(selectedCooldown % 60))
     counter = 0
     nameList = []
+    superTiers = []
+    activeScalars = []
     for superAbility in data[charStat]["SuperAbilities"]:
         if superAbility["BaseCooldown"] == selectedCooldown:
             nameList.append(superAbility["Name"])
+            superTiers.append(superAbility["SuperTier"])
+            activeScalars.append(superAbility["ActiveRegenScalar"])
             counter+=1
     contextBox1.configure(state="normal")
     contextBox1.insert("end",f"Selected Cooldown Time: {selectedCooldown} ({minuteSecond})\n\n")
     contextBox1.insert("end",f"Number of Abilities with this cooldown: {counter}\n\n")
     if counter > 0:
-        contextBox1.insert("end",f"Abilities with matching cooldowns:\n")
-        for i in nameList:
-            contextBox1.insert("end",text=f" • {i}\n")
+        contextBox1.insert("end",f"Abilities with matching cooldowns in Super Tier — Active Regen Scalar — Name format:\n")
+        for (i,j,k) in zip(superTiers, activeScalars, nameList):
+            contextBox1.insert("end",text=f" • {i}—{j}  —  {k}\n")
     contextBox1.configure(state="disabled")
 
 def retrieveAbility(pHash:str,pName:str,pBaseCD:str,pChunkEnergyScalar:str,pChargeBS:str):
@@ -437,7 +440,7 @@ def retrieveOverride(pHash:str,pName:str,pReqs:str,pCDOverride:str,pScalar:str,p
             if type(loaded) == list:
                 if len(loaded) == listLength:
                     if all(it_floats(x) and ( 0.1 < x <= 1 ) for x in loaded):
-                        override["FlatIncrease"] = loaded
+                        override["ChunkEnergyOverride"] = loaded
                     else:
                         return {"Hash": -1, "Name": "ChunkEnergyOverride input was invalid. Please provide an array of numbers between 0.1 and 1."}
                 else:
@@ -1036,7 +1039,7 @@ listIsEmpty = "The selected list is empty"
 emptyLabel = ""
 changedItemList = []
 #endregion
-#region Create Sidebar
+#region Create Left Sidebar
 sidebar = ctk.CTkFrame(app, corner_radius=0)
 sidebar.grid(row=0, column=0, rowspan=4, sticky="nsew")
 sidebar.grid_rowconfigure(4, weight=1)
@@ -1051,7 +1054,7 @@ initialDropdown2Values = getProperties(data[getProperties(data)[0]])
 initialDropdown2Values.pop(0)
 dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=initialDropdown2Values, corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown2.grid(row=1, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
-dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, command=changedDropdown2,
+dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, height=280, command=changedDropdown2,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=250, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
@@ -1069,7 +1072,7 @@ refreshContext.grid(row=5, column=0, padx=(20,5), pady=(0,20), sticky="EW")
 addNewItemButton = ctk.CTkButton(sidebar, anchor='center', text="Add New Item", font=ctk.CTkFont(weight="bold",size=14), cursor="hand2", state="disabled", command=addNewItem)
 addNewItemButton.grid(row=5, column=1, padx=(5,20), pady=(0,20), sticky="EW")
 #endregion
-#region Create main editing frame
+#region Create Main Editing Frame
 editor = ctk.CTkFrame(app, corner_radius=0, fg_color="transparent")
 editor.grid(row=0, column=1, rowspan=4, sticky="nsew")
 editor.columnconfigure(0, weight=1)
@@ -1119,7 +1122,7 @@ value6.grid(row=11, column=0, columnspan=3, padx=25, pady=(0,20), sticky="ew")
 #initialize editor with current state
 populateEditor()
 #endregion
-#region Create right sidebar
+#region Create Right Sidebar
 sidebar2 = ctk.CTkFrame(app, corner_radius=0)
 sidebar2.grid(row=0, column=2, rowspan=4, sticky="nsew")
 sidebar2.grid_rowconfigure(1, weight=1)
