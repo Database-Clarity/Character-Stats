@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "Belastbarkeit bestimmt, wie viele LP dein \"Schild\" hat, gewährt in PvE passive Schadensresistenz, und bietet passiven Widerstand gegen Zurückweichen. Außerdem verringert sie den Schaden, den du beim Ausbrechen aus Stasis-Frost erleidest.\n\nDein \"Schild\" macht einen Anteil von 115 bis 130 LP an deinen Gesamt-LP aus. Dazu kommt ein fester Anteil von 70 LP, die deine \"Gesundheit\" ausmachen.\n\nBelastbarkeit bestimmt auch die Abklingzeit der Klassenfähigkeiten von Titanen.",
-        "TotalHP": "Wie viele LP dein Charakter insgesamt hat.\n\nDeine Gesamt-LP bestehen aus deiner \"Gesundheit\", die immer 70 LP beträgt, und deinem \"Schild\", das je nach Belastbarkeit 115 bis 130 LP besitzt.",
+        "ShieldHP": "",
         "PvEDamageResistance": "Wie viel passive Schadensresistenz du in PvE-Aktivitäten hast.",
         "FlinchResistance": "Wie viel passiven Zurückweichen-Widerstand du hast."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "Intellekt regelt deine passive Abklingzeit von Super-Fähigkeiten.\n\nSuper-Fähigkeiten mit längeren Abklingzeiten erhalten weniger Super-Energie, wenn du Schaden verursachst oder einsteckst, sowie von Kills und Assists. Umgekehrt erhalten Super-Fähigkeiten mit kürzeren Abklingzeiten mehr Super-Energie aus den gleichen Aktionen.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvP bietet.",
         "PvEDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvE bietet.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "Stärke bestimmt die Abklingzeit deiner Nahkampf-Fähigkeit."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }

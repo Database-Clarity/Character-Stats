@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "A Resiliência governa quanto HP seus 'Escudos' têm, concede Resistência a Dano passivo dentro de PvE, e fornece uma quantidade passiva de Resistência a Oscilação de sua arma a dano recebido. Também diminui o dano recebido ao sair forçadamente do Congelamento da Estase.\n\n'Escudos' são uma porção de 115 a 130 HP de seu HP total junto de uma porção fixa de 70 HP de 'Vida'.\n\nResiliência também determina o tempo de recarga da Habilidade de Classe dos Titãs.",
-        "TotalHP": "Quantidade de HP total do seu personagem.\n\nHP total equivale a uma porção fixa de 70 HP de 'Vida' e uma porção de 115 a 130 HP de 'Escudos' que depende do seu nível de Resiliência.",
+        "ShieldHP": "",
         "PvEDamageResistance": "Quantidade de Resistência a Dano passiva você tem nas atividades PvE.",
         "FlinchResistance": "Quantidade de Resistência a Oscilação passiva você possui."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "O Intelecto governa o tempo de recarga de sua Super-Habilidade.\n\nSuper-Habilidades com tempo de recarga mais longo recebem menos Energia de Super-Habilidade ao causar ou receber Dano, bem como por obter Abates ou Assistências. Inversamente, Super-Habilidade com tempo de recarga mais curtos recebem mais Energia de Super-Habilidade das mesmas ações.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvP.",
         "PvEDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "A Força governa o tempo de recarga de suas Habilidades Corpo-a-corpo."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }

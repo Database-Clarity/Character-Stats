@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "La Résistance détermine combien de PV votre \"Bouclier\" possède, augmente votre Résistance aux Dégâts en JcE, et réduit l'amplitude des tressaillements lorsque vous essuyez des tirs. Elle réduit aussi les dégâts reçus lorsque l'on se libère du Gel de la Stase.\n\nLe \"Bouclier\" vaux entre 115 à 130 PV de votre total de PV, avec un montant fixe de 70 PV pour votre \"Vie\".\n\nLa Résistance détermine aussi le temps de recharge de la Compétence de Classe des Titans.",
-        "TotalHP": "Le total de PV que votre personnage possède.\n\nLe total des PV est composé d'une portion de \"Santé\" de 70 PV et d'une portion de \"Bouclier\" de 115 a 130 PV qui dépend de votre niveau de Résistance.",
+        "ShieldHP": "",
         "PvEDamageResistance": "La valeur de Résistance passive aux Dégâts que vous avez dans les activités JcE.",
         "FlinchResistance": "La valeur de Résistance passive aux Tressaillements que vous avez."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "L'Intelligence détermine le temps de recharge de votre Compétence de Super.\n\nLes Compétences de Super avec des temps de rechargement plus long reçoivent moins d'énergie de Super en infligeant ou recevant des dégâts, de même pour les Kills et les Assistances. Inversement, les Compétences de Super avec des temps de recharge plus court reçoivent plus d'énergie de Super de ces mêmes actions.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcJ.",
         "PvEDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "La Force détermine le temps de recharge de la Compétence de Mêlée."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }
