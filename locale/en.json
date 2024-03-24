@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "Resilience governs how much HP your <Shields> have, grants passive Damage Resistance in PvE activities, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "ShieldHP": "How much HP your <Shields> have.\n\n<Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 everywhere else.",
+        "ShieldHP": "How much HP your <Shields> have.\n\n<Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 HP everywhere else.",
         "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
         "FlinchResistance": "How much passive Flinch Resistance you have."
     },

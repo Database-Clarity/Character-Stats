@@ -477,7 +477,7 @@
                 "Description": {
                     "$ref": "#/definitions/Description"
                 },
-                "TotalHP": {
+                "ShieldHP": {
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
@@ -491,7 +491,7 @@
                                 "minItems": 11,
                                 "maxItems": 11
                             },
-                            "description": "Array index represents the Resilience tier. The numbers represent your total HP at each tier. <Health> is a static 70 HP, the rest are what Bungie calls <Shields> in-game. If you wish to display them separately, just subtract 70 from the numbers to get your shield HP."
+                            "description": "Array index represents the Resilience tier. The numbers represent how much HP your <Shields> have at each tier. <Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 HP everywhere else."
                         }
                     }
                 },
@@ -554,7 +554,7 @@
             },
             "required": [
                 "Description",
-                "TotalHP",
+                "ShieldHP",
                 "PvEDamageResistance",
                 "FlinchResistance",
                 "Abilities",
