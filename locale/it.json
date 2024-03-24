@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "La Resilienza determina quanti Punti Vita il tuo 'Scudo' possiede, garantisce passivamente una Resistenza ai Danni in PvE, e fornisce in modo passivo Resistenza al Sussulto. Riduce anche il danno ricevuto quando ti liberi dal Congelamento Stasi.\n\nLa porzione di 'Scudo' va da 115 ai 130 Punti Vita da aggiungere alla porzione fissa di 'Salute' di 70 Punti Vita.\n\nLa Resilienza determina inoltre la velocità di recupero dell'Abilità di Classe dei Titani.",
-        "TotalHP": "Quanti Punti Vita il tuo personaggio ha in totale.\n\nI Punti Vita totali consistono in una porzione di 'Salute' fissa di 70 Punti Vita e una porzione di 'Scudo' che va da 115 a 130 Punti Vita che dipende dal tuo grado di Resilienza.",
+        "ShieldHP": "",
         "PvEDamageResistance": "Quanta Resistenza al Danno passiva hai nelle attività PvE.",
         "FlinchResistance": "Quanta Resistenza al Sussulto passiva hai."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "L'Intelletto determina la velocità di recupero passiva della tua Super Abilità.\n\nLe Super Abilità con una velocità di recupero più lunga ricevono meno Energia della Super quando infliggono o ricevono Danno, cosi come quando effettuano Eliminazioni o Assist. Al contrario, le Super Abilità con una velocità di recupero più corta ricevono più Energia della Super dalle stesse azioni.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvP.",
         "PvEDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "La Forza determina la velocità di recupero della tua Abilità Corpo a Corpo."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }

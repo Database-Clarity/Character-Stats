@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "생존력은 당신의 '보호막'의 HP와 피격 반동 저항, PvE에서의 받는 피해 감소 효과에 관여합니다. 또한 시공 얼음에서 탈출할 때 받는 피해도 감소시킵니다.\n\n'보호막'은 총 체력에서 고정된 '체력' 70과 함께 115~130만큼의 HP를 제공합니다.\n\n생존력은 타이탄의 직업 능력 재사용 대기시간을 결정합니다.",
-        "TotalHP": "수호자의 총 체력이 얼마인지.\n\n총 체력은 70HP의 '체력'과 생존력 등급에 따라 115에서 130 HP의 '보호막'으로 구성되어 있습니다.",
+        "ShieldHP": "",
         "PvEDamageResistance": "PvE 활동에서의 피해 감소 효과.",
         "FlinchResistance": "피격 반동 저항 효과."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "지능은 궁극기 재사용 대기시간을 결정합니다.\n\n긴 재사용 대기시간을 가진 궁극기는 피해를 입거나 가할때, 처치나 처치 지원을 기록할 때 얻는 궁극기 에너지가 적습니다. 반대로 짧은 재사용 대기시간을 가진 궁극기는 같은 행동에서 더 많은 궁극기 에너지를 얻습니다.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "PvP에서 궁극기가 제공하는 피해 감소 효과.",
         "PvEDamageResistance": "PvE에서 궁극기가 제공하는 피해 감소 효과.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "힘은 근접 능력 재사용 대기시간을 결정합니다."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }
