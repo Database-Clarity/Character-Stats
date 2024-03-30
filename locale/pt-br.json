@@ -24,7 +24,7 @@
     },
     "Intellect": {
         "Description": "O Intelecto governa o tempo de recarga de sua Super-Habilidade.\n\nSuper-Habilidades com tempo de recarga mais longo recebem menos Energia de Super-Habilidade ao causar ou receber Dano, bem como por obter Abates ou Assistências. Inversamente, Super-Habilidade com tempo de recarga mais curtos recebem mais Energia de Super-Habilidade das mesmas ações.",
-        "SuperTier": "",
+        "SuperTier": "Níveis de Super são uma simples categorização das habilidades de Super em cinco níveis com base em seus tempos de recarga. Os Supers de nível 5 tem o tempo de recarga mais curto, e os Supers de nível 1 tem o maior.\n\nSuper Níveis também influenciam quanto de energia de Super você obtém por Regeneração Ativa de Super, com níveis mais altos se beneficiam mais da mecânica.",
         "ActiveRegenScalar": "",
         "PvPDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvP.",
         "PvEDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvE.",
