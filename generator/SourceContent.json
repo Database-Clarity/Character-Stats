@@ -1008,8 +1008,8 @@
             {
                 "Hash": 2716335210,
                 "Name": "Disorienting Blow",
-                "BaseCooldown": 100.0,
-                "ChunkEnergyScalar": 0.8
+                "BaseCooldown": 90.0,
+                "ChunkEnergyScalar": 0.9
             },
             {
                 "Hash": 4094417246,
@@ -1044,7 +1044,11 @@
                 "Hash": 4016776974,
                 "Name": "Lightweight Knife",
                 "BaseCooldown": 100.0,
-                "ChunkEnergyScalar": 0.8
+                "ChunkEnergyScalar": 0.8,
+                "ChargeBasedScaling": [
+                    1,
+                    1
+                ]
             },
             {
                 "Hash": 2543177538,

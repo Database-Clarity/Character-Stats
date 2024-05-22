@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.9.1 The Final Shape Balancing Patch - June 4, 2024
+
+- Changed *Disorienting Blow* cooldown from 100 to 90 seconds and `ChunkEnergyScalar` from 0.8 to 0.9
+- Added `ChargeBasedScaling` property to *Lightweight Knife* to indicate that it has 2 charges by default
+
 ## v1.9.0 Breaking Change - March 22, 2024
 
 ### Reworks and Deprecations
