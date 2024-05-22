@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "La resistencia determina cuánto HP (puntos de salud) tienen tus \"escudos\", otorga resistencia pasiva al daño dentro del PvE y proporciona Resistencia al Estremecimiento de forma pasiva. También disminuye el daño recibido al romper el congelamiento de Estasis.\n\n'Escudos' es una porción de 115 a 130 HP de tu HP total junto con una porción fija de 70 HP de 'Salud'.\n\nResistencia también determina la velocidad de recarga de la Habilidad de Clase de los Titanes.",
-        "TotalHP": "Cuánto HP (puntos de salud) total tiene tu personaje.\n\nHP Total consiste en una porción fija de 70 HP de 'Salud' y una porción de 115 a 130 HP de 'Escudos' que depende de tu nivel de Resistencia.",
+        "ShieldHP": "",
         "PvEDamageResistance": "Cuánta Resistencia al Daño de forma pasiva tienes en actividades PvE.",
         "FlinchResistance": "Cuánta Resistencia al Estremecimiento de forma pasiva tienes."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "Intelecto determina tu recarga pasiva de la Habilidad de Super.\n\nHabilidades de Super con tiempos de carga más largos reciben menos Energía de Super al infligir o recibir Daño, así como al conseguir Bajas o Asistencias. Por el contrario, las Habilidades de Super con tiempos de carga más cortos reciben más Energía de Super de las mismas acciones.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "Cuánta Resistencia al Daño te proporciona tu Habilidad de Super en PvP.",
         "PvEDamageResistance": "Cuánta Resistencia al Daño te proporciona tu Habilidad de Súper en PvE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "Fuerza determina el tiempo de recarga de tu Habilidad Cuerpo a Cuerpo."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }

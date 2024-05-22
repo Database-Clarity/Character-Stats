@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "Odporność decyduje o ilości HP, jaką posiada twoja 'Tarcza', zwiększa odporność na obrażenia w PvE, zapewnia pasywną odporność na odrzut wywołany otrzymywanymi obrażeniami. Zmniejsza również obrażenia otrzymywane podczas uwalniania się ze Stazy.\n\n'Tarcza' posiada od 115 do 130 punktów twojego całkowitego zdrowia razem ze stałymi 70 punktami 'Zdrowia'.\n\nOdporność wpływa również na czas odnowienia zdolności klasowej Tytanów.",
-        "TotalHP": "Jak dużo HP twoja postać posiada.\n\nTwoje życie składa się ze stałych 70 punków 'Zdrowia' oraz od 115 do 130 punktów 'Tarczy', która zależna jest od twojego poziomu Odporności.",
+        "ShieldHP": "",
         "PvEDamageResistance": "Jak dużą posiadasz odporność na obrażenia w aktywnościach PvE.",
         "FlinchResistance": "Jak dużą odporność na odrzut wywołany otrzymywanymi obrażeniami posiadasz."
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "Intelekt decyduje o twojej pasywnej regeneracji twojej superzdolności.\n\nSuperzdolności z dłuższymi czasami odnowienia otrzymują mniej energii z zadawania lub otrzymywania obrażeń, jak również z wykonywania zabójstw lub asyst. Z drugiej strony superzdolności z krótszymi czasami odnowienia otrzymują więcej energii z tym samych działań.",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvP.",
         "PvEDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvE.",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "Siła wpływa na czas odnowienia twojej zdolności walki wręcz."
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }

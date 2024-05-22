@@ -7,7 +7,7 @@
     },
     "Resilience": {
         "Description": "韌性影響'護盾'的血量、在PvE中的被動減傷、被動的退縮抗性、以及解除冰凍後所受到的傷害。\n\n玩家總生命值包含115~130血量的'護盾'以及固定70血量的'基礎生命值'。\n\n韌性也影響泰坦的職業技能冷卻時間。",
-        "TotalHP": "玩家的總生命值。\n\n玩家總生命值包含固定70血量的'基礎生命值'以及115~130血量的'護盾'，其值取決於韌性階級。",
+        "ShieldHP": "",
         "PvEDamageResistance": "於PvE活動中的被動減傷。",
         "FlinchResistance": "被動的退縮抗性。"
     },
@@ -24,6 +24,8 @@
     },
     "Intellect": {
         "Description": "智慧影響超能力的被動冷卻時間。\n\n冷卻時間較長的超能力在造成傷害、受到傷害、擊殺或助攻後所獲得的超能力能量會較少，冷卻時間較短的超能力則會獲得較多能量。",
+        "SuperTier": "",
+        "ActiveRegenScalar": "",
         "PvPDamageResistance": "在PvP中超能力的減傷。",
         "PvEDamageResistance": "在PvE中超能力的減傷。",
         "DRCondition": {
@@ -37,5 +39,7 @@
     },
     "Strength": {
         "Description": "力量影響近戰技能的冷卻時間。"
-    }
+    },
+    "ChunkEnergyScalar": "",
+    "ChargeBasedScaling": ""
 }
