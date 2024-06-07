@@ -69,8 +69,20 @@
                 "ChunkEnergyScalar": 0.5
             },
             {
+                "Hash": 2711519343,
+                "Name": "Acrobat's Dodge - Prismatic",
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
                 "Hash": 426473317,
                 "Name": "Gambler's Dodge - Arc",
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 0.8
+            },
+            {
+                "Hash": 2711519340,
+                "Name": "Gambler's Dodge - Prismatic",
                 "BaseCooldown": 38.0,
                 "ChunkEnergyScalar": 0.8
             },
@@ -103,6 +115,12 @@
                 "Name": "Marksman's Dodge - Arc",
                 "BaseCooldown": 28.5,
                 "ChunkEnergyScalar": 1
+            },
+            {
+                "Hash": 2711519341,
+                "Name": "Marksman's Dodge - Prismatic",
+                "BaseCooldown": 28.5,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 3636300854,
@@ -204,6 +222,12 @@
                 "ChunkEnergyScalar": 1
             },
             {
+                "Hash": 2868073560,
+                "Name": "Rally Barricade - Prismatic",
+                "BaseCooldown": 38.0,
+                "ChunkEnergyScalar": 1.0
+            },
+            {
                 "Hash": 2495523341,
                 "Name": "Rally Barricade - Solar",
                 "BaseCooldown": 38,
@@ -234,8 +258,20 @@
                 "ChunkEnergyScalar": 1
             },
             {
+                "Hash": 2868073563,
+                "Name": "Thruster - Prismatic",
+                "BaseCooldown": 36.0,
+                "ChunkEnergyScalar": 1.0
+            },
+            {
                 "Hash": 489583096,
                 "Name": "Towering Barricade - Arc",
+                "BaseCooldown": 70.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
+                "Hash": 2868073561,
+                "Name": "Towering Barricade - Prismatic",
                 "BaseCooldown": 70.0,
                 "ChunkEnergyScalar": 0.5
             },
@@ -269,12 +305,15 @@
                 "Hash": 90009855,
                 "Name": "Arbor Warden - Exotic Chest",
                 "Requirements": [
-                    489583098
+                    489583098,
+                    2868073563
                 ],
                 "ChunkEnergyOverride": [
+                    1,
                     1
                 ],
                 "Scalar": [
+                    1.9444444444,
                     1.9444444444
                 ]
             },
@@ -302,9 +341,11 @@
                     2087010645,
                     3260056808,
                     2495523340,
-                    489583096
+                    489583096,
+                    2868073561
                 ],
                 "Scalar": [
+                    1.724137931,
                     1.724137931,
                     1.724137931,
                     1.724137931,
@@ -316,12 +357,15 @@
                 "Hash": 1322544481,
                 "Name": "Hoarfrost-Z - Exotic Chest",
                 "Requirements": [
-                    3260056809
+                    3260056809,
+                    2868073560
                 ],
                 "Scalar": [
+                    1.8421052632,
                     1.8421052632
                 ],
                 "ChunkEnergyOverride": [
+                    1,
                     1
                 ]
             },
@@ -333,9 +377,11 @@
                     2495523341,
                     3260056809,
                     2087010644,
-                    2722641741
+                    2722641741,
+                    2868073560
                 ],
                 "Scalar": [
+                    1.8421052632,
                     1.8421052632,
                     1.8421052632,
                     1.8421052632,
@@ -343,6 +389,7 @@
                     1.8421052632
                 ],
                 "ChunkEnergyOverride": [
+                    1,
                     1,
                     1,
                     1,
@@ -457,6 +504,12 @@
                 "ChunkEnergyScalar": 0.5
             },
             {
+                "Hash": 1444664839,
+                "Name": "Empowering Rift - Prismatic",
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
                 "Hash": 2979486802,
                 "Name": "Empowering Rift - Solar",
                 "BaseCooldown": 82.0,
@@ -483,6 +536,12 @@
             {
                 "Hash": 25156515,
                 "Name": "Healing Rift - Arc",
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
+                "Hash": 1444664838,
+                "Name": "Healing Rift - Prismatic",
                 "BaseCooldown": 82.0,
                 "ChunkEnergyScalar": 0.5
             },
@@ -515,6 +574,12 @@
                 "Name": "Phoenix Dive",
                 "BaseCooldown": 55.0,
                 "ChunkEnergyScalar": 0.8
+            },
+            {
+                "Hash": 1444664836,
+                "Name": "Phoenix Dive - Prismatic",
+                "BaseCooldown": 55.0,
+                "ChunkEnergyScalar": 0.8
             }
         ],
         "Overrides": [],
@@ -544,6 +609,12 @@
                 "ChunkEnergyScalar": 0.75
             },
             {
+                "Hash": 3897682694,
+                "Name": "Arcbolt Grenade - Prismatic",
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
+            },
+            {
                 "Hash": 3232422679,
                 "Name": "Axion Bolt",
                 "BaseCooldown": 152.0,
@@ -556,10 +627,22 @@
                 "ChunkEnergyScalar": 0.625
             },
             {
+                "Hash": 4265391440,
+                "Name": "Coldsnap Grenade - Prismatic",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
                 "Hash": 1399216,
                 "Name": "Duskfield Grenade",
                 "BaseCooldown": 91.0,
                 "ChunkEnergyScalar": 0.875
+            },
+            {
+                "Hash": 4051767608,
+                "Name": "Duskfield Grenade - Prismatic",
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 2202441959,
@@ -592,14 +675,32 @@
                 "ChunkEnergyScalar": 0.625
             },
             {
+                "Hash": 934199459,
+                "Name": "Glacier Grenade - Prismatic",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
                 "Hash": 2470512752,
                 "Name": "Grapple",
                 "BaseCooldown": 82.0,
                 "ChunkEnergyScalar": 0.85
             },
             {
+                "Hash": 1225978592,
+                "Name": "Grapple - Prismatic",
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.85
+            },
+            {
                 "Hash": 1841016428,
                 "Name": "Healing Grenade",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
+            },
+            {
+                "Hash": 3040080535,
+                "Name": "Healing Grenade - Prismatic",
                 "BaseCooldown": 91.0,
                 "ChunkEnergyScalar": 0.875
             },
@@ -622,8 +723,20 @@
                 "ChunkEnergyScalar": 0.75
             },
             {
+                "Hash": 886607940,
+                "Name": "Magnetic Grenade - Prismatic",
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
+            },
+            {
                 "Hash": 1713935764,
                 "Name": "Pulse Grenade",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
+                "Hash": 1323461861,
+                "Name": "Pulse Grenade - Prismatic",
                 "BaseCooldown": 121.0,
                 "ChunkEnergyScalar": 0.625
             },
@@ -636,6 +749,12 @@
             {
                 "Hash": 2809342386,
                 "Name": "Shackle Grenade",
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
+                "Hash": 1517917190,
+                "Name": "Shackle Grenade - Prismatic",
                 "BaseCooldown": 152.0,
                 "ChunkEnergyScalar": 0.5
             },
@@ -658,8 +777,20 @@
                 "ChunkEnergyScalar": 1.0
             },
             {
+                "Hash": 4241856103,
+                "Name": "Storm Grenade - Prismatic",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 1.0
+            },
+            {
                 "Hash": 2265076177,
                 "Name": "Suppressor Grenade",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
+                "Hash": 3923577992,
+                "Name": "Suppressor Grenade - Prismatic",
                 "BaseCooldown": 121.0,
                 "ChunkEnergyScalar": 0.625
             },
@@ -670,14 +801,32 @@
                 "ChunkEnergyScalar": 0.875
             },
             {
+                "Hash": 2842514288,
+                "Name": "Swarm Grenade - Prismatic",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.875
+            },
+            {
                 "Hash": 3969294337,
                 "Name": "Thermite Grenade",
                 "BaseCooldown": 121.0,
                 "ChunkEnergyScalar": 0.625
             },
             {
+                "Hash": 2400634603,
+                "Name": "Thermite Grenade - Prismatic",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
                 "Hash": 4228170798,
                 "Name": "Threadling Grenade",
+                "BaseCooldown": 121.0,
+                "ChunkEnergyScalar": 0.625
+            },
+            {
+                "Hash": 3994381207,
+                "Name": "Threadling Grenade - Prismatic",
                 "BaseCooldown": 121.0,
                 "ChunkEnergyScalar": 0.625
             },
@@ -702,6 +851,12 @@
             {
                 "Hash": 1016030582,
                 "Name": "Vortex Grenade",
+                "BaseCooldown": 152.0,
+                "ChunkEnergyScalar": 0.5
+            },
+            {
+                "Hash": 1048847436,
+                "Name": "Vortex Grenade - Prismatic",
                 "BaseCooldown": 152.0,
                 "ChunkEnergyScalar": 0.5
             }
@@ -776,6 +931,13 @@
                 "ActiveRegenScalar": 0.9
             },
             {
+                "Hash": 2529942642,
+                "Name": "Bladefury - Prismatic",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
                 "Hash": 2747500760,
                 "Name": "Burning Maul",
                 "BaseCooldown": 500.0,
@@ -818,6 +980,13 @@
                 "ActiveRegenScalar": 0.9
             },
             {
+                "Hash": 2529942645,
+                "Name": "Glacial Quake - Prismatic",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
                 "Hash": 375052469,
                 "Name": "Golden Gun: Deadshot",
                 "BaseCooldown": 556.0,
@@ -832,8 +1001,22 @@
                 "ActiveRegenScalar": 0.9
             },
             {
+                "Hash": 2370269390,
+                "Name": "Golden Gun: Marksman - Prismatic",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
                 "Hash": 2747500761,
                 "Name": "Hammer of Sol",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 2529942647,
+                "Name": "Hammer of Sol - Prismatic",
                 "BaseCooldown": 556.0,
                 "SuperTier": 2,
                 "ActiveRegenScalar": 0.9
@@ -846,10 +1029,24 @@
                 "ActiveRegenScalar": 1.0
             },
             {
+                "Hash": 1869939001,
+                "Name": "Needlestorm",
+                "BaseCooldown": 500.0,
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
+            },
+            {
                 "Hash": 1656118682,
                 "Name": "Nova Bomb: Cataclysm",
                 "BaseCooldown": 500.0,
                 "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
+            },
+            {
+                "Hash": 1869939004,
+                "Name": "Nova Bomb: Cataclysm - Prismatic",
+                "BaseCooldown": 500.0,
+                "SuperTier": 2,
                 "ActiveRegenScalar": 1.0
             },
             {
@@ -881,6 +1078,13 @@
                 "ActiveRegenScalar": 1.1
             },
             {
+                "Hash": 2370269389,
+                "Name": "Shadowshot: Deadfall - Prismatic",
+                "BaseCooldown": 455.0,
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
+            },
+            {
                 "Hash": 2722573681,
                 "Name": "Shadowshot: Moebius Quiver",
                 "BaseCooldown": 500.0,
@@ -895,8 +1099,36 @@
                 "ActiveRegenScalar": 1.1
             },
             {
+                "Hash": 2370269391,
+                "Name": "Silence and Squall - Prismatic",
+                "BaseCooldown": 455.0,
+                "SuperTier": 4,
+                "ActiveRegenScalar": 1.1
+            },
+            {
                 "Hash": 2463983862,
                 "Name": "Silkstrike",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 2370269384,
+                "Name": "Silkstrike - Prismatic",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 2274196884,
+                "Name": "Song of Flame",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 1869939005,
+                "Name": "Song of Flame - Prismatic",
                 "BaseCooldown": 556.0,
                 "SuperTier": 2,
                 "ActiveRegenScalar": 0.9
@@ -909,8 +1141,29 @@
                 "ActiveRegenScalar": 0.9
             },
             {
+                "Hash": 3769507635,
+                "Name": "Storm's Edge",
+                "BaseCooldown": 500.0,
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
+            },
+            {
+                "Hash": 2370269388,
+                "Name": "Storm's Edge - Prismatic",
+                "BaseCooldown": 500.0,
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
+            },
+            {
                 "Hash": 1081893460,
                 "Name": "Stormtrance",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 1869939007,
+                "Name": "Stormtrance - Prismatic",
                 "BaseCooldown": 556.0,
                 "SuperTier": 2,
                 "ActiveRegenScalar": 0.9
@@ -921,6 +1174,27 @@
                 "BaseCooldown": 556.0,
                 "SuperTier": 2,
                 "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 2529942644,
+                "Name": "Thundercrash - Prismatic",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 4260353955,
+                "Name": "Twilight Arsenal",
+                "BaseCooldown": 500.0,
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
+            },
+            {
+                "Hash": 2529942646,
+                "Name": "Twilight Arsenal - Prismatic",
+                "BaseCooldown": 500.0,
+                "SuperTier": 3,
+                "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 4260353953,
@@ -939,6 +1213,13 @@
             {
                 "Hash": 3683904166,
                 "Name": "Winter's Wrath",
+                "BaseCooldown": 556.0,
+                "SuperTier": 2,
+                "ActiveRegenScalar": 0.9
+            },
+            {
+                "Hash": 1869939006,
+                "Name": "Winter's Wrath - Prismatic",
                 "BaseCooldown": 556.0,
                 "SuperTier": 2,
                 "ActiveRegenScalar": 0.9
@@ -976,6 +1257,17 @@
                 "ChunkEnergyScalar": 0.8
             },
             {
+                "Hash": 3644045871,
+                "Name": "Arcane Needle - Prismatic",
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8,
+                "ChargeBasedScaling": [
+                    1.0,
+                    1.33,
+                    2.0
+                ]
+            },
+            {
                 "Hash": 1232050830,
                 "Name": "Ball Lightning",
                 "BaseCooldown": 114.0,
@@ -1000,8 +1292,20 @@
                 "ChunkEnergyScalar": 0.9
             },
             {
+                "Hash": 3644045868,
+                "Name": "Chain Lightning - Prismatic",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
                 "Hash": 2716335211,
                 "Name": "Combination Blow",
+                "BaseCooldown": 40.0,
+                "ChunkEnergyScalar": 1.0
+            },
+            {
+                "Hash": 2657901005,
+                "Name": "Combination Blow - Prismatic",
                 "BaseCooldown": 40.0,
                 "ChunkEnergyScalar": 1.0
             },
@@ -1023,8 +1327,25 @@
                 "ChunkEnergyScalar": 0.7
             },
             {
+                "Hash": 1980796564,
+                "Name": "Frenzied Blade - Prismatic",
+                "BaseCooldown": 114.0,
+                "ChunkEnergyScalar": 0.7,
+                "ChargeBasedScaling": [
+                    1.0,
+                    1.25,
+                    1.5
+                ]
+            },
+            {
                 "Hash": 852252788,
                 "Name": "Hammer Strike",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
+                "Hash": 1980796562,
+                "Name": "Hammer Strike - Prismatic",
                 "BaseCooldown": 91.0,
                 "ChunkEnergyScalar": 0.9
             },
@@ -1035,8 +1356,20 @@
                 "ChunkEnergyScalar": 0.9
             },
             {
+                "Hash": 3644045869,
+                "Name": "Incinerator Snap - Prismatic",
+                "BaseCooldown": 83.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
                 "Hash": 4016776972,
                 "Name": "Knife Trick",
+                "BaseCooldown": 82.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
+                "Hash": 2657901004,
+                "Name": "Knife Trick - Prismatic",
                 "BaseCooldown": 82.0,
                 "ChunkEnergyScalar": 0.9
             },
@@ -1057,8 +1390,20 @@
                 "ChunkEnergyScalar": 0.8
             },
             {
+                "Hash": 3644045867,
+                "Name": "Penumbral Blast - Prismatic",
+                "BaseCooldown": 101.0,
+                "ChunkEnergyScalar": 0.8
+            },
+            {
                 "Hash": 2299867342,
                 "Name": "Pocket Singularity",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
+                "Hash": 3644045870,
+                "Name": "Pocket Singularity - Prismatic",
                 "BaseCooldown": 91.0,
                 "ChunkEnergyScalar": 0.9
             },
@@ -1087,8 +1432,20 @@
                 "ChunkEnergyScalar": 0.9
             },
             {
+                "Hash": 1980796560,
+                "Name": "Shield Throw - Prismatic",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
                 "Hash": 2028772231,
                 "Name": "Shiver Strike",
+                "BaseCooldown": 114.0,
+                "ChunkEnergyScalar": 0.7
+            },
+            {
+                "Hash": 1980796561,
+                "Name": "Shiver Strike - Prismatic",
                 "BaseCooldown": 114.0,
                 "ChunkEnergyScalar": 0.7
             },
@@ -1099,8 +1456,20 @@
                 "ChunkEnergyScalar": 0.9
             },
             {
+                "Hash": 2657901007,
+                "Name": "Snare Bomb - Prismatic",
+                "BaseCooldown": 90.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
                 "Hash": 1680616210,
                 "Name": "Threaded Spike",
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8
+            },
+            {
+                "Hash": 2657901002,
+                "Name": "Threaded Spike - Prismatic",
                 "BaseCooldown": 100.0,
                 "ChunkEnergyScalar": 0.8
             },
@@ -1113,6 +1482,12 @@
             {
                 "Hash": 2708585279,
                 "Name": "Thunderclap",
+                "BaseCooldown": 91.0,
+                "ChunkEnergyScalar": 0.9
+            },
+            {
+                "Hash": 1980796563,
+                "Name": "Thunderclap - Prismatic",
                 "BaseCooldown": 91.0,
                 "ChunkEnergyScalar": 0.9
             },
@@ -1131,6 +1506,16 @@
                     1.0
                 ],
                 "ChunkEnergyScalar": 0.8
+            },
+            {
+                "Hash": 2657901006,
+                "Name": "Withering Blade - Prismatic",
+                "BaseCooldown": 100.0,
+                "ChunkEnergyScalar": 0.8,
+                "ChargeBasedScaling": [
+                    1,
+                    1
+                ]
             }
         ],
         "Overrides": [

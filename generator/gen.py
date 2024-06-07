@@ -48,15 +48,21 @@ def is_int(element: any) -> bool:
     except ValueError:
         return False
 
-def changedDropdown1(choice):
-    '''Updates 2nd and 3rd dropdowns as well as text boxes if 1st one was updated'''
+def changedDropdown1(choice: str):
+    '''
+    Updates 2nd and 3rd dropdowns as well as text boxes if 1st one was updated
+    Allows manual selection by providing the selected list item's name as the argument.
+    '''
     dropdown1.set(choice)
     newDropdown2 = getProperties(data[choice])
     dropdown2contents.configure(values=newDropdown2)
     dropdown2.set(newDropdown2[0])
     changedDropdown2(newDropdown2[0])
-def changedDropdown2(choice):
-    '''Updates 3rd dropdown (and/or populates editor) if 2nd one was updated'''
+def changedDropdown2(choice: str):
+    '''
+    Updates 3rd dropdown (and/or populates editor) if 2nd one was updated.
+    Allows manual selection by providing the selected list item's name as the argument.
+    '''
     dropdown2.set(choice)
     if (choice == "Abilities" or choice == "Overrides" or choice == "SuperAbilities"):
         if (len(data[dropdown1.get()][choice]) > 0):
@@ -86,8 +92,11 @@ def changedDropdown2(choice):
         addNewItemButton.configure(state="disabled")
         clearContext()
         populateEditor()
-def changedDropdown3(choice):
-    '''Updates text boxes if 3rd dropdown was updated'''
+def changedDropdown3(choice: str):
+    '''
+    Updates text boxes if 3rd dropdown was updated
+    Allows manual selection by providing the selected list item's name as the argument.
+    '''
     dropdown3.set(re.search("^[^ ]*",choice).group(0))
     populateEditor()
     populateContext()
@@ -715,7 +724,7 @@ def addNewItem():
     currentState = dropdown2.get()
     popup = ctk.CTkToplevel()
     input_popup_w = 650
-    input_popup_h = 335
+    input_popup_h = 400
     input_popup_offset_w = app_w/2 - input_popup_w/2
     input_popup_offset_h = app_h/2 - input_popup_h/2
     popup.geometry("%dx%d+%d+%d" % (input_popup_w, input_popup_h, app.winfo_x() + input_popup_offset_w, app.winfo_y() + input_popup_offset_h))
@@ -725,54 +734,76 @@ def addNewItem():
 
     def appendReturnItem() -> bool:
         if currentState == "Abilities":
-            returnItem = retrieveAbility(popupValue1.get(),popupValue2.get(),popupValue3.get(),popupValue4.get())
+            returnItem = retrieveAbility(popupValue1.get(),popupValue2.get(),popupValue3.get(),popupValue4.get(),popupValue5.get())
             if returnItem["Hash"] < 0:
                 errorPopup("There were problems when parsing the input.",returnItem["Name"])
                 return False
-            else:
-                data[charStat][currentState].append(returnItem)
-                change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
-                for item in changedItemList:
-                    if item["Name"] == change["Name"]:
-                        return True
-                changedItemList.append(change)
-                changedItems.add_item(change)
-                return True
+            if (returnIndexByHash(returnItem["Hash"],data[charStat][currentState]) != -1):
+                errorPopup("The provided hash is already present in the list.",returnItem["Hash"])
+                return False
+            if (returnIndexByName(returnItem["Name"],data[charStat][currentState]) != -1):
+                errorPopup("The provided name is already present in the list.",returnItem["Name"])
+                return False
+            
+            data[charStat][currentState].append(returnItem)
+            data[charStat][currentState].sort(key = lambda k: (k['Name']))
+            change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
+            for item in changedItemList:
+                if item["Name"] == change["Name"]:
+                    return True
+            changedItemList.append(change)
+            changedItems.add_item(change)
+            changedDropdown3(returnItem["Name"])
+            return True
         elif currentState == "Overrides":
             returnItem = retrieveOverride(popupValue1.get(),popupValue2.get(),popupValue3.get(),popupValue4.get(),popupValue5.get(),popupValue6.get())
             if returnItem["Hash"] < 0:
                 errorPopup("There were problems when parsing the input.",returnItem["Name"])
                 return False
-            else:
-                data[charStat][currentState].append(returnItem)
-                change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
-                for item in changedItemList:
-                    if item["Name"] == change["Name"]:
-                        return True
-                changedItemList.append(change)
-                changedItems.add_item(change)
-                return True
+            if (returnIndexByHash(returnItem["Hash"],data[charStat][currentState]) != -1):
+                errorPopup("The provided hash is already present in the list.",returnItem["Hash"])
+                return False
+            if (returnIndexByName(returnItem["Name"],data[charStat][currentState]) != -1):
+                errorPopup("The provided name is already present in the list.",returnItem["Name"])
+                return False
+            
+            data[charStat][currentState].append(returnItem)
+            data[charStat][currentState].sort(key = lambda k: (k['Name']))
+            change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
+            for item in changedItemList:
+                if item["Name"] == change["Name"]:
+                    return True
+            changedItemList.append(change)
+            changedItems.add_item(change)
+            changedDropdown3(returnItem["Name"])
+            return True
         elif currentState == "SuperAbilities":
-            returnItem = retrieveSuperAbility(popupValue1.get(),popupValue2.get(),popupValue3.get(),popupValue4.get(),popupValue5.get(),popupValue6.get())
+            returnItem = retrieveSuperAbility(popupValue1.get(),popupValue2.get(),popupValue3.get(),popupValue4.get(),popupValue5.get())
             if returnItem["Hash"] < 0:
                 errorPopup("There were problems when parsing the input.",returnItem["Name"])
                 return False
-            else:
-                data[charStat][currentState].append(returnItem)
-                change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
-                for item in changedItemList:
-                    if item["Name"] == change["Name"]:
-                        return True
-                changedItemList.append(change)
-                changedItems.add_item(change)
-                return True
+            if (returnIndexByHash(returnItem["Hash"],data[charStat][currentState]) != -1):
+                errorPopup("The provided hash is already present in the list.",returnItem["Hash"])
+                return False
+            if (returnIndexByName(returnItem["Name"],data[charStat][currentState]) != -1):
+                errorPopup("The provided name is already present in the list.",returnItem["Name"])
+                return False
+            
+            data[charStat][currentState].append(returnItem)
+            data[charStat][currentState].sort(key = lambda k: (k['Name']))
+            change = {"CharStat": charStat, "CharStatProperty": currentState, "Hash": returnItem["Hash"], "Name": returnItem["Name"]}
+            for item in changedItemList:
+                if item["Name"] == change["Name"]:
+                    return True
+            changedItemList.append(change)
+            changedItems.add_item(change)
+            changedDropdown3(returnItem["Name"])
+            return True
         else:
             return False
     
     def destroyPopup(*_):
         if appendReturnItem():
-            changedDropdown2(currentState)
-            changedDropdown3(data[charStat][currentState][-1]["Name"])
             popup.destroy()
     
     if currentState == "Abilities":
@@ -1014,7 +1045,7 @@ def scrollDown():
 #region App/Variable Initialization and Window Config
 app = ctk.CTk()
 app.title("Destiny 2 Character Stats by Stardust")
-app_w = 1250
+app_w = 1350
 app_h = 580
 screen_w = app.winfo_screenwidth()
 screen_h = app.winfo_screenheight()
@@ -1022,8 +1053,8 @@ app_offset_w = screen_w/2 - app_w/2
 app_offset_h = screen_h/2 - app_h/2
 app.geometry("%dx%d+%d+%d" % (app_w, app_h, app_offset_w, app_offset_h))
 
-app.grid_columnconfigure(2, weight=1)
 app.grid_columnconfigure(1, weight=2)
+app.grid_columnconfigure(2, weight=1)
 app.grid_rowconfigure((0, 1, 2, 3), weight=1)
 
 # Mouse Wheel Ability Scroll Binding
@@ -1045,19 +1076,19 @@ sidebar.grid(row=0, column=0, rowspan=4, sticky="nsew")
 sidebar.grid_rowconfigure(4, weight=1)
 sidebar.columnconfigure(0, weight=1)
 
-dropdown1 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=getProperties(data), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
+dropdown1 = ctk.CTkOptionMenu(sidebar, anchor='center', width=300, values=getProperties(data), corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown1.grid(row=0, column=0, columnspan=2, padx=20, pady=(20, 0), sticky="ew", ipadx=10)
 dropdown2contents = CTkScrollableDropdownFrame(dropdown1, values=getProperties(data), resize=False, command=changedDropdown1,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
 initialDropdown2Values = getProperties(data[getProperties(data)[0]])
 initialDropdown2Values.pop(0)
-dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=250, values=initialDropdown2Values, corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
+dropdown2 = ctk.CTkOptionMenu(sidebar, anchor='center', width=300, values=initialDropdown2Values, corner_radius=10, font=ctk.CTkFont(weight="bold",size=14))
 dropdown2.grid(row=1, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
 dropdown2contents = CTkScrollableDropdownFrame(dropdown2, values=initialDropdown2Values, resize=False, height=280, command=changedDropdown2,
                                                font=ctk.CTkFont(weight="bold",size=14), frame_border_color="#2fa572")
 
-dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=250, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
+dropdown3 = ctk.CTkOptionMenu(sidebar, anchor='center', state="disabled", width=300, dynamic_resizing=False, corner_radius=10, values=[dropdown3invalid],
                             font=ctk.CTkFont(weight="bold",size=14))
 dropdown3.grid(row=2, column=0, columnspan=2, padx=20, pady=(10,0), sticky="ew", ipadx=10)
 dropdown3contents = CTkScrollableDropdownFrame(dropdown3, values=[dropdown3invalid], state="disabled", frame_corner_radius=10, resize=False, height=400, command=changedDropdown3,

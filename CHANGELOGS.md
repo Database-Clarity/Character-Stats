@@ -1,5 +1,11 @@
 # Changelogs
 
+## v1.9.2 The Final Shape New Abilities - June 7, 2024
+
+- Added Prismatic mirrors of existing abilities
+  - Currently under the assumption that they have no behavioural differences compared to their regular versions
+- Added new Supers and their Prismatic versions
+
 ## v1.9.1 The Final Shape Balancing Patch - June 4, 2024
 
 - Changed *Disorienting Blow* cooldown from 100 to 90 seconds and `ChunkEnergyScalar` from 0.8 to 0.9
