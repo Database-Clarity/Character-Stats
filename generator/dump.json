@@ -774,13 +774,13 @@
                 "Hash": 2481624867,
                 "Name": "Storm Grenade",
                 "BaseCooldown": 121.0,
-                "ChunkEnergyScalar": 1.0
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 4241856103,
                 "Name": "Storm Grenade - Prismatic",
                 "BaseCooldown": 121.0,
-                "ChunkEnergyScalar": 1.0
+                "ChunkEnergyScalar": 0.625
             },
             {
                 "Hash": 2265076177,
