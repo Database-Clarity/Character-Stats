@@ -41,5 +41,5 @@
         "Description": "La Forza determina la velocità di recupero della tua Abilità Corpo a Corpo."
     },
     "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": ""
+    "ChargeBasedScaling": "Alcune abilità che intrinsecamente hanno multiple cariche potrebbero ricaricarsi a velocità diverse in base alla quantità di Cariche Abilità che hai già disponibili. Quindi, la prima carica di abilità potrebbe usare la Velocità di Ricarica di base, ma la seconda o la terza potrebbero ricaricarsi più velocemente."
 }
