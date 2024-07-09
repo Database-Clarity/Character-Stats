@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.9.3 Added Unbreakable Aspects
+
+- *Unbreakable* overrides base grenade ability cooldowns to 152 seconds
+  - This matches the cooldown of Vortex Grenades
+
 ## v1.9.2 The Final Shape New Abilities - June 7, 2024
 
 - Added Prismatic mirrors of existing abilities

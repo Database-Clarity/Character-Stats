@@ -888,6 +888,22 @@
                 "ChunkEnergyOverride": [
                     1
                 ]
+            },
+            {
+                "Hash": 1262901521,
+                "Name": "Unbreakable - Prismatic Aspect",
+                "Requirements": [
+                    0
+                ],
+                "CooldownOverride": 152
+            },
+            {
+                "Hash": 1602994571,
+                "Name": "Unbreakable - Void Aspect",
+                "Requirements": [
+                    0
+                ],
+                "CooldownOverride": 152
             }
         ],
         "Description": "Discipline.Description",
