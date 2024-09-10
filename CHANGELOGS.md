@@ -1,9 +1,16 @@
 # Changelogs
 
-## v1.9.4 Updated for [Game Version 8.0.5.4](https://www.bungie.net/7/en/News/Article/destiny_2_update_8_0_5_4) - September 10, 2024
+## v1.9.5 Largely updated for [Game Version 8.0.5.4](https://www.bungie.net/7/en/News/Article/destiny_2_update_8_0_5_4) - September 10, 2024
+
+- Added *Threaded Specter* aspect Overrides
+  - Affects `Gambler's Dodge` and `Marksman's Dodge`
+  - Applies a `1.6666666667` cooldown `Scalar` to both class abilities
+  - Still missing confirmation about its behaviour with regards to `ChunkEnergyScalar`s
+
+## v1.9.4 Initial update for [Game Version 8.0.5.4](https://www.bungie.net/7/en/News/Article/destiny_2_update_8_0_5_4) - September 10, 2024
 
 - *Swarm Grenade* cooldown changed from 91 to 105 seconds
-- *Swarm Grenade* [Chunk Energy Scalar](https://docs.google.com/spreadsheets/d/1lEOY_Z0v5ZZVZJ1SVLJyleMBEG2a7KLq4aLIQA9zk0A/) changed from 0.875 to 0.75
+- *Swarm Grenade* `ChunkEnergyScalar` changed from 0.875 to 0.75
 
 ## v1.9.3 Added Unbreakable Aspects - July 9, 2024
 

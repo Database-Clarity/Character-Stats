@@ -302,7 +302,32 @@
                 ]
             }
         ],
-        "Overrides": [],
+        "Overrides": [
+            {
+                "Hash": 4249729125,
+                "Name": "Threaded Specter",
+                "Requirements": [
+                    1282157890,
+                    1282157891
+                ],
+                "Scalar": [
+                    1.6666666667,
+                    1.6666666667
+                ]
+            },
+            {
+                "Hash": 2835214897,
+                "Name": "Threaded Specter - Prismatic",
+                "Requirements": [
+                    2711519340,
+                    2711519341
+                ],
+                "Scalar": [
+                    1.6666666667,
+                    1.6666666667
+                ]
+            }
+        ],
         "Description": "Mobility.Description",
         "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
         "ChargeBasedScalingDescription": "ChargeBasedScaling"
