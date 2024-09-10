@@ -1,6 +1,11 @@
 # Changelogs
 
-## v1.9.3 Added Unbreakable Aspects
+## v1.9.4 Updated for [Game Version 8.0.5.4](https://www.bungie.net/7/en/News/Article/destiny_2_update_8_0_5_4) - September 10, 2024
+
+- *Swarm Grenade* cooldown changed from 91 to 105 seconds
+- *Swarm Grenade* CES changed from 0.875 to 0.75
+
+## v1.9.3 Added Unbreakable Aspects - July 9, 2024
 
 - *Unbreakable* overrides base grenade ability cooldowns to 152 seconds
   - This matches the cooldown of Vortex Grenades

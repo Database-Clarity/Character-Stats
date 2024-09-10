@@ -797,14 +797,14 @@
             {
                 "Hash": 3199702642,
                 "Name": "Swarm Grenade",
-                "BaseCooldown": 91.0,
-                "ChunkEnergyScalar": 0.875
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 2842514288,
                 "Name": "Swarm Grenade - Prismatic",
-                "BaseCooldown": 91.0,
-                "ChunkEnergyScalar": 0.875
+                "BaseCooldown": 105.0,
+                "ChunkEnergyScalar": 0.75
             },
             {
                 "Hash": 3969294337,
