@@ -1353,7 +1353,7 @@
             {
                 "Hash": 2716335210,
                 "Name": "Disorienting Blow",
-                "BaseCooldown": 90.0,
+                "BaseCooldown": 82.0,
                 "ChunkEnergyScalar": 0.9
             },
             {

@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.9.6 Updated for [Game Version 8.1.0](https://www.bungie.net/7/en/News/article/destiny_update_8_1_0) - October 13, 2024
+
+- Changed *Disorienting Blow* cooldown from 90 to 82 seconds
+  - Don't check the patch notes for this info because Bungie completely messed their numbers up
+
 ## v1.9.5 Largely updated for [Game Version 8.0.5.4](https://www.bungie.net/7/en/News/Article/destiny_2_update_8_0_5_4) - September 10, 2024
 
 - Added *Threaded Specter* aspect Overrides
