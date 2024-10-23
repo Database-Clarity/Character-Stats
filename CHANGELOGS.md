@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.9.7 Added Prismatic Bleak Watcher Aspect Override
+
+- Prismatic *Bleak Watcher* overrides base cooldowns to at least 121 seconds but interestingly does not affect Chunk Energy Scalars
+  - This currently only affects *Healing Grenades* as they are the only ones with a shorter cooldown
+
 ## v1.9.6 Updated for [Game Version 8.1.0](https://www.bungie.net/7/en/News/article/destiny_update_8_1_0) - October 13, 2024
 
 - Changed *Disorienting Blow* cooldown from 90 to 82 seconds

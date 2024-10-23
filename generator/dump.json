@@ -888,6 +888,14 @@
         ],
         "Overrides": [
             {
+                "Hash": 790664813,
+                "Name": "Bleak Watcher - Prismatic Aspect",
+                "Requirements": [
+                    3040080535
+                ],
+                "CooldownOverride": 121
+            },
+            {
                 "Hash": 2642597904,
                 "Name": "Bleak Watcher - Stasis Aspect",
                 "Requirements": [
