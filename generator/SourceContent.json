@@ -278,9 +278,9 @@
             },
             {
                 "Hash": 489583098,
-                "Name": "Thruster",
-                "BaseCooldown": 36,
-                "ChunkEnergyScalar": 1
+                "Name": "Thruster - Arc",
+                "BaseCooldown": 36.0,
+                "ChunkEnergyScalar": 1.0
             },
             {
                 "Hash": 2868073563,
@@ -404,6 +404,7 @@
                     2087010644,
                     2722641741,
                     2868073560,
+                    489583098,
                     2868073563
                 ],
                 "Scalar": [
@@ -413,9 +414,11 @@
                     1.8421052632,
                     1.8421052632,
                     1.8421052632,
+                    1.9444444444,
                     1.9444444444
                 ],
                 "ChunkEnergyOverride": [
+                    1,
                     1,
                     1,
                     1,

@@ -1,8 +1,12 @@
 # Changelogs
 
+## v1.9.9 Updated Icefall Mantle to now work with Arc's Thruster ability - November 11, 2024
+
+- *Icefall Mantle* now properly rescales base cooldown to 70 seconds when used with *Thruster - Arc*
+
 ## v1.9.8 Updated Icefall Mantle to now work with Prismatic's Thruster ability - October 25, 2024
 
-- *Icefall Mantle* now properly rescales base cooldown to 70 seconds when used with *Thruster*
+- *Icefall Mantle* now properly rescales base cooldown to 70 seconds when used with *Thruster - Prismatic*
 
 ## v1.9.7 Added Prismatic Bleak Watcher Aspect Override - October 23, 2024
 
