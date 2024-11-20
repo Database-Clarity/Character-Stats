@@ -18,7 +18,7 @@ All new cooldowns mentioned differ from those shown in the in-game UI. We're awa
     - `BaseCooldown` changed to 124 seconds (from 100 seconds)
     - `ChargeBasedScaling` changed to `1, 1.415, 2.25` (from `1, 1.33, 2`) for `0, 1, 2` active charges of the ability
 - Updated *Frenzied Blade*
-  - - Strand version:
+  - Strand version:
     - `BaseCooldown` changed to 99 seconds (from 114 seconds)
     - `ChargeBasedScaling` changed to `1, 1.35, 1.7` (from `1, 1.25, 1.5`) for `0, 1, 2` active charges of the ability
   - Prismatic version
