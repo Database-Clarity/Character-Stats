@@ -1,5 +1,30 @@
 # Changelogs
 
+## v1.9.9 - November 20, 2024
+
+### Revenant Act II Patch
+
+- *Storm's Edge* `BaseCooldown` changed to 625 seconds (from 500) and `SuperTier` changed to 1 (from 3)
+
+### Strand Melee Cooldown Updates
+
+All new cooldowns mentioned differ from those shown in the in-game UI. We're aware and the in-game UI is wrong just as it has been many times in the past. These changes don't "accurately" represent the underlying mechanics at play here but the numbers produced are within the expected margin of error for the project. Ideally, we'd use values that more closely represent the actual underlying behavior but seeing as no partner project supports `ChargeBasedScaling` currently in any capacity, we have to distribute the mess and let it bleed into the `BaseCooldown`.
+
+- Updated *Arcane Needle*
+  - Strand version:
+    - `BaseCooldown` changed to 86.5 seconds (from 100 seconds)
+    - `ChargeBasedScaling` changed to `1, 1.415, 2.25` (from `1, 1.33, 2`) for `0, 1, 2` active charges of the ability
+  - Prismatic version
+    - `BaseCooldown` changed to 124 seconds (from 100 seconds)
+    - `ChargeBasedScaling` changed to `1, 1.415, 2.25` (from `1, 1.33, 2`) for `0, 1, 2` active charges of the ability
+- Updated *Frenzied Blade*
+  - - Strand version:
+    - `BaseCooldown` changed to 99 seconds (from 114 seconds)
+    - `ChargeBasedScaling` changed to `1, 1.35, 1.7` (from `1, 1.25, 1.5`) for `0, 1, 2` active charges of the ability
+  - Prismatic version
+    - `BaseCooldown` changed to 141 seconds (from 114 seconds)
+    - `ChargeBasedScaling` changed to `1, 1.35, 1.7` (from `1, 1.25, 1.5`) for `0, 1, 2` active charges of the ability
+
 ## v1.9.8 Updated Icefall Mantle to now work with Prismatic's Thruster ability - October 25, 2024
 
 - *Icefall Mantle* now properly rescales base cooldown to 70 seconds when used with *Thruster - Prismatic*

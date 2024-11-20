@@ -1195,15 +1195,15 @@
             {
                 "Hash": 3769507635,
                 "Name": "Storm's Edge",
-                "BaseCooldown": 500.0,
-                "SuperTier": 3,
+                "BaseCooldown": 625.0,
+                "SuperTier": 1,
                 "ActiveRegenScalar": 1.0
             },
             {
                 "Hash": 2370269388,
                 "Name": "Storm's Edge - Prismatic",
-                "BaseCooldown": 500.0,
-                "SuperTier": 3,
+                "BaseCooldown": 625.0,
+                "SuperTier": 1,
                 "ActiveRegenScalar": 1.0
             },
             {
@@ -1300,23 +1300,23 @@
             {
                 "Hash": 2307689415,
                 "Name": "Arcane Needle",
-                "BaseCooldown": 100.0,
+                "BaseCooldown": 86.5,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.33,
-                    2.0
+                    1.415,
+                    2.25
                 ],
                 "ChunkEnergyScalar": 0.8
             },
             {
                 "Hash": 3644045871,
                 "Name": "Arcane Needle - Prismatic",
-                "BaseCooldown": 100.0,
+                "BaseCooldown": 124.0,
                 "ChunkEnergyScalar": 0.8,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.33,
-                    2.0
+                    1.415,
+                    2.25
                 ]
             },
             {
@@ -1370,23 +1370,23 @@
             {
                 "Hash": 4094417246,
                 "Name": "Frenzied Blade",
-                "BaseCooldown": 114.0,
+                "BaseCooldown": 99.0,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.25,
-                    1.5
+                    1.35,
+                    1.7
                 ],
                 "ChunkEnergyScalar": 0.7
             },
             {
                 "Hash": 1980796564,
                 "Name": "Frenzied Blade - Prismatic",
-                "BaseCooldown": 114.0,
+                "BaseCooldown": 141.0,
                 "ChunkEnergyScalar": 0.7,
                 "ChargeBasedScaling": [
                     1.0,
-                    1.25,
-                    1.5
+                    1.35,
+                    1.7
                 ]
             },
             {
