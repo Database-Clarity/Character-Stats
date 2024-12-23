@@ -16,15 +16,11 @@ Currently used and trusted by [Destiny Item Manager](https://dim.gg/) and [D2Arm
 ## Report Issues/Inaccuracies
 
 If you notice any inaccuracies in the dataset, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
-Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://url.d2clarity.com/discord), and [Massive Breakdowns](https://discord.gg/TheyfeQ) Discord servers.
+Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://url.d2clarity.com/discord), and [Destiny Science](https://discord.gg/TheyfeQ) Discord servers.
 
 ## Crediting and Usage Policy
 
-**Do NOT claim to be the creator/curator of this database or its contents. This includes purposefully showing the data in a way that leads people to think you may be the maintainer of this data.**
-
-That's really about it, I don't ask for anything else. As long as you don't break that rule, please feel free to use whatever info is stored here for your projects.
-
-However, I would certainly appreciate it if you linked back to this repository and [Clarity's Ko-Fi page](https://ko-fi.com/d2clarity). But it's not required so it's entirely up to you.
+Please check out our website's [Partnerships page](https://www.d2clarity.com/partnerships) for our guidelines.
 
 ## Recommended Access Paths
 
@@ -43,7 +39,7 @@ In addition to the main database files, the `update.json` contains the following
 - `lastUpdate` - integer: timestamp of the last update made to the database
 - `schemaVersion` - string (matches `^\d+\.\d+$`): the current schema version used for this database
 
-Example usage the `update.json` file for handling breaking changes:
+Example usage of the `update.json` file for handling breaking changes:
 
 1. The app developer stores the `schemaVersion` property during implementation to use it for checks
 2. When accessing the `update.json` file to check if there is new information available, the app detects that the current `schemaVersion` does not match the version stored in the app's code
@@ -52,4 +48,4 @@ Example usage the `update.json` file for handling breaking changes:
 
 ## Credits
 
-I want to thank Hugo for [their amazing spreadsheet](https://docs.google.com/spreadsheets/d/1LgOPdcdEmRvDxFq1ZgJkR9-U6KMsTvYTUSJgkqsLIqs/) which provided the fundamentals of this database and u/Crystic_Knight for their [breakdown of Mobility](https://www.reddit.com/r/DestinyTheGame/comments/ejw37c/breakdown_of_mobility_ultimate_edition/). Last, but most certainly not least, I want to thank RyTako for [his spreadsheet](https://docs.google.com/spreadsheets/d/1lEOY_Z0v5ZZVZJ1SVLJyleMBEG2a7KLq4aLIQA9zk0A/) and ongoing quality testing to help out the entire science community.
+I want to thank Hugo for [their amazing spreadsheet](https://docs.google.com/spreadsheets/d/1LgOPdcdEmRvDxFq1ZgJkR9-U6KMsTvYTUSJgkqsLIqs/) which provided the fundamentals of this database and u/Crystic_Knight for their [breakdown of Mobility](https://www.reddit.com/r/DestinyTheGame/comments/ejw37c/breakdown_of_mobility_ultimate_edition/). Last, but most certainly not least, I want to thank RyTako for [his spreadsheet](https://docs.google.com/spreadsheets/d/1lEOY_Z0v5ZZVZJ1SVLJyleMBEG2a7KLq4aLIQA9zk0A/) and ongoing high quality testing to help out the entire science community.
