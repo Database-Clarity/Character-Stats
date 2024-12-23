@@ -16,7 +16,7 @@ Currently used and trusted by [Destiny Item Manager](https://dim.gg/) and [D2Arm
 ## Report Issues/Inaccuracies
 
 If you notice any inaccuracies in the dataset, feel free to [file an issue](https://github.com/Database-Clarity/Character-Stats/issues/new/choose) in the Issues tab and fill out the template.
-Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [DIM](https://discordapp.com/invite/UK2GWC7), [Clarity](https://url.d2clarity.com/discord), and [Destiny Science](https://discord.gg/TheyfeQ) Discord servers.
+Otherwise, feel free to contact me on Discord `@starglance` (Stardust) as well. You can also find me in the [Clarity](https://url.d2clarity.com/discord), and [Destiny Science](https://discord.gg/TheyfeQ), [DIM](https://discordapp.com/invite/UK2GWC7) Discord servers.
 
 ## Crediting and Usage Policy
 
