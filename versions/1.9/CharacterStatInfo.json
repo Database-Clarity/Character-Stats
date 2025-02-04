@@ -669,26 +669,6 @@
                 ]
             },
             {
-                "Hash": 1190497097,
-                "Name": "Citan's Ramparts - Exotic Arms",
-                "Requirements": [
-                    2722641740,
-                    2087010645,
-                    3260056808,
-                    2495523340,
-                    489583096,
-                    2868073561
-                ],
-                "Scalar": [
-                    1.724137931,
-                    1.724137931,
-                    1.724137931,
-                    1.724137931,
-                    1.724137931,
-                    1.724137931
-                ]
-            },
-            {
                 "Hash": 1322544481,
                 "Name": "Hoarfrost-Z - Exotic Chest",
                 "Requirements": [
@@ -3580,18 +3560,7 @@
                 ]
             }
         ],
-        "Overrides": [
-            {
-                "Hash": 4194622037,
-                "Name": "Tempest Strike - Arc Aspect",
-                "Requirements": [
-                    2716335211
-                ],
-                "Scalar": [
-                    2.275
-                ]
-            }
-        ],
+        "Overrides": [],
         "Description": "Strength.Description",
         "ChunkEnergyScalarDescription": "ChunkEnergyScalar",
         "ChargeBasedScalingDescription": "ChargeBasedScaling"

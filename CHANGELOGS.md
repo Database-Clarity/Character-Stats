@@ -1,5 +1,10 @@
 # Changelogs
 
+## v1.9.10 - February 4, 2025
+
+- *Tempest Strike* `Override` has been removed
+- *Citan's Ramparts* `Override` has been removed
+
 ## v1.9.9 - November 20, 2024
 
 ### Revenant Act II Patch
