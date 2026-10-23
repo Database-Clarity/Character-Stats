@@ -1,3 +1,7 @@
+# Currently SEVERELY Outdated
+
+Please do not use for ANYTHING until this notice is removed.
+
 # Destiny 2 Character Stats
 
 [![Crowdin](https://badges.crowdin.net/clarity-d2-character-stats/localized.svg)](https://crowdin.com/project/clarity-d2-character-stats)
