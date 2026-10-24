@@ -211,20 +211,32 @@ but **does not change the data apps download**. Hover Save for this distinction.
 
 Choose **Publish** only after the source changes are committed to the selected
 branch. The **Publish data** dialog shows the branch and warns if there are unsaved
-edits; unsaved edits must be saved before dispatch. **New schema version (optional)**
-should be left empty to rebuild the current version only after `update.json` is
-already `2.0` or later, or set to `X.Y` for a breaking release. The first v2 publish
-must explicitly set `2.0`. Select **Dispatch build workflow**. After dispatch, use
-**Refresh runs** or **Open Actions workflow runs** to find the run; it may take a few
-seconds to appear.
+edits; unsaved edits must be saved before dispatch. Schema versions are selected
+automatically from the code-defined major/minor baseline and changes to the
+published consumer data; there is no manual schema-version input. Raising the
+major/minor baseline publishes `X.Y.0` even when JSON is unchanged, to alert
+consumers to newly supported schema/API features. At the same major/minor, identical
+pretty and minified exports are a no-op; a notes-only CLI build on that unchanged
+baseline is also a no-op. Select
+**Dispatch build workflow**. After dispatch, use **Refresh runs** or **Open Actions
+workflow runs** to find the run; it may take a few seconds to appear.
 
 The dialog states the outcome explicitly: on `master`, **Build data and deploy
 Pages**; on any other branch, **Build data on `<branch>` &mdash; does not deploy Pages**.
 Publishing is unavailable when connected with **Local (read-only dev)** data.
-**Publish** regenerates the data apps download (`versions/<v>/` and `update.json`)
-from the source edits already committed to that branch. On `master`, it also
-redeploys the site. Hover Publish for this distinction; saving source edits alone
-does not regenerate these published JSON files.
+**Publish** regenerates the data apps download (`versions/<major>/` and
+`update.json`) from the source edits already committed to that branch. On `master`,
+it also redeploys the site. Hover Publish for this distinction; saving source edits
+alone does not regenerate these published JSON files. For v2+, `schemaVersion` is
+full `X.Y.Z` and all versions with the same major share a directory (for example,
+`versions/2/`). Legacy v1 uses its historical `X.Y` schema version and paths.
+Maintainer versioning and the command-line build options are covered in the
+[development guide](DEVELOPMENT.md).
+
+If the branch advances during a build and the generated-data push is rejected,
+the workflow fails without rebasing stale output. Ask a maintainer to retry the
+workflow so it can recompute the version and changelog against the latest
+published data.
 
 ## Development and limitations
 

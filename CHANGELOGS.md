@@ -14,6 +14,7 @@ Stat values in this build are placeholders. Expect most of them to change once w
 - The top-level `Movement` key holds shared movement rules, class base values and movement sources. See the Movement section below.
 - Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Arrays for the enhanced range (101 to 200) have 100 entries, so index 0 is stat 101. Stat values above 100 use the last entry of a 0 to 100 array.
 - `schema.json` describes the new shape in full and is the reference for every property.
+- `update.json.schemaVersion` now contains the full semantic version `X.Y.Z`. All compatible v2 releases use `versions/2/`, not a directory named after the full version. Publishing changed consumer data automatically increments the patch and records a dated changelog entry. A code-defined major/minor increase publishes `X.Y.0`, even with identical data, to signal new schema/API support; unchanged data within the same major/minor does not create a release.
 
 ### Abilities and cooldowns
 

@@ -6,7 +6,7 @@ export function serializeUpdate(
     extra: Record<string, unknown> = {},
 ): string {
     if (!isSchemaVersion(schemaVersion)) {
-        throw new Error('Schema version must have format X.Y');
+        throw new Error('Schema version must have format X.Y.Z');
     }
     if (lastUpdate < 0n) {
         throw new Error('Timestamp must be non-negative');

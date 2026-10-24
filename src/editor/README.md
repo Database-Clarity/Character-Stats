@@ -76,8 +76,10 @@ middleware or configuration changes are needed.
   after commit is reported separately, and the editor switches to the saved branch.
 - `PublishDialog` dispatches `build-data.yml` on the saved branch and shows recent
   runs. It states that `master` builds data and deploys Pages, while other branches
-  build data only; the first v2 release requires schema version `2.0`. Local dev mode
-  cannot save or publish.
+  build data only. Version selection is automatic; there is no manual schema-version
+  input. Raising major/minor publishes `X.Y.0` even with identical consumer JSON as
+  a feature alert; only identical pretty/minified outputs at the same major/minor
+  are a no-op. Local dev mode cannot save or publish.
 
 ## Editor polish and assets
 
@@ -106,8 +108,8 @@ middleware or configuration changes are needed.
 - **Save** writes source edits (`sources/`, `locale/en.json`) in one branch commit,
   or creates a PR. On `master`, it redeploys the site and sends English text to
   Crowdin, but does not change the data apps download. **Publish** regenerates
-  `versions/<v>/` and `update.json` from committed source data; on `master`, it also
-  redeploys the site. Tooltips and the dialogs distinguish these operations.
+  `versions/<major>/` and `update.json` from committed source data; on `master`, it
+  also redeploys the site. Tooltips and the dialogs distinguish these operations.
 
 Class glyphs (`assets/class-titan.svg`, `assets/class-hunter.svg`,
 `assets/class-warlock.svg`) are unmodified SVGs from

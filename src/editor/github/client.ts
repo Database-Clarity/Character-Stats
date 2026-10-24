@@ -241,10 +241,10 @@ export class GitHubClient {
         );
         return stringField(response, 'html_url', 'pull request URL');
     }
-    async dispatchWorkflow(schemaVersion: string): Promise<void> {
+    async dispatchWorkflow(releaseNotes: string): Promise<void> {
         await this.request('actions/workflows/build-data.yml/dispatches', 'POST', {
             ref: this.repo.branch,
-            inputs: { schema_version: schemaVersion },
+            inputs: { release_notes: releaseNotes },
         });
     }
     async listWorkflowRuns(): Promise<WorkflowRun[]> {

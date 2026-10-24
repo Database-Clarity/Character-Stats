@@ -216,7 +216,7 @@ describe('GitHub editor REST client', () => {
             body: 'Details',
         });
     });
-    it('dispatches the saved branch with optional schema_version and lists branch-specific runs', async () => {
+    it('dispatches the saved branch with freeform release notes and lists branch-specific runs', async () => {
         const fetch = mockResponses([
             undefined,
             {
@@ -231,10 +231,11 @@ describe('GitHub editor REST client', () => {
                 ],
             },
         ]);
-        await client.dispatchWorkflow('2.1');
+        const releaseNotes = 'Added a new stat export.\n- Updated movement data.';
+        await client.dispatchWorkflow(releaseNotes);
         expect(JSON.parse(String(fetch.mock.calls[0]?.[1]?.body))).toEqual({
             ref: 'feature/data',
-            inputs: { schema_version: '2.1' },
+            inputs: { release_notes: releaseNotes },
         });
         expect(await client.listWorkflowRuns()).toEqual([
             {
@@ -246,6 +247,14 @@ describe('GitHub editor REST client', () => {
             },
         ]);
         expect(fetch.mock.calls[1]?.[0]).toContain('branch=feature%2Fdata');
+    });
+    it('dispatches with empty release notes', async () => {
+        const fetch = mockResponses([undefined]);
+        await client.dispatchWorkflow('');
+        expect(JSON.parse(String(fetch.mock.calls[0]?.[1]?.body))).toEqual({
+            ref: 'feature/data',
+            inputs: { release_notes: '' },
+        });
     });
     it('reports REST failures without exposing the token', async () => {
         vi.spyOn(globalThis, 'fetch').mockResolvedValue(

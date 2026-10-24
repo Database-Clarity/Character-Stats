@@ -3,8 +3,8 @@ name: Build data
 on:
   workflow_dispatch:
     inputs:
-      schema_version:
-        description: Leave empty only when update.json is 2.0+; set X.Y for a breaking release. The first v2 release must explicitly set 2.0.
+      release_notes:
+        description: Optional release notes for this data build.
         required: false
         type: string
 
@@ -24,6 +24,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: Fast-forward to latest dispatched branch
+        env:
+          PUSH_REF: ${{ github.ref }}
+        run: git pull --ff-only origin "$PUSH_REF"
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -33,40 +38,11 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm test
-      - name: Validate schema version input
-        env:
-          SCHEMA_VERSION: ${{ inputs.schema_version }}
-        run: |
-          CURRENT_VERSION=$(node -p "require('./update.json').schemaVersion")
-          if [[ ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
-            echo "update.json schemaVersion must match X.Y." >&2
-            exit 1
-          fi
-          if [[ -n "$SCHEMA_VERSION" && ! "$SCHEMA_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
-            echo "schema_version must match X.Y (for example 2.1)." >&2
-            exit 1
-          fi
-          CURRENT_MAJOR="${CURRENT_VERSION%%.*}"
-          if (( CURRENT_MAJOR < 2 )); then
-            if [[ -z "$SCHEMA_VERSION" ]]; then
-              echo "Leaving schema_version blank is allowed only when update.json is already 2.0 or later; pass 2.0 for the first v2 release." >&2
-              exit 1
-            fi
-            INPUT_MAJOR="${SCHEMA_VERSION%%.*}"
-            if (( INPUT_MAJOR >= 2 )) && [[ "$SCHEMA_VERSION" != "2.0" ]]; then
-              echo "The first v2 release must explicitly set schema_version to 2.0." >&2
-              exit 1
-            fi
-          fi
       - name: Build data
         env:
-          SCHEMA_VERSION: ${{ inputs.schema_version }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
         run: |
-          if [[ -n "$SCHEMA_VERSION" ]]; then
-            npm run build:data -- --schema-version "$SCHEMA_VERSION"
-          else
-            npm run build:data
-          fi
+          npm run build:data -- --release-notes "$RELEASE_NOTES"
       - name: Record resulting version
         id: version
         run: |
@@ -79,14 +55,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- versions/ update.json
+          git add -- versions/ update.json CHANGELOGS.md
           if git diff --cached --quiet; then
             echo "No generated data changes to commit."
             exit 0
           fi
-          git commit -m "Data build v${VERSION}"
-          # Integrate commits (e.g. editor saves) that landed while building.
-          git pull --rebase origin "${PUSH_REF}"
+          git commit -m "Data build v${VERSION}" \
+            -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
           git push origin "HEAD:${PUSH_REF}"
 
   deploy-pages:

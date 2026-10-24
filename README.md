@@ -26,9 +26,14 @@ Please check out our website's [Partnerships page](https://www.d2clarity.com/par
 
 - JSON schema for the database with documentation: <https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json>
 - Main Database contents:
-  - With Indentation (human-readable): `https://Database-Clarity.github.io/Character-Stats/versions/[schemaVersion]/CharacterStatInfo.json`
-  - Without Indentation (smaller file size): `https://Database-Clarity.github.io/Character-Stats/versions/[schemaVersion]/CharacterStatInfo-NI.json`
+  - With Indentation (human-readable): `https://Database-Clarity.github.io/Character-Stats/versions/[major]/CharacterStatInfo.json` for v2 and later
+  - Without Indentation (smaller file size): `https://Database-Clarity.github.io/Character-Stats/versions/[major]/CharacterStatInfo-NI.json` for v2 and later
 - Versioning using the `update.json` file found here: `https://Database-Clarity.github.io/Character-Stats/update.json`
+
+For v2 and later, use the major number from `schemaVersion` as the directory
+(for example, `2.0.0` uses `versions/2/`). Legacy v1 releases use `X.Y`
+`schemaVersion` values and historically inconsistent directory names, so
+consumers must retain their exact v1 paths rather than deriving a directory.
 
 ## Database Information
 
@@ -37,9 +42,11 @@ Vital information about the database structure and what each property stored in 
 In addition to the main database files, the `update.json` contains the following two values:
 
 - `lastUpdate` - integer: Unix epoch time in nanoseconds of the last update made to the database
-- `schemaVersion` - string (matches `^\d+\.\d+$`): the current schema version used for this database
+- `schemaVersion` - string: the current schema version used for this database; full `X.Y.Z` for v2 and later, or legacy `X.Y` for v1
 
-When publishing schema v2 for the first time, run the **Build data** workflow with `schema_version` set to `2.0`. The workflow only allows a blank version to rebuild the current schema after `update.json` already reports `2.0` or later.
+A higher published major/minor signals newly supported schema/API features and
+publishes as `X.Y.0` even if the consumer JSON is unchanged. A build is a no-op
+only at the same major/minor when both pretty and minified exports are unchanged.
 
 Example usage of the `update.json` file for handling breaking changes:
 

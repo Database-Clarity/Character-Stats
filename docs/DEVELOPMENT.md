@@ -3,7 +3,7 @@
 ## Architecture
 
 ```text
-sources/ + locale/en.json -> src/core -> CLI / web editor -> versions/<schema-version>/
+sources/ + locale/en.json -> src/core -> CLI / web editor -> versions/<major>/
 ```
 
 - [`sources/`](../sources/) contains stat and movement input JSON. [`locale/en.json`](../locale/en.json) is the editable English source; translated locale files are Crowdin-managed.
@@ -27,10 +27,30 @@ Use Node.js 24 and npm 11. Install dependencies with `npm install`.
 | `npm run format:check`                       | Check those files for Prettier formatting without writing changes.                                                                                                                            |
 | `npm run validate`                           | Validate sources, English placeholders, and exported JSON against `schema.json`.                                                                                                              |
 | `npm run schema`                             | Generate `schema.json` from the core registry.                                                                                                                                                |
-| `npm run build:data`                         | Validate and write the current version's pretty/minified export and `update.json`.                                                                                                            |
-| `npm run build:data -- --schema-version X.Y` | Build a specified version; use a new version for a breaking release.                                                                                                                          |
+| `npm run build:data [--release-notes "text"] [--out-dir dir]` | Validate and build data, automatically choosing the next published version. |
 
-`build:data` also accepts `--out-dir <directory>`. It uses the output's existing `update.json` version, falling back to the repository's current version when no version is supplied. Validation errors prevent export writes. These are the CLI's supported flags; see [`src/cli/build-data.ts`](../src/cli/build-data.ts).
+With npm, pass optional script arguments after `--`, for example
+`npm run build:data -- --release-notes "Adjusted grenade data" --out-dir build-output`.
+There is no manual schema-version argument. The version baseline is
+`defaultConfig.schemaVersion` in [`src/core/config.ts`](../src/core/config.ts)
+(currently `2.0.0`); its patch component must remain `0`. Maintainers bump the
+major component for breaking schema or export changes, and the minor component
+for backward-compatible additions. The builder compares consumer output with
+the previous published JSON: changed output under the same major/minor gets the
+next patch version automatically. A higher configured major/minor always publishes
+`X.Y.0`, even when the JSON is identical, to alert consumers to newly supported
+schema/API features; a lower one is rejected.
+
+The build is a no-op only when the configured and published major/minor match
+and both the pretty and minified consumer JSON outputs are unchanged. In that
+case, it leaves all outputs, `update.json`'s timestamp, and `CHANGELOGS.md`
+untouched, even when release notes were supplied; notes alone do not create a
+release on an unchanged baseline. On a published build, `--release-notes` adds
+freeform text alongside the generated data-change summary in `CHANGELOGS.md`,
+dated in UTC. With `--out-dir`, the builder compares against that directory's
+`update.json` when present; if it has no isolated metadata, it reads the prior
+published baseline from the repository root. It writes generated files only to
+the requested output directory.
 
 ## Adding a field to a stat
 
@@ -230,7 +250,22 @@ These are separate valid segment examples for a `0-100` field; each covers that 
 
 Numeric limits encode structure and mathematical meaning, not guessed game-balance ranges. Keep finite numbers, integer hashes/HP/counts, uint32 manifest ranges, curve domains, parallel-array lengths, and nonnegative magnitudes. Cooldowns, recharge-rate multipliers and movement multipliers remain positive. Energy scalars can be zero and have no upper bound. Base Mobility tiers have no upper bound; the calculator clamps effective tiers to the configured curve cap. Mobility tier effects may be negative penalties.
 
-In the editor, **Publish** dispatches `build-data.yml` on the selected branch. The workflow tests and validates, builds the versioned JSON and `update.json`, and commits generated data as `github-actions[bot]`. A dispatch on `master` then runs the reusable Pages workflow; it checks out the latest `master`, builds the editor, and deploys the site. Other branches build and commit data without deploying Pages. Leave `schema_version` blank only to rebuild the current version after `update.json` is already `2.0` or later; the first v2 release must explicitly set it to `2.0`.
+In the editor, **Publish** dispatches `build-data.yml` on the selected branch. The
+workflow tests and validates, builds the versioned JSON and `update.json`, and
+commits generated data as `github-actions[bot]`. Builds on any branch can update
+that branch's generated data; only a dispatch on `master` also deploys Pages.
+Before tests and the build, the workflow fast-forwards to the latest branch head.
+If the branch advances after that and the generated-data push is rejected, the
+workflow fails safely rather than rebasing stale generated output. A maintainer
+should retry the workflow; the new build recomputes the patch version and
+changelog against the latest published data.
+
+For v2 and later, `update.json.schemaVersion` is the full `X.Y.Z` version, while
+the export directory is `versions/<major>/` (for example, all `2.x.x` exports
+are under `versions/2/`). Legacy v1 metadata remains `X.Y`, including when a
+patch release was published, and historical v1 directory names are
+inconsistent. Consumers should derive the major directory only for v2+ and
+continue using the exact legacy paths for v1.
 
 Partner apps do not currently consume locale strings, but future breaking schema releases should version locale files (keep the previous-version keys or use a versioned locale folder) so consumers pinned to an older `schemaVersion` continue to work. For end-user editor instructions, use [`docs/EDITOR.md`](EDITOR.md); for the editor's development architecture and limitations, see [`src/editor/README.md`](../src/editor/README.md).
 

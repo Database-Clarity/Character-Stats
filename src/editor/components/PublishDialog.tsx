@@ -5,7 +5,7 @@ import { useEditor } from '../state/store';
 import { Modal } from './Modal';
 export function PublishDialog({ onClose }: { onClose(): void }) {
     const { source, dirty } = useEditor();
-    const [version, setVersion] = useState('');
+    const [releaseNotes, setReleaseNotes] = useState('');
     const [busy, setBusy] = useState(false);
     const [dispatched, setDispatched] = useState(false);
     const [runs, setRuns] = useState<WorkflowRun[]>([]);
@@ -26,7 +26,7 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
         setBusy(true);
         setError('');
         try {
-            await github.client.dispatchWorkflow(version.trim());
+            await github.client.dispatchWorkflow(releaseNotes);
             setDispatched(true);
             await refresh();
         } catch (e) {
@@ -43,8 +43,12 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
                         ? 'Build data and deploy Pages'
                         : `Build data on ${github?.client.repo.branch ?? 'the selected branch'} — does not deploy Pages`}
                 </strong>
-                . Regenerates the data apps download (versions/&lt;v&gt;/ and update.json) from
-                source edits already committed to GitHub. On master it also redeploys the site.
+                . Builds from source edits already committed to GitHub. Publishing automatically
+                increments the patch version for each changed export. If exports are unchanged
+                within the same code-defined major.minor, no version, changelog entry, or commit is
+                created. A code-defined major.minor increase signals a new schema/API and publishes
+                X.Y.0 even when the generated JSON is unchanged. Data is stored in
+                versions/&lt;major&gt;/. On master it also redeploys the site.
             </p>
             {dirty.length > 0 && (
                 <p className="warning">
@@ -55,20 +59,13 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
             {!dispatched ? (
                 <form onSubmit={publish}>
                     <label>
-                        New schema version (optional)
-                        <input
-                            placeholder="2.0 for first v2 release"
-                            value={version}
-                            onChange={(e) => setVersion(e.target.value)}
+                        Release notes (optional)
+                        <textarea
+                            value={releaseNotes}
+                            onChange={(e) => setReleaseNotes(e.target.value)}
                             disabled={busy}
                         />
                     </label>
-                    <p className="help">
-                        The first v2 release must specify schema version 2.0. Leave empty to keep
-                        the current version only when update.json already declares 2.0 or newer.
-                        Changing the version is a breaking release and creates a new version
-                        directory.
-                    </p>
                     <button className="primary" disabled={!github || busy || dirty.length > 0}>
                         {busy ? 'Dispatching…' : 'Dispatch build workflow'}
                     </button>
