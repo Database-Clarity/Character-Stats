@@ -1,0 +1,105 @@
+{
+    "Hash": 2996146975,
+    "Name": "Weapons",
+    "Fields": {
+        "ReloadSpeed": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 100,
+                    "Value": 1
+                }
+            ]
+        },
+        "Handling": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 100,
+                    "Value": 1
+                }
+            ]
+        },
+        "NonBossDamageIncrease": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 100,
+                    "Value": 0
+                }
+            ]
+        },
+        "SpecialDamageIncrease": {
+            "Domain": [
+                101,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 101,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "PowerDamageIncrease": {
+            "Domain": [
+                101,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 101,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "PVPDamageIncrease": {
+            "Domain": [
+                101,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 101,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "LargeAmmoBrickChance": {
+            "Domain": [
+                101,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 101,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        }
+    },
+    "Notes": "Placeholder field values — replace with tested data."
+}

@@ -1,45 +1,39 @@
 {
-    "Mobility": {
-        "Description": "Mobility governs how high you can jump without using your jump ability. It also determines your movement speed while Walking forward, Strafing, or Crouching.\n\nMobility has no effect on Sprint Speed as that is fixed at 8 meters per second, assuming no external Sprint Speed buffs.\n\nMobility also determines the Class Ability cooldown of Hunters.",
+    "Health": {
+        "Overview": "Health governs how much passive Flinch Resistance you have and how much health collecting Orbs of Power restores.\n\nWhen enhanced, it increases the Recharge Rate of your Shields in all activities as well as their total HP in PVE activities.",
+        "BaseStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\nYour Shields start recharging {{ShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{ShieldRechargeSpeed}}{{PercentPerSecond}}. Your shields have {{PVPShieldHP}}{{HP}}.",
+        "EnhancedStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\n{{Enhancement}} Your Shields start recharging {{ShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{ShieldRechargeSpeed}}{{PercentPerSecond}}. Your shields have {{PVEShieldHP}}{{HP}} [PVP: {{PVPShieldHP}}{{HP}}]."
+    },
+    "Melee": {
+        "Overview": "Melee governs your Melee Ability's passive cooldown and how much Melee Energy you gain from perks.\n\nIncreases Melee Damage when enhanced.",
+        "BaseStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and perks that grant you Melee Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Melee Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Melee Ability deals {{MeleeDamageIncrease}}{{Percent}} increased damage."
+    },
+    "Grenade": {
+        "Overview": "Grenade governs your Grenade Ability's passive cooldown and how much Grenade Energy you gain from perks.\n\nIncreases Grenade Damage when enhanced.",
+        "BaseStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{GrenadeDamageIncrease}}{{Percent}} increased damage."
+    },
+    "Super": {
+        "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nIncreases Super Damage when enhanced.",
+        "BaseStatTooltip": "Your Super Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}} effectiveness.",
+        "EnhancedStatTooltip": "Your Super Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
+    },
+    "Class": {
+        "Overview": "Class governs your Class Ability's passive cooldown and how much Class Ability Energy you gain from perks.\n\nCasting your Class Ability grants you an Overshield when enhanced.",
+        "BaseStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants you a(n) {{OvershieldHP}}{{HP}} Overshield."
+    },
+    "Weapons": {
+        "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor, Elite, and Miniboss combatants.\n\nWhen enhanced, it increases your weapons' damage against Boss combatants and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
+        "BaseStatTooltip": "Passively grants your weapons {{ReloadSpeed}}{{Scalar}} Reload Speed and {{Handling}}{{Scalar}} Handling.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.",
+        "EnhancedStatTooltip": "Passively grants your weapons {{ReloadSpeed}}{{Scalar}} Reload Speed and {{Handling}}{{Scalar}} Handling.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.\n\n{{Enhancement}} Special and Power weapons deal {{SpecialDamageIncrease}}{{Percent}} and {{PowerDamageIncrease}}{{Percent}} increased damage against Bosses, respectively. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
+    },
+    "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling}} when you have {{ChargeCount}} active charges stored up.",
+    "Movement": {
+        "Overview": "Mobility was removed in Edge of Fate; base movement speed is fixed per class and can only be increased by Enhanced Athletics mods.",
         "WalkSpeed": "How fast you can walk forward.",
         "StrafeSpeed": "How fast you can move side-to-side and backwards.",
         "CrouchSpeed": "How fast you can move while crouching."
-    },
-    "Resilience": {
-        "Description": "Resilience governs how much HP your <Shields> have, grants passive Damage Resistance in PvE activities, and provides passive Flinch Resistance. It also decreases the damage received when breaking out of Stasis Freeze.\n\nResilience also determines the Class Ability cooldown of Titans.",
-        "ShieldHP": "How much HP your <Shields> have.\n\n<Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 HP everywhere else.",
-        "PvEDamageResistance": "How much passive Damage Resistance you have in PvE activities.",
-        "FlinchResistance": "How much passive Flinch Resistance you have."
-    },
-    "Recovery": {
-        "Description": "Recovery governs the delay before your <Health> and <Shields> start regenerating after taking damage as well as the speed of the regeneration.\n\nRecovery also determines the Class Ability cooldown of Warlocks.",
-        "TotalRegenTime": "How long it takes to fully regenerate your <Health> and <Shields> from 0 HP.",
-        "HealthRegenDelay": "How long it takes to start regenerating <Health> after taking damage.",
-        "HealthRegenSpeed": "How fast your <Health> regenerates once the delay after taking damage is over.",
-        "ShieldRegenDelay": "How long it takes for your <Shields> to start regenerating after taking damage.",
-        "ShieldRegenSpeed": "How fast your <Shields> regenerate once the delay after taking damage is over."
-    },
-    "Discipline": {
-        "Description": "Discipline governs your Grenade Ability cooldown."
-    },
-    "Intellect": {
-        "Description": "Intellect governs your passive Super Ability cooldown.",
-        "SuperTier": "Super Tiers are a simple categorization of Super Abilities into five tiers based on their cooldowns. Tier 5 Supers have the shortest cooldowns, and Tier 1 Supers have the longest.\n\nSuper Tiers also influence how much Super Energy you get from Active Super Regeneration, with higher tiers benefiting more from the mechanic.",
-        "ActiveRegenScalar": "Active Regen Scalars are tied to the tier of the Super Ability and influence how much Super Energy you get from Active Super Regeneration. These scalars range from 0.8 for Tier 1 Supers to 1.2 for Tier 5 Supers with Tier 3 being the baseline at 1.0.\n\nActive Super Regeneration refers to any Super Energy Gains from any source other than passive regeneration or perks that grant an additional percentage of your Base Super Regeneration Rate. These include scoring kills or assists, dealing or taking damage, collecting Orbs of Power, and perks that grant chunks of Super Energy.",
-        "PvPDamageResistance": "How much Damage Resistance your Super Ability provides in PvP.",
-        "PvEDamageResistance": "How much Damage Resistance your Super Ability provides in PvE.",
-        "DRCondition": {
-            "Passive": "Passively Active",
-            "CastAnimation": "Active during the Super Cast animation.",
-            "GoldenGunDeadShot1": "Passively Active with the Knock 'Em Down Aspect",
-            "SpectralBlades1": "Active while Invisible",
-            "WellOfRadiance1": "Against Primary Ammo Weapon damage",
-            "WellOfRadiance2": "Against any damage not dealt with a Primary Ammo Weapon"
-        }
-    },
-    "Strength": {
-        "Description": "Strength governs your Melee Ability cooldown."
-    },
-    "ChunkEnergyScalar": "Chunk Energy Scalars are generally tied to the cooldowns of abilities and influence how much Ability Energy you get from perks that grant you a chunk of energy at once. For example, if a perk were to give you 100% Ability Energy and the Scalar was 0.6, you'd only receive 60% from it.\n\nGenerally, abilities with longer cooldowns within their category (e.g. Grenades) will have a lower scalar and thus will receive a lower percentage of the Ability Energy these perks grant.",
-    "ChargeBasedScaling": "Some abilities that intrinsically have multiple ability charges may recharge at a different rate depending on the number of Ability Charges you have stored up. So, the first ability charge may use the default Recharge Rate, but the second or third charge may recharge much faster."
+    }
 }

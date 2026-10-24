@@ -1,0 +1,34 @@
+{
+    "name": "character-stats",
+    "version": "2.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "test": "vitest run",
+        "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.core.json",
+        "validate": "tsx src/cli/validate.ts",
+        "build:data": "tsx src/cli/build-data.ts",
+        "schema": "tsx src/cli/schema.ts",
+        "format": "prettier --write src/core src/cli src/editor tests *config* .prettierrc package.json",
+        "format:check": "prettier --check src/core src/cli src/editor tests *config* .prettierrc package.json"
+    },
+    "dependencies": {
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "recharts": "^3.3.0"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3",
+        "vite": "^7.1.12",
+        "@vitejs/plugin-react": "^5.0.4",
+        "vitest": "^3.2.4",
+        "tsx": "^4.20.6",
+        "ajv": "^8.17.1",
+        "@types/node": "^24.0.0",
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+        "prettier": "^3.6.2"
+    }
+}

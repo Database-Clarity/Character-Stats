@@ -1,0 +1,83 @@
+{
+    "Hash": 392767087,
+    "Name": "Health",
+    "Fields": {
+        "FlinchResistance": {
+            "Domain": [
+                0,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "OrbOfPowerHealthRestore": {
+            "Domain": [
+                0,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "PVPHealthHP": 0,
+        "PVEHealthHP": 0,
+        "HealthRegenDelay": 0,
+        "HealthRegenSpeed": 0,
+        "PVPShieldHP": 0,
+        "PVEShieldHP": {
+            "Domain": [
+                0,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "ShieldRechargeDelay": {
+            "Domain": [
+                0,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "ShieldRechargeSpeed": {
+            "Domain": [
+                0,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 200,
+                    "Value": 0
+                }
+            ]
+        },
+        "PVEDamageResistance": 34.5
+    },
+    "Notes": "Placeholder field values — replace with tested data."
+}

@@ -1,0 +1,75 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the latest master data and source
+        uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build editor
+        run: npm run build
+      - name: Assemble static site
+        run: |
+          mkdir -p _site/editor
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='node_modules/' \
+            --exclude='src/' \
+            --exclude='tests/' \
+            --exclude='dist/' \
+            --exclude='_site/' \
+            --exclude='coverage/' \
+            --exclude='.vscode/' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='tsconfig*.json' \
+            --exclude='vite.config.ts' \
+            --exclude='vitest.config.ts' \
+            --exclude='.gitignore' \
+            --exclude='.npmrc' \
+            --exclude='.prettierrc' \
+            --exclude='.prettierignore' \
+            ./ _site/
+          cp -a dist/. _site/editor/
+          touch _site/.nojekyll
+          # Bypass Jekyll so JSON endpoints are copied as-is; render the former README landing page with a pinned Markdown renderer.
+          { printf '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Destiny 2 Character Stats</title></head><body>\n'; \
+            npx --yes marked@15.0.12 README.md; \
+            printf '\n</body></html>\n'; } > _site/index.html
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

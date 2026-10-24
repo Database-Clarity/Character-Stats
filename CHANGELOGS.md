@@ -1,5 +1,13 @@
 # Changelogs
 
+## v2.0.0 Breaking Change - July X, 2025
+
+### Edge of Fate Preview Build
+
+- All Character Stats have been replaced with the Edge of Fate versions
+- Cooldown arrays have been removed from ability entries, we only provide an unscaled (base) cooldown for them now alongside a high level "scalar" array at the Character Stat level
+- Values present in this build are not final and will NEED to be revised with testing data
+
 ## v1.9.10 - February 4, 2025
 
 - *Tempest Strike* `Override` has been removed

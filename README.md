@@ -32,7 +32,7 @@ Please check out our website's [Partnerships page](https://www.d2clarity.com/par
 
 ## Database Information
 
-Vital information about the database structure and what each property stored in it represents can be found in the `shema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
+Vital information about the database structure and what each property stored in it represents can be found in the `schema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
 
 In addition to the main database files, the `update.json` contains the following two values:
 
@@ -49,3 +49,7 @@ Example usage of the `update.json` file for handling breaking changes:
 ## Credits
 
 I want to thank Hugo for [their amazing spreadsheet](https://docs.google.com/spreadsheets/d/1LgOPdcdEmRvDxFq1ZgJkR9-U6KMsTvYTUSJgkqsLIqs/) which provided the fundamentals of this database and u/Crystic_Knight for their [breakdown of Mobility](https://www.reddit.com/r/DestinyTheGame/comments/ejw37c/breakdown_of_mobility_ultimate_edition/). Last, but most certainly not least, I want to thank RyTako for [his spreadsheet](https://docs.google.com/spreadsheets/d/1lEOY_Z0v5ZZVZJ1SVLJyleMBEG2a7KLq4aLIQA9zk0A/) and ongoing high quality testing to help out the entire science community.
+
+## Contributing / Development
+
+See the [development guide](docs/DEVELOPMENT.md) for setup, data/schema workflows, and publishing, and the [editor guide](docs/EDITOR.md) for using the web editor. The editor is available at <https://database-clarity.github.io/Character-Stats/editor/>.
