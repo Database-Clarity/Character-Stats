@@ -23,6 +23,16 @@ describe('GitHub editor REST client', () => {
             Authorization: 'Bearer test-token',
         });
     });
+    it('lists branches across pages of 100', async () => {
+        const firstPage = Array.from({ length: 100 }, (_, index) => ({ name: `branch-${index}` }));
+        const fetch = mockResponses([firstPage, [{ name: 'branch-100' }]]);
+        expect(await client.listBranches()).toHaveLength(101);
+        expect(fetch.mock.calls.map(([url]) => String(url))).toEqual([
+            'https://api.github.com/repos/example/stats/branches?per_page=100&page=1',
+            'https://api.github.com/repos/example/stats/branches?per_page=100&page=2',
+        ]);
+        expect(fetch.mock.calls[0]?.[1]).toMatchObject({ cache: 'no-store' });
+    });
     it('discovers nested JSON sources without filename assumptions', async () => {
         mockResponses([
             [

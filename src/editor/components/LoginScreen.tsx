@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { GitHubDataSource, LocalDevDataSource, type DataSource, type LoadedData } from '../data';
 import { GitHubClient } from '../github/client';
 import logo from '../assets/clarity-logo.svg';
@@ -45,10 +45,68 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
     const [settings, setSettings] = useState(savedSettings);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
+    const [branchList, setBranchList] = useState({
+        token: '',
+        names: [] as string[],
+        loading: false,
+        error: '',
+    });
+    const token = settings.token.trim();
+    const branchListMatchesToken = branchList.token === token;
+    const branchNames = branchListMatchesToken ? branchList.names : [];
+    const branchesLoading = !!token && (!branchListMatchesToken || branchList.loading);
+    const branchListError = branchListMatchesToken ? branchList.error : '';
+    const branchesReady = branchListMatchesToken && !branchList.loading && !branchList.error;
+    const validBranch = branchesReady && branchNames.includes(settings.branch);
     function change<K extends keyof LoginSettings>(key: K, value: LoginSettings[K]) {
         setSettings((current) => ({ ...current, [key]: value }));
     }
+    useEffect(() => {
+        let cancelled = false;
+        if (!token) {
+            setBranchList({ token: '', names: [], loading: false, error: '' });
+            return () => {
+                cancelled = true;
+            };
+        }
+        setBranchList({ token, names: [], loading: true, error: '' });
+        const timeout = window.setTimeout(() => {
+            const repo = {
+                owner: settings.owner.trim(),
+                name: settings.name.trim(),
+                branch: 'master',
+            };
+            void new GitHubClient(token, repo)
+                .listBranches()
+                .then((names) => {
+                    if (cancelled) return;
+                    setBranchList({ token, names, loading: false, error: '' });
+                    setSettings((current) => {
+                        const branch = names.includes(current.branch)
+                            ? current.branch
+                            : names.includes('master')
+                              ? 'master'
+                              : (names[0] ?? '');
+                        return current.branch === branch ? current : { ...current, branch };
+                    });
+                })
+                .catch(() => {
+                    if (!cancelled)
+                        setBranchList({
+                            token,
+                            names: [],
+                            loading: false,
+                            error: 'Could not load branches. Check the token and repository access.',
+                        });
+                });
+        }, 500);
+        return () => {
+            cancelled = true;
+            window.clearTimeout(timeout);
+        };
+    }, [settings.name, settings.owner, token]);
     async function connect(local = false) {
+        if (!local && (!token || !validBranch)) return;
         setBusy(true);
         setError('');
         try {
@@ -133,12 +191,35 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                     </p>
                     <label>
                         Branch
-                        <input
+                        <select
                             required
-                            value={settings.branch}
+                            value={validBranch ? settings.branch : ''}
+                            disabled={!branchesReady || branchNames.length === 0}
                             onChange={(e) => change('branch', e.target.value)}
-                        />
+                        >
+                            <option value="">
+                                {!token
+                                    ? 'Enter a token to list branches'
+                                    : branchesLoading
+                                      ? 'Loading branches…'
+                                      : branchListError
+                                        ? 'Branches unavailable'
+                                        : branchNames.length === 0
+                                          ? 'No branches found'
+                                          : 'Select a branch'}
+                            </option>
+                            {branchNames.map((branch) => (
+                                <option key={branch} value={branch}>
+                                    {branch}
+                                </option>
+                            ))}
+                        </select>
                     </label>
+                    {branchListError && (
+                        <p className="error" role="alert">
+                            {branchListError}
+                        </p>
+                    )}
                     <label className="check">
                         <input
                             type="checkbox"
@@ -152,7 +233,7 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                         api.github.com. Remember me keeps the token in localStorage. Use a trusted
                         device and a repository-scoped token.
                     </p>
-                    <button className="primary" disabled={!settings.token.trim()}>
+                    <button className="primary" disabled={!token || !validBranch}>
                         {busy ? 'Loading data…' : 'Connect to GitHub'}
                     </button>
                 </fieldset>

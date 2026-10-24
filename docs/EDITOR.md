@@ -4,7 +4,7 @@ Open the editor at [database-clarity.github.io/Character-Stats/editor](https://d
 
 ## Connect
 
-On **Connect to your repository**, enter the **Fine-grained GitHub personal access token** and **Branch** (default `master`). The repository is fixed to `Database-Clarity/Character-Stats`. The token needs Contents read/write, Pull requests read/write, Actions read/write, and Metadata read permissions. Select **Remember me on this device (localStorage)** only on a trusted device; otherwise the token stays in session storage. Select **Connect to GitHub** to load the source JSON and English locale for that branch.
+On **Connect to your repository**, enter the **Fine-grained GitHub personal access token**; **Branch** is a dropdown listing the repository's branches after a token is entered (default `master` when available). The repository is fixed to `Database-Clarity/Character-Stats`. The token needs Contents read/write, Pull requests read/write, Actions read/write, and Metadata read permissions. Select **Remember me on this device (localStorage)** only on a trusted device; otherwise the token stays in session storage. Select **Connect to GitHub** to load the source JSON and English locale for that branch.
 
 For development only, **Use local dev data** opens the checked-out repository's JSON without a token. It is labeled **Local (read-only dev)**: edits exist only in memory, and Save and Publish are disabled. This option is not included in production builds.
 

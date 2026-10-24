@@ -109,6 +109,20 @@ export class GitHubClient {
             )
         ).flat();
     }
+    async listBranches(): Promise<string[]> {
+        const branches: string[] = [];
+        for (let page = 1; ; page++) {
+            const response: unknown = await this.request(`branches?per_page=100&page=${page}`);
+            if (!Array.isArray(response)) throw new Error('GitHub returned an invalid branch list');
+            for (const entry of response) {
+                const branch = record(entry, 'branch entry');
+                const name = stringField(branch, 'name', 'branch name');
+                if (!name) throw new Error('GitHub returned an invalid branch name');
+                branches.push(name);
+            }
+            if (response.length < 100) return branches;
+        }
+    }
     private branchPath(branch: string) {
         return branch.split('/').map(encodeURIComponent).join('/');
     }
