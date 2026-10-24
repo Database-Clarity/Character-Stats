@@ -11,7 +11,7 @@ Stat values in this build are placeholders. Expect most of them to change once w
 ### New layout
 
 - The six old stats are gone. The top-level keys are now the manifest hashes of the new stats, as strings: Weapons `2996146975`, Health `392767087`, Class `1943323491`, Grenade `1735777505`, Super `144602215` and Melee `4244567218`.
-- A new top-level `Movement` key holds walk, strafe and crouch speeds. See the Movement section below.
+- The top-level `Movement` key holds shared movement rules, class base values and movement sources. See the Movement section below.
 - Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Arrays for the enhanced range (101 to 200) have 100 entries, so index 0 is stat 101. Stat values above 100 use the last entry of a 0 to 100 array.
 - `schema.json` describes the new shape in full and is the reference for every property.
 
@@ -25,7 +25,11 @@ Stat values in this build are placeholders. Expect most of them to change once w
 
 ### Movement
 
-Mobility no longer exists, but movement speed still matters. `Movement` lists walk, strafe and crouch speed in meters per second for Titan, Hunter and Warlock, with one value for each number of Enhanced Athletics mods equipped (0 to 3). The mod's hash is in `EnhancedAthleticsHash`. These numbers come from the old Mobility tiers and haven't been verified in game yet.
+Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.WalkSpeed` gives forward walking speed in m/s from 5.0 to 7.6, increasing by 0.2 per tier. Strafe, crouch and ADS multipliers are 0.85, 0.55 and 0.75. Forward speed, including sprint, caps at 9 m/s. Strafe caps at 6 m/s, including ADS. Crouch caps at 4 m/s.
+
+Sprint uses a base speed independent of Mobility. Titan and Warlock start at tier 3 with 8 m/s sprint. Hunter starts at tier 10 in PvE and tier 7 in PvP, with 8.5 m/s sprint.
+
+Sources point to an item or item category and use `Always`, `WhileHeld` or `Conditional` activation. Effects add Mobility tiers or apply forward, sprint, grounded or ADS multipliers. `Values` lists each effect value by stack count. `BoostedValues` replaces those values when all `BoostRequiresAll` hashes are equipped. ADS effects replace the default multiplier for the selected held weapon. Values marked unknown are placeholders. `JumpHeight` is not published yet.
 
 ### Descriptions and locale
 
