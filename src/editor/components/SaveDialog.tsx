@@ -135,6 +135,11 @@ export function SaveDialog({ onClose }: { onClose(): void }) {
                         {state.dirty.length} file(s) will be saved as a single commit. Warnings do
                         not block saving.
                     </p>
+                    <p className="help">
+                        Save writes sources/ and locale/en.json to the branch, or opens a PR. On
+                        master, it redeploys the site and sends English text to Crowdin. It does not
+                        change the data apps download; Publish regenerates that data.
+                    </p>
                     {notice && <p role="status">{notice}</p>}
                     {errors.length > 0 && (
                         <p role="alert" className="error">

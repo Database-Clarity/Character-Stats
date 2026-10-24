@@ -13,7 +13,7 @@ export interface CooldownResult {
 export function calculateCooldown(
     ability: Ability | SuperAbility,
     overrides: readonly Override[],
-    cooldownScalars: Curve,
+    cooldownScalars: Curve | undefined,
     statValue: number,
 ): CooldownResult {
     if (!Number.isFinite(statValue)) {
@@ -49,11 +49,14 @@ export function calculateCooldown(
             base *= override.Scalar?.[index] ?? 1;
         }
     }
-    const scalar = evaluateCurve(
-        cooldownScalars,
-        Math.max(0, Math.min(100, Math.trunc(statValue))),
-        [0, 100],
-    );
+    let scalar = 1;
+    if (!('ActiveRegenScalar' in ability) && cooldownScalars !== undefined) {
+        scalar = evaluateCurve(
+            cooldownScalars,
+            Math.max(0, Math.min(100, Math.trunc(statValue))),
+            [0, 100],
+        );
+    }
     return {
         cooldown: roundValue(base * scalar, 3),
         effectiveBase: base,
@@ -68,7 +71,12 @@ export function effectiveCooldown(
     statValue: number,
     overrides = source.Overrides ?? [],
 ): CooldownResult {
-    return calculateCooldown(ability, overrides, source.Fields.CooldownScalars as Curve, statValue);
+    return calculateCooldown(
+        ability,
+        overrides,
+        source.Fields.CooldownScalars as Curve | undefined,
+        statValue,
+    );
 }
 
 export function calculateActiveRegen(
@@ -140,14 +148,21 @@ export function movementSpeed(
         GroundedMultiplier: 1,
     };
     const seen = new Set<number>();
+    const activeSourceHashes = new Set<number>();
     const heldWeaponSources = new Set(input.heldWeaponSources ?? []);
     const adsMultipliers = new Set<number>();
     for (const active of input.sources) {
         if (seen.has(active.hash))
             throw new Error('Duplicate active movement source ' + active.hash);
         seen.add(active.hash);
-        const entry = source.Sources.find((candidate) => candidate.Hash === active.hash);
+        const entry = source.Sources.find(
+            (candidate) =>
+                candidate.Hash === active.hash || candidate.AlsoMatches?.includes(active.hash),
+        );
         if (!entry) throw new Error('Unknown movement source ' + active.hash);
+        if (activeSourceHashes.has(entry.Hash))
+            throw new Error('Duplicate active movement source ' + entry.Hash);
+        activeSourceHashes.add(entry.Hash);
         const stacks = active.stacks ?? 1;
         if (!Number.isSafeInteger(stacks) || stacks < 1)
             throw new Error('Source stacks must be a positive integer');

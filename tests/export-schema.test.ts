@@ -80,8 +80,8 @@ describe('exports and generated schema', () => {
         expect(first).not.toContain('stat point.s');
         const superDef = (generateSchema().definitions as Record<string, Record<string, unknown>>)
             .Super!;
-        expect(superDef.required).toContain('CooldownScalars');
-        expect(superDef.properties).toHaveProperty('CooldownScalars');
+        expect(superDef.required).not.toContain('CooldownScalars');
+        expect(superDef.properties).not.toHaveProperty('CooldownScalars');
     });
     it('derives index mappings from domains without repeating Health fallback sentences', () => {
         for (const domain of [

@@ -91,7 +91,7 @@ dialog::backdrop {
 .picker-results {
     max-height: 52dvh;
     overflow: auto;
-    padding: 4px 0;
+    padding: 0;
 }
 .picker-results > button,
 .picker-results section > button {
@@ -103,13 +103,21 @@ dialog::backdrop {
     border-bottom-color: #2a2e35;
     padding: 6px 8px;
 }
-.picker-results h3 {
+.picker-results h3,
+.picker-results h4 {
     color: var(--muted);
     font-size: 11px;
     padding: 8px;
     background: #20242a;
     position: sticky;
     top: 0;
+    z-index: 2;
+    margin: 0;
+    width: 100%;
+}
+progress {
+    width: 100%;
+    accent-color: var(--accent);
 }
 .login {
     width: min(560px, calc(100vw - 32px));

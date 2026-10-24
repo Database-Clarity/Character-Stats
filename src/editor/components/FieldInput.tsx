@@ -5,6 +5,8 @@ import { HashIdentity, ManifestPicker } from './ManifestUI';
 import { Modified, Collapse } from './EditorPrimitives';
 import { fieldDefault, numericDefault, updateNestedField } from '../state/editing';
 import { EntityForm } from './EntityForm';
+import { numberStep } from './numberStep';
+import { ReferenceArrayInput } from './ReferenceArrayInput';
 
 export function NumberArrayInput({
     spec,
@@ -49,7 +51,11 @@ export function NumberArrayInput({
                                     <input
                                         aria-label={`${spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
                                         type="number"
-                                        step={spec.kind === 'intArray' ? 1 : 'any'}
+                                        step={numberStep(
+                                            number,
+                                            spec.items,
+                                            spec.kind === 'intArray' || spec.items?.integer,
+                                        )}
                                         value={Number.isFinite(number) ? number : ''}
                                         onChange={(e) =>
                                             onChange(
@@ -330,6 +336,13 @@ export function FieldInput({
                                     </option>
                                 ))}
                             </select>
+                        ) : spec.kind === 'intArray' && spec.itemRef ? (
+                            <ReferenceArrayInput
+                                spec={spec}
+                                value={value}
+                                table={table}
+                                onChange={onChange}
+                            />
                         ) : spec.kind === 'numberArray' || spec.kind === 'intArray' ? (
                             <NumberArrayInput
                                 spec={spec}
@@ -379,7 +392,7 @@ export function FieldInput({
                                     aria-required={!!spec.required}
                                     aria-invalid={issues.length > 0}
                                     type="number"
-                                    step={spec.kind === 'number' ? 'any' : 1}
+                                    step={numberStep(value, spec, spec.kind !== 'number')}
                                     value={
                                         typeof value === 'number' && Number.isFinite(value)
                                             ? value

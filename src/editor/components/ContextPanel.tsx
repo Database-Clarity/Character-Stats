@@ -24,7 +24,8 @@ export function ContextPanel({
     const [statValue, setStatValue] = useState(100);
     const { abilities: allAbilities, overrides, collections } = previewCollections(source);
     const abilities = allAbilities.filter(isPreviewAbility);
-    if (!isRecord(source.Fields) || !source.Fields.CooldownScalars || !abilities.length)
+    const scaled = isRecord(source.Fields) && source.Fields.CooldownScalars !== undefined;
+    if (!abilities.length)
         return (
             <aside className="context">
                 <div className="pane-header">
@@ -87,10 +88,16 @@ export function ContextPanel({
                 <strong>Cooldown context</strong>
                 <span className="muted">seconds</span>
             </div>
-            <div className="pinned-controls">
-                <StatControl label="Context stat value" value={statValue} onChange={setStatValue} />
-                <p className="help">Core calculation · cooldown stat clamps at 100.</p>
-            </div>
+            {scaled && (
+                <div className="pinned-controls">
+                    <StatControl
+                        label="Context stat value"
+                        value={statValue}
+                        onChange={setStatValue}
+                    />
+                    <p className="help">Core calculation · cooldown stat clamps at 100.</p>
+                </div>
+            )}
             <div className="scroll-pane context-body">
                 {!selected ? (
                     <p className="empty-state">
@@ -112,7 +119,11 @@ export function ContextPanel({
                                 <strong className="mono">
                                     {selectedBase ? `${selectedBase.cooldown} s` : 'Invalid data'}
                                 </strong>
-                                <small>Base cooldown at {statValue}</small>
+                                <small>
+                                    {scaled && statValue < 100
+                                        ? `Cooldown at ${statValue} ${source.Name}`
+                                        : 'Base cooldown'}
+                                </small>
                             </div>
                         )}
                         <Collapse

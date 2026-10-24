@@ -18,10 +18,11 @@ Stat values in this build are placeholders. Expect most of them to change once w
 ### Abilities and cooldowns
 
 - Abilities moved to the stat that now controls them. Class holds the class abilities of all three classes (previously under Mobility, Resilience and Recovery). Grenade took over from Discipline, Melee from Strength, and Super from Intellect.
-- The precomputed `Cooldowns` arrays are gone. Each ability has a `BaseCooldown` in seconds, and each stat has a `CooldownScalars` array. The cooldown at a given stat value is `BaseCooldown * CooldownScalars[min(stat, 100)]`.
+- The precomputed `Cooldowns` arrays are gone. Each ability has a `BaseCooldown` in seconds. Class, Grenade and Melee have a `CooldownScalars` array. Their cooldown at a given stat value is `BaseCooldown * CooldownScalars[min(stat, 100)]`.
 - `CooldownOverride` on overrides is now a single number in seconds instead of an 11-tier array. It replaces `BaseCooldown` before any `Scalar` and the stat's `CooldownScalars` apply.
 - `Scalar`, `ChunkEnergyScalar`, `ChunkEnergyOverride` and `ChargeBasedScaling` work as before.
-- Super abilities lost `SuperTier`. `ActiveRegenScalar` stays, and the Super stat's `ActiveRegenScalars` array scales it by stat value.
+- Super abilities lost `SuperTier`. Super cooldowns no longer scale with the Super stat. They use `BaseCooldown`, with applicable `CooldownOverride` and `Scalar` values. `ActiveRegenScalar` stays, and the Super stat's `ActiveRegenScalars` array scales it by stat value. `EnergyGainScalar` still controls external energy gains.
+- Numeric validation keeps structural and mathematical constraints, not guessed balance ranges. Energy scalars can be zero or greater than one. Active Super regeneration has no upper bound.
 
 ### Movement
 
@@ -30,6 +31,10 @@ Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.Walk
 Sprint uses a base speed independent of Mobility. Titan and Warlock start at tier 3 with 8 m/s sprint. Hunter starts at tier 10 in PvE and tier 7 in PvP, with 8.5 m/s sprint.
 
 Sources point to an item or item category and use `Always`, `WhileHeld` or `Conditional` activation. Effects add Mobility tiers or apply forward, sprint, grounded or ADS multipliers. `Values` lists each effect value by stack count. `BoostedValues` replaces those values when all `BoostRequiresAll` hashes are equipped. ADS effects replace the default multiplier for the selected held weapon. Values marked unknown are placeholders. `JumpHeight` is not published yet.
+
+`AlsoMatches` lists other item or plug hashes that activate the same source. `Hash` remains its primary identity. Lightweight Frame includes its weapon-type variants and grenade-launcher Micro-Missile frames. Enhanced MIDA Synergy includes its equivalent variants. Apply each source once, even when more than one matching hash is present.
+
+Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro-Tool has a separate conditional source. With MIDA Multi-Tool equipped, it grants 10% forward movement speed without the base Lightweight Mobility tiers or sprint bonus.
 
 ### Descriptions and locale
 

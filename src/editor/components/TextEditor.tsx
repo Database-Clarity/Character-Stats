@@ -68,7 +68,14 @@ export function TextEditor({
     return (
         <section className="text-editor">
             <div className="pinned-controls text-controls">
-                <StatControl label="Preview stat value" value={statValue} onChange={setStatValue} />
+                {(spec.fields.some((field) => field.kind === 'curve') ||
+                    source.Fields.CooldownScalars !== undefined) && (
+                    <StatControl
+                        label="Preview stat value"
+                        value={statValue}
+                        onChange={setStatValue}
+                    />
+                )}
                 {abilities.length > 0 && (
                     <label className="inline">
                         Preview ability

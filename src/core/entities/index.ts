@@ -79,6 +79,7 @@ export interface MovementSourceEntry {
     RefType: 'item' | 'itemCategory';
     Activation: 'Always' | 'WhileHeld' | 'Conditional';
     Effects: MovementEffect[];
+    AlsoMatches?: number[];
     BoostRequiresAll?: number[];
     Notes?: string;
 }
@@ -102,15 +103,14 @@ export const abilitySpec: EntitySpec = {
         }),
 
         numberField('ChunkEnergyScalar', {
-            exclusiveMin: 0.1,
-            max: 1,
+            min: 0,
             round: 3,
-            description: 'Scalar for chunk energy gains; greater than 0.1 and at most 1.',
+            description: 'Nonnegative scalar for chunk energy gains.',
         }),
 
         numberArrayField('ChargeBasedScaling', {
             indexLabel: 'Charges stored',
-            minItems: 2,
+            minItems: 1,
             items: { exclusiveMin: 0 },
             required: false,
             description:
@@ -136,16 +136,14 @@ export const superAbilitySpec: EntitySpec = {
             exclusiveMin: 0,
             round: 3,
             description:
-                'Base cooldown in seconds. Applicable CooldownOverride values replace this ' +
+                'Fixed Super cooldown in seconds, independent of the Super stat. Applicable CooldownOverride values replace this ' +
                 'base first (last matching replacement wins in collection order), then ' +
-                'all matching Scalar entries multiply it, then ' +
-                'CooldownScalars[min(stat value, 100)] multiplies the result.',
+                'all matching Scalar entries multiply it.',
         }),
 
         numberField('ActiveRegenScalar', {
-            exclusiveMin: 0,
-            exclusiveMax: 2,
-            description: 'Active Super regeneration scalar; greater than 0 and less than 2.',
+            min: 0,
+            description: 'Nonnegative active Super regeneration scalar.',
         }),
 
         notesField(),
@@ -182,7 +180,7 @@ export const overrideSpec: EntitySpec = {
             required: false,
             description:
                 'Replacement base cooldown in seconds for matching Requirements. Applied ' +
-                'before all Scalar multipliers and then CooldownScalars[min(stat value, 100)]. ' +
+                'before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. ' +
                 'If multiple replacements match, the last in collection order wins.',
         }),
 
@@ -194,13 +192,13 @@ export const overrideSpec: EntitySpec = {
             description:
                 'Dimensionless cooldown multipliers, one per Requirements entry. All matching ' +
                 'indices stack multiplicatively after CooldownOverride replaces BaseCooldown ' +
-                '(in seconds), and before CooldownScalars[min(stat value, 100)].',
+                '(in seconds), and before CooldownScalars[min(stat value, 100)] for non-Super abilities.',
         }),
 
         numberArrayField('ChunkEnergyOverride', {
             minItems: 1,
             lengthOf: 'Requirements',
-            items: { exclusiveMin: 0.1, max: 1 },
+            items: { min: 0 },
             required: false,
             description:
                 'Chunk energy scalars for corresponding Requirements, applied in ' +
@@ -221,13 +219,11 @@ export const movementClassSpec: EntitySpec = {
         nameField(),
         integerField('BaseMobilityTier', {
             min: 0,
-            max: 13,
             description:
                 'Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified.',
         }),
         integerField('BaseMobilityTierPVP', {
             min: 0,
-            max: 13,
             required: false,
             description: 'Base hidden Mobility tier in PvP when it differs from PvE.',
         }),
@@ -317,14 +313,12 @@ export const movementEffectSpec: EntitySpec = {
         ),
         numberArrayField('Values', {
             minItems: 1,
-            items: { min: 0 },
             description:
                 'Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1.',
         }),
         numberArrayField('BoostedValues', {
             minItems: 1,
             lengthOf: 'Values',
-            items: { min: 0 },
             required: false,
             description:
                 'Replacement values when every BoostRequiresAll hash is equipped; length must match Values.',
@@ -369,7 +363,16 @@ export const movementSourceSpec: EntitySpec = {
             minItems: 1,
             description: 'Effects from this source, with at most one entry for each effect type.',
         }),
+        integerArrayField('AlsoMatches', {
+            itemRef: 'item',
+            minItems: 1,
+            items: { min: 1, max: 4294967295 },
+            required: false,
+            description:
+                'Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once.',
+        }),
         integerArrayField('BoostRequiresAll', {
+            itemRef: 'item',
             minItems: 1,
             items: { min: 1, max: 4294967295 },
             required: false,

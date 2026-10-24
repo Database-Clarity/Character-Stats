@@ -24,8 +24,15 @@ export function Modal({
             ref={ref}
             className={className}
             aria-label={title}
+            onKeyDown={(event) => {
+                if (event.key !== 'Escape') return;
+                event.preventDefault();
+                event.stopPropagation();
+                if (!busy) onClose();
+            }}
             onCancel={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 if (!busy) onClose();
             }}
         >

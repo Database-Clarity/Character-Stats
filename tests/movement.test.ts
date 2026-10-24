@@ -23,6 +23,58 @@ const input = (changes: Partial<MovementSpeedInput> = {}): MovementSpeedInput =>
 });
 
 describe('movement calculator', () => {
+    it('activates every verified Lightweight and MIDA alias with the same effects', () => {
+        for (const hash of [1458010786, 2213377102, 2470575005]) {
+            const entry = data().Sources.find((source) => source.Hash === hash)!;
+            expect(entry.AlsoMatches?.length).toBeGreaterThan(0);
+            const expected = movementSpeed(input({ sources: [{ hash }] }));
+            for (const alias of entry.AlsoMatches!)
+                expect(movementSpeed(input({ sources: [{ hash: alias }] }))).toEqual(expected);
+        }
+        const lightweight = data().Sources.find((source) => source.Hash === 1458010786)!;
+        expect(lightweight.AlsoMatches).toHaveLength(28);
+        expect(lightweight.AlsoMatches).toContain(3758615625);
+        expect(lightweight.AlsoMatches).not.toContain(2928496916);
+    });
+    it('keeps Macro-Tool conditional forward movement separate from Lightweight bonuses', () => {
+        const source = data();
+        expect(source.Sources.find((entry) => entry.Hash === 1888623310)).toMatchObject({
+            Activation: 'Conditional',
+            Effects: [{ Type: 'ForwardMultiplier', Values: [1.1] }],
+        });
+        const sources = [{ hash: 1888623310 }];
+        expect(movementSpeed(input({ sources }))).toEqual({ tier: 3, speed: 5.6 * 1.1 });
+        expect(movementSpeed(input({ sources, sprint: true }))).toEqual({ tier: 3, speed: 8 });
+        expect(movementSpeed(input({ sources, direction: 'Strafe' })).speed).toBeCloseTo(
+            5.6 * 0.85,
+            12,
+        );
+        expect(movementSpeed(input({ sources, posture: 'Crouched' })).speed).toBeCloseTo(
+            5.6 * 1.1 * 0.55,
+            12,
+        );
+    });
+    it('rejects duplicate aliases of the same source and supports alias ADS selection', () => {
+        expect(() =>
+            movementSpeed(
+                input({
+                    sources: [{ hash: 1458010786 }, { hash: 3758615625 }],
+                }),
+            ),
+        ).toThrow('Duplicate active movement source');
+        const source = data();
+        source.Sources.find((entry) => entry.Hash === 14)!.AlsoMatches = [123];
+        expect(
+            movementSpeed(
+                input({
+                    ads: true,
+                    sources: [{ hash: 123 }],
+                    heldWeaponSources: [123],
+                }),
+                source,
+            ).speed,
+        ).toBeCloseTo(5.6 * 0.85, 12);
+    });
     it('uses current source data by default and class-specific PvE/PvP tiers', () => {
         expect(movementSpeed(input())).toEqual({ tier: 3, speed: 5.6 });
         expect(movementSpeed(input({ classHash: warlock }))).toEqual({ tier: 3, speed: 5.6 });
@@ -251,6 +303,35 @@ describe('movement calculator', () => {
 });
 
 describe('movement source validation', () => {
+    it('rejects ambiguous, repeated, invalid and empty aliases', () => {
+        for (const aliases of [[12], [123, 123], [0], [-1], [4294967296], [1.5], []]) {
+            const source = fixture();
+            source.movement = data();
+            source.movement.Sources[0]!.AlsoMatches = aliases;
+            expect(validateSources(source).some((issue) => issue.severity === 'error')).toBe(true);
+        }
+    });
+    it('allows tiers above the cap, negative tier effects and unbounded positive multipliers', () => {
+        const source = fixture();
+        source.movement.Classes[0]!.BaseMobilityTier = 20;
+        source.movement.Sources = [
+            {
+                Hash: 123,
+                Name: 'Penalty',
+                RefType: 'item',
+                Activation: 'Always',
+                Effects: [
+                    { Type: 'MobilityTiers', Values: [-2] },
+                    { Type: 'ForwardMultiplier', Values: [10] },
+                ],
+            },
+        ];
+        expect(validateSources(source)).toEqual([]);
+        source.movement.Sources[0]!.Effects[1]!.Values = [0];
+        expect(validateSources(source).some((issue) => issue.message.includes('positive'))).toBe(
+            true,
+        );
+    });
     it('keeps Wraithwalk on the verified inventory catalyst rather than a perk RefType', () => {
         expect(data().Sources.find((entry) => entry.Hash === 3072857252)).toMatchObject({
             RefType: 'item',

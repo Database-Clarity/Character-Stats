@@ -17,12 +17,19 @@ import { PublishDialog } from './components/PublishDialog';
 import { QuickJump } from './components/QuickJump';
 import { ManifestStatusBadge } from './components/ManifestUI';
 import logo from './assets/clarity-logo.svg';
+import mobility from './assets/mobility.png';
+import { ConfirmDialog } from './components/ConfirmDialog';
 function Workspace({ onDisconnect }: { onDisconnect(): void }) {
     const state = useEditor(),
         [section, setSection] = useState<string>(statRegistry[0]!.name),
         [dialog, setDialog] = useState<'pending' | 'save' | 'publish' | 'jump' | null>(null),
         [request, setRequest] = useState<NavigationRequest | null>(null),
         [currentChange, setCurrentChange] = useState<string>();
+    const [disconnecting, setDisconnecting] = useState(false);
+    function disconnect() {
+        forgetLogin();
+        onDisconnect();
+    }
     const errors = state.issues.filter((i) => i.severity === 'error'),
         warnings = state.issues.filter((i) => i.severity === 'warning');
     function go(target: ChangeTarget) {
@@ -89,9 +96,6 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     <strong>Clarity</strong>
                     <span>data editor</span>
                 </div>
-                <span className="source-label" title={state.source.label}>
-                    {state.source.readOnly ? 'Character-Stats / local dev' : state.source.label}
-                </span>
                 <button
                     className="quick-jump-button"
                     onClick={() => setDialog('jump')}
@@ -99,7 +103,6 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                 >
                     Jump… <kbd>Ctrl K</kbd>
                 </button>
-                <ManifestStatusBadge />
                 <div className="toolbar">
                     <div className="change-controls">
                         <button
@@ -135,28 +138,46 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                         className="primary"
                         disabled={state.source.readOnly || !state.dirty.length}
                         onClick={() => setDialog('save')}
+                        title="Writes source edits (sources/, locale/en.json) to the branch, or opens a PR. On master this redeploys the site and sends English text to Crowdin; the data apps download does not change."
                     >
                         Save
                     </button>
-                    <button disabled={state.source.readOnly} onClick={() => setDialog('publish')}>
+                    <button
+                        disabled={state.source.readOnly}
+                        onClick={() => setDialog('publish')}
+                        title="Regenerates the data apps download (versions/<v>/ and update.json) from committed source edits. On master it also redeploys the site."
+                    >
                         Publish
                     </button>
-                    <button
-                        className="account-button"
-                        title="Disconnect account"
-                        aria-label="Disconnect"
-                        onClick={() => {
-                            if (
-                                (state.dirty.length || Object.keys(state.itemDrafts).length) &&
-                                !window.confirm('Disconnect and discard unsaved edits and drafts?')
-                            )
-                                return;
-                            forgetLogin();
-                            onDisconnect();
-                        }}
-                    >
-                        ↪
-                    </button>
+                    <div className="account-area">
+                        <span className="account-repo" title={state.source.label}>
+                            {state.source.readOnly ? 'Local dev' : state.source.label}
+                        </span>
+                        <ManifestStatusBadge />
+                        <button
+                            className="account-button"
+                            title="Sign out of this repository"
+                            aria-label="Sign out"
+                            onClick={() => {
+                                if (state.dirty.length || Object.keys(state.itemDrafts).length)
+                                    setDisconnecting(true);
+                                else disconnect();
+                            }}
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.7"
+                                aria-hidden="true"
+                            >
+                                <path d="M10 4H4v16h6M10 12h11m-5-5 5 5-5 5" />
+                            </svg>
+                            Sign out
+                        </button>
+                    </div>
                 </div>
             </header>
             <nav className="sidebar" aria-label="Stats">
@@ -174,7 +195,11 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                                 setRequest(null);
                             }}
                         >
-                            <ManifestIcon hash={item.hash} size={20} />
+                            {item.name === 'Movement' ? (
+                                <img src={mobility} width={20} height={20} alt="Mobility" />
+                            ) : (
+                                <ManifestIcon hash={item.hash} size={20} />
+                            )}
                             <span>{item.name}</span>
                             {count > 0 && <span className="count-badge">{count}</span>}
                         </button>
@@ -235,6 +260,15 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             {dialog === 'save' && <SaveDialog onClose={() => setDialog(null)} />}{' '}
             {dialog === 'publish' && <PublishDialog onClose={() => setDialog(null)} />}{' '}
             {dialog === 'jump' && <QuickJump onClose={() => setDialog(null)} onGo={go} />}
+            {disconnecting && (
+                <ConfirmDialog
+                    title="Sign out"
+                    message="Sign out and discard unsaved edits and drafts?"
+                    confirmLabel="Sign out and discard"
+                    onClose={() => setDisconnecting(false)}
+                    onConfirm={disconnect}
+                />
+            )}
         </div>
     );
 }

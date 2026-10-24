@@ -24,14 +24,21 @@ menus and dialogs. Every input has a label and keyboard focus ring.
 
 ### Manifest names and icons
 
-The manifest indicator in the top bar reports loading, ready, disabled, or error
-status. Disabled status includes its reason (for example, **No API key**); retry
-is shown only for an error. Names, icons, item types, stat icons, and class icons
+The refresh indicator in the repository/branch account area reports loading, ready,
+disabled, or error status. The initial load blocks editing with a modal showing
+the current step and indexing progress; it closes when the manifest is ready.
+If loading fails (including **No API key** configuration), the modal explains the
+error and offers **Continue without manifest**. Later refreshes do not block editing.
+Names, icons, item types, stat icons, and class icons
 come from Bungie's manifest. Source names remain editable: if one differs from its
 manifest name, the item header offers **Use manifest name**. Hash inputs show their
 resolved identity or an **Unknown hash** warning. Without a manifest, source names
 and hashes remain usable; numeric manual entry is always available. Class
-definitions without icon URLs use distinct local geometric class symbols.
+definitions without icon URLs use accurate CC0 Destiny class glyphs (source and
+licence recorded in the editor README). Prismatic ability icons have a small
+multicolour corner marker, detected from manifest ability types, not source names.
+Movement uses the provided Mobility glyph. **Sign out** is beside the repository
+and branch; unsaved edits or drafts require an in-app confirmation before leaving.
 
 ### Fields and curves
 
@@ -40,7 +47,9 @@ the information symbol for the field description. Modified fields have a cyan
 edge, dot, and **Revert** (curved arrow) button whose tooltip shows the saved value.
 
 Fields and Text have an **On this page** outline. Select a section to jump to it;
-the outline tracks scrolling. Sections, segments, locale entries, and change
+the outline tracks scrolling and can be collapsed. Below 1100px it automatically
+collapses into a floating **On this page** toggle/popover. Long names are ellipsized
+with their full text available on hover. Sections, segments, locale entries, and change
 groups collapse using their summary row. **Collapse all / Expand all** helps with
 long pages. Collapse preferences are remembered in localStorage, independently of
 unsaved data; edits themselves are not persisted.
@@ -53,7 +62,11 @@ inputs. Add, reorder, collapse, and remove segments with their inline controls.
 Segments preserves every evaluated value exactly; the conversion is checked
 against the expanded array before it is applied. **View JSON** is read-only
 debugging output, not a required editing surface. Core validation checks coverage,
-expressions, and numeric constraints.
+expressions, and numeric constraints. Tick labels retain their natural proportions
+at every plot width; the x/y value label follows the pointer, independently of the
+nearest-value crosshair. Number controls step by one for integers, by 0.01 for
+fields constrained to 0–1, or by the current decimal precision otherwise
+(for example, 0.875 → 0.001 and 91 → 1).
 
 Enum fields use compact selects; hover the selected value or an option for its
 description. Object fields expand into inline spec-driven groups. Object arrays
@@ -107,6 +120,10 @@ atomically. **Revert requirements table** restores Requirements and all of its
 `lengthOf` parallel arrays together; columns cannot be reverted independently.
 Plain numeric arrays use individual inputs, with Add/Remove controls and meaningful
 zero-based labels (for example **Charges stored: 0**).
+Every other integer array with an `itemRef` hint (including **BoostRequiresAll**
+and **AlsoMatches**) uses removable icon/name chips and a manifest picker. These
+plain hash references do not treat zero as a wildcard or negative values as
+subclasses. Manual hashes remain available without a manifest.
 
 ### Cooldown context
 
@@ -115,6 +132,9 @@ context content. An ability selection shows only that ability's base cooldown
 and one before to after / delta row for each applicable override. An override
 selection shows only the abilities it affects. There is no "all overrides"
 comparison. Calculations use the shared core; the stat value clamps at 100.
+Scaled results are labeled **Cooldown at &lt;value&gt; &lt;Stat name&gt;**.
+Stats without cooldown scaling, including Super, show **Base cooldown** and
+their fixed cooldown without a cooldown-stat slider.
 Negative subclass filters are explicitly **unresolved: subclass filter**, never
 silently applied. Large tables scroll below their sticky header.
 
@@ -183,6 +203,10 @@ follows the saved branch. If the commit succeeds but PR creation fails, the chan
 remain saved on the new branch and the dialog explains that a PR must be opened
 manually.
 
+**Save** writes source edits (`sources/`, `locale/en.json`) to the branch or opens
+a PR. On `master`, this redeploys the site and sends English text to Crowdin,
+but **does not change the data apps download**. Hover Save for this distinction.
+
 ## Publish
 
 Choose **Publish** only after the source changes are committed to the selected
@@ -197,6 +221,10 @@ seconds to appear.
 The dialog states the outcome explicitly: on `master`, **Build data and deploy
 Pages**; on any other branch, **Build data on `<branch>` &mdash; does not deploy Pages**.
 Publishing is unavailable when connected with **Local (read-only dev)** data.
+**Publish** regenerates the data apps download (`versions/<v>/` and `update.json`)
+from the source edits already committed to that branch. On `master`, it also
+redeploys the site. Hover Publish for this distinction; saving source edits alone
+does not regenerate these published JSON files.
 
 ## Development and limitations
 

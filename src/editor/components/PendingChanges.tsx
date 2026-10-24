@@ -1,4 +1,6 @@
 import { useEditor } from '../state/store';
+import { useState } from 'react';
+import { ConfirmDialog } from './ConfirmDialog';
 import type { EditorChange } from '../state/editing';
 import { Collapse } from './EditorPrimitives';
 import { Modal } from './Modal';
@@ -111,16 +113,32 @@ export function PendingChanges({
     onGo(change: EditorChange): void;
 }) {
     const { dirty, originals, serialized, dispatch, changes } = useEditor();
+    const [confirmation, setConfirmation] = useState<{ file?: string } | null>(null);
     function discard(file?: string) {
-        if (
-            window.confirm(
-                file ? `Discard all changes to ${file}?` : 'Discard all pending changes?',
-            )
-        )
-            dispatch(file ? { type: 'discard', file } : { type: 'discard' });
+        setConfirmation(file ? { file } : {});
     }
     return (
         <Modal title={`Changes (${changes.length})`} onClose={onClose} className="changes-dialog">
+            {confirmation && (
+                <ConfirmDialog
+                    title="Discard changes"
+                    message={
+                        confirmation.file
+                            ? `Discard all changes to ${confirmation.file}?`
+                            : 'Discard all pending changes?'
+                    }
+                    confirmLabel="Discard"
+                    onClose={() => setConfirmation(null)}
+                    onConfirm={() => {
+                        dispatch(
+                            confirmation.file
+                                ? { type: 'discard', file: confirmation.file }
+                                : { type: 'discard' },
+                        );
+                        setConfirmation(null);
+                    }}
+                />
+            )}
             <div className="section-bar">
                 <p className="muted">
                     {changes.length} changes · {dirty.length} files

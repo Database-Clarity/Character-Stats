@@ -12,6 +12,7 @@ import CurveModeToggle from './CurveModeToggle';
 import CurvePlot from './CurvePlot';
 import SegmentList from './SegmentList';
 import { valuesToSegments } from './curveValuesConversion';
+import { numberStep } from './numberStep';
 
 export function CurveEditor({
     spec,
@@ -133,7 +134,7 @@ export function CurveEditor({
                                 {domain[0] + i}
                                 <input
                                     type="number"
-                                    step="any"
+                                    step={numberStep(n, spec)}
                                     aria-label={`${spec.key} value ${domain[0] + i}`}
                                     value={Number.isFinite(n) ? Number(n) : ''}
                                     onChange={(event) =>

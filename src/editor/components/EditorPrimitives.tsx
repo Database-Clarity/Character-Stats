@@ -115,6 +115,15 @@ export function LongPage({
 }) {
     const root = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(items[0]?.id);
+    const [outlineOpen, setOutlineOpen] = useState(
+        () => !window.matchMedia('(max-width: 1100px)').matches,
+    );
+    useEffect(() => {
+        const media = window.matchMedia('(max-width: 1100px)');
+        const change = () => setOutlineOpen(!media.matches);
+        media.addEventListener('change', change);
+        return () => media.removeEventListener('change', change);
+    }, []);
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -133,29 +142,39 @@ export function LongPage({
     }
     return (
         <div className="long-page">
-            <nav className="outline" aria-label={`${label} outline`}>
-                <div className="outline-heading">ON THIS PAGE</div>
-                {items.map((item) => (
-                    <button
-                        key={item.id}
-                        aria-current={active === item.id ? 'location' : undefined}
-                        onClick={() => {
-                            const el = Array.from(
-                                root.current?.querySelectorAll<HTMLElement>('[data-outline]') ?? [],
-                            ).find((e) => e.dataset.outline === item.id);
-                            if (!el) return;
-                            el.querySelector('details')?.setAttribute('open', '');
-                            el.scrollIntoView({ block: 'start', behavior: 'smooth' });
-                        }}
-                    >
-                        {item.label}
-                    </button>
-                ))}
-                <div className="outline-actions">
-                    <button onClick={() => toggle(false)}>Collapse all</button>
-                    <button onClick={() => toggle(true)}>Expand all</button>
-                </div>
-            </nav>
+            <details
+                className="outline-shell"
+                open={outlineOpen}
+                onToggle={(event) => setOutlineOpen(event.currentTarget.open)}
+            >
+                <summary className="outline-heading">On this page</summary>
+                <nav className="outline" aria-label={`${label} outline`}>
+                    {items.map((item) => (
+                        <button
+                            key={item.id}
+                            title={item.label}
+                            aria-current={active === item.id ? 'location' : undefined}
+                            onClick={() => {
+                                const el = Array.from(
+                                    root.current?.querySelectorAll<HTMLElement>('[data-outline]') ??
+                                        [],
+                                ).find((e) => e.dataset.outline === item.id);
+                                if (!el) return;
+                                el.querySelector('details')?.setAttribute('open', '');
+                                el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                                if (window.matchMedia('(max-width: 1100px)').matches)
+                                    setOutlineOpen(false);
+                            }}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                    <div className="outline-actions">
+                        <button onClick={() => toggle(false)}>Collapse all</button>
+                        <button onClick={() => toggle(true)}>Expand all</button>
+                    </div>
+                </nav>
+            </details>
             <div className="scroll-pane long-content" ref={root}>
                 {children}
             </div>

@@ -52,6 +52,43 @@ describe('context calculations', () => {
         const source = fixture().stats.find((s) => s.Name === 'Melee')!;
         expect(effectiveCooldown(source, source.Abilities![0]!, 0).cooldown).toBe(100);
     });
+    it.each([0, 50, 100, 200])(
+        'keeps Super cooldown fixed at stat %i, including overrides',
+        (statValue) => {
+            const source = fixture().stats.find((s) => s.Name === 'Super')!;
+            const superAbility = source.SuperAbilities![0]!;
+            expect(source.Fields).not.toHaveProperty('CooldownScalars');
+            expect(effectiveCooldown(source, superAbility, statValue).cooldown).toBe(200);
+            expect(calculateCooldown(superAbility, [], curve, statValue).cooldown).toBe(200);
+            expect(
+                effectiveCooldown(source, superAbility, statValue, [
+                    { Hash: 3, Name: 'Scale', Requirements: [superAbility.Hash], Scalar: [0.5] },
+                    {
+                        Hash: 4,
+                        Name: 'Replace',
+                        Requirements: [0],
+                        CooldownOverride: 80,
+                        Scalar: [2],
+                    },
+                ]).cooldown,
+            ).toBe(80);
+        },
+    );
+    it.each([0, 100, 200])(
+        'uses identity scaling without a cooldown curve at stat %i',
+        (statValue) => {
+            const source = fixture().stats.find((s) => s.Name === 'Melee')!;
+            delete source.Fields.CooldownScalars;
+            const overrides: Override[] = [
+                { Hash: 3, Name: 'Replace', Requirements: [0], CooldownOverride: 80 },
+                { Hash: 4, Name: 'Scale', Requirements: [ability.Hash], Scalar: [0.5] },
+            ];
+            expect(calculateCooldown(ability, [], undefined, statValue).cooldown).toBe(100);
+            expect(effectiveCooldown(source, ability, statValue).cooldown).toBe(100);
+            expect(effectiveCooldown(source, ability, statValue, overrides).cooldown).toBe(40);
+            expect(() => calculateCooldown(ability, [], undefined, NaN)).toThrow('finite');
+        },
+    );
 });
 describe('locale helpers', () => {
     it('extracts unique placeholders and recognizes the declarative formatting token list', () => {

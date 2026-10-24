@@ -32,6 +32,44 @@ describe('audit editor regressions', () => {
     it('previews the base ability without stacking overrides', () => {
         expect(tooltipAbilityContext(source, ability, 100).Cooldown).toBe(64);
     });
+    it('renders fixed Super cooldowns without a stat control', () => {
+        const superAbility = {
+            Hash: 7,
+            Name: 'Nova Bomb',
+            BaseCooldown: 600,
+            ActiveRegenScalar: 1,
+        };
+        const fixed: StatSource = {
+            Hash: 1,
+            Name: 'Super',
+            Fields: {},
+            SuperAbilities: [superAbility],
+        };
+        for (const statValue of [0, 59, 100, 200])
+            expect(tooltipAbilityContext(fixed, superAbility, statValue).Cooldown).toBe(600);
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source: fixed,
+                collection: 'SuperAbilities',
+                selected: superAbility,
+            }),
+        );
+        expect(html).toContain('600 s');
+        expect(html).toContain('Base cooldown');
+        expect(html).not.toContain('Context stat value');
+        expect(html).not.toContain('No cooldown context');
+    });
+    it('labels an unscaled ability value as its base cooldown', () => {
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source,
+                collection: 'Abilities',
+                selected: ability,
+            }),
+        );
+        expect(html).toContain('Base cooldown');
+        expect(html).not.toContain('Base cooldown at');
+    });
     it.each([
         null,
         5,

@@ -127,6 +127,8 @@
     min-width: 0;
     font-size: 12px;
     text-align: left;
+    max-width: 100%;
+    overflow: hidden;
 }
 .hash-identity img,
 .hash-identity > :first-child {
@@ -139,6 +141,31 @@
     flex-direction: column;
     min-width: 0;
     line-height: 17px;
+    flex: 1;
+}
+.identity-icon {
+    display: inline-flex;
+    position: relative;
+}
+.class-symbol {
+    filter: invert(1);
+    object-fit: contain;
+}
+.prismatic-icon {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+.prismatic-marker {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 9px;
+    height: 9px;
+    border: 1px solid #f3daff;
+    background: linear-gradient(135deg, #8de7ff, #c077ec 52%, #ff90a4);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    filter: drop-shadow(0 0 2px #dc93fa);
 }
 .identity-text > span {
     white-space: nowrap;

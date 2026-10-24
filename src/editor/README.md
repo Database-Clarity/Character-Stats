@@ -34,8 +34,9 @@ middleware or configuration changes are needed.
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
   portaled outside scrolling panes, so it cannot be clipped by list boundaries.
   On widths below 1280px, Context becomes an explicitly toggled side overlay.
-- `RequirementEditor` recognizes `intArray` + `itemRef` spec hints. Reference
-  chips, grouped pickers, and enabled parallel columns use `lengthOf`, not field
+- `RequirementEditor` handles reference arrays with subclass/parallel-column
+  semantics; `ReferenceArrayInput` handles ordinary `intArray` + `itemRef` fields.
+  Reference chips, grouped pickers, and enabled parallel columns use `lengthOf`, not field
   name switches. Reverting Requirements restores the whole requirement/parallel-array
   table atomically. `ChargeBasedScaling` and Movement arrays use `indexLabel` hints.
 - `CurveEditor` uses core expansion/validation; converting Values to Segments
@@ -53,8 +54,8 @@ middleware or configuration changes are needed.
 - `ManifestUI` uses only the public `manifest/` contract for status, identity
   lookup, icons, subclasses, and search. One search shows role-matched Suggested
   results followed by Other matches; disabled/unavailable manifest states explain
-  why and allow creation of a blank draft. `ClassIcon` supplies distinct local
-  geometric class symbols when a class definition has no icon URL. `QuickJump`
+  why and allow creation of a blank draft. `ClassIcon` supplies accurate local
+  class glyphs when a class definition has no icon URL. `QuickJump`
   searches registered stats/tabs and source item names/hashes. The UI still works without a manifest.
 - Movement shows Rules plus Classes/Sources collections. `MovementContext`
   validates working data before calling core `movementSpeed`, with pinned class,
@@ -77,6 +78,44 @@ middleware or configuration changes are needed.
   runs. It states that `master` builds data and deploys Pages, while other branches
   build data only; the first v2 release requires schema version `2.0`. Local dev mode
   cannot save or publish.
+
+## Editor polish and assets
+
+- Plots measure their container with `ResizeObserver` and render in CSS-pixel SVG
+  coordinates, preserving tick text proportions. The hover label follows pointer
+  coordinates independently of the nearest-value crosshair.
+- `numberStep.ts` is the tested numeric-step helper: integer fields step by one,
+  fields constrained to 0–1 by hundredths, and other values by their decimal
+  precision (including scientific notation). Numeric arrays and curve values use it.
+- `manifest/prismatic.ts` detects prismatic ability plugs from manifest type names
+  ending in `| Light Ability` / `| Darkness Ability`, never source name suffixes.
+  Every manifest icon surface gets the same small corner marker.
+- Any `intArray` with `itemRef` uses removable identity chips and a manifest picker.
+  Plain reference arrays have no wildcard or negative-subclass semantics; requirement
+  tables retain those spec-declared semantics and their atomic parallel columns.
+- The outline can collapse; below 1100px it automatically becomes a closed floating
+  disclosure. Labels ellipsize rather than breaking into individual letters.
+- First manifest load blocks editing with a modal showing the current loading step
+  and indexing progress. Errors (including missing API-key configuration) offer an
+  explicit **Continue without manifest** action. Later refreshes stay nonblocking.
+  Refresh and sign-out live in the repository/branch account area. Destructive
+  confirmations reuse `Modal`, not browser confirm/alert.
+- A stat without `CooldownScalars` still previews its fixed base cooldown through
+  core and has no cooldown-stat slider. Other stat-dependent text previews retain
+  their stat controls.
+- **Save** writes source edits (`sources/`, `locale/en.json`) in one branch commit,
+  or creates a PR. On `master`, it redeploys the site and sends English text to
+  Crowdin, but does not change the data apps download. **Publish** regenerates
+  `versions/<v>/` and `update.json` from committed source data; on `master`, it also
+  redeploys the site. Tooltips and the dialogs distinguish these operations.
+
+Class glyphs (`assets/class-titan.svg`, `assets/class-hunter.svg`,
+`assets/class-warlock.svg`) are unmodified SVGs from
+[justrealmilk/destiny-icons](https://github.com/justrealmilk/destiny-icons/tree/394ed051455e938f72ddd600d42cf87600ec7172/general),
+revision `394ed051455e938f72ddd600d42cf87600ec7172`, under
+[CC0 1.0 Universal](https://github.com/justrealmilk/destiny-icons/blob/394ed051455e938f72ddd600d42cf87600ec7172/LICENSE).
+CSS inverts their black fill for the dark UI. The owner-provided
+`assets/mobility.png` is the Movement navigation glyph.
 
 ## Specs and styles
 

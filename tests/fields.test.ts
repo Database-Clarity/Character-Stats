@@ -60,9 +60,8 @@ describe('entity validation', () => {
             { Hash: -1 },
             { Name: '' },
             { BaseCooldown: 0 },
-            { ChunkEnergyScalar: 0.1 },
-            { ChunkEnergyScalar: 1.1 },
-            { ChargeBasedScaling: [1] },
+            { ChunkEnergyScalar: -0.1 },
+            { ChargeBasedScaling: [] },
             { ChargeBasedScaling: [1, 0] },
         ]) {
             expect(validateEntity(abilitySpec, { ...ability, ...patch }).length).toBeGreaterThan(0);
@@ -71,16 +70,27 @@ describe('entity validation', () => {
             validateEntity(abilitySpec, { ...ability, ChargeBasedScaling: [1, 2], Notes: 'why' }),
         ).toEqual([]);
         expect(validateEntity(abilitySpec, { ...ability, Notes: '' })).toEqual([]);
+        for (const ChunkEnergyScalar of [0, 0.1, 1.1, 10])
+            expect(
+                validateEntity(abilitySpec, {
+                    ...ability,
+                    ChunkEnergyScalar,
+                    ChargeBasedScaling: [1],
+                }),
+            ).toEqual([]);
         expect(validateEntity(abilitySpec, { ...ability, Unknown: 1 })).not.toEqual([]);
     });
-    it('enforces Super regen bounds, rejects retired tier', () => {
+    it('allows nonnegative Super regen without an arbitrary upper bound, rejects retired tier', () => {
         const superAbility = { Hash: 1, Name: 'S', BaseCooldown: 100, ActiveRegenScalar: 1 };
         expect(validateEntity(superAbilitySpec, superAbility)).toEqual([]);
-        for (const ActiveRegenScalar of [0, 2]) {
+        for (const ActiveRegenScalar of [0, 2, 10]) {
             expect(
                 validateEntity(superAbilitySpec, { ...superAbility, ActiveRegenScalar }),
-            ).not.toEqual([]);
+            ).toEqual([]);
         }
+        expect(
+            validateEntity(superAbilitySpec, { ...superAbility, ActiveRegenScalar: -1 }),
+        ).not.toEqual([]);
         expect(validateEntity(superAbilitySpec, { ...superAbility, SuperTier: 1 })).not.toEqual([]);
     });
     it('enforces lengthOf and anyOf', () => {
@@ -99,8 +109,11 @@ describe('entity validation', () => {
             validateEntity(overrideSpec, { ...override, Requirements: [], CooldownOverride: 10 }),
         ).not.toEqual([]);
         expect(
-            validateEntity(overrideSpec, { ...override, ChunkEnergyOverride: [0.1, 1, 0.5] }),
+            validateEntity(overrideSpec, { ...override, ChunkEnergyOverride: [-0.1, 1, 0.5] }),
         ).not.toEqual([]);
+        expect(
+            validateEntity(overrideSpec, { ...override, ChunkEnergyOverride: [0, 0.1, 10] }),
+        ).toEqual([]);
     });
     it('enforces uniqueness within each collection, including movement class hashes', () => {
         expect(

@@ -124,6 +124,21 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
             issues.push(...validateCollection(spec, movement[key], 'movement.' + key));
         }
         if (Array.isArray(movement.Sources)) {
+            const sourceHashes = new Set<number>();
+            movement.Sources.forEach((source: unknown, index: number) => {
+                if (!isRecord(source)) return;
+                const registerHash = (hash: unknown, path: string) => {
+                    if (typeof hash !== 'number') return;
+                    if (sourceHashes.has(hash))
+                        error(path, 'Duplicate movement source hash or alias: ' + hash);
+                    sourceHashes.add(hash);
+                };
+                registerHash(source.Hash, `movement.Sources[${index}].Hash`);
+                if (Array.isArray(source.AlsoMatches))
+                    source.AlsoMatches.forEach((hash: unknown, aliasIndex: number) =>
+                        registerHash(hash, `movement.Sources[${index}].AlsoMatches[${aliasIndex}]`),
+                    );
+            });
             movement.Sources.forEach((source: unknown, index: number) => {
                 if (!isRecord(source)) return;
                 const path = 'movement.Sources[' + index + ']';

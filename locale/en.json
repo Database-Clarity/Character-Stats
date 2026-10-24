@@ -16,8 +16,8 @@
     },
     "Super": {
         "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nIncreases Super Damage when enhanced.",
-        "BaseStatTooltip": "Your Super Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}} effectiveness.",
-        "EnhancedStatTooltip": "Your Super Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
+        "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
     },
     "Class": {
         "Overview": "Class governs your Class Ability's passive cooldown and how much Class Ability Energy you gain from perks.\n\nCasting your Class Ability grants you an Overshield when enhanced.",
@@ -74,6 +74,10 @@
             },
             "2213377102": {
                 "Description": "MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."
+            },
+            "1888623310": {
+                "Description": "While MIDA Multi-Tool is equipped, MIDA Macro-Tool grants a 1.1 forward-walk multiplier. It does not grant Lightweight Mobility tiers or a sprint bonus.",
+                "Condition": "While MIDA Macro-Tool is held and MIDA Multi-Tool is equipped."
             },
             "2470575005": {
                 "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."

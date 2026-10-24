@@ -38,7 +38,7 @@ export interface FieldSpec extends NumericConstraints {
     label?: string;
     multiline?: boolean;
     group?: string;
-    itemRef?: 'ability' | 'any';
+    itemRef?: 'ability' | 'item' | 'any';
     refSubclassFilters?: boolean;
     indexLabel?: string;
 }

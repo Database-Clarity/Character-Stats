@@ -4,6 +4,7 @@ import { useManifest } from '../manifest';
 import { editRequirement, equal, revertRequirementTable, toggleParallel } from '../state/editing';
 import { HashIdentity } from './ManifestUI';
 import { Modal } from './Modal';
+import { numberStep } from './numberStep';
 
 export function RequirementEditor({
     field,
@@ -208,7 +209,11 @@ export function RequirementEditor({
                                                 <input
                                                     aria-label={`${f.key} requirement ${index}`}
                                                     type="number"
-                                                    step="any"
+                                                    step={numberStep(
+                                                        (value[f.key] as number[])[index],
+                                                        f.items,
+                                                        f.kind === 'intArray' || f.items?.integer,
+                                                    )}
                                                     value={
                                                         Number.isFinite(
                                                             (value[f.key] as number[])[index],

@@ -1,13 +1,29 @@
 .long-page {
     display: grid;
-    grid-template-columns: 184px minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr);
     height: 100%;
     min-height: 0;
+    position: relative;
+}
+.outline-shell {
+    width: 200px;
+    min-width: 0;
+    min-height: 0;
+    background: #15171b;
+    border-right: 1px solid var(--border);
+    overflow: auto;
+}
+.outline-shell:not([open]) {
+    width: 112px;
+}
+.outline-shell > summary {
+    cursor: pointer;
+    padding: 12px 8px;
+    white-space: nowrap;
 }
 .outline {
-    border-right: 1px solid var(--border);
     background: #15171b;
-    padding: 12px 8px;
+    padding: 0 8px 12px;
     overflow: auto;
     scrollbar-width: thin;
 }
@@ -28,7 +44,9 @@
     font-size: 11px;
     padding: 4px 8px;
     min-height: 26px;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .outline > button[aria-current] {
     border-left-color: var(--accent);
@@ -204,6 +222,20 @@
     height: 176px;
     min-width: 0;
     margin: 4px 0;
+    position: relative;
+}
+.plot-tooltip {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    padding: 4px 8px;
+    background: #23262c;
+    border: 1px solid var(--border);
+    font:
+        11px Consolas,
+        monospace;
+    color: #f0f3f8;
+    z-index: 2;
 }
 .plot svg {
     width: 100%;
@@ -359,8 +391,12 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 16px;
+    align-items: start;
 }
 .text-source {
+    align-content: start;
+    align-items: start;
+    grid-template-rows: auto auto;
     margin: 0;
     font-size: 11px;
     gap: 4px;
@@ -372,6 +408,7 @@
 }
 .preview-column {
     min-width: 0;
+    align-self: start;
 }
 .preview-column h4 {
     font-weight: 400;
@@ -422,4 +459,21 @@
     margin: 0;
     font-size: 11px;
     white-space: nowrap;
+}
+.reference-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+.reference-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 4px;
+    background: #20242a;
 }

@@ -43,7 +43,8 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
                         ? 'Build data and deploy Pages'
                         : `Build data on ${github?.client.repo.branch ?? 'the selected branch'} — does not deploy Pages`}
                 </strong>
-                . Only data already committed to GitHub is published.
+                . Regenerates the data apps download (versions/&lt;v&gt;/ and update.json) from
+                source edits already committed to GitHub. On master it also redeploys the site.
             </p>
             {dirty.length > 0 && (
                 <p className="warning">

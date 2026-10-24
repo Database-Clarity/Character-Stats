@@ -254,12 +254,19 @@ small {
     display: flex;
     gap: 16px;
     min-width: 112px;
+    align-items: center;
+    margin-left: auto;
 }
 kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 18px;
     font:
         10px 'Cascadia Code',
         Consolas,
         monospace;
+    line-height: 16px;
     color: var(--muted);
     border: 1px solid var(--border);
     border-radius: 2px;
@@ -300,7 +307,7 @@ kbd {
         Consolas,
         monospace;
     background: #30363e;
-    color: #e3e6ed;
+    color: var(--info);
     border-radius: 3px;
     padding: 0 5px;
     min-width: 18px;
@@ -308,9 +315,30 @@ kbd {
     line-height: 18px;
 }
 .account-button {
-    font-size: 17px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
     background: transparent;
     border-color: transparent;
+}
+.account-area {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0 4px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--border);
+    max-width: 240px;
+}
+.account-repo {
+    grid-column: 1 / -1;
+    font-size: 10px;
+    line-height: 12px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .sidebar {
     border-right: 1px solid var(--border);

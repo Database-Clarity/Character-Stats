@@ -23,7 +23,12 @@ export function EntityForm({
     fieldPrefix?: string;
     onChange(next: Record<string, unknown>): void;
 }) {
-    const requirements = spec.fields.filter((f) => f.itemRef && f.kind === 'intArray');
+    const requirements = spec.fields.filter(
+        (f) =>
+            f.itemRef &&
+            f.kind === 'intArray' &&
+            (f.refSubclassFilters || spec.fields.some((column) => column.lengthOf === f.key)),
+    );
     const normal = spec.fields.filter(
         (f) => !requirements.includes(f) && !requirements.some((r) => f.lengthOf === r.key),
     );

@@ -87,9 +87,7 @@ export function EntityList({
         setFormSession((session) => selectEntityFormSession(session, selected));
     }, [selected]);
     const abilities = previewCollections(source).abilities;
-    const hasContext =
-        !!context ||
-        (isRecord(source.Fields) && !!source.Fields.CooldownScalars && abilities.length > 0);
+    const hasContext = !!context || abilities.length > 0;
     const rows = indexedRows.sort((a, b) =>
         String(
             lookup(Number(a.item[idKey]), manifestTable(a.item))?.name ?? a.item.Name,

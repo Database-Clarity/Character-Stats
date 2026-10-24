@@ -46,14 +46,17 @@ export function HashIdentity({
                 )}
             </span>
             <span className="identity-text">
-                <span>
+                <span title={resolved ?? 'Unknown hash'}>
                     {resolved ?? 'Unknown hash'}
                     {!entry && hash !== 0 && !name && (
                         <span className="warning"> · unknown hash</span>
                     )}
                 </span>
                 {!compact && (
-                    <small className="mono">
+                    <small
+                        className="mono"
+                        title={`${hash}${entry?.typeName ? ` · ${entry.typeName}` : ''}`}
+                    >
                         {hash}
                         {entry?.typeName ? ` · ${entry.typeName}` : ''}
                     </small>
@@ -68,7 +71,7 @@ export function ManifestStatusBadge() {
     if (status.state === 'error')
         return (
             <button className="manifest-status error" onClick={refresh} title={status.error}>
-                Manifest unavailable - retry
+                ↻ Manifest unavailable - retry
             </button>
         );
     if (status.state === 'ready')
@@ -79,7 +82,7 @@ export function ManifestStatusBadge() {
                 title={`${text}. Click to refresh.`}
                 aria-label="Refresh manifest"
             >
-                Manifest
+                ↻ Manifest
             </button>
         );
     return (

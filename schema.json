@@ -50,9 +50,8 @@
                 },
                 "ChunkEnergyScalar": {
                     "type": "number",
-                    "maximum": 1,
-                    "exclusiveMinimum": 0.1,
-                    "description": "Scalar for chunk energy gains; greater than 0.1 and at most 1."
+                    "minimum": 0,
+                    "description": "Nonnegative scalar for chunk energy gains."
                 },
                 "ChargeBasedScaling": {
                     "type": "array",
@@ -60,7 +59,7 @@
                         "type": "number",
                         "exclusiveMinimum": 0
                     },
-                    "minItems": 2,
+                    "minItems": 1,
                     "description": "Entry i is the charge-rate scalar while i charges are stored (starting at i = 0). Array length is the maximum number of charges. AbilityName, ChargeCount and ChargeBasedScaling tooltip tokens are supplied by the consumer per ability, not properties of the stat."
                 }
             },
@@ -90,13 +89,12 @@
                 "BaseCooldown": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Base cooldown in seconds. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
+                    "description": "Fixed Super cooldown in seconds, independent of the Super stat. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it."
                 },
                 "ActiveRegenScalar": {
                     "type": "number",
-                    "exclusiveMinimum": 0,
-                    "exclusiveMaximum": 2,
-                    "description": "Active Super regeneration scalar; greater than 0 and less than 2."
+                    "minimum": 0,
+                    "description": "Nonnegative active Super regeneration scalar."
                 }
             },
             "required": [
@@ -135,7 +133,7 @@
                 "CooldownOverride": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Replacement base cooldown in seconds for matching Requirements. Applied before all Scalar multipliers and then CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
+                    "description": "Replacement base cooldown in seconds for matching Requirements. Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
                 },
                 "Scalar": {
                     "type": "array",
@@ -144,14 +142,13 @@
                         "exclusiveMinimum": 0
                     },
                     "minItems": 1,
-                    "description": "Dimensionless cooldown multipliers, one per Requirements entry. All matching indices stack multiplicatively after CooldownOverride replaces BaseCooldown (in seconds), and before CooldownScalars[min(stat value, 100)]."
+                    "description": "Dimensionless cooldown multipliers, one per Requirements entry. All matching indices stack multiplicatively after CooldownOverride replaces BaseCooldown (in seconds), and before CooldownScalars[min(stat value, 100)] for non-Super abilities."
                 },
                 "ChunkEnergyOverride": {
                     "type": "array",
                     "items": {
                         "type": "number",
-                        "maximum": 1,
-                        "exclusiveMinimum": 0.1
+                        "minimum": 0
                     },
                     "minItems": 1,
                     "description": "Chunk energy scalars for corresponding Requirements, applied in place of ChunkEnergyScalar."
@@ -199,13 +196,11 @@
                 "BaseMobilityTier": {
                     "type": "integer",
                     "minimum": 0,
-                    "maximum": 13,
                     "description": "Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified."
                 },
                 "BaseMobilityTierPVP": {
                     "type": "integer",
                     "minimum": 0,
-                    "maximum": 13,
                     "description": "Base hidden Mobility tier in PvP when it differs from PvE."
                 },
                 "BaseSprintSpeed": {
@@ -325,8 +320,7 @@
                 "Values": {
                     "type": "array",
                     "items": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "number"
                     },
                     "minItems": 1,
                     "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
@@ -334,8 +328,7 @@
                 "BoostedValues": {
                     "type": "array",
                     "items": {
-                        "type": "number",
-                        "minimum": 0
+                        "type": "number"
                     },
                     "minItems": 1,
                     "description": "Replacement values when every BoostRequiresAll hash is equipped; length must match Values."
@@ -446,8 +439,7 @@
                             "Values": {
                                 "type": "array",
                                 "items": {
-                                    "type": "number",
-                                    "minimum": 0
+                                    "type": "number"
                                 },
                                 "minItems": 1,
                                 "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
@@ -455,8 +447,7 @@
                             "BoostedValues": {
                                 "type": "array",
                                 "items": {
-                                    "type": "number",
-                                    "minimum": 0
+                                    "type": "number"
                                 },
                                 "minItems": 1,
                                 "description": "Replacement values when every BoostRequiresAll hash is equipped; length must match Values."
@@ -469,6 +460,16 @@
                     },
                     "minItems": 1,
                     "description": "Effects from this source, with at most one entry for each effect type."
+                },
+                "AlsoMatches": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4294967295
+                    },
+                    "minItems": 1,
+                    "description": "Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once."
                 },
                 "BoostRequiresAll": {
                     "type": "array",
@@ -785,16 +786,6 @@
                     "$ref": "#/definitions/EnhancedStatTooltip",
                     "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
                 },
-                "CooldownScalars": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minimum": 0
-                    },
-                    "minItems": 101,
-                    "maxItems": 101,
-                    "description": "Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown in seconds, replace it with applicable CooldownOverride (last matching replacement in collection order), multiply all matching Scalar entries, then multiply by CooldownScalars[min(stat value, 100)]. Requirements select with 0 as wildcard, positive ability hash, or negative subclass hash requiring consumer-side resolution. Stat values 0-100: index = stat value."
-                },
                 "EnergyGainScalar": {
                     "type": "array",
                     "items": {
@@ -842,7 +833,6 @@
                 "Overview",
                 "BaseStatTooltip",
                 "EnhancedStatTooltip",
-                "CooldownScalars",
                 "EnergyGainScalar",
                 "ActiveRegenScalars",
                 "SuperDamageIncrease",

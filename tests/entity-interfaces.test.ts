@@ -74,6 +74,7 @@ const movementSourceKeys = {
     RefType: true,
     Activation: true,
     Effects: true,
+    AlsoMatches: true,
     BoostRequiresAll: true,
     Notes: true,
 } satisfies Record<keyof MovementSourceEntry, true>;

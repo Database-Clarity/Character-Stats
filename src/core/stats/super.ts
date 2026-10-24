@@ -8,17 +8,6 @@ export const superSpec: StatSpec = {
     abilityKind: 'super',
     collections: { SuperAbilities: superAbilitySpec, Overrides: overrideSpec },
     fields: [
-        curve('CooldownScalars', {
-            domain: [0, 100],
-            items: { min: 0 },
-            description:
-                'Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown ' +
-                'in seconds, replace it with applicable CooldownOverride (last matching replacement ' +
-                'in collection order), multiply all matching Scalar entries, then multiply by ' +
-                'CooldownScalars[min(stat value, 100)]. Requirements select with 0 as wildcard, ' +
-                'positive ability hash, or negative subclass hash requiring consumer-side resolution.',
-        }),
-
         curve('EnergyGainScalar', {
             domain: [0, 100],
             items: { min: 0 },

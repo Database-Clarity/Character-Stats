@@ -77,6 +77,36 @@
         {
             "Hash": 1458010786,
             "Name": "Lightweight Frame",
+            "AlsoMatches": [
+                118439741,
+                132189785,
+                308595185,
+                395096174,
+                474269988,
+                539564471,
+                540070330,
+                745725302,
+                885620491,
+                956390015,
+                1278053348,
+                1665848857,
+                1671927875,
+                1713206376,
+                2012877834,
+                2105054824,
+                2108556049,
+                2753228730,
+                3048420653,
+                3272152575,
+                3377988521,
+                3472640090,
+                3725333007,
+                3728676938,
+                3758615625,
+                4008973208,
+                4024789138,
+                4080055066
+            ],
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
@@ -99,7 +129,7 @@
                     ]
                 }
             ],
-            "Notes": "Verified Intrinsic plug. Apply once for the readied lightweight weapon, not again alongside its MIDA Synergy intrinsic."
+            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137: all Lightweight Frame plugs and movement-granting grenade-launcher Micro-Missile Frame plugs verified. Rocket-sidearm and pulse-rifle Micro-Missile frames are not aliases. Apply once for the readied lightweight weapon, not again alongside its MIDA Synergy intrinsic."
         },
         {
             "Hash": 12,
@@ -160,6 +190,9 @@
         {
             "Hash": 2213377102,
             "Name": "MIDA Synergy",
+            "AlsoMatches": [
+                2179934441
+            ],
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
@@ -191,8 +224,28 @@
             "Notes": "Value unknown — needs testing. Boosted forward multiplier with MIDA Multi-Tool is unknown; 1 is a neutral placeholder. Do not also apply Lightweight Frame for this weapon."
         },
         {
+            "Hash": 1888623310,
+            "Name": "MIDA Synergy (Macro-Tool)",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.1
+                    ]
+                }
+            ],
+            "Notes": "Grants only the 10% forward movement bonus while MIDA Multi-Tool is equipped. Does not grant base Lightweight Mobility tiers or sprint bonuses."
+        },
+        {
             "Hash": 2470575005,
             "Name": "MIDA Synergy (Enhanced Intrinsic)",
+            "AlsoMatches": [
+                1057935015,
+                1891876363,
+                2670025099
+            ],
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [

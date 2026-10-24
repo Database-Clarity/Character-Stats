@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useManifest } from './context';
 import type { ManifestTable } from './types';
+import { isPrismaticAbility } from './prismatic';
 
 export interface ManifestIconProps {
     hash: number;
@@ -28,8 +29,8 @@ export function ManifestIcon({
         objectFit: 'cover',
         boxSizing: 'border-box',
     };
-    if (!entry?.icon || failed) {
-        return (
+    const icon =
+        !entry?.icon || failed ? (
             <span
                 className={className}
                 role="img"
@@ -41,20 +42,29 @@ export function ManifestIcon({
                     border: '1px solid rgba(0, 0, 0, 0.14)',
                 }}
             />
+        ) : (
+            <img
+                className={className}
+                src={entry.icon}
+                alt={entry.name}
+                width={size}
+                height={size}
+                loading="lazy"
+                decoding="async"
+                style={style}
+                onError={() => setFailed(true)}
+            />
         );
-    }
-
-    return (
-        <img
-            className={className}
-            src={entry.icon}
-            alt={entry.name}
-            width={size}
-            height={size}
-            loading="lazy"
-            decoding="async"
-            style={style}
-            onError={() => setFailed(true)}
-        />
+    return isPrismaticAbility(entry) ? (
+        <span
+            className="prismatic-icon"
+            style={{ width: size, height: size }}
+            title="Prismatic ability"
+        >
+            {icon}
+            <span className="prismatic-marker" aria-label="Prismatic ability" />
+        </span>
+    ) : (
+        icon
     );
 }

@@ -2,20 +2,6 @@
     "Hash": 144602215,
     "Name": "Super",
     "Fields": {
-        "CooldownScalars": {
-            "Domain": [
-                0,
-                100
-            ],
-            "Segments": [
-                {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 1
-                }
-            ]
-        },
         "EnergyGainScalar": {
             "Domain": [
                 0,

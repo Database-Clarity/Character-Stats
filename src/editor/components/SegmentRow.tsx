@@ -1,5 +1,6 @@
 import type { CurveSegment, Domain } from '../../core';
 import { Collapse } from './EditorPrimitives';
+import { numberStep } from './numberStep';
 
 export default function SegmentRow({
     file,
@@ -109,7 +110,7 @@ export default function SegmentRow({
                                 <input
                                     aria-label={`${fieldKey} segment ${index + 1} Value`}
                                     type="number"
-                                    step="any"
+                                    step={numberStep(segment.Value)}
                                     value={Number.isFinite(segment.Value) ? segment.Value : ''}
                                     onChange={(event) =>
                                         onChange({
@@ -176,7 +177,7 @@ export default function SegmentRow({
                                     <input
                                         aria-label={`${fieldKey} segment ${index + 1} point ${pointIndex} ${axis === 0 ? 'x' : 'y'}`}
                                         type="number"
-                                        step="any"
+                                        step={numberStep(point[axis])}
                                         value={Number.isFinite(point[axis]) ? point[axis] : ''}
                                         onChange={(event) =>
                                             onChange({
