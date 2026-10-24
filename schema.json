@@ -300,7 +300,7 @@
                         },
                         {
                             "const": "ForwardMultiplier",
-                            "description": "Multiply forward walking, standing or crouched; never affects strafing or sprint."
+                            "description": "Multiply forward walking, standing or crouched, and sprint before the speed cap; never affects strafing."
                         },
                         {
                             "const": "SprintMultiplier",
@@ -373,6 +373,16 @@
                     ],
                     "description": "Manifest definition table used by Hash."
                 },
+                "AlsoMatches": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4294967295
+                    },
+                    "minItems": 1,
+                    "description": "Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once."
+                },
                 "Activation": {
                     "type": "string",
                     "enum": [
@@ -419,7 +429,7 @@
                                     },
                                     {
                                         "const": "ForwardMultiplier",
-                                        "description": "Multiply forward walking, standing or crouched; never affects strafing or sprint."
+                                        "description": "Multiply forward walking, standing or crouched, and sprint before the speed cap; never affects strafing."
                                     },
                                     {
                                         "const": "SprintMultiplier",
@@ -460,16 +470,6 @@
                     },
                     "minItems": 1,
                     "description": "Effects from this source, with at most one entry for each effect type."
-                },
-                "AlsoMatches": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer",
-                        "minimum": 1,
-                        "maximum": 4294967295
-                    },
-                    "minItems": 1,
-                    "description": "Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once."
                 },
                 "BoostRequiresAll": {
                     "type": "array",

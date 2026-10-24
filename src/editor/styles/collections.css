@@ -182,6 +182,19 @@
     font-size: 11px;
     gap: 6px;
 }
+.hash-identity.compact .identity-text {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 4px;
+}
+.hash-identity.compact .identity-text > span {
+    flex: 1;
+}
+.hash-identity.compact .identity-text > .identity-hash {
+    flex-shrink: 0;
+    overflow: visible;
+    text-overflow: clip;
+}
 .editor-header {
     justify-content: space-between;
     min-height: 64px;

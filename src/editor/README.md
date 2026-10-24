@@ -64,6 +64,7 @@ middleware or configuration changes are needed.
   Invalid data and conflicting ADS choices show errors, not fallback speeds.
   Source RefType scopes lookups/icons/hash pickers to items or item categories;
   collection manifest drafts infer RefType from the picked definition table.
+  Movement Sources place AlsoMatches immediately after Hash and RefType.
 - `PendingChanges` groups semantic changes by stat/tab/item/field and shows
   structured array/curve changes by index or segment with old &rarr; new values and
   keyboard-accessible expanded old/new details. It keeps stable per-file line diffs
@@ -93,6 +94,7 @@ middleware or configuration changes are needed.
   ending in `| Light Ability` / `| Darkness Ability`, never source name suffixes.
   Every manifest icon surface gets the same small corner marker.
 - Any `intArray` with `itemRef` uses removable identity chips and a manifest picker.
+  Resolved hash chips show the manifest name followed by the hash in muted monospace text.
   Plain reference arrays have no wildcard or negative-subclass semantics; requirement
   tables retain those spec-declared semantics and their atomic parallel columns.
 - The outline can collapse; below 1100px it automatically becomes a closed floating

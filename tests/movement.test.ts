@@ -44,7 +44,10 @@ describe('movement calculator', () => {
         });
         const sources = [{ hash: 1888623310 }];
         expect(movementSpeed(input({ sources }))).toEqual({ tier: 3, speed: 5.6 * 1.1 });
-        expect(movementSpeed(input({ sources, sprint: true }))).toEqual({ tier: 3, speed: 8 });
+        expect(movementSpeed(input({ sources, sprint: true }))).toEqual({
+            tier: 3,
+            speed: 8 * 1.1,
+        });
         expect(movementSpeed(input({ sources, direction: 'Strafe' })).speed).toBeCloseTo(
             5.6 * 0.85,
             12,
@@ -133,9 +136,11 @@ describe('movement calculator', () => {
             movementSpeed(input({ sprint: true, sources: [{ hash: 1133590731, stacks: 3 }] }))
                 .speed,
         ).toBe(8);
-        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 1458010786 }] })).speed).toBe(
-            8.5,
-        );
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 1458010786 }] }))).toEqual({
+            tier: 5,
+            speed: 9,
+            cappedBy: 'ForwardSpeedCap',
+        });
         const source = data();
         source.Sources.push({
             Hash: 123,
@@ -155,6 +160,20 @@ describe('movement calculator', () => {
                 input({ classHash: hunter, sprint: true, sources: [{ hash: 1458010786 }] }),
             ),
         ).toEqual({ tier: 12, speed: 9, cappedBy: 'ForwardSpeedCap' });
+    });
+    it('stacks forward, sprint and grounded multipliers before capping sprint, independent of source order', () => {
+        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }];
+        for (const order of [sources, [...sources].reverse()]) {
+            const result = movementSpeed(input({ sprint: true, sources: order }));
+            expect(result.tier).toBe(5);
+            expect(result.speed).toBeCloseTo(8 * 1.0625 * 1.1 * 1.075 * 0.85, 12);
+            expect(result.cappedBy).toBeUndefined();
+        }
+        expect(
+            movementSpeed(
+                input({ sprint: true, sources: [{ hash: 1888623310 }, { hash: 1458010786 }] }),
+            ),
+        ).toEqual({ tier: 5, speed: 9, cappedBy: 'ForwardSpeedCap' });
     });
     it.each([12, 13, 54])(
         'applies grounded penalty %i to walking, ADS/crouch, and sprint',

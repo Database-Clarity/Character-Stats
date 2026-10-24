@@ -9,6 +9,7 @@ import {
     parseStatSource,
     parseMovementSource,
     abilitySpec,
+    movementSourceSpec,
     exportEntity,
     validateField,
     fieldSchema,
@@ -82,6 +83,30 @@ describe('exports and generated schema', () => {
             .Super!;
         expect(superDef.required).not.toContain('CooldownScalars');
         expect(superDef.properties).not.toHaveProperty('CooldownScalars');
+    });
+    it('places movement aliases immediately after identity fields in forms, exports and schema', () => {
+        const fields = ['Hash', 'Name', 'RefType', 'AlsoMatches', 'Activation', 'Effects'];
+        expect(movementSourceSpec.fields.slice(0, fields.length).map((field) => field.key)).toEqual(
+            fields,
+        );
+        const entry = {
+            Hash: 123,
+            Name: 'Source',
+            RefType: 'item',
+            Activation: 'Always',
+            Effects: [{ Type: 'ForwardMultiplier', Values: [1.1] }],
+            AlsoMatches: [456],
+        };
+        expect(Object.keys(exportEntity(movementSourceSpec, entry))).toEqual(fields);
+        const definitions = generateSchema().definitions as Record<
+            string,
+            { properties: Record<string, unknown> }
+        >;
+        expect(Object.keys(definitions.MovementSource!.properties)).toEqual([
+            ...fields,
+            'BoostRequiresAll',
+        ]);
+        expect(Object.keys(JSON.parse(serializeSource(entry)))).toEqual(fields);
     });
     it('derives index mappings from domains without repeating Health fallback sentences', () => {
         for (const domain of [

@@ -32,10 +32,10 @@
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling}} when you have {{ChargeCount}} active charges stored up.",
     "Movement": {
         "Overview": "Hidden Mobility uses tiers, with a maximum of 13. Higher tiers increase walking speed. Sprint speed does not depend on Mobility. Active movement bonuses multiply together, then speed caps apply. Jump height is not included because measured values are not available.",
-        "WalkSpeed": "Forward walk speed is 5 + 0.2 times your hidden Mobility tier, in metres per second. Forward movement, including sprint, is capped at 9 m/s.",
+        "WalkSpeed": "Forward walk speed is 5 + 0.2 times your hidden Mobility tier, in metres per second. Forward movement, including sprint, is capped at 9 m/s. Forward multipliers affect forward walking and sprint, but never strafing.",
         "StrafeSpeed": "Walking left, right, or backward uses 0.85 times your base walk speed, with a cap of 6 m/s. Forward-only bonuses do not apply.",
         "CrouchSpeed": "Crouching uses 0.55 times your walking speed, in either direction, with a cap of 4 m/s. Forward-only bonuses apply while crouch-walking forward, not while crouch-strafing.",
-        "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.5 m/s for Hunters. Lightweight weapons and sprint bonuses each multiply sprint speed by 1.0625. The cap is 9 m/s.",
+        "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.5 m/s for Hunters. Lightweight weapons provide a 1.0625 sprint multiplier. Applicable forward, sprint, and grounded multipliers stack multiplicatively before the 9 m/s cap.",
         "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS bonuses are evaluated for one held weapon at a time. ADS stacks with strafe and crouch multipliers, and all applicable direction and posture caps still apply.",
         "Classes": {
             "671679327": {
@@ -70,17 +70,17 @@
                 "Description": "Enhanced Athletics grants 3, 5, or 6 Mobility tiers with 1, 2, or 3 mods."
             },
             "1458010786": {
-                "Description": "While held, a Lightweight Frame grants 2 Mobility tiers, a 1.075 forward-walk multiplier (standing or crouched, not strafing), and a 1.0625 sprint multiplier."
+                "Description": "While held, a Lightweight Frame grants 2 Mobility tiers, a 1.075 multiplier to forward walking (standing or crouched) and sprinting (not strafing), and a 1.0625 sprint multiplier. The forward and sprint multipliers stack while sprinting."
             },
             "2213377102": {
-                "Description": "MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."
+                "Description": "MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward multiplier further; that value has not been measured. Forward multipliers affect forward walking and sprint, but never strafing."
             },
             "1888623310": {
-                "Description": "While MIDA Multi-Tool is equipped, MIDA Macro-Tool grants a 1.1 forward-walk multiplier. It does not grant Lightweight Mobility tiers or a sprint bonus.",
+                "Description": "While MIDA Multi-Tool is equipped, MIDA Macro-Tool grants a 1.1 multiplier to forward walking and sprinting, but not strafing. It does not grant Lightweight Mobility tiers or a separate sprint multiplier.",
                 "Condition": "While MIDA Macro-Tool is held and MIDA Multi-Tool is equipped."
             },
             "2470575005": {
-                "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."
+                "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward multiplier further; that value has not been measured. Forward multipliers affect forward walking and sprint, but never strafing."
             },
             "3072857252": {
                 "Description": "Wraithwalk increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",

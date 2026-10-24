@@ -52,15 +52,13 @@ export function HashIdentity({
                         <span className="warning"> · unknown hash</span>
                     )}
                 </span>
-                {!compact && (
-                    <small
-                        className="mono"
-                        title={`${hash}${entry?.typeName ? ` · ${entry.typeName}` : ''}`}
-                    >
-                        {hash}
-                        {entry?.typeName ? ` · ${entry.typeName}` : ''}
-                    </small>
-                )}
+                <small
+                    className="mono muted identity-hash"
+                    title={`${hash}${!compact && entry?.typeName ? ` · ${entry.typeName}` : ''}`}
+                >
+                    {hash}
+                    {!compact && entry?.typeName ? ` · ${entry.typeName}` : ''}
+                </small>
             </span>
         </span>
     );

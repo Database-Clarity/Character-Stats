@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { ManifestStatus } from '../manifest';
-import { ManifestPicker, ManifestStatusBadge } from './ManifestUI';
+import { HashIdentity, ManifestPicker, ManifestStatusBadge } from './ManifestUI';
 
 const manifest = vi.hoisted(() => ({
     status: { state: 'disabled', reason: 'No API key' } as ManifestStatus,
@@ -31,6 +31,20 @@ function picker() {
 }
 
 describe('manifest availability and picker states', () => {
+    it('shows hashes after names in compact identities and preserves full identity details', () => {
+        const compact = renderToStaticMarkup(
+            createElement(HashIdentity, { hash: 123456, name: 'Shared name', compact: true }),
+        );
+        expect(compact).toContain(
+            '<span title="Shared name">Shared name</span><small class="mono muted identity-hash" title="123456">123456</small>',
+        );
+
+        const full = renderToStaticMarkup(
+            createElement(HashIdentity, { hash: 123456, name: 'Shared name' }),
+        );
+        expect(full).toContain('class="mono muted identity-hash"');
+        expect(full).toContain('123456');
+    });
     it('shows the disabled reason without a retry button and offers a blank draft', () => {
         manifest.status = { state: 'disabled', reason: 'No API key' };
         const badge = renderToStaticMarkup(createElement(ManifestStatusBadge));

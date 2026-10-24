@@ -196,7 +196,7 @@ export function movementSpeed(
     let speed = input.sprint
         ? character.BaseSprintSpeed * multipliers.SprintMultiplier
         : evaluateCurve(rules.WalkSpeed, tier, [0, 13]);
-    if (!input.sprint && input.direction === 'Forward') speed *= multipliers.ForwardMultiplier;
+    if (input.direction === 'Forward') speed *= multipliers.ForwardMultiplier;
     if (input.direction === 'Strafe') speed *= rules.StrafeMultiplier;
     if (input.posture === 'Crouched') speed *= rules.CrouchMultiplier;
     if (input.ads) speed *= adsMultiplier;

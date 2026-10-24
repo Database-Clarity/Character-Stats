@@ -31,11 +31,11 @@ Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.Walk
 
 Sprint uses a base speed independent of Mobility. Titan and Warlock start at tier 3 with 8 m/s sprint. Hunter starts at tier 10 in PvE and tier 7 in PvP, with 8.5 m/s sprint.
 
-Sources point to an item or item category and use `Always`, `WhileHeld` or `Conditional` activation. Effects add Mobility tiers or apply forward, sprint, grounded or ADS multipliers. `Values` lists each effect value by stack count. `BoostedValues` replaces those values when all `BoostRequiresAll` hashes are equipped. ADS effects replace the default multiplier for the selected held weapon. Values marked unknown are placeholders. `JumpHeight` is not published yet.
+Sources point to an item or item category and use `Always`, `WhileHeld` or `Conditional` activation. Effects add Mobility tiers or apply forward, sprint, grounded or ADS multipliers. `ForwardMultiplier` affects forward walking while standing or crouched and sprinting, but never strafing; during sprint it stacks multiplicatively with applicable `SprintMultiplier` and `GroundedMultiplier` effects before the 9 m/s forward cap. `Values` lists each effect value by stack count. `BoostedValues` replaces those values when all `BoostRequiresAll` hashes are equipped. ADS effects replace the default multiplier for the selected held weapon. Values marked unknown are placeholders. `JumpHeight` is not published yet.
 
 `AlsoMatches` lists other item or plug hashes that activate the same source. `Hash` remains its primary identity. Lightweight Frame includes its weapon-type variants and grenade-launcher Micro-Missile frames. Enhanced MIDA Synergy includes its equivalent variants. Apply each source once, even when more than one matching hash is present.
 
-Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro-Tool has a separate conditional source. With MIDA Multi-Tool equipped, it grants 10% forward movement speed without the base Lightweight Mobility tiers or sprint bonus.
+Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro-Tool has a separate conditional source. With MIDA Multi-Tool equipped, it grants a 1.1 forward multiplier to forward walking and sprinting, without Lightweight Mobility tiers or a separate sprint multiplier.
 
 ### Descriptions and locale
 

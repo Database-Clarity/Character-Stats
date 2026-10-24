@@ -32,8 +32,9 @@ error and offers **Continue without manifest**. Later refreshes do not block edi
 Names, icons, item types, stat icons, and class icons
 come from Bungie's manifest. Source names remain editable: if one differs from its
 manifest name, the item header offers **Use manifest name**. Hash inputs show their
-resolved identity or an **Unknown hash** warning. Without a manifest, source names
-and hashes remain usable; numeric manual entry is always available. Class
+resolved identity or an **Unknown hash** warning. Hash identity chips show the
+resolved name followed by the hash in muted monospace text. Without a manifest,
+source names and hashes remain usable; numeric manual entry is always available. Class
 definitions without icon URLs use accurate CC0 Destiny class glyphs (source and
 licence recorded in the editor README). Prismatic ability icons have a small
 multicolour corner marker, detected from manifest ability types, not source names.
@@ -121,9 +122,10 @@ atomically. **Revert requirements table** restores Requirements and all of its
 Plain numeric arrays use individual inputs, with Add/Remove controls and meaningful
 zero-based labels (for example **Charges stored: 0**).
 Every other integer array with an `itemRef` hint (including **BoostRequiresAll**
-and **AlsoMatches**) uses removable icon/name chips and a manifest picker. These
-plain hash references do not treat zero as a wildcard or negative values as
-subclasses. Manual hashes remain available without a manifest.
+and **AlsoMatches**) uses removable identity chips and a manifest picker. These
+chips show the resolved name followed by the hash in muted monospace text. Plain
+hash references do not treat zero as a wildcard or negative values as subclasses.
+Manual hashes remain available without a manifest.
 
 ### Cooldown context
 
@@ -144,7 +146,8 @@ Movement has **Rules**, **Classes**, **Sources**, and **Text** tabs. Rules edits
 the shared curves, multipliers, and caps. JumpHeight remains **Unpublished** until
 measured data is available. Classes and Sources use the normal list, isolated
 draft, editor, and context layout. Source **RefType** chooses items or item
-categories for hash resolution and the field picker; **Add from manifest**
+categories for hash resolution and the field picker. **AlsoMatches** appears
+immediately after **Hash** and **RefType** in the source form. **Add from manifest**
 offers an Items / Item categories selector and sets RefType to match the result.
 Source Effects are spec-driven rows. **Values** and optional **BoostedValues**
 are small numeric inputs labelled by stack count starting at 1; core checks their

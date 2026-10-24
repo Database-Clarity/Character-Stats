@@ -295,7 +295,7 @@ export const movementEffectSpec: EntitySpec = {
                 {
                     value: 'ForwardMultiplier',
                     description:
-                        'Multiply forward walking, standing or crouched; never affects strafing or sprint.',
+                        'Multiply forward walking, standing or crouched, and sprint before the speed cap; never affects strafing.',
                 },
                 { value: 'SprintMultiplier', description: 'Multiply sprint speed only.' },
                 {
@@ -347,6 +347,14 @@ export const movementSourceSpec: EntitySpec = {
             ],
             { description: 'Manifest definition table used by Hash.' },
         ),
+        integerArrayField('AlsoMatches', {
+            itemRef: 'item',
+            minItems: 1,
+            items: { min: 1, max: 4294967295 },
+            required: false,
+            description:
+                'Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once.',
+        }),
         enumField(
             'Activation',
             [
@@ -362,14 +370,6 @@ export const movementSourceSpec: EntitySpec = {
         objectArrayField('Effects', movementEffectSpec, {
             minItems: 1,
             description: 'Effects from this source, with at most one entry for each effect type.',
-        }),
-        integerArrayField('AlsoMatches', {
-            itemRef: 'item',
-            minItems: 1,
-            items: { min: 1, max: 4294967295 },
-            required: false,
-            description:
-                'Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once.',
         }),
         integerArrayField('BoostRequiresAll', {
             itemRef: 'item',
