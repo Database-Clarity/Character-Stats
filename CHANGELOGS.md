@@ -25,7 +25,7 @@ Stat values in this build are placeholders. Expect most of them to change once w
 
 ### Movement
 
-Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.WalkSpeed` gives forward walking speed in m/s from 5.0 to 7.6, increasing by 0.2 per tier. Strafe, crouch and ADS multipliers are 0.85, 0.55 and 0.75. Forward speed, including sprint, caps at 9 m/s. Strafe caps at 6 m/s, including ADS. Crouch caps at 4 m/s.
+Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.WalkSpeed` gives forward walking speed in m/s from 5.0 to 7.6, increasing by 0.2 per tier. Strafe, crouch and ADS multipliers are 0.85, 0.55 and 0.75. Sidearms use 0.85 for ADS instead, through a Sidearm movement source. Forward speed, including sprint, caps at 9 m/s. Strafe caps at 6 m/s, including ADS. Crouch caps at 4 m/s.
 
 Sprint uses a base speed independent of Mobility. Titan and Warlock start at tier 3 with 8 m/s sprint. Hunter starts at tier 10 in PvE and tier 7 in PvP, with 8.5 m/s sprint.
 
