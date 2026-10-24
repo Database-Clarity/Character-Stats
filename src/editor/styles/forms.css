@@ -137,7 +137,7 @@
 }
 .field {
     display: grid;
-    grid-template-columns: 164px minmax(0, 1fr);
+    grid-template-columns: 224px minmax(0, 1fr);
     gap: 16px;
     padding: 8px 4px;
     align-items: start;
@@ -153,7 +153,7 @@
     gap: 8px;
     color: #c3c8d2;
     font-weight: 400;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
 }
 .field-help {
     color: var(--muted);

@@ -24,8 +24,8 @@ function savedSettings(): LoginSettings {
         const parsed = JSON.parse(saved) as Partial<LoginSettings>;
         return {
             token: typeof parsed.token === 'string' ? parsed.token : '',
-            owner: parsed.owner || defaults.owner,
-            name: parsed.name || defaults.name,
+            owner: defaults.owner,
+            name: defaults.name,
             branch: parsed.branch || defaults.branch,
             remember: parsed.remember === true,
         };
@@ -128,24 +128,9 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                             Create a fine-grained token on GitHub
                         </a>
                     </details>
-                    <div className="row">
-                        <label>
-                            Repository owner
-                            <input
-                                required
-                                value={settings.owner}
-                                onChange={(e) => change('owner', e.target.value)}
-                            />
-                        </label>
-                        <label>
-                            Repository name
-                            <input
-                                required
-                                value={settings.name}
-                                onChange={(e) => change('name', e.target.value)}
-                            />
-                        </label>
-                    </div>
+                    <p className="muted">
+                        Repository: {settings.owner}/{settings.name}
+                    </p>
                     <label>
                         Branch
                         <input
