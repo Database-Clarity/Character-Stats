@@ -5,13 +5,13 @@
         "FlinchResistance": {
             "Domain": [
                 0,
-                200
+                100
             ],
             "Segments": [
                 {
                     "Type": "Constant",
                     "From": 0,
-                    "To": 200,
+                    "To": 100,
                     "Value": 0
                 }
             ]
@@ -19,13 +19,13 @@
         "OrbOfPowerHealthRestore": {
             "Domain": [
                 0,
-                200
+                100
             ],
             "Segments": [
                 {
                     "Type": "Constant",
                     "From": 0,
-                    "To": 200,
+                    "To": 100,
                     "Value": 0
                 }
             ]
@@ -34,44 +34,46 @@
         "PVEHealthHP": 0,
         "HealthRegenDelay": 0,
         "HealthRegenSpeed": 0,
-        "PVPShieldHP": 0,
-        "PVEShieldHP": {
+        "BaseShieldHP": 0,
+        "PVEBonusShieldHP": {
             "Domain": [
-                0,
+                101,
                 200
             ],
             "Segments": [
                 {
                     "Type": "Constant",
-                    "From": 0,
+                    "From": 101,
                     "To": 200,
                     "Value": 0
                 }
             ]
         },
+        "BaseShieldRechargeDelay": 0,
         "ShieldRechargeDelay": {
             "Domain": [
-                0,
+                101,
                 200
             ],
             "Segments": [
                 {
                     "Type": "Constant",
-                    "From": 0,
+                    "From": 101,
                     "To": 200,
                     "Value": 0
                 }
             ]
         },
+        "BaseShieldRechargeSpeed": 0,
         "ShieldRechargeSpeed": {
             "Domain": [
-                0,
+                101,
                 200
             ],
             "Segments": [
                 {
                     "Type": "Constant",
-                    "From": 0,
+                    "From": 101,
                     "To": 200,
                     "Value": 0
                 }

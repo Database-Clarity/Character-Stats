@@ -1,7 +1,6 @@
 import { expandCurve, roundValue, type Curve } from './curves';
 import { defaultConfig, type ExportConfig } from './config';
 import { statRegistry, localeFields } from './stats';
-import { entityRegistry } from './entities';
 import { movementSpec } from './movement';
 import { localeId } from './locale';
 import type { SourceSet } from './sources';
@@ -17,10 +16,18 @@ export function exportFields(
     const object = value as Record<string, unknown>;
     return Object.fromEntries(
         fields
-            .filter((f) => f.exported !== false && object[f.key] !== undefined)
+            .filter(
+                (f) => f.exported !== false && f.published !== false && object[f.key] !== undefined,
+            )
             .map((f) => {
                 let result = object[f.key];
-                if (f.kind === 'curve' && f.domain) {
+                if (f.kind === 'object' && f.entity) {
+                    result = exportEntity(f.entity, result as object, config);
+                } else if (f.kind === 'objectArray' && f.entity) {
+                    result = (result as object[]).map((item) =>
+                        exportEntity(f.entity!, item, config),
+                    );
+                } else if (f.kind === 'curve' && f.domain) {
                     result = expandCurve(result as Curve, f.domain, config.rounding);
                 } else if (typeof result === 'number' && f.round !== undefined) {
                     result = roundValue(result, f.round);
@@ -47,10 +54,9 @@ export function exportSources(sources: SourceSet, options: Partial<ExportConfig>
         }
         const stat = {
             ...Object.fromEntries(
-                localeFields('Abilities' in spec.collections).map((f) => [
-                    f.key,
-                    localeId(spec.name, f.key),
-                ]),
+                localeFields(
+                    Object.values(spec.collections).some((entity) => entity.role === 'ability'),
+                ).map((f) => [f.key, localeId(spec.name, f.key)]),
             ),
             ...exportFields(spec.fields, source.Fields, config),
         };
@@ -68,8 +74,11 @@ export function exportSources(sources: SourceSet, options: Partial<ExportConfig>
     }
     result.Movement = {
         ...exportFields(movementSpec.fields, sources.movement, config),
-        Classes: sources.movement.Classes.map((c) =>
-            exportEntity(entityRegistry.MovementClass, c, config),
+        ...Object.fromEntries(
+            Object.entries(movementSpec.collections).map(([key, entity]) => {
+                const source = sources.movement as unknown as Record<string, object[]>;
+                return [key, (source[key] ?? []).map((item) => exportEntity(entity, item, config))];
+            }),
         ),
         ...Object.fromEntries(movementSpec.localeKeys.map((k) => [k, 'Movement.' + k])),
     };

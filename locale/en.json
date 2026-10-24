@@ -1,8 +1,8 @@
 {
     "Health": {
         "Overview": "Health governs how much passive Flinch Resistance you have and how much health collecting Orbs of Power restores.\n\nWhen enhanced, it increases the Recharge Rate of your Shields in all activities as well as their total HP in PVE activities.",
-        "BaseStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\nYour Shields start recharging {{ShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{ShieldRechargeSpeed}}{{PercentPerSecond}}. Your shields have {{PVPShieldHP}}{{HP}}.",
-        "EnhancedStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\n{{Enhancement}} Your Shields start recharging {{ShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{ShieldRechargeSpeed}}{{PercentPerSecond}}. Your shields have {{PVEShieldHP}}{{HP}} [PVP: {{PVPShieldHP}}{{HP}}]."
+        "BaseStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\nYour Shields start recharging {{BaseShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{BaseShieldRechargeSpeed}}{{PercentPerSecond}}. Your Shields have {{BaseShieldHP}}{{HP}}.",
+        "EnhancedStatTooltip": "Grants you {{FlinchResistance}}{{Percent}} Flinch Resistance while aiming down sights and makes Orbs of Power restore {{OrbOfPowerHealthRestore}}{{HP}} on pickup.\n\nYou have {{PVEDamageResistance}}{{Percent}} Damage Resistance against combatants in PvE.\n\nYour Health starts regenerating {{HealthRegenDelay}}{{Time}} after taking damage, at a rate of {{HealthRegenSpeed}}{{PercentPerSecond}}. Your Health has {{PVPHealthHP}}{{HP}} in most PVP activities and {{PVEHealthHP}}{{HP}} in PVE activities.\n\n{{Enhancement}} Your Shields start recharging {{ShieldRechargeDelay}}{{Time}} after taking damage, at a rate of {{ShieldRechargeSpeed}}{{PercentPerSecond}}. Your Shields have {{BaseShieldHP}}{{HP}}, plus {{PVEBonusShieldHP}}{{HP}} in PVE activities."
     },
     "Melee": {
         "Overview": "Melee governs your Melee Ability's passive cooldown and how much Melee Energy you gain from perks.\n\nIncreases Melee Damage when enhanced.",
@@ -31,9 +31,57 @@
     },
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling}} when you have {{ChargeCount}} active charges stored up.",
     "Movement": {
-        "Overview": "Mobility was removed in Edge of Fate; base movement speed is fixed per class and can only be increased by Enhanced Athletics mods.",
-        "WalkSpeed": "How fast you can walk forward.",
-        "StrafeSpeed": "How fast you can move side-to-side and backwards.",
-        "CrouchSpeed": "How fast you can move while crouching."
+        "Overview": "Hidden Mobility uses tiers, with a maximum of 13. Higher tiers increase walking speed. Sprint speed does not depend on Mobility. Active movement bonuses multiply together, then speed caps apply. Jump height is not included because measured values are not available.",
+        "WalkSpeed": "Forward walk speed is 5 + 0.2 times your hidden Mobility tier, in metres per second. Forward movement, including sprint, is capped at 9 m/s.",
+        "StrafeSpeed": "Walking left, right, or backward uses 0.85 times your base walk speed, with a cap of 6 m/s. Forward-only bonuses do not apply.",
+        "CrouchSpeed": "Crouching uses 0.55 times your walking speed, in either direction, with a cap of 4 m/s. Forward-only bonuses apply while crouch-walking forward, not while crouch-strafing.",
+        "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.5 m/s for Hunters. Lightweight weapons and sprint bonuses each multiply sprint speed by 1.0625. The cap is 9 m/s.",
+        "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS bonuses are evaluated for one held weapon at a time. ADS stacks with strafe and crouch multipliers, and all applicable direction and posture caps still apply.",
+        "Classes": {
+            "671679327": {
+                "Description": "Hunter: base hidden Mobility tier 10 in PvE and tier 7 in PvP."
+            },
+            "2271682572": {
+                "Description": "Warlock: base hidden Mobility tier 3."
+            },
+            "3655393761": {
+                "Description": "Titan: base hidden Mobility tier 3."
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": "A readied Machine Gun multiplies grounded movement speed by 0.85."
+            },
+            "13": {
+                "Description": "A readied Rocket Launcher multiplies grounded movement speed by 0.85."
+            },
+            "14": {
+                "Description": "A readied sidearm replaces the normal ADS multiplier with 0.85."
+            },
+            "54": {
+                "Description": "Guarding with a sword multiplies grounded movement speed by 0.85.",
+                "Condition": "While guarding with a sword."
+            },
+            "25692695": {
+                "Description": "The Scientific Method increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",
+                "Condition": "For a short time after dealing damage with Tractor Cannon."
+            },
+            "1133590731": {
+                "Description": "Enhanced Athletics grants 3, 5, or 6 Mobility tiers with 1, 2, or 3 mods."
+            },
+            "1458010786": {
+                "Description": "While held, a Lightweight Frame grants 2 Mobility tiers, a 1.075 forward-walk multiplier (standing or crouched, not strafing), and a 1.0625 sprint multiplier."
+            },
+            "2213377102": {
+                "Description": "MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."
+            },
+            "2470575005": {
+                "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward bonus further; that value has not been measured."
+            },
+            "3072857252": {
+                "Description": "Wraithwalk increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",
+                "Condition": "While invisible with the Heartshadow Catalyst equipped."
+            }
+        }
     }
 }

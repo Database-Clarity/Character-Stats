@@ -38,9 +38,12 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
     return (
         <Modal title="Publish data" onClose={onClose} busy={busy}>
             <p>
-                Runs build-data.yml on{' '}
-                <strong>{github?.client.repo.branch ?? 'the selected branch'}</strong>. Only data
-                already committed to GitHub is published.
+                <strong>
+                    {github?.client.repo.branch === 'master'
+                        ? 'Build data and deploy Pages'
+                        : `Build data on ${github?.client.repo.branch ?? 'the selected branch'} — does not deploy Pages`}
+                </strong>
+                . Only data already committed to GitHub is published.
             </p>
             {dirty.length > 0 && (
                 <p className="warning">
@@ -53,15 +56,17 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
                     <label>
                         New schema version (optional)
                         <input
-                            placeholder="e.g. 2.1"
+                            placeholder="2.0 for first v2 release"
                             value={version}
                             onChange={(e) => setVersion(e.target.value)}
                             disabled={busy}
                         />
                     </label>
                     <p className="help">
-                        Leave empty to keep the current version. Changing the version is a breaking
-                        release and creates a new version directory.
+                        The first v2 release must specify schema version 2.0. Leave empty to keep
+                        the current version only when update.json already declares 2.0 or newer.
+                        Changing the version is a breaking release and creates a new version
+                        directory.
                     </p>
                     <button className="primary" disabled={!github || busy || dirty.length > 0}>
                         {busy ? 'Dispatching…' : 'Dispatch build workflow'}

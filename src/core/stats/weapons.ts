@@ -10,8 +10,7 @@ export const weaponsSpec: StatSpec = {
             domain: [0, 100],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (0-100). The numbers ' +
-                'represent a scalar for the Reload animation durations of your ' +
+                'Values represent a scalar for the Reload animation durations of your ' +
                 'weapons at each stat point.',
         }),
 
@@ -19,8 +18,7 @@ export const weaponsSpec: StatSpec = {
             domain: [0, 100],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (0-100). The numbers ' +
-                'represent a scalar for the Handling animation durations of your ' +
+                'Values represent a scalar for the Handling animation durations of your ' +
                 'weapons at each stat point.',
         }),
 
@@ -28,8 +26,7 @@ export const weaponsSpec: StatSpec = {
             domain: [0, 100],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (0-100). The numbers ' +
-                'represent how much increased damage your weapons deal against ' +
+                'Values represent how much increased damage your weapons deal against ' +
                 'Minor, Elite, and Miniboss combatants.',
         }),
 
@@ -37,8 +34,7 @@ export const weaponsSpec: StatSpec = {
             domain: [101, 200],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (101-200). The numbers ' +
-                'represent how much increased damage Special weapons deal against ' +
+                'Values represent how much increased damage Special weapons deal against ' +
                 'Bosses when the Weapons stat is enhanced.',
         }),
 
@@ -46,8 +42,7 @@ export const weaponsSpec: StatSpec = {
             domain: [101, 200],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (101-200). The numbers ' +
-                'represent how much increased damage Power weapons deal against ' +
+                'Values represent how much increased damage Power weapons deal against ' +
                 'Bosses when the Weapons stat is enhanced.',
         }),
 
@@ -55,8 +50,7 @@ export const weaponsSpec: StatSpec = {
             domain: [101, 200],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (101-200). The numbers ' +
-                'represent how much increased damage your weapons deal against ' +
+                'Values represent how much increased damage your weapons deal against ' +
                 'Players when the Weapons stat is enhanced.',
         }),
 
@@ -64,8 +58,7 @@ export const weaponsSpec: StatSpec = {
             domain: [101, 200],
             items: { min: 0 },
             description:
-                'Array index represents the Weapons stat (101-200). The numbers ' +
-                'represent the chance of spawning Large Ammo Bricks through the ' +
+                'Values represent the chance of spawning Large Ammo Bricks through the ' +
                 'Ammo Meter system when the Weapons stat is enhanced.',
         }),
     ],

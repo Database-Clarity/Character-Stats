@@ -2,6 +2,7 @@ import {
     statRegistry,
     localeFields,
     localeId,
+    movementSpec,
     type SourceSet,
     type LocaleData,
     type StatSource,
@@ -54,14 +55,27 @@ export function fixture(): SourceSet {
             return source;
         }),
         movement: {
-            EnhancedAthleticsHash: 0,
+            Rules: {
+                WalkSpeed: {
+                    Domain: [0, 13],
+                    Segments: [{ Type: 'Expression', From: 0, To: 13, Expression: '5 + 0.2*x' }],
+                },
+                JumpHeight: { Values: Array(14).fill(0) },
+                StrafeMultiplier: 0.85,
+                CrouchMultiplier: 0.55,
+                ADSMultiplier: 0.75,
+                ForwardSpeedCap: 9,
+                StrafeSpeedCap: 6,
+                CrouchSpeedCap: 4,
+                MaxMobilityTier: 13,
+            },
+            Sources: [],
             Classes: [
                 {
                     ClassHash: 3655393761,
                     Name: 'Titan',
-                    WalkSpeed: [1, 2, 3, 4],
-                    StrafeSpeed: [1, 2, 3, 4],
-                    CrouchSpeed: [1, 2, 3, 4],
+                    BaseMobilityTier: 3,
+                    BaseSprintSpeed: 8,
                     Notes: 'Do not export',
                 },
             ],
@@ -79,5 +93,8 @@ export function fixtureLocale(): LocaleData {
             .map((f) => [f.key, 'Text {{' + spec.fields[0]!.key + '}}{{Percent}}']);
         locale[spec.name] = Object.fromEntries(entries);
     }
+    locale.Movement = Object.fromEntries(
+        movementSpec.localeKeys.map((key) => [key, 'Movement text']),
+    );
     return locale;
 }

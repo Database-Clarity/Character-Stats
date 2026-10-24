@@ -7,18 +7,19 @@ export const healthSpec: StatSpec = {
     collections: {},
     fields: [
         curve('FlinchResistance', {
-            domain: [0, 200],
+            domain: [0, 100],
             items: { min: 0 },
             description:
-                'Array index represents the Health stat (0-200). The numbers ' +
-                'represent the percentage flinch resistance granted at each stat ' +
-                'point.',
+                'Percentage flinch resistance while aiming down sights at each ' +
+                'Health stat value. Stat values above 100 use the value at 100.',
         }),
 
         curve('OrbOfPowerHealthRestore', {
-            domain: [0, 200],
+            domain: [0, 100],
             items: { min: 0, integer: true },
-            description: 'How much HP picking up an Orb of Power restores.',
+            description:
+                'How much HP picking up an Orb of Power restores at each Health ' +
+                'stat value. Stat values above 100 use the value at 100.',
         }),
 
         integerField('PVPHealthHP', {
@@ -48,34 +49,52 @@ export const healthSpec: StatSpec = {
                 'and <PVEHealthHP> properties.',
         }),
 
-        integerField('PVPShieldHP', {
+        integerField('BaseShieldHP', {
             min: 0,
             description:
-                'This number represents how much HP your Shields have in PVP ' + 'activities.',
+                'How much HP your Shields have in all activities (PVE and PVP), ' +
+                'independent of the Health stat value.',
         }),
 
-        curve('PVEShieldHP', {
-            domain: [0, 200],
+        curve('PVEBonusShieldHP', {
+            domain: [101, 200],
             items: { min: 0, integer: true },
             description:
-                'This number represents how much HP your Shields have in PVE ' + 'activities.',
+                'Extra Shield HP in PVE activities at each enhanced Health stat ' +
+                'value, added on top of <BaseShieldHP>. Below 101 there is no ' +
+                'bonus. Does not apply in PVP.',
+        }),
+
+        numberField('BaseShieldRechargeDelay', {
+            min: 0,
+            description:
+                'How many seconds after taking damage your Shields start ' +
+                'recharging while the Health stat is not enhanced (100 or below).',
         }),
 
         curve('ShieldRechargeDelay', {
-            domain: [0, 200],
+            domain: [101, 200],
             items: { min: 0 },
             description:
-                'This number represents how many seconds after taking damage you ' +
-                'Shields start recharging.',
+                'How many seconds after taking damage your Shields start ' +
+                'recharging at each enhanced Health stat value. Below 101, use ' +
+                '<BaseShieldRechargeDelay>.',
+        }),
+
+        numberField('BaseShieldRechargeSpeed', {
+            min: 0,
+            description:
+                'How fast your Shields recharge, in % of total Shield HP per ' +
+                'second, while the Health stat is not enhanced (100 or below).',
         }),
 
         curve('ShieldRechargeSpeed', {
-            domain: [0, 200],
+            domain: [101, 200],
             items: { min: 0 },
             description:
-                'This number represents how fast your Shields recharge in % of ' +
-                'total Shield HP per second. Total Shield HP can be found in the ' +
-                '<PVPShieldHP> and <PVEShieldHP> properties.',
+                'How fast your Shields recharge, in % of total Shield HP per ' +
+                'second, at each enhanced Health stat value. Below 101, use ' +
+                '<BaseShieldRechargeSpeed>.',
         }),
 
         numberField('PVEDamageResistance', {

@@ -56,11 +56,52 @@ fields: [
 ];
 ```
 
-Use the actual helper for the data kind: `curve`, `numberField`, `integerField`, `numberArrayField`, `integerArrayField`, or `localeField`. `curve` sets a default nonnegative item constraint; specify `domain` and any field-specific constraints. `hashField`, `nameField`, and `notesField` are the shared entity helpers. Most fields are required by default; set `required: false` for optional fields. Add matching values under `Fields` in the affected [`sources/stats/`](../sources/stats/) file(s). For a curve, source JSON may use raw `Values` or validated piecewise `Segments` (see below).
+Use the actual helper for the data kind: `curve`, `numberField`, `integerField`, `numberArrayField`, `integerArrayField`, `enumField`, `objectField`, `objectArrayField`, or `localeField`. `curve` sets a default nonnegative item constraint; specify `domain` and any field-specific constraints. `hashField`, `nameField`, and `notesField` are the shared entity helpers. Most fields are required by default; set `required: false` for optional fields. Add matching values under `Fields` in the affected [`sources/stats/`](../sources/stats/) file(s). For a curve, source JSON may use raw `Values` or validated piecewise `Segments` (see below).
+
+## Enum and nested-object fields
+
+Enums store strings. Give each allowed value a description; validation and generated schema use the same list:
+
+```ts
+import { enumField, objectField, objectArrayField } from '../fields/builders';
+
+enumField('Activation', [
+    { value: 'Always', description: 'Active while equipped.' },
+    { value: 'Conditional', description: 'Active only while the condition is satisfied.' },
+], { description: 'When this source applies.' });
+
+objectField('Rules', rulesSpec, { description: 'Shared rules.' });
+objectArrayField('Effects', effectSpec, {
+    minItems: 1,
+    description: 'Effects supplied by this source.',
+});
+```
+
+Both nested helpers take an `EntitySpec`. Fields validate recursively, nested curves expand on export, and nested `Notes` stay editor-only. Arrays support `minItems`, `maxItems`, and `lengthOf`; an entity's `uniqueKey` controls duplicate checks (Movement effects use `Type`). Nested specs generate inline object schemas, so they do not have to be separately registered unless another consumer needs them. Enum and nested-object editing currently uses a generic read-only JSON preview; full editor controls come in step 2.
+
+Set `published: false` on a field whose source data must be retained and validated but is not ready for consumers. The editor marks it **Unpublished**; export and schema omit it recursively. This is distinct from `exported: false`, which is for permanent author-only metadata such as `Notes`. Change `published` to `true` (or remove it) when measurements are ready, then regenerate the schema. `Movement.Rules.JumpHeight` is an unpublished, zero-valued curve placeholder, not published jump-height data.
+
+## Movement data and calculations
+
+`sources/movement.json` contains one `Rules` object, `Classes`, and `Sources`. Hidden Mobility is measured in tiers, not the old 0-100 stat points. Walk speed uses tiers 0-13; class bases differ by activity only when `BaseMobilityTierPVP` is present. Source `Effects` are generic object arrays with an enum `Type` and cumulative `Values`: index 0 is one stack, index 1 is two stacks, and so on. `BoostedValues` replaces that effect's values when every `BoostRequiresAll` item is equipped. Both arrays must have equal lengths. Unknown tiers use 0 and unknown multipliers use 1, with `Notes: "Value unknown — needs testing"`.
+
+`RefType` selects `DestinyInventoryItemDefinition` (`item`) or `DestinyItemCategoryDefinition` (`itemCategory`). A source hash of 0 is allowed with a warning through `hashField(..., { warnIfZero: true })`; use it only for unverified references. Conditional sources need English text at `Movement.Sources.<Hash>.Condition`; missing text is a warning. Wraithwalk remains on the verified inventory-item Heartshadow Catalyst hash (3072857252), which links to sandbox perk 3936394000; no perk RefType is needed. MIDA's extra forward bonus, Wraithwalk's grounded bonus, and The Scientific Method's grounded bonus remain neutral placeholders. Other unmeasured frames/perks and unspecified Exotic Power Weapon penalties are not guessed.
+
+`movementSpeed({ classHash, activity, sources, direction, posture, sprint?, ads?, heldWeaponSources?, adsMultiplierOverride? }, movement?)` uses repository movement data by default; pass a validated `MovementSource` as the optional second argument to calculate an edited preview. `activity` is `PVE` or `PVP`. Direction (`Forward` or `Strafe`) and posture (`Standing` or `Crouched`) are independent, so crouched strafing is represented directly. `sprint: true` requires `Forward` and `Standing`. It returns `{ tier, speed, cappedBy? }` with unrounded m/s, and `cappedBy` names the limiting rule.
+
+Callers resolve held weapons, category membership, and activation conditions before passing active non-ADS bonuses. For ADS, `heldWeaponSources` identifies source hashes belonging to the one held weapon being inspected. These hashes must also be present in `sources`. Only that subset's ADS effects replace the global multiplier; omitted or empty selection uses the global value, even when `sources` contains ADS overrides for all three loadout weapons. Call the calculator once per weapon with its own subset; source order never selects the weapon. Conflicting values within the selected subset are rejected instead of merged. An explicit `adsMultiplierOverride` takes priority when a caller has already resolved a value. For example, a sidearm uses `ads: true, heldWeaponSources: [14]` with source 14 in the supplied sources, while another weapon uses its own source hashes or an empty array for default ADS.
+
+Do not apply Lightweight Frame and MIDA Synergy to the same held weapon, or both variants of MIDA Synergy together. `boosted: true` asserts that all required equipment is present; it does not add the prerequisite item's own effects. `stacks` defaults to 1 and saturates at the last recorded value. Duplicate source hashes, unknown hashes, invalid stack counts, incompatible sprint direction/posture, and simultaneous ADS/sprint are rejected.
+
+The calculator adds Mobility tiers, clamps them, evaluates walk speed, multiplies applicable effects, and finally applies the lowest relevant cap. `ForwardMultiplier` applies only while walking forward, standing or crouched; it never affects left/right/backward strafing, including crouched strafing, or sprint. `GroundedMultiplier` affects every supported grounded state, including sprint, and never jump height. ADS stacks with both direction and posture multipliers. All movement uses the forward cap (9 m/s); strafing also uses the strafe cap (6 m/s), and either crouched direction also uses the crouch cap (4 m/s). Sprint ignores Mobility and walking multipliers.
+
+Keep core calculation results exact. Editor speed previews use `formatMovementSpeed` from `src/editor/components/previewData.ts` for fixed two-decimal display (6.39625 becomes **6.40**, 3.825 becomes **3.83**). The formatter handles floating-point noise without changing the core result. The step-1 editor remains a generic read-only JSON fallback; the formatter is ready for step-2 movement previews.
 
 ## Adding an entity or collection
 
 Entity TypeScript interfaces and their `EntitySpec`s live together in [`src/core/entities/index.ts`](../src/core/entities/index.ts). For a new or changed entity property, add the matching interface property and builder call in `EntitySpec.fields`. Use the builders there, add a new spec to `entityRegistry`, and add the collection to a stat's `collections` map (or [`src/core/movement/index.ts`](../src/core/movement/index.ts) for movement). For example, a stat's map can include `collections: { CooldownItems: cooldownItemSpec }`. Add the corresponding optional collection property and type import to `StatSource` or `MovementSource` in [`src/core/sources.ts`](../src/core/sources.ts), then add matching records to the source JSON. Use `uniqueKey` for an entity's non-default identity key and `anyOf` for alternative required-field groups where appropriate.
+
+For behavior that depends on an entity's meaning, use registry metadata rather than branching on collection names. Map the Ability, SuperAbility, Override, and MovementClass entity specs respectively to `role: 'ability'`, `role: 'superAbility'`, `role: 'override'`, and `role: 'movementClass'`. Set `StatSpec.abilityKind` to `grenade`, `melee`, `class`, or `super` for a stat with that ability category (for example, `abilityKind: 'grenade'`); consumers such as manifest filtering should derive the category from this metadata. These hints belong to the registries and do not change source JSON or the public export data shape.
 
 For example, this follows the existing entity pattern:
 
@@ -159,7 +200,7 @@ export const statRegistry = [
 ] as const;
 ```
 
-Add `sources/stats/<stat>.json` with matching `Hash`, `Name`, `Fields`, and any registered collections. Add the stat's required English strings in [`locale/en.json`](../locale/en.json): `Overview`, `BaseStatTooltip`, and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` when the stat has `Abilities`. Locale IDs are generated from the stat name and key. The registry drives the editor's stat navigation; no editor-specific wiring is needed.
+Add `sources/stats/<stat>.json` with matching `Hash`, `Name`, `Fields`, and any registered collections. Add the stat's required English strings in [`locale/en.json`](../locale/en.json): `Overview`, `BaseStatTooltip`, and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` when a registered collection has `role: 'ability'`. Locale IDs are generated from the stat name and key. In `ChargeBasedScaling`, entry `i` is the charge-rate scalar while `i` charges are stored, and the array length is the ability's maximum charges. The `AbilityName`, `ChargeCount`, and `ChargeBasedScaling` tooltip tokens are supplied by the consumer per ability, not stat properties; see the [CBSD example](../CBSD_example.md). The registry drives the editor's stat navigation; no editor-specific wiring is needed.
 
 After changing a registry, run `npm run schema`; [`schema.json`](../schema.json) is generated and must never be hand-edited. Then run `npm test`, `npm run validate`, `npm run typecheck`, and `npm run format:check` as appropriate. Update focused tests if they assert a fixed stat list or generated schema.
 
@@ -181,7 +222,9 @@ These are separate valid segment examples for a `0-100` field; each covers that 
 
 `npm run validate` checks sources, locale placeholders, and exported JSON against the committed draft-06 schema. `npm run schema` regenerates that schema from the registries. Warnings do not block data builds; errors do.
 
-In the editor, **Publish** dispatches `build-data.yml` on the selected branch. The workflow tests and validates, builds the versioned JSON and `update.json`, and commits generated data as `github-actions[bot]`. A dispatch on `master` then runs the reusable Pages workflow; it checks out the latest `master`, builds the editor, and deploys the site. Other branches build and commit data without deploying Pages. For end-user editor instructions, use [`docs/EDITOR.md`](EDITOR.md); for the editor's development architecture and limitations, see [`src/editor/README.md`](../src/editor/README.md).
+In the editor, **Publish** dispatches `build-data.yml` on the selected branch. The workflow tests and validates, builds the versioned JSON and `update.json`, and commits generated data as `github-actions[bot]`. A dispatch on `master` then runs the reusable Pages workflow; it checks out the latest `master`, builds the editor, and deploys the site. Other branches build and commit data without deploying Pages. Leave `schema_version` blank only to rebuild the current version after `update.json` is already `2.0` or later; the first v2 release must explicitly set it to `2.0`.
+
+Partner apps do not currently consume locale strings, but future breaking schema releases should version locale files (keep the previous-version keys or use a versioned locale folder) so consumers pinned to an older `schemaVersion` continue to work. For end-user editor instructions, use [`docs/EDITOR.md`](EDITOR.md); for the editor's development architecture and limitations, see [`src/editor/README.md`](../src/editor/README.md).
 
 ## One-time GitHub setup
 

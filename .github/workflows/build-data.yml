@@ -4,14 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       schema_version:
-        description: Leave empty to rebuild the current version; set new X.Y for a breaking release.
+        description: Leave empty only when update.json is 2.0+; set X.Y for a breaking release. The first v2 release must explicitly set 2.0.
         required: false
         type: string
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: data-build-${{ github.ref }}
@@ -20,6 +15,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       schema_version: ${{ steps.version.outputs.schema_version }}
     steps:
@@ -40,9 +37,26 @@ jobs:
         env:
           SCHEMA_VERSION: ${{ inputs.schema_version }}
         run: |
+          CURRENT_VERSION=$(node -p "require('./update.json').schemaVersion")
+          if [[ ! "$CURRENT_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            echo "update.json schemaVersion must match X.Y." >&2
+            exit 1
+          fi
           if [[ -n "$SCHEMA_VERSION" && ! "$SCHEMA_VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
             echo "schema_version must match X.Y (for example 2.1)." >&2
             exit 1
+          fi
+          CURRENT_MAJOR="${CURRENT_VERSION%%.*}"
+          if (( CURRENT_MAJOR < 2 )); then
+            if [[ -z "$SCHEMA_VERSION" ]]; then
+              echo "Leaving schema_version blank is allowed only when update.json is already 2.0 or later; pass 2.0 for the first v2 release." >&2
+              exit 1
+            fi
+            INPUT_MAJOR="${SCHEMA_VERSION%%.*}"
+            if (( INPUT_MAJOR >= 2 )) && [[ "$SCHEMA_VERSION" != "2.0" ]]; then
+              echo "The first v2 release must explicitly set schema_version to 2.0." >&2
+              exit 1
+            fi
           fi
       - name: Build data
         env:

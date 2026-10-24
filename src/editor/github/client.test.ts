@@ -93,6 +93,90 @@ describe('GitHub editor REST client', () => {
         );
         expect(fetch).toHaveBeenCalledTimes(1);
     });
+    it('fast-forwards across commits that only change untracked files', async () => {
+        mockResponses([
+            { object: { sha: 'new-head' } },
+            { tree: { sha: 'old-tree' } },
+            { tree: { sha: 'new-tree' } },
+            {
+                truncated: false,
+                tree: [
+                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-blob' },
+                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
+                    { path: 'README.md', type: 'blob', sha: 'old-readme' },
+                ],
+            },
+            {
+                truncated: false,
+                tree: [
+                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-blob' },
+                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
+                    { path: 'README.md', type: 'blob', sha: 'new-readme' },
+                ],
+            },
+            { object: { sha: 'new-head' } },
+        ]);
+        expect(await client.checkTrackedFiles('old-head')).toEqual({
+            head: 'new-head',
+            changed: false,
+        });
+    });
+    it('requires reload when a tracked source or locale file changed', async () => {
+        mockResponses([
+            { object: { sha: 'new-head' } },
+            { tree: { sha: 'old-tree' } },
+            { tree: { sha: 'new-tree' } },
+            {
+                truncated: false,
+                tree: [
+                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-before' },
+                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
+                ],
+            },
+            {
+                truncated: false,
+                tree: [
+                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-after' },
+                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
+                ],
+            },
+            { object: { sha: 'new-head' } },
+        ]);
+        expect(await client.checkTrackedFiles('old-head')).toEqual({
+            head: 'new-head',
+            changed: true,
+        });
+    });
+    it('treats a changed English locale file as a tracked conflict', async () => {
+        mockResponses([
+            { object: { sha: 'new-head' } },
+            { tree: { sha: 'old-tree' } },
+            { tree: { sha: 'new-tree' } },
+            {
+                truncated: false,
+                tree: [{ path: 'locale/en.json', type: 'blob', sha: 'old-locale' }],
+            },
+            {
+                truncated: false,
+                tree: [{ path: 'locale/en.json', type: 'blob', sha: 'new-locale' }],
+            },
+            { object: { sha: 'new-head' } },
+        ]);
+        expect(await client.checkTrackedFiles('old-head')).toEqual({
+            head: 'new-head',
+            changed: true,
+        });
+    });
+    it('refuses to compare a truncated Git tree rather than risk an overwrite', async () => {
+        mockResponses([
+            { object: { sha: 'new-head' } },
+            { tree: { sha: 'old-tree' } },
+            { tree: { sha: 'new-tree' } },
+            { truncated: true, tree: [] },
+            { truncated: false, tree: [] },
+        ]);
+        await expect(client.checkTrackedFiles('old-head')).rejects.toThrow('truncated');
+    });
     it('creates a new branch pointing at the single commit without changing the base branch', async () => {
         const fetch = mockResponses([
             { object: { sha: 'head' } },
@@ -123,13 +207,34 @@ describe('GitHub editor REST client', () => {
         });
     });
     it('dispatches the saved branch with optional schema_version and lists branch-specific runs', async () => {
-        const fetch = mockResponses([undefined, { workflow_runs: [{ id: 1 }] }]);
+        const fetch = mockResponses([
+            undefined,
+            {
+                workflow_runs: [
+                    {
+                        id: 1,
+                        html_url: 'https://github.com/example/stats/actions/runs/1',
+                        display_title: 'Build data',
+                        status: 'completed',
+                        conclusion: 'success',
+                    },
+                ],
+            },
+        ]);
         await client.dispatchWorkflow('2.1');
         expect(JSON.parse(String(fetch.mock.calls[0]?.[1]?.body))).toEqual({
             ref: 'feature/data',
             inputs: { schema_version: '2.1' },
         });
-        expect(await client.listWorkflowRuns()).toEqual([{ id: 1 }]);
+        expect(await client.listWorkflowRuns()).toEqual([
+            {
+                id: 1,
+                html_url: 'https://github.com/example/stats/actions/runs/1',
+                display_title: 'Build data',
+                status: 'completed',
+                conclusion: 'success',
+            },
+        ]);
         expect(fetch.mock.calls[1]?.[0]).toContain('branch=feature%2Fdata');
     });
     it('reports REST failures without exposing the token', async () => {

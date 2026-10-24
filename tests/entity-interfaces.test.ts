@@ -4,6 +4,12 @@ import {
     superAbilitySpec,
     overrideSpec,
     movementClassSpec,
+    movementRulesSpec,
+    movementEffectSpec,
+    movementSourceSpec,
+    type MovementRules,
+    type MovementEffect,
+    type MovementSourceEntry,
     type Ability,
     type SuperAbility,
     type Override,
@@ -41,11 +47,36 @@ const overrideKeys = {
 const movementClassKeys = {
     ClassHash: true,
     Name: true,
-    WalkSpeed: true,
-    StrafeSpeed: true,
-    CrouchSpeed: true,
+    BaseMobilityTier: true,
+    BaseMobilityTierPVP: true,
+    BaseSprintSpeed: true,
     Notes: true,
 } satisfies Record<keyof MovementClass, true>;
+
+const movementRulesKeys = {
+    WalkSpeed: true,
+    JumpHeight: true,
+    StrafeMultiplier: true,
+    CrouchMultiplier: true,
+    ADSMultiplier: true,
+    ForwardSpeedCap: true,
+    StrafeSpeedCap: true,
+    CrouchSpeedCap: true,
+    MaxMobilityTier: true,
+} satisfies Record<keyof MovementRules, true>;
+const movementEffectKeys = { Type: true, Values: true, BoostedValues: true } satisfies Record<
+    keyof MovementEffect,
+    true
+>;
+const movementSourceKeys = {
+    Hash: true,
+    Name: true,
+    RefType: true,
+    Activation: true,
+    Effects: true,
+    BoostRequiresAll: true,
+    Notes: true,
+} satisfies Record<keyof MovementSourceEntry, true>;
 
 describe('explicit entity interfaces', () => {
     it.each([
@@ -53,6 +84,9 @@ describe('explicit entity interfaces', () => {
         { name: 'SuperAbility', spec: superAbilitySpec, keys: superAbilityKeys },
         { name: 'Override', spec: overrideSpec, keys: overrideKeys },
         { name: 'MovementClass', spec: movementClassSpec, keys: movementClassKeys },
+        { name: 'MovementRules', spec: movementRulesSpec, keys: movementRulesKeys },
+        { name: 'MovementEffect', spec: movementEffectSpec, keys: movementEffectKeys },
+        { name: 'MovementSource', spec: movementSourceSpec, keys: movementSourceKeys },
     ])('keeps the $name interface keys in sync with its spec', ({ spec, keys }) => {
         expect(spec.fields.map((field) => field.key).sort()).toEqual(Object.keys(keys).sort());
     });

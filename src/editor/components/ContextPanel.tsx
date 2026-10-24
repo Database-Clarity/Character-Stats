@@ -2,11 +2,16 @@ import { useState } from 'react';
 import {
     effectiveCooldown,
     isRecord,
+    isAbilityRole,
     type Ability,
     type SuperAbility,
     type Override,
     type StatSource,
 } from '../../core';
+import { Collapse, StatControl } from './EditorPrimitives';
+import { HashIdentity } from './ManifestUI';
+import { isPreviewAbility, isPreviewOverride, previewCollections } from './previewData';
+
 export function ContextPanel({
     source,
     collection,
@@ -17,97 +22,156 @@ export function ContextPanel({
     selected: Record<string, unknown> | undefined;
 }) {
     const [statValue, setStatValue] = useState(100);
-    const collectionItems = Array.isArray(source.Abilities)
-        ? source.Abilities
-        : Array.isArray(source.SuperAbilities)
-          ? source.SuperAbilities
-          : [];
-    const abilities = collectionItems.filter(isRecord);
+    const { abilities: allAbilities, overrides, collections } = previewCollections(source);
+    const abilities = allAbilities.filter(isPreviewAbility);
     if (!isRecord(source.Fields) || !source.Fields.CooldownScalars || !abilities.length)
-        return null;
-    const overrides = Array.isArray(source.Overrides) ? source.Overrides.filter(isRecord) : [];
+        return (
+            <aside className="context">
+                <div className="pane-header">
+                    <strong>Context</strong>
+                </div>
+                <p className="empty-state">No cooldown context for this collection.</p>
+            </aside>
+        );
     function result(ability: Ability | SuperAbility, applied: Override[]) {
         try {
-            return effectiveCooldown(source, ability, statValue, applied);
+            const calculated = effectiveCooldown(source, ability, statValue, applied);
+            return Number.isFinite(calculated.cooldown) ? calculated : undefined;
         } catch {
             return undefined;
         }
     }
+    const role = collections[collection]?.role;
     const selectedAbility =
-        collection === 'Overrides'
-            ? undefined
-            : abilities.find((ability) => ability.Hash === selected?.Hash);
-    const chosenOverrides =
-        collection === 'Overrides' && selected ? [selected as unknown as Override] : overrides;
+        isAbilityRole(role) && isPreviewAbility(selected) ? selected : undefined;
+    const selectedOverride =
+        role === 'override' && isPreviewOverride(selected) ? selected : undefined;
+    const selectedBase = selectedAbility ? result(selectedAbility, []) : undefined;
+    const rows = selectedAbility
+        ? overrides.flatMap((override) => {
+              const base = selectedBase,
+                  applied = result(selectedAbility, [override]);
+              return applied?.appliedOverrides.includes(override.Hash)
+                  ? [
+                        {
+                            hash: override.Hash,
+                            name: override.Name,
+                            before: base?.cooldown,
+                            after: applied.cooldown,
+                        },
+                    ]
+                  : [];
+          })
+        : selectedOverride
+          ? abilities.flatMap((ability) => {
+                const base = result(ability, []),
+                    applied = result(ability, [selectedOverride]);
+                return applied?.appliedOverrides.includes(selectedOverride.Hash)
+                    ? [
+                          {
+                              hash: ability.Hash,
+                              name: ability.Name,
+                              before: base?.cooldown,
+                              after: applied.cooldown,
+                          },
+                      ]
+                    : [];
+            })
+          : [];
+    const unresolved = (
+        selectedOverride ? [selectedOverride] : selectedAbility ? overrides : []
+    ).filter((o) => o.Requirements.some((r) => r < 0));
     return (
-        <aside className="context card">
-            <h3>Cooldown context</h3>
-            <label>
-                Context stat value: {statValue}
-                <input
-                    aria-label="Context stat value"
-                    type="range"
-                    min={0}
-                    max={200}
-                    value={statValue}
-                    onChange={(e) => setStatValue(Number(e.target.value))}
-                />
-            </label>
-            <p className="help">
-                Calculated by the shared core. Stat values above 100 clamp to 100 for cooldowns.
-                Negative subclass requirements remain unresolved.
-            </p>
-            <div className="table-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ability</th>
-                            <th>No overrides (s)</th>
-                            <th>
-                                {collection === 'Overrides'
-                                    ? 'Selected override (s)'
-                                    : 'All overrides (s)'}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {abilities.map((ability) => {
-                            const base = result(ability, []),
-                                applied = result(ability, chosenOverrides);
-                            return (
-                                <tr key={ability.Hash}>
-                                    <th>
-                                        {ability.Name}
-                                        {selectedAbility?.Hash === ability.Hash
-                                            ? ' • selected'
-                                            : ''}
-                                    </th>
-                                    <td>{base?.cooldown ?? 'Invalid data'}</td>
-                                    <td>
-                                        {applied?.cooldown ?? 'Invalid data'}
-                                        {applied?.unresolved.length ? ' (unresolved subclass)' : ''}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+        <aside className="context">
+            <div className="pane-header">
+                <strong>Cooldown context</strong>
+                <span className="muted">seconds</span>
             </div>
-            {selectedAbility && (
-                <>
-                    <h4>Each applicable override</h4>
-                    <ul>
-                        {overrides.map((override) => {
-                            const applied = result(selectedAbility, [override]);
-                            return applied?.appliedOverrides.includes(override.Hash) ? (
-                                <li key={override.Hash}>
-                                    {override.Name}: {applied.cooldown}s
-                                </li>
-                            ) : null;
-                        })}
-                    </ul>
-                </>
-            )}
+            <div className="pinned-controls">
+                <StatControl label="Context stat value" value={statValue} onChange={setStatValue} />
+                <p className="help">Core calculation · cooldown stat clamps at 100.</p>
+            </div>
+            <div className="scroll-pane context-body">
+                {!selected ? (
+                    <p className="empty-state">
+                        Select an ability or override to inspect its effects.
+                    </p>
+                ) : (
+                    <>
+                        {!selectedAbility && !selectedOverride && (
+                            <p className="warning">
+                                Invalid item data; fix validation errors to preview cooldowns.
+                            </p>
+                        )}
+                        {selectedAbility && (
+                            <div className="context-base">
+                                <HashIdentity
+                                    hash={selectedAbility.Hash}
+                                    name={selectedAbility.Name}
+                                />
+                                <strong className="mono">
+                                    {selectedBase ? `${selectedBase.cooldown} s` : 'Invalid data'}
+                                </strong>
+                                <small>Base cooldown at {statValue}</small>
+                            </div>
+                        )}
+                        <Collapse
+                            storageKey={`${source.Name}:${collection}:context`}
+                            title={selectedAbility ? 'Applicable overrides' : 'Affected abilities'}
+                        >
+                            <div className="table-scroll context-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>{selectedAbility ? 'Override' : 'Ability'}</th>
+                                            <th>Before → after</th>
+                                            <th>Δ s</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {rows.map((row) => (
+                                            <tr key={row.hash}>
+                                                <th>
+                                                    <HashIdentity
+                                                        hash={row.hash}
+                                                        name={row.name}
+                                                        compact
+                                                    />
+                                                </th>
+                                                <td className="mono">
+                                                    {row.before ?? '—'} → {row.after ?? '—'}
+                                                </td>
+                                                <td className="mono info">
+                                                    {row.before === undefined ||
+                                                    row.after === undefined
+                                                        ? '—'
+                                                        : `${row.after - row.before > 0 ? '+' : ''}${Number((row.after - row.before).toFixed(3))}`}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                {!rows.length && (
+                                    <p className="help">No resolved applicable effects.</p>
+                                )}
+                            </div>
+                        </Collapse>
+                        {unresolved.length > 0 && (
+                            <Collapse
+                                storageKey={`${source.Name}:unresolved`}
+                                title="Unresolved subclass filters"
+                            >
+                                {unresolved.map((o) => (
+                                    <p key={o.Hash} className="warning">
+                                        <HashIdentity hash={o.Hash} name={o.Name} compact />{' '}
+                                        unresolved: subclass filter
+                                    </p>
+                                ))}
+                            </Collapse>
+                        )}
+                    </>
+                )}
+            </div>
         </aside>
     );
 }

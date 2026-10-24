@@ -1,12 +1,40 @@
 # Changelogs
 
-## v2.0.0 Breaking Change - July X, 2025
+## v2.0.0 Breaking change - TBD
 
-### Edge of Fate Preview Build
+### Edge of Fate stats
 
-- All Character Stats have been replaced with the Edge of Fate versions
-- Cooldown arrays have been removed from ability entries, we only provide an unscaled (base) cooldown for them now alongside a high level "scalar" array at the Character Stat level
-- Values present in this build are not final and will NEED to be revised with testing data
+This release replaces the whole database with the Edge of Fate stat system. Nothing from v1.9 carries over unchanged, so treat it as a new integration. The v1.9 files stay online at `versions/1.9/` and won't receive further updates.
+
+Stat values in this build are placeholders. Expect most of them to change once we have testing data.
+
+### New layout
+
+- The six old stats are gone. The top-level keys are now the manifest hashes of the new stats, as strings: Weapons `2996146975`, Health `392767087`, Class `1943323491`, Grenade `1735777505`, Super `144602215` and Melee `4244567218`.
+- A new top-level `Movement` key holds walk, strafe and crouch speeds. See the Movement section below.
+- Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Arrays for the enhanced range (101 to 200) have 100 entries, so index 0 is stat 101. Stat values above 100 use the last entry of a 0 to 100 array.
+- `schema.json` describes the new shape in full and is the reference for every property.
+
+### Abilities and cooldowns
+
+- Abilities moved to the stat that now controls them. Class holds the class abilities of all three classes (previously under Mobility, Resilience and Recovery). Grenade took over from Discipline, Melee from Strength, and Super from Intellect.
+- The precomputed `Cooldowns` arrays are gone. Each ability has a `BaseCooldown` in seconds, and each stat has a `CooldownScalars` array. The cooldown at a given stat value is `BaseCooldown * CooldownScalars[min(stat, 100)]`.
+- `CooldownOverride` on overrides is now a single number in seconds instead of an 11-tier array. It replaces `BaseCooldown` before any `Scalar` and the stat's `CooldownScalars` apply.
+- `Scalar`, `ChunkEnergyScalar`, `ChunkEnergyOverride` and `ChargeBasedScaling` work as before.
+- Super abilities lost `SuperTier`. `ActiveRegenScalar` stays, and the Super stat's `ActiveRegenScalars` array scales it by stat value.
+
+### Movement
+
+Mobility no longer exists, but movement speed still matters. `Movement` lists walk, strafe and crouch speed in meters per second for Titan, Hunter and Warlock, with one value for each number of Enhanced Athletics mods equipped (0 to 3). The mod's hash is in `EnhancedAthleticsHash`. These numbers come from the old Mobility tiers and haven't been verified in game yet.
+
+### Descriptions and locale
+
+- Stat descriptions are now the locale IDs `Overview`, `BaseStatTooltip` and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` on stats with abilities. They replace `Description`, `ChunkEnergyScalarDescription` and the other `*Description` keys.
+- Tooltips contain `{{Placeholder}}` tokens. Replace each one with the value of the stat property that has the same name, read at the player's stat value.
+- `locale/en.json` uses the new keys. The other languages still contain the v1.9 text until translations catch up.
+- Health's PvE damage resistance is now a fixed 34.5% in `PVEDamageResistance`.
+- Health's shield values follow the same split. `BaseShieldHP` is the Shield HP in every activity, PvE and PvP. `PVEBonusShieldHP` is a 101 to 200 array of extra Shield HP that only applies in PvE. `BaseShieldRechargeDelay` and `BaseShieldRechargeSpeed` are plain numbers for stat values up to 100, and `ShieldRechargeDelay` and `ShieldRechargeSpeed` are 101 to 200 arrays for the enhanced range.
+- `PVPShieldHP` is gone because PvP shields always use `BaseShieldHP`.
 
 ## v1.9.10 - February 4, 2025
 

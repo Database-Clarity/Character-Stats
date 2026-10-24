@@ -1,4 +1,11 @@
-import { isRecord, validateEntity, validateCollection, type ValidationIssue } from './fields';
+import {
+    collectionItems,
+    isAbilityRole,
+    isRecord,
+    validateEntity,
+    validateCollection,
+    type ValidationIssue,
+} from './fields';
 import { statRegistry, localeFields } from './stats';
 import { movementSpec } from './movement';
 import { localeId, resolveLocale, validatePlaceholders, type LocaleData } from './locale';
@@ -53,20 +60,21 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
         for (const [key, entity] of Object.entries(spec.collections)) {
             issues.push(...validateCollection(entity, source[key], path + '.' + key));
         }
-        let abilities: unknown[] = [];
-        if (Array.isArray(source.Abilities)) {
-            abilities = source.Abilities;
-        } else if (Array.isArray(source.SuperAbilities)) {
-            abilities = source.SuperAbilities;
-        }
-        const hashes = new Set(abilities.filter(isRecord).map((a) => a.Hash));
-        if (Array.isArray(source.Overrides)) {
-            source.Overrides.forEach((o: unknown, j: number) => {
-                if (isRecord(o) && Array.isArray(o.Requirements)) {
-                    o.Requirements.forEach((hash: unknown, k: number) => {
+        const abilities = collectionItems(source, spec.collections, (entity) =>
+            isAbilityRole(entity.role),
+        );
+        const hashes = new Set(abilities.map((ability) => ability.Hash));
+        for (const [key, entity] of Object.entries(spec.collections)) {
+            if (entity.role !== 'override' || !Array.isArray(source[key])) continue;
+            source[key].forEach((override: unknown, index: number) => {
+                if (!isRecord(override)) return;
+                for (const field of entity.fields.filter((field) => field.itemRef === 'ability')) {
+                    const requirements = override[field.key];
+                    if (!Array.isArray(requirements)) continue;
+                    requirements.forEach((hash: unknown, requirementIndex: number) => {
                         if (typeof hash === 'number' && hash > 0 && !hashes.has(hash)) {
                             issues.push({
-                                path: path + '.Overrides[' + j + '].Requirements[' + k + ']',
+                                path: `${path}.${key}[${index}].${field.key}[${requirementIndex}]`,
                                 message: 'Ability hash ' + hash + ' is not present in this stat',
                                 severity: 'warning',
                             });
@@ -76,7 +84,9 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
             });
         }
         if (locale) {
-            for (const f of localeFields('Abilities' in spec.collections)) {
+            for (const f of localeFields(
+                Object.values(spec.collections).some((entity) => entity.role === 'ability'),
+            )) {
                 const id = localeId(spec.name, f.key),
                     text = resolveLocale(locale, id);
                 if (text === undefined) {
@@ -113,6 +123,71 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
         for (const [key, spec] of Object.entries(movementSpec.collections)) {
             issues.push(...validateCollection(spec, movement[key], 'movement.' + key));
         }
+        if (Array.isArray(movement.Sources)) {
+            movement.Sources.forEach((source: unknown, index: number) => {
+                if (!isRecord(source)) return;
+                const path = 'movement.Sources[' + index + ']';
+                if (
+                    source.Activation === 'Conditional' &&
+                    locale &&
+                    !resolveLocale(
+                        locale,
+                        'Movement.Sources.' + String(source.Hash) + '.Condition',
+                    )?.trim()
+                ) {
+                    issues.push({
+                        path: 'locale.Movement.Sources.' + String(source.Hash) + '.Condition',
+                        message: 'Conditional movement source is missing English Condition text',
+                        severity: 'warning',
+                    });
+                }
+                if (Array.isArray(source.Effects))
+                    source.Effects.forEach((effect: unknown, effectIndex: number) => {
+                        if (!isRecord(effect)) return;
+                        if (
+                            effect.BoostedValues !== undefined &&
+                            !Array.isArray(source.BoostRequiresAll)
+                        )
+                            error(
+                                path + '.BoostRequiresAll',
+                                'BoostedValues requires BoostRequiresAll',
+                            );
+                        for (const key of ['Values', 'BoostedValues']) {
+                            const values = effect[key];
+                            if (!Array.isArray(values)) continue;
+                            values.forEach((value: unknown, valueIndex: number) => {
+                                if (typeof value !== 'number') return;
+                                if (
+                                    effect.Type === 'MobilityTiers'
+                                        ? !Number.isSafeInteger(value)
+                                        : value <= 0
+                                ) {
+                                    error(
+                                        path +
+                                            '.Effects[' +
+                                            effectIndex +
+                                            '].' +
+                                            key +
+                                            '[' +
+                                            valueIndex +
+                                            ']',
+                                        effect.Type === 'MobilityTiers'
+                                            ? 'Mobility tiers must be safe integers'
+                                            : 'Movement multipliers must be positive',
+                                    );
+                                }
+                            });
+                        }
+                    });
+            });
+        }
+        if (locale)
+            for (const key of movementSpec.localeKeys) {
+                const id = 'Movement.' + key;
+                const text = resolveLocale(locale, id);
+                if (text === undefined) error('locale.' + id, 'Missing English locale string');
+                else issues.push(...validatePlaceholders(text, [], 'locale.' + id));
+            }
         for (const key of Object.keys(movement)) {
             if (
                 ![

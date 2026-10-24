@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { statRegistry } from '../../core';
 import type { DataSource } from '../data';
 import {
@@ -38,7 +38,10 @@ describe('editor in-memory state', () => {
         const path = 'sources/movement.json';
         const value = {
             ...(state.values[path] as Record<string, unknown>),
-            EnhancedAthleticsHash: -1,
+            Rules: {
+                ...(state.values[path] as { Rules: Record<string, unknown> }).Rules,
+                MaxMobilityTier: -1,
+            },
         };
         const changed = editorReducer(state, { type: 'set', file: path, value });
         expect(deriveEditorState(changed).dirty).toEqual([path]);
@@ -53,7 +56,7 @@ describe('editor in-memory state', () => {
     it('retains unparsed drafts as dirty, blocks save, and clears them on discard', () => {
         const state = editorReducer(initial(), {
             type: 'draft',
-            key: 'sources/movement.json:Classes[0].WalkSpeed',
+            key: 'sources/movement.json:Rules.WalkSpeed',
             draft: { text: '[', error: 'Invalid JSON' },
         });
         expect(deriveEditorState(state).dirty).toEqual(['sources/movement.json']);
@@ -93,7 +96,7 @@ describe('editor in-memory state', () => {
             file: path,
             value: {
                 ...(state.values[path] as Record<string, unknown>),
-                EnhancedAthleticsHash: 12,
+                Notes: 'pending movement update',
             },
         });
         const serialized = deriveEditorState(changed).serialized[path]!;
@@ -112,5 +115,123 @@ describe('editor in-memory state', () => {
         expect(updateProperty({ Notes: 'hello', Hash: 1 }, 'Notes', undefined)).toEqual({
             Hash: 1,
         });
+    });
+});
+
+describe('isolated item drafts', () => {
+    it('keeps unadded drafts out of validation, serialization and pending changes', () => {
+        const state = editorReducer(initial(), {
+            type: 'item-draft',
+            key: 'sources/movement.json:Classes',
+            value: { Name: 'Incomplete draft' },
+        });
+        expect(deriveEditorState(state).dirty).toEqual([]);
+        expect(deriveEditorState(state).changes).toEqual([]);
+        expect(deriveEditorState(state).issues).toEqual([]);
+        expect(state.itemDrafts['sources/movement.json:Classes']).toEqual({
+            Name: 'Incomplete draft',
+        });
+    });
+    it('retains drafts across unrelated edits and saves, and supports explicit discard', () => {
+        const key = 'sources/movement.json:Classes';
+        const draft = editorReducer(initial(), {
+            type: 'item-draft',
+            key,
+            value: { Name: 'Draft' },
+        });
+        const saved = editorReducer(draft, { type: 'saved', files: {}, head: 'next', source });
+        expect(saved.itemDrafts[key]).toEqual({ Name: 'Draft' });
+        expect(editorReducer(saved, { type: 'item-draft', key }).itemDrafts).toEqual({});
+    });
+    it('clears only drafts belonging to a discarded file', () => {
+        let state = editorReducer(initial(), {
+            type: 'item-draft',
+            key: 'sources/movement.json:Classes',
+            value: {},
+        });
+        state = editorReducer(state, {
+            type: 'item-draft',
+            key: 'sources/stats/grenade.json:Abilities',
+            value: {},
+        });
+        expect(
+            Object.keys(
+                editorReducer(state, { type: 'discard', file: 'sources/movement.json' }).itemDrafts,
+            ),
+        ).toEqual(['sources/stats/grenade.json:Abilities']);
+        expect(editorReducer(state, { type: 'discard' }).itemDrafts).toEqual({});
+    });
+});
+
+describe('branch fast-forward and rebase state', () => {
+    it('fast-forwards the head without changing clean originals or values', () => {
+        const state = initial();
+        const advanced = editorReducer(state, { type: 'fast-forward', head: 'published-commit' });
+        expect(advanced.head).toBe('published-commit');
+        expect(advanced.originals).toBe(state.originals);
+        expect(advanced.values).toBe(state.values);
+    });
+    it('reloads remote originals while retaining pending file values for a rebase attempt', () => {
+        const state = initial();
+        const path = 'sources/movement.json';
+        const pendingValue = {
+            ...(state.values[path] as Record<string, unknown>),
+            Notes: 'pending movement update',
+        };
+        const pending = editorReducer(state, { type: 'set', file: path, value: pendingValue });
+        const remoteValue = {
+            ...(state.originalValues[path] as Record<string, unknown>),
+            Notes: 'remote update',
+        };
+        const remoteFiles = { ...files, [path]: serializeFile(path, remoteValue) };
+        const rebased = editorReducer(pending, {
+            type: 'rebase',
+            files: remoteFiles,
+            head: 'latest-head',
+            preserve: [path],
+        });
+        expect(rebased.head).toBe('latest-head');
+        expect(rebased.originals[path]).toBe(remoteFiles[path]);
+        expect(rebased.originalValues[path]).toEqual(JSON.parse(remoteFiles[path]!));
+        expect(rebased.values[path]).toEqual(pendingValue);
+        expect(deriveEditorState(rebased).dirty).toContain(path);
+    });
+    it('keeps malformed edited JSON unknown and reports validation instead of casting it', () => {
+        const state = editorReducer(initial(), {
+            type: 'set',
+            file: 'locale/en.json',
+            value: 7,
+        });
+        const derived = deriveEditorState(state);
+        expect(derived.locale).toEqual({});
+        expect(derived.issues).toContainEqual({
+            path: 'locale/en.json',
+            message: 'English locale must be an object',
+            severity: 'error',
+        });
+        expect(derived.serialized['locale/en.json']).toBe('7\n');
+    });
+});
+
+describe('per-file derivation caches', () => {
+    it('does not reparse originals while deriving subsequent edits', () => {
+        let state = initial();
+        const parse = vi.spyOn(JSON, 'parse');
+        try {
+            deriveEditorState(state);
+            const file = 'sources/movement.json';
+            state = editorReducer(state, {
+                type: 'set',
+                file,
+                value: {
+                    ...(state.originalValues[file] as Record<string, unknown>),
+                    Notes: 'Edited',
+                },
+            });
+            deriveEditorState(state);
+            expect(parse).not.toHaveBeenCalled();
+        } finally {
+            parse.mockRestore();
+        }
     });
 });

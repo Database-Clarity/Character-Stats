@@ -1,13 +1,13 @@
-import { hashField } from '../fields/builders';
-import { movementClassSpec } from '../entities';
+import { objectField } from '../fields/builders';
+import { movementClassSpec, movementRulesSpec, movementSourceSpec } from '../entities';
 
 export const movementSpec = {
     name: 'Movement',
     fields: [
-        hashField('EnhancedAthleticsHash', {
-            description: 'Enhanced Athletics mod manifest hash; 0 while unknown.',
+        objectField('Rules', movementRulesSpec, {
+            description: 'Shared movement curves, state multipliers, and caps.',
         }),
     ],
-    collections: { Classes: movementClassSpec },
-    localeKeys: ['WalkSpeed', 'StrafeSpeed', 'CrouchSpeed', 'Overview'],
+    collections: { Classes: movementClassSpec, Sources: movementSourceSpec },
+    localeKeys: ['Overview', 'WalkSpeed', 'StrafeSpeed', 'CrouchSpeed', 'SprintSpeed', 'ADSSpeed'],
 };

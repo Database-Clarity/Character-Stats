@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { GitHubDataSource, LocalDevDataSource, type DataSource, type LoadedData } from '../data';
 import { GitHubClient } from '../github/client';
+import logo from '../assets/clarity-logo.svg';
 export interface LoginSettings {
     token: string;
     owner: string;
@@ -93,7 +94,7 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
     return (
         <main className="login">
             <div className="brand">
-                CHARACTER STATS <span>EDITOR</span>
+                <img src={logo} alt="Clarity" /> Clarity <span>data editor</span>
             </div>
             <h1>Connect to your repository</h1>
             <p className="muted">

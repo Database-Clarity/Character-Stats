@@ -55,6 +55,21 @@ export function validateField(
     if (value === undefined) {
         return spec.required ? [issue('Required field is unspecified')] : [];
     }
+    if (spec.kind === 'enum') {
+        return typeof value === 'string' && spec.values?.some((entry) => entry.value === value)
+            ? []
+            : [
+                  issue(
+                      'Expected one of: ' +
+                          (spec.values ?? []).map((entry) => entry.value).join(', '),
+                  ),
+              ];
+    }
+    if (spec.kind === 'object') {
+        return spec.entity
+            ? validateEntity(spec.entity, value, path)
+            : [issue('Object field has no entity spec')];
+    }
     if (spec.kind === 'string' || spec.kind === 'localeRef') {
         if (typeof value !== 'string') {
             return [issue('Please provide a string')];
@@ -78,9 +93,15 @@ export function validateField(
                 ),
         );
     }
-    if (spec.kind === 'numberArray' || spec.kind === 'intArray') {
+    if (spec.kind === 'numberArray' || spec.kind === 'intArray' || spec.kind === 'objectArray') {
         if (!Array.isArray(value)) {
-            return [issue('Please provide an array of numbers')];
+            return [
+                issue(
+                    spec.kind === 'objectArray'
+                        ? 'Expected entity array'
+                        : 'Please provide an array of numbers',
+                ),
+            ];
         }
         const errors: ValidationIssue[] = [];
         if (value.length < (spec.minItems ?? 0)) {
@@ -96,6 +117,14 @@ export function validateField(
                 ),
             );
         }
+        if (spec.kind === 'objectArray') {
+            return [
+                ...errors,
+                ...(spec.entity
+                    ? validateCollection(spec.entity, value, path)
+                    : [issue('Object array field has no entity spec')]),
+            ];
+        }
         value.forEach((n, i) =>
             errors.push(
                 ...validateNumber(n, spec.items ?? {}, spec.kind === 'intArray').map((m) =>
@@ -105,11 +134,15 @@ export function validateField(
         );
         return errors;
     }
-    return validateNumber(
+    const errors = validateNumber(
         value,
         spec.kind === 'hash' ? { min: 0, max: 4294967295, ...spec } : spec,
         spec.kind !== 'number',
     ).map((m) => issue(m));
+    if (spec.kind === 'hash' && spec.warnIfZero && value === 0) {
+        errors.push({ path, message: 'Unverified manifest hash (0)', severity: 'warning' });
+    }
+    return errors;
 }
 
 export function validateEntity(

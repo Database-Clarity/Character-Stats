@@ -21,9 +21,35 @@ function numeric(spec: {
 }
 
 export function fieldSchema(field: FieldSpec): JsonSchema {
-    const schema: JsonSchema = { description: field.description };
+    const mapping =
+        field.kind === 'curve' && field.domain
+            ? ` Stat values ${field.domain[0]}-${field.domain[1]}: index = stat value${field.domain[0] === 0 ? '' : ` - ${field.domain[0]}`}.`
+            : '';
+    const schema: JsonSchema = { description: field.description + mapping };
     if (field.kind === 'localeRef') {
         return { $ref: '#/definitions/' + field.key, ...schema };
+    }
+    if (field.kind === 'enum') {
+        return {
+            type: 'string',
+            enum: (field.values ?? []).map((entry) => entry.value),
+            oneOf: (field.values ?? []).map((entry) => ({
+                const: entry.value,
+                description: entry.description,
+            })),
+            ...schema,
+        };
+    }
+    if (field.kind === 'object' && field.entity)
+        return { ...entitySchema(field.entity), ...schema };
+    if (field.kind === 'objectArray' && field.entity) {
+        return {
+            type: 'array',
+            items: entitySchema(field.entity),
+            ...(field.minItems === undefined ? {} : { minItems: field.minItems }),
+            ...(field.maxItems === undefined ? {} : { maxItems: field.maxItems }),
+            ...schema,
+        };
     }
     if (field.kind === 'string') {
         return { type: 'string', ...(field.required ? { minLength: 1 } : {}), ...schema };
@@ -56,7 +82,7 @@ function objectSchema(
     fields: readonly FieldSpec[],
     extra: Record<string, JsonSchema> = {},
 ): JsonSchema {
-    const exported = fields.filter((f) => f.exported !== false);
+    const exported = fields.filter((f) => f.exported !== false && f.published !== false);
     return {
         type: 'object',
         additionalProperties: false,
@@ -69,10 +95,20 @@ function objectSchema(
 }
 
 function entitySchema(spec: EntitySpec): JsonSchema {
+    const anyOf = spec.anyOf?.map((group) =>
+        group.filter((key) =>
+            spec.fields.some(
+                (field) =>
+                    field.key === key && field.exported !== false && field.published !== false,
+            ),
+        ),
+    );
     return {
         title: spec.name,
         ...objectSchema(spec.fields),
-        ...(spec.anyOf ? { anyOf: spec.anyOf.map((required) => ({ required })) } : {}),
+        ...(anyOf?.length && anyOf.every((group) => group.length)
+            ? { anyOf: anyOf.map((required) => ({ required })) }
+            : {}),
     };
 }
 
@@ -99,7 +135,9 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
             '{{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be ' +
             'filled-in from a property of each Character Stat with the same ' +
             'name. For example, {{FlinchResistance}} will be replaced with the ' +
-            'value of the <FlinchResistance> property of the Character Stat.',
+            'value of the <FlinchResistance> property of the Character Stat. ' +
+            'AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens ' +
+            'supplied by the consumer per ability, not stat properties.',
     };
     for (const f of localeFields(true)) {
         definitions[f.key] = {
@@ -127,13 +165,23 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
         definitions[stat.name] = {
             title: stat.name + ' Stat',
             ...objectSchema(
-                [...localeFields('Abilities' in stat.collections), ...stat.fields],
+                [
+                    ...localeFields(
+                        Object.values(stat.collections).some((entity) => entity.role === 'ability'),
+                    ),
+                    ...stat.fields,
+                ],
                 config.placement === 'inStat' ? collections : {},
             ),
         };
     }
     definitions.Movement = objectSchema(movementSpec.fields, {
-        Classes: { type: 'array', items: { $ref: '#/definitions/MovementClass' } },
+        ...Object.fromEntries(
+            Object.entries(movementSpec.collections).map(([key, entity]) => [
+                key,
+                { type: 'array', items: { $ref: '#/definitions/' + entity.name } },
+            ]),
+        ),
         ...Object.fromEntries(
             movementSpec.localeKeys.map((k) => [
                 k,
@@ -157,6 +205,8 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
     }
     definitions.CharacterStats = {
         title: 'CharacterStats',
+        description:
+            'Root keys are decimal-string stat manifest hashes plus the non-hash Movement key.',
         type: 'object',
         additionalProperties: false,
         properties,
@@ -164,7 +214,7 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
     };
     return {
         $schema: 'http://json-schema.org/draft-06/schema',
-        $id: 'https://github.com/StardustD2/Destiny-2-Character-Stats/blob/main/schema.json',
+        $id: 'https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json',
         $ref: '#/definitions/CharacterStats',
         definitions,
     };

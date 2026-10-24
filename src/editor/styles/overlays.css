@@ -1,0 +1,180 @@
+dialog {
+    background: #191c22;
+    color: inherit;
+    border: 1px solid #4a515e;
+    border-radius: 4px;
+    padding: 16px;
+    width: min(760px, calc(100vw - 32px));
+    max-height: 88dvh;
+    overflow: auto;
+}
+dialog::backdrop {
+    background: #0009;
+}
+.dialog-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: -16px;
+    z-index: 5;
+    background: #191c22;
+}
+.dialog-heading h2 {
+    font-size: 13px;
+}
+.dialog-heading button {
+    background: transparent;
+    border: 0;
+    font-size: 18px;
+    padding: 0 4px;
+}
+.changes-dialog {
+    width: min(620px, calc(100vw - 32px));
+    height: calc(100dvh - 48px);
+    max-height: calc(100dvh - 48px);
+    margin: 48px 0 0 auto;
+    border-radius: 0;
+}
+.changes-dialog .collapse-body {
+    padding: 4px 8px;
+}
+.changes-dialog .collapse {
+    background: #16191e;
+}
+.change-row {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+.change-row > .row-status {
+    margin: 0;
+}
+.change-row strong {
+    font-size: 12px;
+}
+.change-values {
+    display: flex;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+.change-values span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 46%;
+}
+.diff {
+    font-size: 11px;
+    background: #111419;
+    padding: 8px;
+    max-height: 400px;
+    overflow: auto;
+}
+.diff .added {
+    color: #adf5bb;
+    background: #173422;
+}
+.diff .removed {
+    color: #ffbab5;
+    background: #3b2328;
+}
+.picker-results {
+    max-height: 52dvh;
+    overflow: auto;
+    padding: 4px 0;
+}
+.picker-results > button,
+.picker-results section > button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border-color: transparent;
+    border-bottom-color: #2a2e35;
+    padding: 6px 8px;
+}
+.picker-results h3 {
+    color: var(--muted);
+    font-size: 11px;
+    padding: 8px;
+    background: #20242a;
+    position: sticky;
+    top: 0;
+}
+.login {
+    width: min(560px, calc(100vw - 32px));
+    margin: 5vh auto;
+    background: #191c21;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+}
+.login .brand {
+    margin-bottom: 20px;
+}
+.login h1 {
+    font-size: 16px;
+}
+.login details {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 12px 0;
+}
+.login details ul {
+    padding-left: 20px;
+    line-height: 20px;
+}
+.login label {
+    font-size: 12px;
+}
+.local-button {
+    margin-top: 16px;
+    width: 100%;
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+.skip-link {
+    position: fixed;
+    left: 8px;
+    top: -100px;
+    background: var(--panel);
+    padding: 8px;
+    z-index: 100;
+}
+.skip-link:focus {
+    top: 8px;
+}
+.change-highlight {
+    animation: highlight-change 2.5s ease-out;
+}
+@keyframes highlight-change {
+    0%,
+    35% {
+        background: #164652;
+        outline: 1px solid var(--info);
+        outline-offset: 2px;
+    }
+    100% {
+        background: transparent;
+        outline-color: transparent;
+    }
+}

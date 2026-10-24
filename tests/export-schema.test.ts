@@ -12,6 +12,8 @@ import {
     exportEntity,
     validateField,
     fieldSchema,
+    healthSpec,
+    validateSources,
 } from '../src/core';
 import { validateExport } from '../src/cli/io';
 import { fixture } from './fixtures';
@@ -34,7 +36,9 @@ describe('exports and generated schema', () => {
         expect(result.Movement).toMatchObject({
             Overview: 'Movement.Overview',
             WalkSpeed: 'Movement.WalkSpeed',
+            Rules: { WalkSpeed: [5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4, 6.6, 6.8, 7, 7.2, 7.4, 7.6] },
         });
+        expect(JSON.stringify(result)).not.toContain('JumpHeight');
         expect(validateExport(result, generateSchema())).toEqual([]);
     });
     it('supports the single top-level placement switch in both export and schema', () => {
@@ -79,6 +83,35 @@ describe('exports and generated schema', () => {
         expect(superDef.required).toContain('CooldownScalars');
         expect(superDef.properties).toHaveProperty('CooldownScalars');
     });
+    it('derives index mappings from domains without repeating Health fallback sentences', () => {
+        for (const domain of [
+            [0, 100],
+            [0, 200],
+            [101, 200],
+        ] as const) {
+            expect(
+                fieldSchema({ key: 'Curve', kind: 'curve', description: 'Example.', domain })
+                    .description,
+            ).toBe(
+                `Example. Stat values ${domain[0]}-${domain[1]}: index = stat value${domain[0] === 0 ? '' : ' - 101'}.`,
+            );
+        }
+        const flinch = fieldSchema(
+            healthSpec.fields.find((field) => field.key === 'FlinchResistance')!,
+        );
+        expect(String(flinch.description).match(/Stat values above 100/g)).toHaveLength(1);
+        const shield = fieldSchema(
+            healthSpec.fields.find((field) => field.key === 'PVEBonusShieldHP')!,
+        );
+        expect(String(shield.description).match(/Below 101/g)).toHaveLength(1);
+        expect(flinch.minItems).toBe(101);
+        expect(shield.minItems).toBe(100);
+        expect(generateSchema().$id).toBe(
+            'https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json',
+        );
+        expect(serializeSchema()).not.toContain('"abilityKind"');
+        expect(serializeSchema()).not.toContain('"role"');
+    });
     it('declarative field additions drive validation, schema and export', () => {
         const spec = {
             key: 'New',
@@ -100,6 +133,13 @@ describe('source parsing and stable serialization', () => {
     it('returns parse errors instead of throwing', () => {
         expect(parseStatSource('{bad').issues.length).toBe(1);
         expect(parseMovementSource('null').issues.length).toBe(1);
+    });
+    it('leaves parsed source members unknown until content validation', () => {
+        const parsed = parseStatSource('{"Name":"Grenade","Fields":null,"Abilities":[null]}');
+        expect(parsed.issues).toEqual([]);
+        expect(validateSources({ stats: [parsed.value], movement: {} })).toContainEqual(
+            expect.objectContaining({ path: 'stats[0].Fields', severity: 'error' }),
+        );
     });
     it('sorts entities and round trips without mutating curve points', () => {
         const source = fixture().stats.find((s) => s.Name === 'Melee')!;

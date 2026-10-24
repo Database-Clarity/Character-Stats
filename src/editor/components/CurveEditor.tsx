@@ -1,5 +1,4 @@
-import { lazy, Suspense, useId, useState } from 'react';
-
+import { useId, useState } from 'react';
 import {
     expandCurve,
     isRecord,
@@ -8,10 +7,11 @@ import {
     type CurveSegment,
     type FieldSpec,
 } from '../../core';
-import { useEditor } from '../state/store';
-import { JsonInput } from './JsonInput';
-
-const CurvePlot = lazy(() => import('./CurvePlot'));
+import { Collapse } from './EditorPrimitives';
+import CurveModeToggle from './CurveModeToggle';
+import CurvePlot from './CurvePlot';
+import SegmentList from './SegmentList';
+import { valuesToSegments } from './curveValuesConversion';
 
 export function CurveEditor({
     spec,
@@ -28,29 +28,10 @@ export function CurveEditor({
     path: string;
     onChange(value: unknown): void;
 }) {
-    const id = useId();
-    const { dispatch, drafts } = useEditor();
-    const [compare, setCompare] = useState(false);
-    const [message, setMessage] = useState('');
-    const domain = spec.domain!;
-    const curve = value as Curve;
-    const raw =
-        !isRecord(value) ||
-        !Array.isArray(value.Segments) ||
-        !value.Segments.every(
-            (segment) =>
-                isRecord(segment) &&
-                ['Constant', 'Expression', 'Linear'].includes(String(segment.Type)) &&
-                (segment.Type !== 'Linear' ||
-                    (Array.isArray(segment.Points) &&
-                        segment.Points.every(
-                            (point) => Array.isArray(point) && point.length === 2,
-                        ))),
-        );
-    const invalidDraft = Object.entries(drafts).some(
-        ([key, draft]) => key.startsWith(`${file}:${path}`) && draft.error,
-    );
-    const issues = validateField(spec, value);
+    const id = useId(),
+        domain = spec.domain!;
+    const [compare, setCompare] = useState(false),
+        [message, setMessage] = useState('');
     function samples(input: unknown): number[] {
         try {
             return expandCurve(input as Curve, domain);
@@ -60,285 +41,120 @@ export function CurveEditor({
     }
     const current = samples(value),
         original = compare ? samples(saved) : [];
-    const plot = Array.from({ length: domain[1] - domain[0] + 1 }, (_, i) => ({
-        x: domain[0] + i,
-        current: current[i],
-        saved: original[i],
-    }));
-    const segments = !raw ? (curve as Extract<Curve, { Segments: CurveSegment[] }>).Segments : [];
+    const segmented = isRecord(value) && Array.isArray(value.Segments);
+    const segments = segmented ? (value.Segments as CurveSegment[]) : [];
+    const issues = validateField(spec, value);
+
     function setSegments(next: CurveSegment[]) {
-        onChange({ ...(isRecord(value) ? value : {}), Segments: next });
+        onChange({
+            Domain: domain,
+            ...(isRecord(value) && typeof value.Round === 'number' ? { Round: value.Round } : {}),
+            Segments: next,
+        });
     }
-    function update(index: number, next: CurveSegment) {
-        setSegments(segments.map((s, i) => (i === index ? next : s)));
-    }
-    function mode(next: 'raw' | 'segments') {
+
+    function mode(next: 'values' | 'segments') {
         try {
-            if (invalidDraft) throw new Error('The JSON draft is not valid.');
-            const values = expandCurve(curve, domain);
-            onChange(
-                next === 'raw'
-                    ? { Values: values }
-                    : {
-                          Domain: domain,
-                          Round: spec.round ?? 3,
-                          Segments: [
-                              { Type: 'Linear', Points: values.map((y, i) => [domain[0] + i, y]) },
-                          ],
-                      },
-            );
-            dispatch({ type: 'clear-drafts', prefix: `${file}:${path}` });
+            const values = expandCurve(value as Curve, domain);
+            if (next === 'values') {
+                onChange({ Values: values });
+            } else {
+                const result = valuesToSegments(values, domain);
+                if (!('curve' in result)) {
+                    setMessage(
+                        `Cannot convert to Segments without losing precision: ${result.reason}`,
+                    );
+                    return;
+                }
+                onChange(result.curve);
+            }
             setMessage('');
         } catch (error) {
             setMessage(`Fix the curve before converting: ${(error as Error).message}`);
         }
     }
+
+    function setRound(round: number | undefined) {
+        if (!isRecord(value)) return;
+        const next = { ...value };
+        if (round === undefined) delete next.Round;
+        else next.Round = round;
+        onChange(next);
+    }
+
     return (
-        <section className="curve card" aria-labelledby={id}>
-            <h3 id={id}>
-                {spec.label ?? spec.key}{' '}
-                <small>
-                    {domain[0]}–{domain[1]}
-                </small>
-            </h3>
-            <p className="help">{spec.description}</p>
-            <div className="toolbar">
-                <button type="button" aria-pressed={!raw} onClick={() => raw && mode('segments')}>
-                    Segments
-                </button>
-                <button type="button" aria-pressed={raw} onClick={() => !raw && mode('raw')}>
-                    Raw values
-                </button>
-                <label className="check">
-                    <input
-                        type="checkbox"
-                        checked={compare}
-                        onChange={(e) => setCompare(e.target.checked)}
-                    />
-                    Compare with saved
-                </label>
-            </div>
-            <div className="plot" aria-label={`${spec.key} curve plot`} role="img">
-                <Suspense fallback={<p>Loading plot?</p>}>
-                    <CurvePlot plot={plot} domain={domain} compare={compare} />
-                </Suspense>
-            </div>
-            {raw ? (
-                <JsonInput
+        <Collapse
+            storageKey={`${file}:${path}`}
+            className="curve"
+            title={
+                <>
+                    <strong id={id} title={spec.description}>
+                        {spec.label ?? spec.key}
+                    </strong>
+                    <span className="mono muted">
+                        {domain[0]}–{domain[1]}
+                    </span>
+                </>
+            }
+        >
+            <CurveModeToggle
+                segmented={segmented}
+                round={isRecord(value) ? String(value.Round ?? '') : ''}
+                compare={compare}
+                fieldKey={spec.key}
+                onModeChange={mode}
+                onRoundChange={setRound}
+                onCompareChange={setCompare}
+            />
+            <p className="help curve-description sr-only">{spec.description}</p>
+            <CurvePlot
+                plot={Array.from({ length: domain[1] - domain[0] + 1 }, (_, i) => ({
+                    x: domain[0] + i,
+                    current: current[i],
+                    saved: original[i],
+                }))}
+                domain={domain}
+                compare={compare}
+            />
+            {segmented ? (
+                <SegmentList
                     file={file}
                     path={path}
-                    label={`${spec.key} raw curve JSON`}
-                    value={value}
-                    onChange={onChange}
+                    fieldKey={spec.key}
+                    segments={segments}
+                    domain={domain}
+                    onChange={setSegments}
                 />
             ) : (
-                <>
-                    <label className="inline">
-                        Rounding digits
-                        <input
-                            aria-label={`${spec.key} rounding digits`}
-                            type="number"
-                            value={(value as { Round?: number }).Round ?? ''}
-                            onChange={(e) => {
-                                const next = { ...(value as Record<string, unknown>) };
-                                if (e.target.value === '') delete next.Round;
-                                else next.Round = Number(e.target.value);
-                                onChange(next);
-                            }}
-                        />
-                    </label>
-                    {segments.map((segment, index) => (
-                        <fieldset key={index} className="segment">
-                            <legend>Segment {index + 1}</legend>
-                            <label>
-                                Type
-                                <select
-                                    value={segment.Type}
-                                    onChange={(e) => {
-                                        const from =
-                                            segment.Type === 'Linear'
-                                                ? (segment.Points[0]?.[0] ?? domain[0])
-                                                : segment.From;
-                                        const to =
-                                            segment.Type === 'Linear'
-                                                ? (segment.Points.at(-1)?.[0] ?? domain[1])
-                                                : segment.To;
-                                        update(
-                                            index,
-                                            e.target.value === 'Linear'
-                                                ? {
-                                                      Type: 'Linear',
-                                                      Points: [
-                                                          [from, 1],
-                                                          [to, 1],
-                                                      ],
-                                                  }
-                                                : e.target.value === 'Expression'
-                                                  ? {
-                                                        Type: 'Expression',
-                                                        From: from,
-                                                        To: to,
-                                                        Expression: '1',
-                                                    }
-                                                  : {
-                                                        Type: 'Constant',
-                                                        From: from,
-                                                        To: to,
-                                                        Value: 1,
-                                                    },
-                                        );
-                                        dispatch({
-                                            type: 'clear-drafts',
-                                            prefix: `${file}:${path}.Segments[${index}]`,
-                                        });
-                                    }}
-                                >
-                                    <option>Constant</option>
-                                    <option>Linear</option>
-                                    <option>Expression</option>
-                                </select>
-                            </label>
-                            {segment.Type === 'Linear' ? (
-                                <JsonInput
-                                    file={file}
-                                    path={`${path}.Segments[${index}].Points`}
-                                    label={`Segment ${index + 1} points [x, y]`}
-                                    value={segment.Points}
-                                    onChange={(next) =>
-                                        update(index, {
-                                            ...segment,
-                                            Points: next as [number, number][],
+                <div className="raw-values">
+                    {(isRecord(value) && Array.isArray(value.Values) ? value.Values : current).map(
+                        (n, i) => (
+                            <label key={i}>
+                                {domain[0] + i}
+                                <input
+                                    type="number"
+                                    step="any"
+                                    aria-label={`${spec.key} value ${domain[0] + i}`}
+                                    value={Number.isFinite(n) ? Number(n) : ''}
+                                    onChange={(event) =>
+                                        onChange({
+                                            Values: (isRecord(value) && Array.isArray(value.Values)
+                                                ? value.Values
+                                                : current
+                                            ).map((v, j) =>
+                                                i === j
+                                                    ? event.target.value === ''
+                                                        ? NaN
+                                                        : Number(event.target.value)
+                                                    : v,
+                                            ),
                                         })
                                     }
                                 />
-                            ) : (
-                                <>
-                                    <div className="row">
-                                        {(['From', 'To'] as const).map((key) => (
-                                            <label key={key}>
-                                                {key}
-                                                <input
-                                                    aria-label={`${spec.key} segment ${index + 1} ${key}`}
-                                                    type="number"
-                                                    value={
-                                                        Number.isFinite(segment[key])
-                                                            ? segment[key]
-                                                            : ''
-                                                    }
-                                                    onChange={(e) =>
-                                                        update(index, {
-                                                            ...segment,
-                                                            [key]:
-                                                                e.target.value === ''
-                                                                    ? NaN
-                                                                    : Number(e.target.value),
-                                                        })
-                                                    }
-                                                />
-                                            </label>
-                                        ))}
-                                    </div>
-                                    {segment.Type === 'Constant' ? (
-                                        <label>
-                                            Value
-                                            <input
-                                                aria-label={`${spec.key} segment ${index + 1} Value`}
-                                                type="number"
-                                                step="any"
-                                                value={
-                                                    Number.isFinite(segment.Value)
-                                                        ? segment.Value
-                                                        : ''
-                                                }
-                                                onChange={(e) =>
-                                                    update(index, {
-                                                        ...segment,
-                                                        Value:
-                                                            e.target.value === ''
-                                                                ? NaN
-                                                                : Number(e.target.value),
-                                                    })
-                                                }
-                                            />
-                                        </label>
-                                    ) : (
-                                        <label>
-                                            Expression
-                                            <input
-                                                aria-label={`${spec.key} segment ${index + 1} Expression`}
-                                                value={segment.Expression}
-                                                onChange={(e) =>
-                                                    update(index, {
-                                                        ...segment,
-                                                        Expression: e.target.value,
-                                                    })
-                                                }
-                                            />
-                                        </label>
-                                    )}
-                                </>
-                            )}
-                            <div className="toolbar">
-                                <button
-                                    disabled={index === 0}
-                                    onClick={() => {
-                                        const next = [...segments];
-                                        [next[index - 1], next[index]] = [
-                                            next[index]!,
-                                            next[index - 1]!,
-                                        ];
-                                        setSegments(next);
-                                        dispatch({
-                                            type: 'clear-drafts',
-                                            prefix: `${file}:${path}.Segments`,
-                                        });
-                                    }}
-                                >
-                                    Move up
-                                </button>
-                                <button
-                                    disabled={index === segments.length - 1}
-                                    onClick={() => {
-                                        const next = [...segments];
-                                        [next[index], next[index + 1]] = [
-                                            next[index + 1]!,
-                                            next[index]!,
-                                        ];
-                                        setSegments(next);
-                                        dispatch({
-                                            type: 'clear-drafts',
-                                            prefix: `${file}:${path}.Segments`,
-                                        });
-                                    }}
-                                >
-                                    Move down
-                                </button>
-                                <button
-                                    className="danger"
-                                    onClick={() => {
-                                        setSegments(segments.filter((_, i) => i !== index));
-                                        dispatch({
-                                            type: 'clear-drafts',
-                                            prefix: `${file}:${path}.Segments`,
-                                        });
-                                    }}
-                                >
-                                    Remove segment
-                                </button>
-                            </div>
-                        </fieldset>
-                    ))}
-                    <button
-                        onClick={() =>
-                            setSegments([
-                                ...segments,
-                                { Type: 'Constant', From: domain[0], To: domain[1], Value: 1 },
-                            ])
-                        }
-                    >
-                        Add segment
-                    </button>
-                </>
+                            </label>
+                        ),
+                    )}
+                </div>
             )}
             {message && (
                 <p className="error" role="alert">
@@ -348,15 +164,17 @@ export function CurveEditor({
             {issues.length > 0 && (
                 <details open className="issues">
                     <summary>{issues.length} curve issue(s)</summary>
-                    <ul>
-                        {issues.map((issue, i) => (
-                            <li key={i} className="error">
-                                {issue.message}
-                            </li>
-                        ))}
-                    </ul>
+                    {issues.map((issue, i) => (
+                        <p key={i} className="error">
+                            {issue.message}
+                        </p>
+                    ))}
                 </details>
             )}
-        </section>
+            <details className="view-json">
+                <summary>View JSON</summary>
+                <pre>{JSON.stringify(value, null, 2)}</pre>
+            </details>
+        </Collapse>
     );
 }

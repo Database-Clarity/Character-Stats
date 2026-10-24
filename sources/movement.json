@@ -1,74 +1,257 @@
 {
-    "EnhancedAthleticsHash": 1133590731,
+    "Rules": {
+        "WalkSpeed": {
+            "Domain": [
+                0,
+                13
+            ],
+            "Segments": [
+                {
+                    "Type": "Expression",
+                    "From": 0,
+                    "To": 13,
+                    "Expression": "5 + 0.2*x"
+                }
+            ]
+        },
+        "JumpHeight": {
+            "Domain": [
+                0,
+                13
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 13,
+                    "Value": 0
+                }
+            ]
+        },
+        "StrafeMultiplier": 0.85,
+        "CrouchMultiplier": 0.55,
+        "ADSMultiplier": 0.75,
+        "ForwardSpeedCap": 9,
+        "StrafeSpeedCap": 6,
+        "CrouchSpeedCap": 4,
+        "MaxMobilityTier": 13
+    },
     "Classes": [
         {
             "ClassHash": 3655393761,
             "Name": "Titan",
-            "WalkSpeed": [
-                5.6,
-                6.2,
-                6.6,
-                6.8
-            ],
-            "StrafeSpeed": [
-                4.76,
-                5.27,
-                5.61,
-                5.78
-            ],
-            "CrouchSpeed": [
-                3.08,
-                3.41,
-                3.63,
-                3.74
-            ],
-            "Notes": "Seeded from pre-Edge of Fate Mobility tiers; needs verification."
+            "BaseMobilityTier": 3,
+            "BaseSprintSpeed": 8
         },
         {
             "ClassHash": 671679327,
             "Name": "Hunter",
-            "WalkSpeed": [
-                5.8,
-                6.4,
-                6.8,
-                7.0
-            ],
-            "StrafeSpeed": [
-                4.93,
-                5.44,
-                5.78,
-                5.95
-            ],
-            "CrouchSpeed": [
-                3.19,
-                3.52,
-                3.74,
-                3.85
-            ],
-            "Notes": "Seeded from pre-Edge of Fate Mobility tiers; needs verification."
+            "BaseMobilityTier": 10,
+            "BaseMobilityTierPVP": 7,
+            "BaseSprintSpeed": 8.5
         },
         {
             "ClassHash": 2271682572,
             "Name": "Warlock",
-            "WalkSpeed": [
-                5.6,
-                6.2,
-                6.6,
-                6.8
+            "BaseMobilityTier": 3,
+            "BaseSprintSpeed": 8
+        }
+    ],
+    "Sources": [
+        {
+            "Hash": 1133590731,
+            "Name": "Enhanced Athletics",
+            "RefType": "item",
+            "Activation": "Always",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        3,
+                        5,
+                        6
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1458010786,
+            "Name": "Lightweight Frame",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.075
+                    ]
+                },
+                {
+                    "Type": "SprintMultiplier",
+                    "Values": [
+                        1.0625
+                    ]
+                }
             ],
-            "StrafeSpeed": [
-                4.76,
-                5.27,
-                5.61,
-                5.78
+            "Notes": "Verified Intrinsic plug. Apply once for the readied lightweight weapon, not again alongside its MIDA Synergy intrinsic."
+        },
+        {
+            "Hash": 12,
+            "Name": "Machine Gun",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 13,
+            "Name": "Rocket Launcher",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 14,
+            "Name": "Sidearm",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 54,
+            "Name": "Sword guarding",
+            "RefType": "itemCategory",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2213377102,
+            "Name": "MIDA Synergy",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.075
+                    ],
+                    "BoostedValues": [
+                        1
+                    ]
+                },
+                {
+                    "Type": "SprintMultiplier",
+                    "Values": [
+                        1.0625
+                    ]
+                }
             ],
-            "CrouchSpeed": [
-                3.08,
-                3.41,
-                3.63,
-                3.74
+            "BoostRequiresAll": [
+                1331482397
             ],
-            "Notes": "Seeded from pre-Edge of Fate Mobility tiers; needs verification."
+            "Notes": "Value unknown — needs testing. Boosted forward multiplier with MIDA Multi-Tool is unknown; 1 is a neutral placeholder. Do not also apply Lightweight Frame for this weapon."
+        },
+        {
+            "Hash": 2470575005,
+            "Name": "MIDA Synergy (Enhanced Intrinsic)",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.075
+                    ],
+                    "BoostedValues": [
+                        1
+                    ]
+                },
+                {
+                    "Type": "SprintMultiplier",
+                    "Values": [
+                        1.0625
+                    ]
+                }
+            ],
+            "BoostRequiresAll": [
+                1331482397
+            ],
+            "Notes": "Value unknown — needs testing. Boosted forward multiplier with MIDA Multi-Tool is unknown; 1 is a neutral placeholder. Alternative intrinsic, not an additional stack of MIDA Synergy or Lightweight Frame."
+        },
+        {
+            "Hash": 3072857252,
+            "Name": "Wraithwalk (Heartshadow Catalyst)",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        1
+                    ]
+                }
+            ],
+            "Notes": "Value unknown — needs testing. Wraithwalk is DestinySandboxPerkDefinition 3936394000, linked by this verified DestinyInventoryItemDefinition catalyst. Grounded speed only; no jump-height change."
+        },
+        {
+            "Hash": 25692695,
+            "Name": "The Scientific Method (Tractor Cannon)",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        1
+                    ]
+                }
+            ],
+            "Notes": "Value unknown — needs testing. Verified Trait plug for Tractor Cannon (weapon hash 3580904581). Grounded speed only; no jump-height change."
         }
     ]
 }

@@ -36,8 +36,10 @@ Vital information about the database structure and what each property stored in 
 
 In addition to the main database files, the `update.json` contains the following two values:
 
-- `lastUpdate` - integer: timestamp of the last update made to the database
+- `lastUpdate` - integer: Unix epoch time in nanoseconds of the last update made to the database
 - `schemaVersion` - string (matches `^\d+\.\d+$`): the current schema version used for this database
+
+When publishing schema v2 for the first time, run the **Build data** workflow with `schema_version` set to `2.0`. The workflow only allows a blank version to rebuild the current schema after `update.json` already reports `2.0` or later.
 
 Example usage of the `update.json` file for handling breaking changes:
 

@@ -9,6 +9,15 @@ import {
     overrideSpec,
     movementClassSpec,
     validateSources,
+    enumField,
+    objectField,
+    objectArrayField,
+    numberField,
+    curve,
+    notesField,
+    exportEntity,
+    fieldSchema,
+    type EntitySpec,
 } from '../src/core';
 import { fixture, fixtureLocale } from './fixtures';
 describe('reusable validators', () => {
@@ -125,5 +134,109 @@ describe('entity validation', () => {
         expect(
             validateSources({ stats: [null, { Name: 'Nope' }], movement: null }).length,
         ).toBeGreaterThan(0);
+    });
+});
+
+describe('generic nested fields and unpublished data', () => {
+    const entry: EntitySpec = {
+        name: 'Entry',
+        uniqueKey: 'Kind',
+        fields: [
+            enumField(
+                'Kind',
+                [
+                    { value: 'A', description: 'First kind.' },
+                    { value: 'B', description: 'Second kind.' },
+                ],
+                { description: 'Choice.' },
+            ),
+            numberField('Number', { min: 0, round: 1, description: 'Nested number.' }),
+            curve('Hidden', { domain: [0, 1], published: false, description: 'Measured later.' }),
+            curve('Curve', { domain: [0, 1], description: 'Published curve.' }),
+            notesField(),
+        ],
+    };
+    const value = {
+        Kind: 'A',
+        Number: 1.234,
+        Hidden: { Values: [0, 0] },
+        Curve: { Values: [1, 2] },
+        Notes: 'Keep in source',
+    };
+    const object = objectField('Settings', entry, { description: 'One nested entity.' });
+    const array = objectArrayField('Entries', entry, {
+        minItems: 1,
+        maxItems: 2,
+        description: 'Nested entities.',
+    });
+    it('validates nested objects, enums, lengths, duplicate keys and precise paths', () => {
+        expect(validateField(object, value)).toEqual([]);
+        expect(validateField(array, [value])).toEqual([]);
+        expect(validateField(array, [])).toContainEqual(
+            expect.objectContaining({ message: 'Must contain at least 1 items' }),
+        );
+        expect(
+            validateField(array, [value, { ...value, Kind: 'B' }, { ...value, Kind: 'C' }]).some(
+                (issue) => issue.message.includes('at most'),
+            ),
+        ).toBe(true);
+        expect(validateField(array, [value, value])).toContainEqual(
+            expect.objectContaining({ path: 'Entries[1].Kind', message: 'Duplicate Kind: A' }),
+        );
+        expect(
+            validateField(array, [{ ...value, Kind: 'C', Number: -1, Extra: true }]).map(
+                (issue) => issue.path,
+            ),
+        ).toEqual(['Entries[0].Kind', 'Entries[0].Number', 'Entries[0].Extra']);
+        expect(validateField(object, null)[0]?.path).toBe('Settings');
+        expect(validateField(array, [null])[0]?.path).toBe('Entries[0]');
+        expect(validateField(array, 'bad')).not.toEqual([]);
+    });
+    it('recursively exports values, rounds and expands curves, and keeps unpublished input untouched', () => {
+        const input = { Settings: value, Entries: [value] };
+        const before = JSON.stringify(input);
+        const result = exportEntity({ name: 'Container', fields: [object, array] }, input);
+        const expected = { Kind: 'A', Number: 1.2, Curve: [1, 2] };
+        expect(result).toEqual({ Settings: expected, Entries: [expected] });
+        expect(JSON.stringify(input)).toBe(before);
+        const schema = fieldSchema(array);
+        expect(schema).toMatchObject({
+            type: 'array',
+            minItems: 1,
+            maxItems: 2,
+            items: {
+                properties: {
+                    Kind: {
+                        type: 'string',
+                        enum: ['A', 'B'],
+                        oneOf: [
+                            { const: 'A', description: 'First kind.' },
+                            { const: 'B', description: 'Second kind.' },
+                        ],
+                    },
+                },
+            },
+        });
+        expect(JSON.stringify(schema)).not.toContain('Hidden');
+        expect(
+            JSON.stringify(fieldSchema({ ...object, entity: { ...entry, anyOf: [['Hidden']] } })),
+        ).not.toContain('Hidden');
+        expect(JSON.stringify(schema)).not.toContain('Notes');
+        const published = {
+            ...object,
+            entity: {
+                ...entry,
+                fields: entry.fields.map((field) =>
+                    field.key === 'Hidden' ? { ...field, published: true } : field,
+                ),
+            },
+        };
+        expect(
+            exportEntity({ name: 'Container', fields: [published] }, input).Settings,
+        ).toHaveProperty('Hidden', [0, 0]);
+        expect(JSON.stringify(fieldSchema(published))).toContain('Hidden');
+    });
+    it('validates unpublished placeholders rather than allowing invalid author data', () => {
+        expect(validateField(object, { ...value, Hidden: { Values: [0] } })).not.toEqual([]);
     });
 });

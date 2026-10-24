@@ -1,4 +1,4 @@
-import type { FieldSpec } from './types';
+import type { EntitySpec, FieldSpec } from './types';
 
 export type FieldOptions = Omit<FieldSpec, 'key' | 'kind'>;
 
@@ -53,4 +53,24 @@ export function notesField(): FieldSpec {
         multiline: true,
         description: 'Editor-only author notes.',
     });
+}
+
+export function enumField(
+    key: string,
+    values: NonNullable<FieldSpec['values']>,
+    options: FieldOptions,
+): FieldSpec {
+    return field(key, 'enum', { ...options, values });
+}
+
+export function objectField(key: string, entity: EntitySpec, options: FieldOptions): FieldSpec {
+    return field(key, 'object', { ...options, entity });
+}
+
+export function objectArrayField(
+    key: string,
+    entity: EntitySpec,
+    options: FieldOptions,
+): FieldSpec {
+    return field(key, 'objectArray', { ...options, entity });
 }

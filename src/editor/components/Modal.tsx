@@ -4,21 +4,25 @@ export function Modal({
     onClose,
     children,
     busy = false,
+    className = '',
 }: {
     title: string;
     onClose(): void;
     children: ReactNode;
     busy?: boolean;
+    className?: string;
 }) {
     const ref = useRef<HTMLDialogElement>(null);
     useEffect(() => {
         const dialog = ref.current!;
         dialog.showModal();
+        dialog.querySelector<HTMLElement>('input:not([type=checkbox]),textarea,select')?.focus();
         return () => dialog.close();
     }, []);
     return (
         <dialog
             ref={ref}
+            className={className}
             aria-label={title}
             onCancel={(e) => {
                 e.preventDefault();

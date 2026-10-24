@@ -21,7 +21,8 @@ export function localeFields(abilities = false): FieldSpec[] {
                 'based on the Character Stat value. For example, if the ' +
                 '<FlinchResistance> property is an array, then ' +
                 '{{FlinchResistance}} will be replaced with the value at the index ' +
-                'corresponding to the stat value (0-200).',
+                'corresponding to the stat value, clamped to the field domain (0-100 for ' +
+                'FlinchResistance).',
         }),
 
         localeField('EnhancedStatTooltip', {
@@ -33,7 +34,8 @@ export function localeFields(abilities = false): FieldSpec[] {
                 'use based on the Character Stat value. For example, if the ' +
                 '<FlinchResistance> property is an array, then ' +
                 '{{FlinchResistance}} will be replaced with the value at the index ' +
-                'corresponding to the stat value (0-200).',
+                'corresponding to the stat value, clamped to the field domain (0-100 for ' +
+                'FlinchResistance).',
         }),
     ];
 
@@ -44,7 +46,8 @@ export function localeFields(abilities = false): FieldSpec[] {
                     'This is a description of the Charge-based Scaling behavior of ' +
                     'certain abilities. It is used to explain how the passive recharge ' +
                     'speed of an ability may be increased by the number of active ' +
-                    'charges stored up. This tooltip is intended to be displayed only ' +
+                    'charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are ' +
+                    'contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only ' +
                     'if the <ChargeBasedScaling> property is present in the <Ability> ' +
                     'object. You can see an example of how this should be formatted ' +
                     'here: ' +
