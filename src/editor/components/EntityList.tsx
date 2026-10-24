@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { isRecord, validateEntity, type EntitySpec, type StatSource } from '../../core';
 import { useEditor } from '../state/store';
 import {
@@ -29,6 +29,7 @@ export function EntityList({
     selected,
     onSelect,
     onChange,
+    context,
 }: {
     spec: EntitySpec;
     items: Record<string, unknown>[];
@@ -39,6 +40,7 @@ export function EntityList({
     selected: string | null;
     onSelect(key: string | null): void;
     onChange(next: Record<string, unknown>[]): void;
+    context?: ReactNode;
 }) {
     const [formSession, setFormSession] = useState<EntityFormSession>(() => ({
         selected,
@@ -50,6 +52,15 @@ export function EntityList({
         [contextOpen, setContextOpen] = useState(false);
     const { originalValues, itemDrafts, dispatch } = useEditor();
     const { lookup } = useManifest();
+    function manifestTable(item: Record<string, unknown>) {
+        return item.RefType === 'itemCategory'
+            ? ('itemCategory' as const)
+            : item.RefType === 'item'
+              ? ('item' as const)
+              : spec.role === 'movementClass'
+                ? ('class' as const)
+                : undefined;
+    }
     const idKey = identityKey(spec),
         draftKey = `${file}:${collection}`,
         draft = itemDrafts[draftKey];
@@ -66,7 +77,9 @@ export function EntityList({
     const editorValue = current ?? original;
     const identity = editorValue?.[idKey];
     const hash = typeof identity === 'number' && Number.isFinite(identity) ? identity : Number.NaN;
-    const manifest = Number.isFinite(hash) ? lookup(hash) : undefined;
+    const manifest = Number.isFinite(hash)
+        ? lookup(hash, editorValue ? manifestTable(editorValue) : undefined)
+        : undefined;
     const errors = draft ? validateEntity(spec, draft).filter((i) => i.severity === 'error') : [];
     const duplicate = !!draft && currentById.has(String(draft[idKey]));
     const draftReady = !!draft && hasDraftIdentity(spec, draft);
@@ -75,10 +88,13 @@ export function EntityList({
     }, [selected]);
     const abilities = previewCollections(source).abilities;
     const hasContext =
-        isRecord(source.Fields) && !!source.Fields.CooldownScalars && abilities.length > 0;
+        !!context ||
+        (isRecord(source.Fields) && !!source.Fields.CooldownScalars && abilities.length > 0);
     const rows = indexedRows.sort((a, b) =>
-        String(lookup(Number(a.item[idKey]))?.name ?? a.item.Name).localeCompare(
-            String(lookup(Number(b.item[idKey]))?.name ?? b.item.Name),
+        String(
+            lookup(Number(a.item[idKey]), manifestTable(a.item))?.name ?? a.item.Name,
+        ).localeCompare(
+            String(lookup(Number(b.item[idKey]), manifestTable(b.item))?.name ?? b.item.Name),
         ),
     );
     function selectItem(key: string | null) {
@@ -176,7 +192,8 @@ export function EntityList({
                 draft={draft}
                 selected={selected}
                 search={search}
-                getManifestName={(itemHash) => lookup(itemHash)?.name}
+                getManifestName={(itemHash, item) => lookup(itemHash, manifestTable(item))?.name}
+                getManifestTable={manifestTable}
                 actions={actions}
                 onSearch={setSearch}
                 onSelect={selectItem}
@@ -193,6 +210,7 @@ export function EntityList({
                 abilities={abilities}
                 hash={hash}
                 manifestName={manifest?.name}
+                manifestTable={editorValue ? manifestTable(editorValue) : undefined}
                 deleted={deleted}
                 isDraft={selected === 'draft'}
                 formKey={formSession.token}
@@ -223,12 +241,15 @@ export function EntityList({
                     >
                         ×
                     </button>
-                    <ContextPanel source={source} collection={collection} selected={current} />
+                    {context ?? (
+                        <ContextPanel source={source} collection={collection} selected={current} />
+                    )}
                 </div>
             )}
             {picker && (
                 <ManifestPicker
                     title={`Add ${spec.name} from manifest`}
+                    chooseTable={spec.fields.some((field) => field.key === 'RefType')}
                     filter={collectionFilter(stat, collection)}
                     onClose={() => setPicker(false)}
                     onCreateBlank={() => {
@@ -240,6 +261,12 @@ export function EntityList({
                             ...createItemDraft(spec, items),
                             [idKey]: entry.hash,
                             Name: entry.name,
+                            ...(spec.fields.some((field) => field.key === 'RefType')
+                                ? {
+                                      RefType:
+                                          entry.table === 'itemCategory' ? 'itemCategory' : 'item',
+                                  }
+                                : {}),
                         };
                         setDraft(next);
                         selectItem('draft');

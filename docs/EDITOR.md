@@ -15,6 +15,7 @@ The editor is a compact full-height workbench. The left sidebar lists **Health**
 icons and change counts. Tabs and list rows also indicate changes. Each pane scrolls
 independently; the page itself stays in place. At narrower widths, **Context** in the
 item header opens the cooldown panel over the right side; its close button closes it.
+Movement uses the same Context overlay for its speed preview.
 
 Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item names, or hashes.
 Press **/** outside an input to focus the current collection filter (or open Jump).
@@ -53,6 +54,14 @@ Segments preserves every evaluated value exactly; the conversion is checked
 against the expanded array before it is applied. **View JSON** is read-only
 debugging output, not a required editing surface. Core validation checks coverage,
 expressions, and numeric constraints.
+
+Enum fields use compact selects; hover the selected value or an option for its
+description. Object fields expand into inline spec-driven groups. Object arrays
+use compact rows with **Add row**, **Up**, **Down**, and **Remove** controls.
+Nested fields have their own validation, modified marker, and revert button.
+Changes **Go to** expands the containing groups and focuses the nested field.
+Adding/removing rows is a parent-array change; reordering rows is meaningful.
+An **Unpublished** badge means the field is kept in sources but not exported.
 
 ### Collections and drafts
 
@@ -108,6 +117,34 @@ selection shows only the abilities it affects. There is no "all overrides"
 comparison. Calculations use the shared core; the stat value clamps at 100.
 Negative subclass filters are explicitly **unresolved: subclass filter**, never
 silently applied. Large tables scroll below their sticky header.
+
+### Movement
+
+Movement has **Rules**, **Classes**, **Sources**, and **Text** tabs. Rules edits
+the shared curves, multipliers, and caps. JumpHeight remains **Unpublished** until
+measured data is available. Classes and Sources use the normal list, isolated
+draft, editor, and context layout. Source **RefType** chooses items or item
+categories for hash resolution and the field picker; **Add from manifest**
+offers an Items / Item categories selector and sets RefType to match the result.
+Source Effects are spec-driven rows. **Values** and optional **BoostedValues**
+are small numeric inputs labelled by stack count starting at 1; core checks their
+lengths and effect-type uniqueness.
+
+The speed preview uses the current validated Movement data and core
+`movementSpeed`. Pick a class, PvE/PvP, direction, posture, Sprint, and ADS.
+Sprint selects forward/standing and turns ADS off; choosing ADS turns Sprint off.
+Activate sources explicitly, set stack counts, and use **Boosted** to assert all
+of that source's prerequisite equipment is present. Conditions and loadout
+compatibility are not inferred: select only applicable sources, not both
+Lightweight Frame and MIDA Synergy for the same weapon.
+
+For ADS effects, **Held ADS** marks active sources belonging to the one held
+weapon being inspected, not all three loadout weapons. No selection uses the
+global ADS multiplier. Conflicting selected ADS overrides show an error instead
+of silently choosing one. The pinned controls/results show effective tier, speed
+to two decimal places, and the cap that actually limited speed (or **none**).
+Invalid source data blocks the preview until fixed; calculator errors are shown
+instead of a stale result. Active-source controls scroll independently below it.
 
 ### English text
 
@@ -174,6 +211,11 @@ the change separately. Save/Publish remain disabled for local dev data; browser
 verification does not make GitHub writes or dispatch workflows.
 
 Viewport captures from the redesign walkthrough are in [editor-screenshots](editor-screenshots/).
+
+Movement captures: [Rules, 1440px](editor-screenshots/16-wide-movement-rules.png),
+[Sources, 1440px](editor-screenshots/17-wide-movement-sources.png),
+[Sources, 1000px](editor-screenshots/18-narrow-movement-sources.png), and
+[Context overlay, 1000px](editor-screenshots/19-narrow-movement-context.png).
 
 Captures use 1440x900 and 1000x900 CSS viewports. The integrated browser may
 scale raster output to its display surface; the original captures are retained.

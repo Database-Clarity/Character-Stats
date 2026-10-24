@@ -91,7 +91,7 @@ export function numericDefault(field: FieldSpec, array = false): number {
     const low = c.min ?? (c.exclusiveMin === undefined ? 0 : c.exclusiveMin + 0.1);
     return Math.min(c.max ?? Infinity, Math.max(low, 1));
 }
-function fieldDefault(field: FieldSpec): unknown {
+export function fieldDefault(field: FieldSpec): unknown {
     if (field.kind === 'enum') return field.values?.[0]?.value ?? '';
     if (field.kind === 'object' || field.kind === 'objectArray') {
         const object = () =>
@@ -109,6 +109,35 @@ function fieldDefault(field: FieldSpec): unknown {
         return Array.from({ length: field.minItems ?? 0 }, () => numericDefault(field, true));
     if (field.kind === 'curve') return { Values: [] };
     return numericDefault(field);
+}
+export function updateNestedField(
+    value: Record<string, unknown>,
+    path: string,
+    next: unknown,
+): Record<string, unknown> {
+    const [key, ...rest] = path.split('.');
+    if (!key) return value;
+    const result = { ...value };
+    if (!rest.length) {
+        if (next === undefined) delete result[key];
+        else result[key] = structuredClone(next);
+    } else if (Array.isArray(value[key])) {
+        const [index, ...tail] = rest;
+        const array = [...value[key]];
+        const row = array[Number(index)];
+        if (tail.length && isRecord(row))
+            array[Number(index)] = updateNestedField(row, tail.join('.'), next);
+        else if (next === undefined) array.splice(Number(index), 1);
+        else array[Number(index)] = structuredClone(next);
+        result[key] = array;
+    } else {
+        result[key] = updateNestedField(
+            isRecord(value[key]) ? value[key] : {},
+            rest.join('.'),
+            next,
+        );
+    }
+    return result;
 }
 export function createItemDraft(
     spec: EntitySpec,
@@ -227,6 +256,57 @@ export function collectChanges(
                 localeLeaves(file, stat, a[key], b[key], `${path}.${key}`);
         } else add(file, stat, 'Text', path, before, after);
     }
+    function fieldChanges(
+        file: string,
+        stat: string,
+        tab: string,
+        spec: FieldSpec,
+        before: unknown,
+        after: unknown,
+        path: string,
+        itemKey?: string,
+        item?: string,
+    ) {
+        if (equal(before, after)) return;
+        if (spec.entity && spec.kind === 'object' && isRecord(before) && isRecord(after)) {
+            for (const field of spec.entity.fields)
+                fieldChanges(
+                    file,
+                    stat,
+                    tab,
+                    field,
+                    before[field.key],
+                    after[field.key],
+                    `${path}.${field.key}`,
+                    itemKey,
+                    item,
+                );
+        } else if (
+            spec.entity &&
+            spec.kind === 'objectArray' &&
+            Array.isArray(before) &&
+            Array.isArray(after) &&
+            before.length === after.length
+        ) {
+            before.forEach((old, index) => {
+                const next = after[index];
+                if (isRecord(old) && isRecord(next)) {
+                    for (const field of spec.entity!.fields)
+                        fieldChanges(
+                            file,
+                            stat,
+                            tab,
+                            field,
+                            old[field.key],
+                            next[field.key],
+                            `${path}.${index}.${field.key}`,
+                            itemKey,
+                            item,
+                        );
+                } else add(file, stat, tab, `${path}.${index}`, old, next, itemKey, item);
+            });
+        } else add(file, stat, tab, path, before, after, itemKey, item);
+    }
     for (const [file, value] of Object.entries(values)) {
         const saved: unknown = parsedOriginals
             ? parsedOriginals[file]
@@ -270,7 +350,7 @@ export function collectChanges(
         const a = movement ? saved : isRecord(saved.Fields) ? saved.Fields : {};
         const b = movement ? value : isRecord(value.Fields) ? value.Fields : {};
         for (const field of spec.fields)
-            add(file, spec.name, 'Fields', field.key, a[field.key], b[field.key]);
+            fieldChanges(file, spec.name, 'Fields', field, a[field.key], b[field.key], field.key);
         for (const [tab, entity] of Object.entries(spec.collections)) {
             const key = identityKey(entity);
             const oldItems = (Array.isArray(saved[tab]) ? saved[tab] : []).filter(isRecord);
@@ -284,13 +364,14 @@ export function collectChanges(
                 if (!old || !next) add(file, spec.name, tab, '', old, next, id, name);
                 else
                     for (const field of entity.fields)
-                        add(
+                        fieldChanges(
                             file,
                             spec.name,
                             tab,
-                            field.key,
+                            field,
                             old[field.key],
                             next[field.key],
+                            field.key,
                             id,
                             name,
                         );

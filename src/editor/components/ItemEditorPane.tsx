@@ -2,6 +2,7 @@ import { type EntitySpec } from '../../core';
 import { EntityForm } from './EntityForm';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
+import type { ManifestTable } from '../manifest';
 
 export function ItemEditorPane({
     spec,
@@ -13,6 +14,7 @@ export function ItemEditorPane({
     abilities,
     hash,
     manifestName,
+    manifestTable,
     deleted,
     isDraft,
     formKey,
@@ -38,6 +40,7 @@ export function ItemEditorPane({
     abilities: Record<string, unknown>[];
     hash: number;
     manifestName?: string | undefined;
+    manifestTable?: ManifestTable | undefined;
     deleted: boolean;
     isDraft: boolean;
     formKey: number;
@@ -60,7 +63,11 @@ export function ItemEditorPane({
                 <div>
                     {editorValue ? (
                         Number.isFinite(hash) ? (
-                            <HashIdentity hash={hash} name={String(editorValue.Name)} />
+                            <HashIdentity
+                                hash={hash}
+                                name={String(editorValue.Name)}
+                                table={manifestTable}
+                            />
                         ) : (
                             <strong>{String(editorValue.Name ?? '') || 'New draft'}</strong>
                         )

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { equal, type EntityRow } from '../state/editing';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
+import type { ManifestTable } from '../manifest';
 
 export function EntityRows({
     collection,
@@ -17,6 +18,7 @@ export function EntityRows({
     onSelect,
     onAdd,
     onAddFromManifest,
+    getManifestTable,
 }: {
     collection: string;
     entityName: string;
@@ -25,7 +27,8 @@ export function EntityRows({
     draft?: Record<string, unknown> | undefined;
     selected: string | null;
     search: string;
-    getManifestName(hash: number): string | undefined;
+    getManifestName(hash: number, item: Record<string, unknown>): string | undefined;
+    getManifestTable(item: Record<string, unknown>): ManifestTable | undefined;
     actions(item: Record<string, unknown>, isDeleted: boolean): ItemAction[];
     onSearch(value: string): void;
     onSelect(key: string | null): void;
@@ -89,7 +92,7 @@ export function EntityRows({
                 <ul>
                     {rows
                         .filter(({ item }) =>
-                            `${item.Name} ${item[idKey]} ${getManifestName(Number(item[idKey])) ?? ''}`
+                            `${item.Name} ${item[idKey]} ${getManifestName(Number(item[idKey]), item) ?? ''}`
                                 .toLowerCase()
                                 .includes(search.toLowerCase()),
                         )
@@ -120,6 +123,7 @@ export function EntityRows({
                                         <HashIdentity
                                             hash={Number(item[idKey])}
                                             name={String(item.Name)}
+                                            table={getManifestTable(item)}
                                         />
                                         {status && (
                                             <span className={`row-status ${status}`} title={status}>

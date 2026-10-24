@@ -11,6 +11,7 @@ export function EntityForm({
     file,
     path,
     abilities,
+    fieldPrefix = '',
     onChange,
 }: {
     spec: EntitySpec;
@@ -19,6 +20,7 @@ export function EntityForm({
     file: string;
     path: string;
     abilities: Record<string, unknown>[];
+    fieldPrefix?: string;
     onChange(next: Record<string, unknown>): void;
 }) {
     const requirements = spec.fields.filter((f) => f.itemRef && f.kind === 'intArray');
@@ -42,6 +44,7 @@ export function EntityForm({
                                 siblings={value}
                                 file={file}
                                 path={`${path}.${field.key}`}
+                                fieldPath={`${fieldPrefix}${field.key}`}
                                 onChange={(next) =>
                                     onChange(updateProperty(value, field.key, next))
                                 }
@@ -61,6 +64,7 @@ export function EntityForm({
                         value={value}
                         saved={saved}
                         abilities={abilities}
+                        fieldPrefix={fieldPrefix}
                         onChange={onChange}
                     />
                 </Collapse>

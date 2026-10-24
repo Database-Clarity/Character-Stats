@@ -21,7 +21,12 @@ export function QuickJump({
                     : isRecord(v) && v.Name === spec.name,
             )?.[1];
             return [
-                { stat: spec.name, tab: 'Fields', field: '', label: `${spec.name} / Fields` },
+                {
+                    stat: spec.name,
+                    tab: 'Fields',
+                    field: '',
+                    label: `${spec.name} / ${spec.name === 'Movement' ? 'Rules' : 'Fields'}`,
+                },
                 { stat: spec.name, tab: 'Text', field: '', label: `${spec.name} / Text` },
                 ...Object.entries(spec.collections).flatMap(([tab, entity]) => [
                     { stat: spec.name, tab, field: '', label: `${spec.name} / ${tab}` },

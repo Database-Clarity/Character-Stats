@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { abilitySpec, overrideSpec, movementClassSpec, validateEntity } from '../../core';
+import movementData from '../../../sources/movement.json';
 import {
     adjacentChange,
     changeAffectsStat,
@@ -12,7 +13,86 @@ import {
     revertRequirementTable,
     selectEntityFormSession,
     toggleParallel,
+    updateNestedField,
 } from './editing';
+
+describe('nested semantic changes and reverts', () => {
+    const file = 'sources/movement.json';
+    const baseline = () => structuredClone(movementData);
+    const changesFor = (next: unknown) =>
+        collectChanges({ [file]: JSON.stringify(movementData) }, { [file]: next });
+
+    it('targets nested rule leaves and reverts one without losing adjacent edits', () => {
+        const next = updateNestedField(
+            updateNestedField(baseline(), 'Rules.StrafeMultiplier', 0.8),
+            'Rules.CrouchMultiplier',
+            0.6,
+        );
+        expect(changesFor(next).map((change) => [change.tab, change.field])).toEqual([
+            ['Fields', 'Rules.StrafeMultiplier'],
+            ['Fields', 'Rules.CrouchMultiplier'],
+        ]);
+        const reverted = updateNestedField(
+            next,
+            'Rules.StrafeMultiplier',
+            movementData.Rules.StrafeMultiplier,
+        );
+        expect(changesFor(reverted).map((change) => change.field)).toEqual([
+            'Rules.CrouchMultiplier',
+        ]);
+        expect(movementData.Rules.StrafeMultiplier).toBe(0.85);
+    });
+
+    it('targets nested array fields within a collection identity', () => {
+        const next = updateNestedField(baseline(), 'Sources.0.Effects.0.Values', [4, 6, 7]);
+        const changes = changesFor(next);
+        expect(changes).toHaveLength(1);
+        expect(changes[0]).toMatchObject({
+            tab: 'Sources',
+            itemKey: String(movementData.Sources[0]!.Hash),
+            field: 'Effects.0.Values',
+            before: [3, 5, 6],
+            after: [4, 6, 7],
+        });
+        const reverted = updateNestedField(next, 'Sources.0.Effects.0.Values', changes[0]!.before);
+        expect(changesFor(reverted)).toEqual([]);
+    });
+
+    it('tracks nested optional fields and removes their key on revert', () => {
+        const next = updateNestedField(baseline(), 'Sources.0.Effects.0.BoostedValues', [4, 6, 7]);
+        const change = changesFor(next)[0]!;
+        expect(change).toMatchObject({ kind: 'added', field: 'Effects.0.BoostedValues' });
+        const reverted = updateNestedField(
+            next,
+            'Sources.0.Effects.0.BoostedValues',
+            change.before,
+        );
+        expect(changesFor(reverted)).toEqual([]);
+        expect((reverted.Sources as typeof movementData.Sources)[0]!.Effects[0]).not.toHaveProperty(
+            'BoostedValues',
+        );
+    });
+
+    it('tracks nested row add/remove at the parent and restores the whole array', () => {
+        const original = movementData.Sources[0]!.Effects;
+        const next = updateNestedField(baseline(), 'Sources.0.Effects', [
+            ...original,
+            { Type: 'SprintMultiplier', Values: [1.0625] },
+        ]);
+        expect(changesFor(next)[0]).toMatchObject({ field: 'Effects' });
+        expect(changesFor(updateNestedField(next, 'Sources.0.Effects', original))).toEqual([]);
+    });
+
+    it('tracks row order while ignoring top-level collection order', () => {
+        const next = baseline();
+        const source = next.Sources.find((entry) => entry.Effects.length > 1)!;
+        source.Effects.reverse();
+        expect(changesFor(next).some((change) => change.field.startsWith('Effects.0.'))).toBe(true);
+        source.Effects.reverse();
+        next.Sources.reverse();
+        expect(changesFor(next)).toEqual([]);
+    });
+});
 
 describe('requirement and parallel-array editing', () => {
     const value = {

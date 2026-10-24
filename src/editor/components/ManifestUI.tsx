@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ManifestIcon, useManifest, type ManifestEntry } from '../manifest';
+import { ManifestIcon, useManifest, type ManifestEntry, type ManifestTable } from '../manifest';
 import { identityLabel, manifestStateMessage } from './manifestHelpers';
 export { collectionFilter } from './manifestHelpers';
 import { Modal } from './Modal';
@@ -10,15 +10,17 @@ export function HashIdentity({
     name,
     compact = false,
     requirement = false,
+    table,
 }: {
     hash: number;
     name?: string | undefined;
     compact?: boolean;
     requirement?: boolean;
+    table?: ManifestTable | undefined;
 }) {
     const { lookup } = useManifest();
     const resolvedHash = requirement ? Math.abs(hash) : hash;
-    const entry = lookup(resolvedHash);
+    const entry = lookup(resolvedHash, table);
     const resolved = identityLabel(hash, name || entry?.name, requirement);
     return (
         <span
@@ -36,7 +38,11 @@ export function HashIdentity({
                 entry.classType !== 3 ? (
                     <ClassIcon type={entry.classType} name={entry.name} size={compact ? 20 : 28} />
                 ) : (
-                    <ManifestIcon hash={resolvedHash} size={compact ? 20 : 28} />
+                    <ManifestIcon
+                        hash={resolvedHash}
+                        {...(table ? { table } : {})}
+                        size={compact ? 20 : 28}
+                    />
                 )}
             </span>
             <span className="identity-text">
@@ -88,15 +94,21 @@ export function ManifestPicker({
     onPick,
     onClose,
     onCreateBlank,
+    table,
+    chooseTable = false,
 }: {
     title: string;
     filter?: (entry: ManifestEntry) => boolean;
     onPick(entry: ManifestEntry): void;
     onClose(): void;
     onCreateBlank?(): void;
+    table?: ManifestTable | undefined;
+    chooseTable?: boolean;
 }) {
     const { search, status } = useManifest();
     const [query, setQuery] = useState('');
+    const [pickedTable, setPickedTable] = useState<ManifestTable>('item');
+    const searchTable = chooseTable ? pickedTable : table;
     const [debouncedQuery, setDebouncedQuery] = useState('');
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedQuery(query), 120);
@@ -104,21 +116,54 @@ export function ManifestPicker({
     }, [query]);
     const groups = useMemo(() => {
         if (status.state !== 'ready') return [];
-        if (!filter) return [{ title: 'Matches', entries: search(debouncedQuery, { limit: 40 }) }];
+        const inTable = (entry: ManifestEntry) => !searchTable || entry.table === searchTable;
+        if (!filter)
+            return [
+                {
+                    title: 'Matches',
+                    entries: search(debouncedQuery, { filter: inTable, limit: 40 }),
+                },
+            ];
         return [
-            { title: 'Suggested', entries: search(debouncedQuery, { filter, limit: 40 }) },
+            {
+                title: 'Suggested',
+                entries: search(debouncedQuery, {
+                    filter: (entry) => inTable(entry) && filter(entry),
+                    limit: 40,
+                }),
+            },
             {
                 title: 'Other matches',
-                entries: search(debouncedQuery, { filter: (entry) => !filter(entry), limit: 40 }),
+                entries: search(debouncedQuery, {
+                    filter: (entry) => inTable(entry) && !filter(entry),
+                    limit: 40,
+                }),
             },
         ];
-    }, [search, status.state, debouncedQuery, filter]);
+    }, [search, status.state, debouncedQuery, filter, searchTable]);
     const count = groups.reduce((total, group) => total + group.entries.length, 0);
     function focusResult() {
         document.querySelector<HTMLButtonElement>('dialog .picker-results button')?.focus();
     }
     return (
         <Modal title={title} onClose={onClose}>
+            {chooseTable && (
+                <label className="inline">
+                    Reference type
+                    <select
+                        aria-label="Manifest reference type"
+                        value={pickedTable}
+                        onChange={(e) =>
+                            setPickedTable(
+                                e.target.value === 'itemCategory' ? 'itemCategory' : 'item',
+                            )
+                        }
+                    >
+                        <option value="item">Items</option>
+                        <option value="itemCategory">Item categories</option>
+                    </select>
+                </label>
+            )}
             <label className="picker-search">
                 Search manifest
                 <input
@@ -171,7 +216,11 @@ export function ManifestPicker({
                                 key={`${entry.table}:${entry.hash}`}
                                 onClick={() => onPick(entry)}
                             >
-                                <HashIdentity hash={entry.hash} name={entry.name} />
+                                <HashIdentity
+                                    hash={entry.hash}
+                                    name={entry.name}
+                                    table={entry.table}
+                                />
                             </button>
                         ))}
                         {!group.entries.length && (

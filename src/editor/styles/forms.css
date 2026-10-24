@@ -154,6 +154,35 @@
 .hash-resolution {
     margin-top: 8px;
 }
+.nested-object > .collapse-body {
+    padding: 8px;
+}
+.nested-row {
+    border-bottom: 1px solid var(--border);
+    padding: 4px 0 8px;
+    margin-bottom: 8px;
+}
+.nested-row > .section-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nested-row .field {
+    grid-template-columns: 116px minmax(0, 1fr);
+    gap: 12px;
+}
+.nested-row .array-element input {
+    width: 76px;
+}
+.unpublished {
+    display: inline-block;
+    margin: 4px 8px;
+    color: var(--warning);
+    border-color: var(--warning);
+    cursor: help;
+}
+.field-value > select {
+    max-width: 100%;
+}
 .field-value .error {
     margin: 4px 0;
 }

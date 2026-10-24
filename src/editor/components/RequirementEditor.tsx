@@ -12,6 +12,7 @@ export function RequirementEditor({
     saved,
     abilities,
     onChange,
+    fieldPrefix = '',
 }: {
     field: FieldSpec;
     fields: readonly FieldSpec[];
@@ -19,6 +20,7 @@ export function RequirementEditor({
     saved: Record<string, unknown>;
     abilities: Record<string, unknown>[];
     onChange(value: Record<string, unknown>): void;
+    fieldPrefix?: string;
 }) {
     const { subclasses, search } = useManifest();
     const [picker, setPicker] = useState(false);
@@ -63,7 +65,7 @@ export function RequirementEditor({
     return (
         <div className="requirements-editor">
             <div
-                data-field={field.key}
+                data-field={`${fieldPrefix}${field.key}`}
                 className={`field-frame ${tableChanged ? 'is-modified' : ''}`}
             >
                 {tableChanged && (
@@ -96,7 +98,7 @@ export function RequirementEditor({
                                 {parallel.map((f) => (
                                     <th
                                         key={f.key}
-                                        data-field={f.key}
+                                        data-field={`${fieldPrefix}${f.key}`}
                                         className={
                                             !equal(value[f.key], saved[f.key]) ? 'is-modified' : ''
                                         }

@@ -1,18 +1,21 @@
-import { useId } from 'react';
-import { validateField, type FieldSpec } from '../../core';
+import { useId, useState } from 'react';
+import { isRecord, validateField, type FieldSpec } from '../../core';
 import { CurveEditor } from './CurveEditor';
-import { HashIdentity } from './ManifestUI';
-import { Modified } from './EditorPrimitives';
-import { numericDefault } from '../state/editing';
+import { HashIdentity, ManifestPicker } from './ManifestUI';
+import { Modified, Collapse } from './EditorPrimitives';
+import { fieldDefault, numericDefault, updateNestedField } from '../state/editing';
+import { EntityForm } from './EntityForm';
 
 export function NumberArrayInput({
     spec,
     value,
     onChange,
+    stackCounts = false,
 }: {
     spec: FieldSpec;
     value: unknown;
     onChange(value: unknown): void;
+    stackCounts?: boolean;
 }) {
     const array = Array.isArray(value) ? (value as number[]) : [];
     return (
@@ -41,9 +44,10 @@ export function NumberArrayInput({
                         {array.map((number, i) => (
                             <div className="array-element" key={i}>
                                 <label>
-                                    {spec.indexLabel ?? 'Index'}: {i}
+                                    {stackCounts ? 'Stacks' : (spec.indexLabel ?? 'Index')}:{' '}
+                                    {stackCounts ? i + 1 : i}
                                     <input
-                                        aria-label={`${spec.key} ${spec.indexLabel ?? 'index'} ${i}`}
+                                        aria-label={`${spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
                                         type="number"
                                         step={spec.kind === 'intArray' ? 1 : 'any'}
                                         value={Number.isFinite(number) ? number : ''}
@@ -90,6 +94,7 @@ export function FieldInput({
     siblings,
     file,
     path,
+    fieldPath = spec.key,
     onChange,
 }: {
     spec: FieldSpec;
@@ -98,39 +103,187 @@ export function FieldInput({
     siblings: Record<string, unknown>;
     file: string;
     path: string;
+    fieldPath?: string;
     onChange(value: unknown): void;
 }) {
     const id = useId();
+    const [picker, setPicker] = useState(false);
     const issues = validateField(spec, value, siblings);
     const label = `${spec.label ?? spec.key}${spec.required ? ' *' : ''}`;
+    const table =
+        siblings.RefType === 'itemCategory'
+            ? 'itemCategory'
+            : siblings.RefType === 'item'
+              ? 'item'
+              : undefined;
+    const nested = spec.entity;
+    const rows: unknown[] = Array.isArray(value) ? value : [];
     return (
         <Modified
-            field={spec.key}
+            field={fieldPath}
             value={value}
             saved={saved}
             onRevert={() => onChange(structuredClone(saved))}
         >
-            {spec.published === false && <span className="badge">Unpublished</span>}
-            {spec.kind === 'enum' || spec.kind === 'object' || spec.kind === 'objectArray' ? (
-                <div className="field">
-                    <label className="field-label" title={spec.description}>
-                        {label}
-                    </label>
-                    <p className="muted">Read-only preview ? editing coming in step 2.</p>
-                    {spec.entity?.fields
-                        .filter((field) => field.published === false)
-                        .map((field) => (
-                            <span className="badge" key={field.key}>
-                                {field.label ?? field.key}: Unpublished
-                            </span>
-                        ))}
-                    <pre>{JSON.stringify(value, null, 2) ?? 'Not set'}</pre>
+            {spec.published === false && (
+                <span className="badge unpublished" title="Kept in sources but not exported.">
+                    Unpublished
+                </span>
+            )}
+            {(spec.kind === 'object' || spec.kind === 'objectArray') && nested ? (
+                <Collapse
+                    storageKey={`${file}:${path}`}
+                    title={<span title={spec.description}>{label}</span>}
+                    className="nested-object"
+                >
+                    {!spec.required && (
+                        <label className="check">
+                            <input
+                                type="checkbox"
+                                checked={value !== undefined}
+                                onChange={(e) =>
+                                    onChange(e.target.checked ? fieldDefault(spec) : undefined)
+                                }
+                            />
+                            Enabled
+                        </label>
+                    )}
+                    {spec.kind === 'object' && isRecord(value) && (
+                        <EntityForm
+                            spec={nested}
+                            value={value}
+                            saved={isRecord(saved) ? saved : {}}
+                            file={file}
+                            path={path}
+                            fieldPrefix={`${fieldPath}.`}
+                            abilities={[]}
+                            onChange={onChange}
+                        />
+                    )}
+                    {spec.kind === 'objectArray' && (spec.required || value !== undefined) && (
+                        <>
+                            {rows.map((row, index) => (
+                                <div
+                                    className="nested-row"
+                                    key={index}
+                                    data-field={`${fieldPath}.${index}`}
+                                >
+                                    <div className="section-bar">
+                                        <strong>
+                                            {nested.name} {index + 1}
+                                        </strong>
+                                        <div className="toolbar">
+                                            <button
+                                                aria-label={`Move ${spec.key} row ${index + 1} up`}
+                                                disabled={index === 0}
+                                                onClick={() => {
+                                                    const next = [...rows];
+                                                    next.splice(
+                                                        index - 1,
+                                                        0,
+                                                        next.splice(index, 1)[0],
+                                                    );
+                                                    onChange(next);
+                                                }}
+                                            >
+                                                Up
+                                            </button>
+                                            <button
+                                                aria-label={`Move ${spec.key} row ${index + 1} down`}
+                                                disabled={index === rows.length - 1}
+                                                onClick={() => {
+                                                    const next = [...rows];
+                                                    next.splice(
+                                                        index + 1,
+                                                        0,
+                                                        next.splice(index, 1)[0],
+                                                    );
+                                                    onChange(next);
+                                                }}
+                                            >
+                                                Down
+                                            </button>
+                                            <button
+                                                className="danger"
+                                                aria-label={`Remove ${spec.key} row ${index + 1}`}
+                                                onClick={() =>
+                                                    onChange(rows.filter((_, i) => i !== index))
+                                                }
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {isRecord(row) ? (
+                                        nested.fields.map((field) => (
+                                            <FieldInput
+                                                key={field.key}
+                                                spec={field}
+                                                value={row[field.key]}
+                                                saved={
+                                                    Array.isArray(saved) && isRecord(saved[index])
+                                                        ? saved[index][field.key]
+                                                        : undefined
+                                                }
+                                                siblings={row}
+                                                file={file}
+                                                path={`${path}.${index}.${field.key}`}
+                                                fieldPath={`${fieldPath}.${index}.${field.key}`}
+                                                onChange={(next) =>
+                                                    onChange(
+                                                        rows.map((item, i) =>
+                                                            i === index
+                                                                ? updateNestedField(
+                                                                      row,
+                                                                      field.key,
+                                                                      next,
+                                                                  )
+                                                                : item,
+                                                        ),
+                                                    )
+                                                }
+                                            />
+                                        ))
+                                    ) : (
+                                        <p className="error">
+                                            Expected an object. Remove this row and add a new one.
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                            <button
+                                disabled={
+                                    spec.maxItems !== undefined && rows.length >= spec.maxItems
+                                }
+                                onClick={() => {
+                                    const defaults = fieldDefault({ ...spec, kind: 'object' });
+                                    const unique = nested.fields.find(
+                                        (f) => f.key === nested.uniqueKey,
+                                    );
+                                    if (isRecord(defaults) && unique?.kind === 'enum') {
+                                        defaults[unique.key] =
+                                            unique.values?.find(
+                                                (entry) =>
+                                                    !rows.some(
+                                                        (row) =>
+                                                            isRecord(row) &&
+                                                            row[unique.key] === entry.value,
+                                                    ),
+                                            )?.value ?? defaults[unique.key];
+                                    }
+                                    onChange([...rows, defaults]);
+                                }}
+                            >
+                                + Add row
+                            </button>
+                        </>
+                    )}
                     {issues.map((issue, index) => (
                         <p className={issue.severity} key={index}>
-                            {issue.message}
+                            {issue.path}: {issue.message}
                         </p>
                     ))}
-                </div>
+                </Collapse>
             ) : spec.kind === 'curve' && spec.domain ? (
                 <CurveEditor
                     spec={spec}
@@ -151,8 +304,42 @@ export function FieldInput({
                     <div
                         className={`field-value ${spec.kind === 'hash' ? 'hash-field-value' : ''}`}
                     >
-                        {spec.kind === 'numberArray' || spec.kind === 'intArray' ? (
-                            <NumberArrayInput spec={spec} value={value} onChange={onChange} />
+                        {spec.kind === 'enum' ? (
+                            <select
+                                id={id}
+                                value={String(value ?? '')}
+                                aria-invalid={issues.some((i) => i.severity === 'error')}
+                                title={
+                                    spec.values?.find((entry) => entry.value === value)?.description
+                                }
+                                onChange={(e) => onChange(e.target.value || undefined)}
+                            >
+                                {(!spec.required ||
+                                    !spec.values?.some((entry) => entry.value === value)) && (
+                                    <option value={String(value ?? '')}>
+                                        {value === undefined ? 'Not set' : String(value)}
+                                    </option>
+                                )}
+                                {spec.values?.map((entry) => (
+                                    <option
+                                        key={entry.value}
+                                        value={entry.value}
+                                        title={entry.description}
+                                    >
+                                        {entry.value}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : spec.kind === 'numberArray' || spec.kind === 'intArray' ? (
+                            <NumberArrayInput
+                                spec={spec}
+                                value={value}
+                                onChange={onChange}
+                                stackCounts={
+                                    typeof siblings.Type === 'string' &&
+                                    (spec.key === 'Values' || spec.key === 'BoostedValues')
+                                }
+                            />
                         ) : spec.kind === 'string' || spec.kind === 'localeRef' ? (
                             spec.multiline ? (
                                 <textarea
@@ -209,8 +396,13 @@ export function FieldInput({
                                 />
                                 {spec.kind === 'hash' && typeof value === 'number' && (
                                     <div className="hash-resolution">
-                                        <HashIdentity hash={value} />
+                                        <HashIdentity hash={value} table={table} />
                                     </div>
+                                )}
+                                {spec.kind === 'hash' && (
+                                    <button onClick={() => setPicker(true)}>
+                                        Pick {table === 'itemCategory' ? 'category' : 'item'}
+                                    </button>
                                 )}
                             </>
                         )}
@@ -218,12 +410,23 @@ export function FieldInput({
                             {spec.description}
                         </span>
                         {issues.map((issue, i) => (
-                            <p key={i} className="error">
+                            <p key={i} className={issue.severity}>
                                 {issue.message}
                             </p>
                         ))}
                     </div>
                 </div>
+            )}
+            {picker && (
+                <ManifestPicker
+                    title={`Choose ${spec.label ?? spec.key}`}
+                    table={table}
+                    onClose={() => setPicker(false)}
+                    onPick={(entry) => {
+                        onChange(entry.hash);
+                        setPicker(false);
+                    }}
+                />
             )}
         </Modified>
     );

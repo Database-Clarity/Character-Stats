@@ -11,8 +11,19 @@ import {
 } from '../../core';
 import { formatMovementSpeed } from './previewData';
 import { FieldInput } from './FieldInput';
+import { MovementContext } from './MovementContext';
 
-describe('new declarative field fallback', () => {
+describe('declarative nested field controls', () => {
+    it('previews validated working data and blocks invalid movement instead of showing a fallback', () => {
+        const html = renderToStaticMarkup(createElement(MovementContext, { value: movementData }));
+        expect(html).toContain('5.60');
+        expect(html).toContain('Cap: ');
+        expect(html).toContain('Preview class');
+        const invalid = { ...movementData, Rules: { ...movementData.Rules, StrafeMultiplier: -1 } };
+        const error = renderToStaticMarkup(createElement(MovementContext, { value: invalid }));
+        expect(error).toContain('Fix Movement validation errors');
+        expect(error).not.toContain('5.60');
+    });
     it('formats editor speed previews to two decimal places without rounding the core result', () => {
         const source = structuredClone(movementData) as unknown as MovementSource;
         source.Classes[0]!.BaseMobilityTier = 8;
@@ -60,8 +71,10 @@ describe('new declarative field fallback', () => {
         );
         expect(html).toContain('JumpHeight');
         expect(html).toContain('Unpublished');
-        expect(html).toContain('coming in step 2');
-        expect(html).not.toContain('type="number"');
+        expect(html).toContain('Kept in sources but not exported.');
+        expect(html).toContain('type="number"');
+        expect(html).toContain('data-field="Rules.WalkSpeed"');
+        expect(html).not.toContain('Read-only preview');
     });
     it.each([
         {
@@ -72,7 +85,7 @@ describe('new declarative field fallback', () => {
             spec: movementEffectSpec.fields.find((field) => field.key === 'Type')!,
             value: 'MobilityTiers',
         },
-    ])('renders $spec.kind as a safe read-only preview', ({ spec, value }) => {
+    ])('renders $spec.kind as structured editable controls', ({ spec, value }) => {
         const html = renderToStaticMarkup(
             createElement(FieldInput, {
                 spec,
@@ -84,8 +97,30 @@ describe('new declarative field fallback', () => {
                 onChange() {},
             }),
         );
-        expect(html).toContain('Read-only preview');
+        expect(html).not.toContain('Read-only preview');
         expect(html).toContain('MobilityTiers');
-        expect(html).not.toContain('type="number"');
+        expect(html).toContain('<select');
+        if (spec.kind === 'objectArray') {
+            expect(html).toContain('Values stacks 1');
+            expect(html).toContain('Move Effects row 1 down');
+            expect(html).toContain('data-field="Effects.0.Values"');
+        }
+    });
+    it('displays nested validation paths and enum descriptions', () => {
+        const spec = movementSourceSpec.fields.find((field) => field.key === 'Effects')!;
+        const html = renderToStaticMarkup(
+            createElement(FieldInput, {
+                spec,
+                value: [{ Type: 'Invalid', Values: [] }],
+                saved: [],
+                siblings: {},
+                file: 'sources/movement.json',
+                path: 'Effects',
+                onChange() {},
+            }),
+        );
+        expect(html).toContain('Effects[0].Type');
+        expect(html).toContain('Add hidden Mobility tiers');
+        expect(html).toContain('aria-invalid="true"');
     });
 });

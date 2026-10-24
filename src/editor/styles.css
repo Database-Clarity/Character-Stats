@@ -3,6 +3,56 @@
 @import './styles/collections.css';
 @import './styles/overlays.css';
 
+.movement-rules-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+}
+.movement-context .inline {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 8px;
+    margin: 0 0 4px;
+}
+.movement-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 8px;
+    font-size: 11px;
+}
+.movement-result > strong {
+    color: var(--accent);
+    font-size: 18px;
+}
+.movement-result > .muted {
+    flex-basis: 100%;
+}
+.movement-source {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+.movement-source > small {
+    display: block;
+    margin-left: 22px;
+}
+.movement-source-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: center;
+    margin: 4px 0 0 22px;
+    font-size: 11px;
+}
+.movement-source-controls > label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+}
+.movement-source-controls input[type='number'] {
+    width: 52px;
+}
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -20,6 +70,9 @@
     }
     .entity-layout {
         grid-template-columns: 224px minmax(0, 1fr);
+    }
+    .movement-rules-layout {
+        grid-template-columns: minmax(0, 1fr);
     }
     .context-slot {
         display: none;
@@ -149,6 +202,9 @@
     }
     .entity-layout {
         grid-template-columns: 180px minmax(0, 1fr);
+    }
+    .movement-rules-layout {
+        grid-template-columns: minmax(0, 1fr);
     }
     .outline {
         padding: 8px 4px;

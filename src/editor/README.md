@@ -24,6 +24,11 @@ middleware or configuration changes are needed.
 - `StatView` renders registered fields and collection tabs without per-stat form
   wiring. `FieldInput` handles all field kinds; numeric arrays have individual
   controls, not JSON textareas. `EntityForm` groups fields from their spec.
+  Enums use described selects, objects use collapsible nested forms, and object
+  arrays use reorderable/removable spec-driven rows. Nested field paths flow into
+  modified markers, validation and Go-to targets. Structural array changes revert
+  at the parent; same-length row edits are tracked by slot and field. Unpublished
+  fields retain their controls and show a source-only badge.
 - `EntityList` owns the three-pane collection layout, pinned draft row, sorted
   source/deleted rows, and per-item actions. Hash edits keep the selected item and
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
@@ -51,6 +56,13 @@ middleware or configuration changes are needed.
   why and allow creation of a blank draft. `ClassIcon` supplies distinct local
   geometric class symbols when a class definition has no icon URL. `QuickJump`
   searches registered stats/tabs and source item names/hashes. The UI still works without a manifest.
+- Movement shows Rules plus Classes/Sources collections. `MovementContext`
+  validates working data before calling core `movementSpeed`, with pinned class,
+  activity, direction/posture, Sprint/ADS controls and two-decimal speed/tier/cap
+  results. Active sources have stack, boosted and per-held-weapon ADS selection.
+  Invalid data and conflicting ADS choices show errors, not fallback speeds.
+  Source RefType scopes lookups/icons/hash pickers to items or item categories;
+  collection manifest drafts infer RefType from the picked definition table.
 - `PendingChanges` groups semantic changes by stat/tab/item/field and shows
   structured array/curve changes by index or segment with old &rarr; new values and
   keyboard-accessible expanded old/new details. It keeps stable per-file line diffs
@@ -68,7 +80,8 @@ middleware or configuration changes are needed.
 
 ## Specs and styles
 
-The only domain-core additions are optional presentation hints on `FieldSpec`:
+This movement editor step adds no core helpers or behavior. Earlier editor
+domain-core additions are optional presentation hints on `FieldSpec`:
 `itemRef`, `refSubclassFilters`, and `indexLabel`. Requirements, charge scaling,
 and Movement speed arrays opt into them in `core/entities/index.ts`. Existing
 validation/export APIs are unchanged. Schema generation deliberately selects its
