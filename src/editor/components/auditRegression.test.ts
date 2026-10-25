@@ -70,6 +70,135 @@ describe('audit editor regressions', () => {
         expect(html).toContain('Base cooldown');
         expect(html).not.toContain('Base cooldown at');
     });
+    it('shows group members per applicable override without a duplicate aggregate table', () => {
+        const second = { ...ability, Hash: 3, Name: 'Flashpoint' };
+        const groupedSource: StatSource = {
+            ...source,
+            Abilities: [ability, second],
+            Overrides: [override],
+        };
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source: groupedSource,
+                collection: 'Abilities',
+                selected: undefined,
+                groupMembers: [ability, second],
+            }),
+        );
+        const table =
+            html.split('class="context-group-overrides-table"')[1]?.split('</table>')[0] ?? '';
+        expect(table.match(/<tr>/g)).toHaveLength(2);
+        expect(table).toContain('Firebolt');
+        expect(table).toContain('Flashpoint');
+        expect(table).toContain('64 → 152');
+        expect(table).toContain('<th>Before <span class="mono">→</span> after</th>');
+        expect(html).not.toContain('context-group-results');
+        expect(html).toContain('class="member-detail-icon"');
+        expect(html).not.toContain('member-detail-icon-card');
+        expect(html).toContain('<summary>Applicable overrides</summary>');
+        expect(html).not.toContain('<summary>Affected abilities</summary>');
+    });
+    it('identifies affected group members when an override matches only one entry', () => {
+        const second = { ...ability, Hash: 3, Name: 'Flashpoint' };
+        const groupedSource: StatSource = {
+            ...source,
+            Abilities: [ability, second],
+            Overrides: [{ ...override, Requirements: [ability.Hash] }],
+        };
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source: groupedSource,
+                collection: 'Abilities',
+                selected: undefined,
+                groupMembers: [ability, second],
+            }),
+        );
+        const table =
+            html.split('class="context-group-overrides-table"')[1]?.split('</table>')[0] ?? '';
+        expect(table.match(/<tr>/g)).toHaveLength(2);
+        expect(table).toContain('Firebolt');
+        expect(table).not.toContain('Flashpoint');
+        expect(table).toContain('64 → 152');
+        expect(html).toContain('class="member-detail-icon"');
+        expect(html).toContain('context-body-with-group');
+        expect(html).toContain('context-group-overrides-collapse');
+    });
+    it('keeps grouped override icons in a multi-column grid without dropping members', () => {
+        const members = Array.from({ length: 4 }, (_, index) => ({
+            ...ability,
+            Hash: index + 1,
+            Name: `Ability ${index + 1}`,
+        }));
+        const groupedSource: StatSource = { ...source, Abilities: members, Overrides: [override] };
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source: groupedSource,
+                collection: 'Abilities',
+                selected: undefined,
+                groupMembers: members,
+            }),
+        );
+        const table =
+            html.split('class="context-group-overrides-table"')[1]?.split('</table>')[0] ?? '';
+        expect(table).toContain('data-min-columns="3"');
+        expect(table.match(/class="member-detail-icon"/g)).toHaveLength(4);
+    });
+    it('populates group context for SuperAbilities without adding a stat control', () => {
+        const first = {
+            Hash: 7,
+            Name: 'Nova Bomb',
+            BaseCooldown: 600,
+            ActiveRegenScalar: 1,
+        };
+        const second = { ...first, Hash: 8, Name: 'Ward of Dawn' };
+        const superSource: StatSource = {
+            Hash: 1,
+            Name: 'Super',
+            Fields: {},
+            SuperAbilities: [first, second],
+            Overrides: [override],
+        };
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source: superSource,
+                collection: 'SuperAbilities',
+                selected: undefined,
+                groupMembers: [first, second],
+            }),
+        );
+        expect(html).not.toContain('Group cooldowns');
+        expect(html).toContain('Show details for Nova Bomb (hash 7)');
+        expect(html).toContain('Show details for Ward of Dawn (hash 8)');
+        expect(html).toContain('600 → 152');
+        expect(html).toContain('<summary>Applicable overrides</summary>');
+        expect(html).not.toContain('Context stat value');
+        expect(html).not.toContain('<summary>Affected abilities</summary>');
+    });
+    it('shows the empty context prompt without stale group results after deselection', () => {
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source,
+                collection: 'Abilities',
+                selected: undefined,
+            }),
+        );
+        expect(html).toContain(
+            'Select an ability, cooldown group, or override to inspect its effects.',
+        );
+        expect(html).not.toContain('Group cooldowns');
+        expect(html).not.toContain('<summary>Affected abilities</summary>');
+    });
+    it('uses the shared member-detail icon for abilities affected by a selected override', () => {
+        const html = renderToStaticMarkup(
+            createElement(ContextPanel, {
+                source,
+                collection: 'Overrides',
+                selected: override,
+            }),
+        );
+        expect(html).toContain('class="member-detail-icon"');
+        expect(html).toContain('Show details for Firebolt (hash 1)');
+    });
     it.each([
         null,
         5,

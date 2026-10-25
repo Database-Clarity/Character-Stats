@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { validateField, type FieldSpec } from '../../core';
 import type { ManifestTable } from '../manifest';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
+import { NumberInput } from './NumberInput';
 
 export function ReferenceArrayInput({
     spec,
@@ -67,13 +68,12 @@ export function ReferenceArrayInput({
                     </button>
                     <label className="inline">
                         Manual hash
-                        <input
-                            type="number"
+                        <NumberInput
+                            aria-label="Manual hash"
                             step={1}
-                            min={0}
-                            max={4294967295}
+                            constraints={{ min: 0, max: 4294967295 }}
                             value={manual}
-                            onChange={(event) => setManual(event.target.value)}
+                            onChangeValue={setManual}
                         />
                     </label>
                     <button disabled={full || !canAdd} onClick={() => add(Number(manual))}>

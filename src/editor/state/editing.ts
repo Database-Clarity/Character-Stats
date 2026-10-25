@@ -18,6 +18,63 @@ export interface EntityRow {
     old: Record<string, unknown> | undefined;
 }
 
+export interface BaseCooldownGroup {
+    cooldown: number;
+    rows: EntityRow[];
+}
+
+export function groupRowsByBaseCooldown(rows: readonly EntityRow[]) {
+    const grouped = new Map<number, EntityRow[]>(),
+        ungrouped: EntityRow[] = [];
+    for (const row of rows) {
+        const cooldown = row.item.BaseCooldown;
+        if (typeof cooldown !== 'number' || !Number.isFinite(cooldown)) {
+            ungrouped.push(row);
+            continue;
+        }
+        const group = grouped.get(cooldown);
+        if (group) group.push(row);
+        else grouped.set(cooldown, [row]);
+    }
+    return {
+        groups: [...grouped]
+            .map(([cooldown, groupedRows]) => ({ cooldown, rows: groupedRows }))
+            .sort((a, b) => a.cooldown - b.cooldown),
+        ungrouped,
+    };
+}
+
+export function sharedEntityFields(
+    spec: EntitySpec,
+    members: readonly Record<string, unknown>[],
+    idKey: string,
+): FieldSpec[] {
+    const first = members[0];
+    if (!first || members.length < 2) return [];
+    return spec.fields.filter(
+        (field) =>
+            field.key !== idKey &&
+            members.every((member) => equal(first[field.key], member[field.key])),
+    );
+}
+
+export function updateEntityGroupField(
+    items: readonly Record<string, unknown>[],
+    idKey: string,
+    memberIds: readonly string[],
+    field: string,
+    valueForMember: (item: Record<string, unknown>) => unknown,
+): Record<string, unknown>[] {
+    const ids = new Set(memberIds);
+    if (ids.size !== memberIds.length || ids.size === 0)
+        throw new Error('An ability group must contain distinct member identities');
+    const matched = items.filter((item) => ids.has(String(item[idKey])));
+    if (matched.length !== ids.size) throw new Error('An ability group member no longer exists');
+    return items.map((item) =>
+        ids.has(String(item[idKey])) ? updateNestedField(item, field, valueForMember(item)) : item,
+    );
+}
+
 export function indexEntityRows(
     items: Record<string, unknown>[],
     saved: Record<string, unknown>[],

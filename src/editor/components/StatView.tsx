@@ -7,6 +7,7 @@ import { FieldInput } from './FieldInput';
 import { LongPage, Collapse } from './EditorPrimitives';
 import { TextEditor } from './TextEditor';
 import { MovementContext } from './MovementContext';
+import type { EditorNavigationSelection, NavigationMode } from './navigationHistory';
 export interface NavigationRequest extends ChangeTarget {
     sequence: number;
 }
@@ -15,15 +16,19 @@ export function StatView({
     file,
     movement = false,
     request,
+    selection,
+    onNavigate,
 }: {
     spec: StatSpec;
     file: string;
     movement?: boolean;
     request: NavigationRequest | null;
+    selection: EditorNavigationSelection;
+    onNavigate(selection: EditorNavigationSelection, mode: NavigationMode): void;
 }) {
     const { values, originals, dispatch, changes } = useEditor(),
-        [tab, setTab] = useState('Fields'),
-        [selected, setSelected] = useState<string | null>(null),
+        tab = selection.tab,
+        selected = selection.itemKey,
         root = useRef<HTMLElement>(null);
     const value = values[file] as Record<string, unknown>,
         saved = JSON.parse(originals[file]!) as Record<string, unknown>;
@@ -44,12 +49,6 @@ export function StatView({
               Fields: Object.fromEntries(spec.fields.map((f) => [f.key, value[f.key]])),
           } as StatSource)
         : (value as unknown as StatSource);
-    useEffect(() => {
-        if (request?.stat === spec.name) {
-            setTab(request.tab);
-            setSelected(request.itemKey ?? null);
-        }
-    }, [request, spec.name]);
     useEffect(() => {
         if (
             !request ||
@@ -129,8 +128,7 @@ export function StatView({
                             aria-controls={`panel-${name}`}
                             key={name}
                             onClick={() => {
-                                setTab(name);
-                                setSelected(null);
+                                onNavigate({ stat: spec.name, tab: name, itemKey: null }, 'click');
                             }}
                         >
                             {movement && name === 'Fields' ? 'Rules' : name}
@@ -227,7 +225,27 @@ export function StatView({
                         source={source}
                         {...(movement ? { context: <MovementContext value={value} /> } : {})}
                         selected={selected}
-                        onSelect={setSelected}
+                        groupMembers={selection.groupMembers}
+                        onSelect={(key) =>
+                            onNavigate({ stat: spec.name, tab, itemKey: key }, 'sync')
+                        }
+                        onNavigate={(key, mode) =>
+                            onNavigate({ stat: spec.name, tab, itemKey: key }, mode)
+                        }
+                        onNavigateGroup={(memberIds) =>
+                            onNavigate(
+                                {
+                                    stat: spec.name,
+                                    tab,
+                                    itemKey: null,
+                                    groupMembers: memberIds,
+                                },
+                                'click',
+                            )
+                        }
+                        onOpenMember={(collection, key) => {
+                            onNavigate({ stat: spec.name, tab: collection, itemKey: key }, 'click');
+                        }}
                         onChange={(next) => setValue({ ...value, [tab]: next })}
                     />
                 )}{' '}

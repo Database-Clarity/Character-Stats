@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { isRecord, validateEntity, type EntitySpec, type StatSource } from '../../core';
 import { useEditor } from '../state/store';
 import {
@@ -18,6 +18,14 @@ import { previewCollections } from './previewData';
 import { ContextPanel } from './ContextPanel';
 import { EntityRows } from './EntityRows';
 import { ItemEditorPane } from './ItemEditorPane';
+import { AbilityGroupEditor } from './AbilityGroupEditor';
+import {
+    consumeWheelNavigation,
+    nextCollectionSelection,
+    normalizeWheelDeltaY,
+    type WheelNavigationState,
+} from './navigationShortcuts';
+import type { NavigationMode } from './navigationHistory';
 
 export function EntityList({
     spec,
@@ -27,9 +35,13 @@ export function EntityList({
     stat,
     source,
     selected,
+    groupMembers: selectedGroupMembers,
     onSelect,
+    onNavigate,
+    onNavigateGroup,
     onChange,
     context,
+    onOpenMember,
 }: {
     spec: EntitySpec;
     items: Record<string, unknown>[];
@@ -38,9 +50,13 @@ export function EntityList({
     stat: string;
     source: StatSource;
     selected: string | null;
+    groupMembers: string[] | undefined;
     onSelect(key: string | null): void;
+    onNavigate(key: string | null, mode: NavigationMode): void;
+    onNavigateGroup(memberIds: string[]): void;
     onChange(next: Record<string, unknown>[]): void;
     context?: ReactNode;
+    onOpenMember(collection: string, key: string): void;
 }) {
     const [formSession, setFormSession] = useState<EntityFormSession>(() => ({
         selected,
@@ -50,6 +66,13 @@ export function EntityList({
     const [search, setSearch] = useState(''),
         [picker, setPicker] = useState(false),
         [contextOpen, setContextOpen] = useState(false);
+    const editingGroup = selectedGroupMembers ?? null;
+    const layout = useRef<HTMLDivElement>(null),
+        wheelNavigation = useRef<WheelNavigationState>({
+            accumulated: 0,
+            direction: null,
+            lastNavigation: 0,
+        });
     const { originalValues, itemDrafts, dispatch } = useEditor();
     const { lookup } = useManifest();
     function manifestTable(item: Record<string, unknown>) {
@@ -69,6 +92,12 @@ export function EntityList({
     const saved = (Array.isArray(oldFile[collection]) ? oldFile[collection] : []).filter(isRecord);
     const { currentById, savedById, rows: indexedRows } = indexEntityRows(items, saved, idKey);
     const current = selected === 'draft' ? draft : selected ? currentById.get(selected) : undefined;
+    const editingMembers =
+        editingGroup?.map((id) => currentById.get(id)).filter((item) => item !== undefined) ?? [];
+    const contextGroupMembers =
+        editingGroup && editingMembers.length === editingGroup.length && editingMembers.length > 1
+            ? editingMembers
+            : undefined;
     const original =
         selected && selected !== 'draft'
             ? savedById.get(formSession.baseline ?? selected)
@@ -86,6 +115,13 @@ export function EntityList({
     useEffect(() => {
         setFormSession((session) => selectEntityFormSession(session, selected));
     }, [selected]);
+    useEffect(() => {
+        const element = layout.current;
+        if (!element) return;
+        const onWheel = (event: WheelEvent) => navigateCollectionOnWheel(event);
+        element.addEventListener('wheel', onWheel, { passive: false });
+        return () => element.removeEventListener('wheel', onWheel);
+    });
     const abilities = previewCollections(source).abilities;
     const hasContext = !!context || abilities.length > 0;
     const rows = indexedRows.sort((a, b) =>
@@ -98,6 +134,45 @@ export function EntityList({
     function selectItem(key: string | null) {
         setFormSession((session) => selectEntityFormSession(session, key));
         onSelect(key);
+    }
+    function navigateItem(key: string | null, mode: NavigationMode) {
+        setFormSession((session) => selectEntityFormSession(session, key));
+        onNavigate(key, mode);
+    }
+    function openMember(targetCollection: string, key: string) {
+        if (targetCollection === collection) navigateItem(key, 'click');
+        else onOpenMember(targetCollection, key);
+    }
+    function navigateCollectionOnWheel(event: WheelEvent) {
+        if (!event.altKey || !event.shiftKey || event.deltaY === 0) return;
+        const target = event.target;
+        if (target instanceof Element && target.closest('.context-slot, dialog, [role="dialog"]'))
+            return;
+
+        event.preventDefault();
+        const height = Math.max(layout.current?.clientHeight ?? 0, 1);
+        const delta = normalizeWheelDeltaY(event.deltaY, event.deltaMode, height);
+        const direction = consumeWheelNavigation(wheelNavigation.current, delta, Date.now());
+        if (direction === undefined) return;
+
+        const buttons = Array.from(
+            layout.current?.querySelectorAll<HTMLButtonElement>(
+                '.item-rows > .draft-row, .item-rows .row-select',
+            ) ?? [],
+        ).filter((button) => !button.disabled && button.getClientRects().length > 0);
+        if (!buttons.length) return;
+        const visibleKeys = buttons.flatMap((button) =>
+            button.dataset.itemKey === undefined ? [] : [button.dataset.itemKey],
+        );
+        const selectedKey =
+            buttons.find((button) => button.getAttribute('aria-pressed') === 'true')?.dataset
+                .itemKey ?? null;
+        const key = nextCollectionSelection(visibleKeys, selectedKey, direction);
+        if (key !== undefined) navigateItem(key, 'scroll');
+    }
+    function selectGroup(memberIds: string[]) {
+        setFormSession((session) => selectEntityFormSession(session, null));
+        onNavigateGroup([...memberIds].sort());
     }
     function followIdentity(key: string) {
         setFormSession((session) => followEntityIdentity(session, key));
@@ -112,11 +187,11 @@ export function EntityList({
     }
     function add(copy?: Record<string, unknown>) {
         if (draft) {
-            selectItem('draft');
+            navigateItem('draft', 'click');
             return;
         }
         setDraft(createItemDraft(spec, items, copy));
-        selectItem('draft');
+        navigateItem('draft', 'click');
         setSearch('');
     }
     function actions(item: Record<string, unknown>, isDeleted: boolean): ItemAction[] {
@@ -162,7 +237,7 @@ export function EntityList({
         if (!draft || !draftReady || errors.length > 0 || duplicate) return;
         const next = [...items, draft].sort((a, b) => String(a.Name).localeCompare(String(b.Name)));
         onChange(next);
-        selectItem(String(draft[idKey]));
+        navigateItem(String(draft[idKey]), 'click');
         setDraft();
     }
     function changeValue(next: Record<string, unknown>) {
@@ -180,6 +255,7 @@ export function EntityList({
     }
     return (
         <div
+            ref={layout}
             className={`entity-layout ${contextOpen ? 'context-open' : ''} ${hasContext ? '' : 'without-context'}`}
         >
             <EntityRows
@@ -190,48 +266,79 @@ export function EntityList({
                 draft={draft}
                 selected={selected}
                 search={search}
+                groupByCooldown={spec.role === 'ability' || spec.role === 'superAbility'}
+                editingGroup={editingGroup}
                 getManifestName={(itemHash, item) => lookup(itemHash, manifestTable(item))?.name}
                 getManifestTable={manifestTable}
                 actions={actions}
                 onSearch={setSearch}
                 onSelect={selectItem}
+                onNavigate={(key) => navigateItem(key, 'click')}
+                onEditGroup={selectGroup}
                 onAdd={() => add()}
                 onAddFromManifest={() => setPicker(true)}
             />
-            <ItemEditorPane
-                spec={spec}
-                collection={collection}
-                file={file}
-                selected={selected}
-                editorValue={editorValue}
-                saved={selected === 'draft' ? (editorValue ?? {}) : (original ?? {})}
-                abilities={abilities}
-                hash={hash}
-                manifestName={manifest?.name}
-                manifestTable={editorValue ? manifestTable(editorValue) : undefined}
-                deleted={deleted}
-                isDraft={selected === 'draft'}
-                formKey={formSession.token}
-                hasContext={hasContext}
-                contextOpen={contextOpen}
-                errors={errors.length}
-                duplicate={duplicate}
-                draftReady={draftReady}
-                actions={editorValue && selected !== 'draft' ? actions(editorValue, deleted) : []}
-                onToggleContext={() => setContextOpen(!contextOpen)}
-                onAddDraft={addDraftToList}
-                onDiscardDraft={() => {
-                    setDraft();
-                    selectItem(null);
-                }}
-                onRestoreDeleted={() => {
-                    if (editorValue) onChange([...items, structuredClone(editorValue)]);
-                }}
-                onUseManifestName={useManifestName}
-                onChange={changeValue}
-            />
+            {editingGroup &&
+            editingMembers.length === editingGroup.length &&
+            editingMembers.length > 1 ? (
+                <AbilityGroupEditor
+                    spec={spec}
+                    items={items}
+                    members={editingMembers}
+                    memberIds={editingGroup}
+                    idKey={idKey}
+                    collection={collection}
+                    file={file}
+                    savedById={savedById}
+                    getManifestName={(memberHash, member) =>
+                        lookup(memberHash, manifestTable(member))?.name
+                    }
+                    hasContext={hasContext}
+                    contextOpen={contextOpen}
+                    onToggleContext={() => setContextOpen(!contextOpen)}
+                    onOpenMember={(member) => openMember(collection, String(member[idKey]))}
+                    onChange={onChange}
+                />
+            ) : (
+                <ItemEditorPane
+                    spec={spec}
+                    collection={collection}
+                    file={file}
+                    selected={selected}
+                    editorValue={editorValue}
+                    saved={selected === 'draft' ? (editorValue ?? {}) : (original ?? {})}
+                    abilities={abilities}
+                    hash={hash}
+                    manifestName={manifest?.name}
+                    manifestTable={editorValue ? manifestTable(editorValue) : undefined}
+                    deleted={deleted}
+                    isDraft={selected === 'draft'}
+                    formKey={formSession.token}
+                    hasContext={hasContext}
+                    contextOpen={contextOpen}
+                    errors={errors.length}
+                    duplicate={duplicate}
+                    draftReady={draftReady}
+                    actions={
+                        editorValue && selected !== 'draft' ? actions(editorValue, deleted) : []
+                    }
+                    onToggleContext={() => setContextOpen(!contextOpen)}
+                    onAddDraft={addDraftToList}
+                    onDiscardDraft={() => {
+                        setDraft();
+                        selectItem(null);
+                    }}
+                    onRestoreDeleted={() => {
+                        if (editorValue) onChange([...items, structuredClone(editorValue)]);
+                    }}
+                    onUseManifestName={useManifestName}
+                    onChange={changeValue}
+                />
+            )}
             {hasContext && (
-                <div className="context-slot">
+                <div
+                    className={`context-slot${contextGroupMembers !== undefined ? ' context-slot-with-group' : ''}`}
+                >
                     <button
                         className="context-close icon-button"
                         aria-label="Close context"
@@ -240,7 +347,15 @@ export function EntityList({
                         ×
                     </button>
                     {context ?? (
-                        <ContextPanel source={source} collection={collection} selected={current} />
+                        <ContextPanel
+                            source={source}
+                            collection={collection}
+                            selected={current}
+                            groupMembers={contextGroupMembers}
+                            onOpenMember={(memberCollection, member) =>
+                                openMember(memberCollection, String(member.Hash))
+                            }
+                        />
                     )}
                 </div>
             )}
@@ -267,7 +382,7 @@ export function EntityList({
                                 : {}),
                         };
                         setDraft(next);
-                        selectItem('draft');
+                        navigateItem('draft', 'click');
                         setSearch('');
                         setPicker(false);
                     }}

@@ -1,6 +1,6 @@
 .entity-layout {
     display: grid;
-    grid-template-columns: 248px minmax(360px, 1fr) 340px;
+    grid-template-columns: 248px minmax(360px, 1fr) minmax(380px, max-content);
     height: 100%;
     min-height: 0;
     position: relative;
@@ -57,6 +57,153 @@
     margin: 0;
     padding: 0;
     list-style: none;
+}
+.cooldown-group {
+    border-bottom: 1px solid #252930;
+}
+.cooldown-group > details > summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+}
+.cooldown-group > details > summary .muted {
+    margin-left: auto;
+}
+.cooldown-group-edit {
+    width: calc(100% - 16px);
+    margin: 0 8px 6px;
+    min-height: 30px;
+    font-size: 11px;
+}
+.cooldown-group-edit[aria-pressed='true'] {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.cooldown-group-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 8px;
+    min-width: 0;
+}
+.cooldown-group-members {
+    display: grid;
+    gap: 6px;
+    margin: 14px 0 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+}
+.member-detail-icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(28px, 32px));
+    gap: 4px;
+    align-content: start;
+    justify-content: start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    white-space: normal;
+}
+.cooldown-group-members .member-detail-icon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr));
+}
+.member-detail-icon {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    user-select: none;
+    padding: 2px;
+    background: #191c21;
+    border-color: var(--border);
+}
+.member-detail-icon-card {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+    width: 100%;
+    height: auto;
+    min-height: 40px;
+    padding: 5px 7px;
+    text-align: left;
+}
+.member-detail-card-text {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+.member-detail-card-name {
+    overflow-wrap: anywhere;
+}
+.member-detail-card-hash {
+    color: var(--muted);
+    font-size: 10px;
+    overflow-wrap: anywhere;
+}
+.member-detail-icon:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+}
+.group-member-tooltip {
+    position: fixed;
+    z-index: 100;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+    padding: 9px 11px;
+    background: #111318;
+    border: 1px solid #626c7a;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px #0009;
+    color: #e2e5eb;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+.group-member-tooltip[hidden] {
+    display: none;
+}
+.group-member-tooltip > strong {
+    display: block;
+    margin-bottom: 7px;
+}
+.group-member-tooltip dl {
+    display: grid;
+    gap: 5px;
+    margin: 0;
+}
+.group-member-tooltip dl > div {
+    display: grid;
+    grid-template-columns: minmax(7em, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+    gap: 8px;
+}
+.group-member-tooltip dt {
+    color: var(--muted);
+}
+.group-member-tooltip dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+.group-member-tooltip pre {
+    max-width: 100%;
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    font: inherit;
+}
+.cooldown-group > details > ul {
+    padding-bottom: 2px;
 }
 .item-row {
     display: flex;
@@ -309,12 +456,46 @@
     min-width: 0;
     min-height: 0;
 }
+.context-slot-with-group {
+    width: max-content;
+    min-width: min(380px, 100%);
+    max-width: 100%;
+}
 .context {
     background: #15171b;
 }
 .context-body {
     padding: 12px 8px;
     flex: 1;
+}
+.context-body-with-group {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+.context-group-overrides-collapse {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+}
+/* Chromium's disclosure wrapper must shrink to let the nested table own scrolling. */
+.context-group-overrides-collapse::details-content {
+    display: flex;
+    flex: 1 1 0px;
+    flex-direction: column;
+    min-height: 0;
+}
+.context-group-overrides-collapse > .collapse-body {
+    display: flex;
+    flex: 1 1 0px;
+    flex-direction: column;
+    min-height: 0;
+}
+.context-group-overrides-collapse .context-table {
+    flex: 1 1 0px;
+    max-height: none;
+    min-height: 0;
 }
 .pinned-controls {
     flex-shrink: 0;
@@ -335,9 +516,11 @@
     align-items: center;
     gap: 12px;
 }
-.slider-input > input[type='number'] {
+.slider-input > .stepped-number-input {
     width: 60px;
     flex-shrink: 0;
+}
+.slider-input > .stepped-number-input > input[type='number'] {
     text-align: center;
 }
 .context-base {
@@ -391,6 +574,57 @@ th {
     white-space: nowrap;
     font-size: 10px;
 }
+.context-table .member-detail-icon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(28px, 32px));
+}
+.context-group-overrides-table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
+}
+.context-group-overrides-table thead th {
+    white-space: nowrap;
+}
+.context-group-overrides-table .hash-identity.compact {
+    align-items: flex-start;
+    gap: 4px;
+    max-width: 130px;
+}
+.context-group-overrides-table .hash-identity.compact .identity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+}
+.context-group-overrides-table .hash-identity.compact .identity-text > span,
+.context-group-overrides-table .hash-identity.compact .identity-hash {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+}
+.context-group-overrides-table .hash-identity.compact .identity-text > .identity-hash {
+    flex-shrink: 1;
+    overflow: visible;
+}
+.context-group-overrides-table .context-member-icon-grid[data-min-columns='2'] {
+    min-width: calc(2 * 32px + 4px);
+}
+.context-group-overrides-table .context-member-icon-grid[data-min-columns='3'] {
+    min-width: calc(3 * 32px + 2 * 4px);
+}
+@media (max-width: 1279px) {
+    .context-body-with-group {
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+    .context-group-overrides-table .hash-identity.compact {
+        max-width: 120px;
+    }
+    .context-group-overrides-table .context-member-icon-grid[data-min-columns='3'] {
+        min-width: calc(3 * 32px + 2 * 4px);
+    }
+}
 .context-table .hash-identity {
     max-width: 130px;
 }
@@ -433,7 +667,8 @@ th {
 .requirement-table th .check input {
     flex-shrink: 0;
 }
-.requirement-table input[type='number'] {
+.requirement-table input[type='number'],
+.requirement-table .stepped-number-input {
     min-width: 64px;
     max-width: 120px;
 }

@@ -8,13 +8,88 @@ import {
     createItemDraft,
     editRequirement,
     followEntityIdentity,
+    groupRowsByBaseCooldown,
     hasDraftIdentity,
     indexEntityRows,
     revertRequirementTable,
     selectEntityFormSession,
+    sharedEntityFields,
     toggleParallel,
     updateNestedField,
+    updateEntityGroupField,
 } from './editing';
+
+describe('cooldown ability groups', () => {
+    it('groups strictly by equal finite BaseCooldown values', () => {
+        const rows = [
+            { item: { Hash: 1, BaseCooldown: 30, Scalar: 0.5 }, deleted: false, old: undefined },
+            { item: { Hash: 2, BaseCooldown: 30, Scalar: 0.8 }, deleted: false, old: undefined },
+            { item: { Hash: 3, BaseCooldown: 60, Scalar: 0.5 }, deleted: false, old: undefined },
+            { item: { Hash: 4, BaseCooldown: Number.NaN }, deleted: false, old: undefined },
+        ];
+        const { groups, ungrouped } = groupRowsByBaseCooldown(rows);
+        expect(
+            groups.map(({ cooldown, rows: group }) => [
+                cooldown,
+                group.map(({ item }) => item.Hash),
+            ]),
+        ).toEqual([
+            [30, [1, 2]],
+            [60, [3]],
+        ]);
+        expect(ungrouped.map(({ item }) => item.Hash)).toEqual([4]);
+    });
+
+    it('offers only identical non-identity fields for group editing', () => {
+        const members = [
+            {
+                Hash: 1,
+                Name: 'Shared name',
+                BaseCooldown: 30,
+                ChunkEnergyScalar: 0.5,
+                ChargeBasedScaling: [0.5],
+                Notes: 'One entry',
+            },
+            {
+                Hash: 2,
+                Name: 'Shared name',
+                BaseCooldown: 30,
+                ChunkEnergyScalar: 0.8,
+                ChargeBasedScaling: [0.8],
+                Notes: 'Another entry',
+            },
+        ];
+        expect(sharedEntityFields(abilitySpec, members, 'Hash').map((field) => field.key)).toEqual([
+            'Name',
+            'BaseCooldown',
+        ]);
+    });
+
+    it('updates every group member, preserves identities, and supports per-member restores', () => {
+        const items = [
+            { Hash: 1, Name: 'A', BaseCooldown: 30 },
+            { Hash: 2, Name: 'B', BaseCooldown: 30 },
+            { Hash: 3, Name: 'C', BaseCooldown: 60 },
+        ];
+        const edited = updateEntityGroupField(items, 'Hash', ['1', '2'], 'BaseCooldown', () => 45);
+        expect(edited).toEqual([
+            { Hash: 1, Name: 'A', BaseCooldown: 45 },
+            { Hash: 2, Name: 'B', BaseCooldown: 45 },
+            items[2],
+        ]);
+        const restored = updateEntityGroupField(
+            edited,
+            'Hash',
+            ['1', '2'],
+            'BaseCooldown',
+            (item) => (item.Hash === 1 ? 30 : 35),
+        );
+        expect(restored.map((item) => item.BaseCooldown)).toEqual([30, 35, 60]);
+        expect(() =>
+            updateEntityGroupField(items, 'Hash', ['1', 'missing'], 'BaseCooldown', () => 45),
+        ).toThrow('An ability group member no longer exists');
+    });
+});
 
 describe('nested semantic changes and reverts', () => {
     const file = 'sources/movement.json';

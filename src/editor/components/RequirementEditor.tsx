@@ -5,6 +5,7 @@ import { editRequirement, equal, revertRequirementTable, toggleParallel } from '
 import { HashIdentity } from './ManifestUI';
 import { Modal } from './Modal';
 import { numberStep } from './numberStep';
+import { NumberInput } from './NumberInput';
 
 export function RequirementEditor({
     field,
@@ -206,30 +207,32 @@ export function RequirementEditor({
                                     {parallel.map((f) => (
                                         <td key={f.key}>
                                             {Array.isArray(value[f.key]) ? (
-                                                <input
+                                                <NumberInput
                                                     aria-label={`${f.key} requirement ${index}`}
-                                                    type="number"
                                                     step={numberStep(
                                                         (value[f.key] as number[])[index],
                                                         f.items,
                                                         f.kind === 'intArray' || f.items?.integer,
                                                     )}
+                                                    constraints={f.items}
                                                     value={
                                                         Number.isFinite(
                                                             (value[f.key] as number[])[index],
                                                         )
-                                                            ? (value[f.key] as number[])[index]
+                                                            ? String(
+                                                                  (value[f.key] as number[])[index],
+                                                              )
                                                             : ''
                                                     }
-                                                    onChange={(e) =>
+                                                    onChangeValue={(raw) =>
                                                         onChange({
                                                             ...value,
                                                             [f.key]: (value[f.key] as number[]).map(
                                                                 (n, i) =>
                                                                     i === index
-                                                                        ? e.target.value === ''
+                                                                        ? raw === ''
                                                                             ? NaN
-                                                                            : Number(e.target.value)
+                                                                            : Number(raw)
                                                                         : n,
                                                             ),
                                                         })
@@ -291,10 +294,11 @@ export function RequirementEditor({
                     </div>
                     <label className="inline">
                         Manual hash (negative for subclass)
-                        <input
-                            type="number"
+                        <NumberInput
+                            aria-label="Manual hash (negative for subclass)"
+                            step={1}
                             value={manual}
-                            onChange={(e) => setManual(e.target.value)}
+                            onChangeValue={setManual}
                         />
                     </label>
                     <button

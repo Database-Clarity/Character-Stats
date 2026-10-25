@@ -8,6 +8,7 @@ export interface ManifestIconProps {
     size?: number;
     className?: string;
     table?: ManifestTable;
+    nativeTitle?: boolean;
 }
 
 export function ManifestIcon({
@@ -15,6 +16,7 @@ export function ManifestIcon({
     size = 24,
     className,
     table,
+    nativeTitle = true,
 }: ManifestIconProps): React.JSX.Element {
     const { lookup, status } = useManifest();
     const entry = status.state === 'ready' ? lookup(hash, table) : undefined;
@@ -59,7 +61,7 @@ export function ManifestIcon({
         <span
             className="prismatic-icon"
             style={{ width: size, height: size }}
-            title="Prismatic ability"
+            {...(nativeTitle ? { title: 'Prismatic ability' } : {})}
         >
             {icon}
             <span className="prismatic-marker" aria-label="Prismatic ability" />

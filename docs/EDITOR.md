@@ -21,6 +21,16 @@ Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item n
 Press **/** outside an input to focus the current collection filter (or open Jump).
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes
 menus and dialogs. Every input has a label and keyboard focus ring.
+Hold **Ctrl+Alt** and scroll anywhere in the editor to navigate the character stats:
+wheel up selects the previous section and wheel down selects the next, stopping at
+either end. The whole stats sidebar highlights while the exact modifiers are held;
+number keys do not activate stats. With **Alt** and **Shift** held together, wheel
+navigates the current collection's visible, filtered items without wrapping; an
+unmodified wheel continues to scroll normally. Clicked stat, tab, cooldown-group,
+and item selections participate in browser **Back** and **Forward**. Wheel
+navigation records its final selection after five seconds without another
+successful navigation step; Back returns to the selection before that scroll burst.
+Changing selections this way preserves unsaved edits and drafts.
 
 ### Manifest names and icons
 
@@ -65,9 +75,11 @@ against the expanded array before it is applied. **View JSON** is read-only
 debugging output, not a required editing surface. Core validation checks coverage,
 expressions, and numeric constraints. Tick labels retain their natural proportions
 at every plot width; the x/y value label follows the pointer, independently of the
-nearest-value crosshair. Number controls step by one for integers, by 0.01 for
-fields constrained to 0–1, or by the current decimal precision otherwise
-(for example, 0.875 → 0.001 and 91 → 1).
+nearest-value crosshair. Number controls step by one for integers and by 0.01 for
+decimal values, including fields constrained to 0–1; manually entered decimal
+precision remains unrestricted. Hold **Shift** and wheel over a numeric input to
+step its hovered value by the configured step, respecting bounds and preserving
+the value's typed precision. The ordinary wheel remains scrolling without **Shift**.
 
 Enum fields use compact selects; hover the selected value or an option for its
 description. Object fields expand into inline spec-driven groups. Object arrays
@@ -87,6 +99,20 @@ header has the same menu. **Duplicate** opens an isolated draft; **Delete** mark
 saved items as deleted with a strikethrough and a **Restore item** action.
 **Revert changes** restores one item (or removes an added item). No global
 Duplicate/Delete toolbar is used.
+
+Ability entries can be grouped by identical **BaseCooldown** values within each
+collection; entries from different collections are not grouped together.
+After all editable fields, **Members** shows a responsive grid of compact
+icon/name/hash cards. Hover or focus a card for its custom tooltip: identity and
+manifest details plus every schema-backed current entry value, including values
+that differ within the group and optional values. A normal click also shows the
+tooltip; **Shift-click** or **double-click** a member card or context icon to open
+that member's individual editor in the current page. **Ctrl-click** does not
+trigger current-page navigation; browser modifier behavior is preserved.
+Overrides remain a separate editing surface. A group editor can
+batch-edit any field that has the same value across every group member. Group
+edits preserve each entry's **Hash**. Existing validation, individual editing,
+drafts, change review, and export workflows continue to apply.
 
 The list-header **+** creates a draft pinned above the sorted list. It is marked
 **DRAFT** and is **not a pending change**. Duplicates also start with empty identity
@@ -131,9 +157,18 @@ Manual hashes remain available without a manifest.
 
 The stat slider and adjacent numeric input remain pinned above the scrolling
 context content. An ability selection shows only that ability's base cooldown
-and one before to after / delta row for each applicable override. An override
-selection shows only the abilities it affects. There is no "all overrides"
-comparison. Calculations use the shared core; the stat value clamps at 100.
+and one before-to-after / delta row for each applicable override. An override
+selection still shows the abilities it affects. For a cooldown group,
+**Applicable overrides** shows each override's individual effect and affected
+members, grouping members with identical results; it does not repeat that data
+in a separate aggregate cooldown table. The group view omits the otherwise-empty
+**Affected abilities** disclosure. Matching **CooldownOverride** replacements
+are applied first (the last matching replacement wins), then matching
+**Scalar** entries multiply the result, and the cooldown curve applies last.
+The curve stat is truncated and clamped to 0–100; final cooldowns are rounded
+to three decimals. Individual ability and override views retain their existing
+behavior and labels.
+
 Scaled results are labeled **Cooldown at &lt;value&gt; &lt;Stat name&gt;**.
 Stats without cooldown scaling, including Super, show **Base cooldown** and
 their fixed cooldown without a cooldown-stat slider.

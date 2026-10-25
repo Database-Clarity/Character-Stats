@@ -4,11 +4,11 @@ import { numberStep } from './numberStep';
 
 describe('numberStep', () => {
     it.each([
-        [0.875, 0.001],
+        [0.875, 0.01],
         [91, 1],
         [-1.25, 0.01],
-        [1e-7, 1e-7],
-        [1.25e-7, 1e-9],
+        [1e-7, 0.01],
+        [1.25e-7, 0.01],
         [1e21, 1],
         [0, 1],
         [NaN, 1],
@@ -28,14 +28,14 @@ describe('numberStep', () => {
         );
         if (!scalar || !chunkEnergy) throw new Error('Missing override parallel fields');
 
-        expect(numberStep(1, scalar.items)).toBe(0.001);
-        expect(numberStep(1, chunkEnergy.items)).toBe(0.001);
+        expect(numberStep(1, scalar.items)).toBe(0.01);
+        expect(numberStep(1, chunkEnergy.items)).toBe(0.01);
         expect(numberStep(1, { round: 2 })).toBe(0.01);
     });
     it('keeps integer controls integral', () => {
         expect(numberStep(0.875, { min: 0, max: 1 }, true)).toBe(1);
     });
-    it('never underflows to a zero step', () => {
-        expect(numberStep(Number.MIN_VALUE)).toBe(Number.MIN_VALUE);
+    it('uses hundredths even for values smaller than the supported arrow precision', () => {
+        expect(numberStep(Number.MIN_VALUE)).toBe(0.01);
     });
 });

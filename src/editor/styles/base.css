@@ -424,6 +424,10 @@ kbd {
     text-align: left;
     border-left: 2px solid transparent;
 }
+.sidebar[data-navigation-active='true'] {
+    background-color: #202a31;
+    box-shadow: inset 0 0 0 2px var(--info);
+}
 .sidebar > button[aria-current] {
     border-left-color: var(--accent);
     background: #24272e;

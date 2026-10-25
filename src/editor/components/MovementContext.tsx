@@ -8,6 +8,7 @@ import {
 } from '../../core';
 import { HashIdentity } from './ManifestUI';
 import { formatMovementSpeed } from './previewData';
+import { NumberInput } from './NumberInput';
 
 function validMovement(value: unknown): value is MovementSource {
     return !validateSources({ stats: [], movement: value }).some(
@@ -215,20 +216,16 @@ function MovementControls({ source }: { source: MovementSource }) {
                                 <div className="movement-source-controls">
                                     <label>
                                         Stacks{' '}
-                                        <input
+                                        <NumberInput
                                             aria-label={`${entry.Name} stacks`}
-                                            type="number"
-                                            min={1}
                                             step={1}
+                                            constraints={{ min: 1 }}
                                             value={
                                                 Number.isFinite(state.stacks) ? state.stacks : ''
                                             }
-                                            onChange={(e) =>
+                                            onChangeValue={(raw) =>
                                                 update(entry.Hash, {
-                                                    stacks:
-                                                        e.target.value === ''
-                                                            ? NaN
-                                                            : Number(e.target.value),
+                                                    stacks: raw === '' ? NaN : Number(raw),
                                                 })
                                             }
                                         />

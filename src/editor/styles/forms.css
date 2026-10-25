@@ -167,10 +167,52 @@
 .field-value {
     min-width: 0;
 }
+.stepped-number-input {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 220px;
+}
+.stepped-number-input > input[type='number'] {
+    width: 100%;
+    min-width: 0;
+    padding-right: 26px;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+.stepped-number-input > input[type='number']::-webkit-inner-spin-button,
+.stepped-number-input > input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+.stepped-number-controls {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    width: 18px;
+}
+.stepped-number-controls > button {
+    min-height: 0;
+    height: 50%;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    font-size: 7px;
+    line-height: 8px;
+}
+.stepped-number-controls > button:hover:not(:disabled) {
+    background: #303640;
+}
 .is-modified > .field {
     padding-right: 40px;
 }
-.field-value > input[type='number'] {
+.field-value > .stepped-number-input {
     max-width: 220px;
 }
 .hash-resolution {
@@ -192,7 +234,8 @@
     grid-template-columns: 116px minmax(0, 1fr);
     gap: 12px;
 }
-.nested-row .array-element input {
+.nested-row .array-element input,
+.nested-row .array-element .stepped-number-input {
     width: 76px;
 }
 .unpublished {
@@ -330,8 +373,10 @@
     gap: 8px;
     margin: 0;
 }
-.point-row input {
+.point-row input,
+.point-row .stepped-number-input {
     width: 72px;
+    flex: 0 0 72px;
 }
 .raw-values {
     display: grid;

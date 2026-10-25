@@ -1,6 +1,7 @@
 import type { CurveSegment, Domain } from '../../core';
 import { Collapse } from './EditorPrimitives';
 import { numberStep } from './numberStep';
+import { NumberInput } from './NumberInput';
 
 export default function SegmentRow({
     file,
@@ -90,17 +91,15 @@ export default function SegmentRow({
                         {(['From', 'To'] as const).map((key) => (
                             <label key={key}>
                                 {key}
-                                <input
+                                <NumberInput
                                     aria-label={`${fieldKey} segment ${index + 1} ${key}`}
-                                    type="number"
                                     value={Number.isFinite(segment[key]) ? segment[key] : ''}
-                                    onChange={(event) =>
+                                    step={numberStep(segment[key], { precision }, true)}
+                                    constraints={{ min: domain[0], max: domain[1] }}
+                                    onChangeValue={(raw) =>
                                         onChange({
                                             ...segment,
-                                            [key]:
-                                                event.target.value === ''
-                                                    ? NaN
-                                                    : Number(event.target.value),
+                                            [key]: raw === '' ? NaN : Number(raw),
                                         })
                                     }
                                 />
@@ -109,18 +108,14 @@ export default function SegmentRow({
                         {segment.Type === 'Constant' ? (
                             <label>
                                 Value
-                                <input
+                                <NumberInput
                                     aria-label={`${fieldKey} segment ${index + 1} Value`}
-                                    type="number"
                                     step={numberStep(segment.Value, { precision })}
                                     value={Number.isFinite(segment.Value) ? segment.Value : ''}
-                                    onChange={(event) =>
+                                    onChangeValue={(raw) =>
                                         onChange({
                                             ...segment,
-                                            Value:
-                                                event.target.value === ''
-                                                    ? NaN
-                                                    : Number(event.target.value),
+                                            Value: raw === '' ? NaN : Number(raw),
                                         })
                                     }
                                 />
@@ -176,25 +171,23 @@ export default function SegmentRow({
                             {([0, 1] as const).map((axis) => (
                                 <label key={axis}>
                                     {axis === 0 ? 'x' : 'y'}
-                                    <input
+                                    <NumberInput
                                         aria-label={`${fieldKey} segment ${index + 1} point ${pointIndex} ${axis === 0 ? 'x' : 'y'}`}
-                                        type="number"
                                         step={numberStep(point[axis], { precision }, axis === 0)}
+                                        constraints={
+                                            axis === 0
+                                                ? { min: domain[0], max: domain[1] }
+                                                : undefined
+                                        }
                                         value={Number.isFinite(point[axis]) ? point[axis] : ''}
-                                        onChange={(event) =>
+                                        onChangeValue={(raw) =>
                                             onChange({
                                                 ...segment,
                                                 Points: segment.Points.map((currentPoint, i) =>
                                                     i === pointIndex
                                                         ? axis === 0
-                                                            ? [
-                                                                  Number(event.target.value),
-                                                                  currentPoint[1],
-                                                              ]
-                                                            : [
-                                                                  currentPoint[0],
-                                                                  Number(event.target.value),
-                                                              ]
+                                                            ? [Number(raw), currentPoint[1]]
+                                                            : [currentPoint[0], Number(raw)]
                                                         : currentPoint,
                                                 ),
                                             })

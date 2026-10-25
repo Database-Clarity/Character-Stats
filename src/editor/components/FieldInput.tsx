@@ -7,6 +7,7 @@ import { fieldDefault, numericDefault, updateNestedField } from '../state/editin
 import { EntityForm } from './EntityForm';
 import { numberStep } from './numberStep';
 import { ReferenceArrayInput } from './ReferenceArrayInput';
+import { NumberInput } from './NumberInput';
 
 export function NumberArrayInput({
     spec,
@@ -48,22 +49,22 @@ export function NumberArrayInput({
                                 <label>
                                     {stackCounts ? 'Stacks' : (spec.indexLabel ?? 'Index')}:{' '}
                                     {stackCounts ? i + 1 : i}
-                                    <input
+                                    <NumberInput
                                         aria-label={`${spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
-                                        type="number"
                                         step={numberStep(
                                             number,
                                             spec.items,
                                             spec.kind === 'intArray' || spec.items?.integer,
                                         )}
+                                        constraints={spec.items}
                                         value={Number.isFinite(number) ? number : ''}
-                                        onChange={(e) =>
+                                        onChangeValue={(raw) =>
                                             onChange(
                                                 array.map((n, index) =>
                                                     index === i
-                                                        ? e.target.value === ''
+                                                        ? raw === ''
                                                             ? NaN
-                                                            : Number(e.target.value)
+                                                            : Number(raw)
                                                         : n,
                                                 ),
                                             )
@@ -101,6 +102,9 @@ export function FieldInput({
     file,
     path,
     fieldPath = spec.key,
+    modified,
+    revertTitle,
+    onRevert,
     onChange,
 }: {
     spec: FieldSpec;
@@ -110,6 +114,9 @@ export function FieldInput({
     file: string;
     path: string;
     fieldPath?: string;
+    modified?: boolean | undefined;
+    revertTitle?: string | undefined;
+    onRevert?(): void;
     onChange(value: unknown): void;
 }) {
     const id = useId();
@@ -129,7 +136,9 @@ export function FieldInput({
             field={fieldPath}
             value={value}
             saved={saved}
-            onRevert={() => onChange(structuredClone(saved))}
+            modified={modified}
+            revertTitle={revertTitle}
+            onRevert={onRevert ?? (() => onChange(structuredClone(saved)))}
         >
             {spec.published === false && (
                 <span className="badge unpublished" title="Kept in sources but not exported.">
@@ -401,24 +410,21 @@ export function FieldInput({
                             )
                         ) : (
                             <>
-                                <input
+                                <NumberInput
                                     id={id}
+                                    aria-label={label}
                                     aria-required={!!spec.required}
                                     aria-invalid={issues.length > 0}
-                                    type="number"
                                     step={numberStep(value, spec, spec.kind !== 'number')}
+                                    constraints={spec}
                                     value={
                                         typeof value === 'number' && Number.isFinite(value)
                                             ? value
                                             : ''
                                     }
                                     aria-describedby={`${id}-help`}
-                                    onChange={(e) =>
-                                        onChange(
-                                            e.target.value === ''
-                                                ? undefined
-                                                : Number(e.target.value),
-                                        )
+                                    onChangeValue={(raw) =>
+                                        onChange(raw === '' ? undefined : Number(raw))
                                     }
                                 />
                                 {spec.kind === 'hash' && typeof value === 'number' && (

@@ -13,6 +13,7 @@ import CurvePlot from './CurvePlot';
 import SegmentList from './SegmentList';
 import { valuesToSegments } from './curveValuesConversion';
 import { numberStep } from './numberStep';
+import { NumberInput } from './NumberInput';
 
 export function CurveEditor({
     spec,
@@ -135,22 +136,18 @@ export function CurveEditor({
                         (n, i) => (
                             <label key={i}>
                                 {domain[0] + i}
-                                <input
-                                    type="number"
+                                <NumberInput
                                     step={numberStep(n, { ...spec, precision })}
                                     aria-label={`${spec.key} value ${domain[0] + i}`}
+                                    constraints={spec}
                                     value={Number.isFinite(n) ? Number(n) : ''}
-                                    onChange={(event) =>
+                                    onChangeValue={(raw) =>
                                         onChange({
                                             Values: (isRecord(value) && Array.isArray(value.Values)
                                                 ? value.Values
                                                 : current
                                             ).map((v, j) =>
-                                                i === j
-                                                    ? event.target.value === ''
-                                                        ? NaN
-                                                        : Number(event.target.value)
-                                                    : v,
+                                                i === j ? (raw === '' ? NaN : Number(raw)) : v,
                                             ),
                                         })
                                     }

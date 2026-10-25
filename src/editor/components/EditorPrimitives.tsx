@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { equal } from '../state/editing';
+import { NumberInput } from './NumberInput';
 
 export function Collapse({
     storageKey,
@@ -47,21 +48,25 @@ export function Modified({
     onRevert,
     children,
     field,
+    modified,
+    revertTitle,
 }: {
     value: unknown;
     saved: unknown;
     onRevert(): void;
     children: ReactNode;
     field: string;
+    modified?: boolean | undefined;
+    revertTitle?: string | undefined;
 }) {
-    const changed = !equal(value, saved);
+    const changed = modified ?? !equal(value, saved);
     return (
         <div data-field={field} className={`field-frame ${changed ? 'is-modified' : ''}`}>
             {changed && (
                 <button
                     className="revert-field"
                     aria-label={`Revert ${field}`}
-                    title={`Saved: ${JSON.stringify(saved) ?? '(not set)'}`}
+                    title={revertTitle ?? `Saved: ${JSON.stringify(saved) ?? '(not set)'}`}
                     onClick={onRevert}
                 >
                     <span className="modified-dot" /> ↶
@@ -92,13 +97,12 @@ export function StatControl({
                     value={value}
                     onChange={(e) => onChange(Number(e.target.value))}
                 />
-                <input
+                <NumberInput
                     aria-label={`${label} number`}
-                    type="number"
-                    min={0}
-                    max={200}
+                    step={1}
+                    constraints={{ min: 0, max: 200 }}
                     value={value}
-                    onChange={(e) => onChange(Math.min(200, Math.max(0, Number(e.target.value))))}
+                    onChangeValue={(raw) => onChange(Math.min(200, Math.max(0, Number(raw))))}
                 />
             </div>
         </div>

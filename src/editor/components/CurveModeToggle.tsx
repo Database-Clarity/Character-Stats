@@ -1,3 +1,5 @@
+import { NumberInput } from './NumberInput';
+
 export default function CurveModeToggle({
     segmented,
     round,
@@ -34,17 +36,12 @@ export default function CurveModeToggle({
             {segmented && (
                 <label className="inline rounding">
                     Rounding digits
-                    <input
+                    <NumberInput
                         aria-label={`${fieldKey} rounding digits`}
-                        type="number"
-                        min={0}
-                        max={15}
+                        step={1}
+                        constraints={{ min: 0, max: 15 }}
                         value={round}
-                        onChange={(event) =>
-                            onRoundChange(
-                                event.target.value === '' ? undefined : Number(event.target.value),
-                            )
-                        }
+                        onChangeValue={(raw) => onRoundChange(raw === '' ? undefined : Number(raw))}
                     />
                 </label>
             )}
