@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Domain } from '../../core';
+import { curveValueRange } from './curveValueRange';
 export default function CurvePlot({
     plot,
     domain,
@@ -22,14 +23,16 @@ export default function CurvePlot({
     const values = plot
         .flatMap((p) => [p.current, ...(compare ? [p.saved] : [])])
         .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-    const min = Math.min(0, ...values),
-        max = Math.max(1, ...values),
-        height = 160;
-    const left = 52,
+    const { min, max } = curveValueRange(values);
+    const height = 240,
+        left = 52,
         right = width - 16,
+        plotTop = 16,
+        plotBottom = 200,
+        plotHeight = plotBottom - plotTop,
         plotWidth = Math.max(1, right - left);
     const x = (n: number) => left + ((n - domain[0]) / (domain[1] - domain[0])) * plotWidth,
-        y = (n: number) => 132 - ((n - min) / (max - min)) * 116;
+        y = (n: number) => plotBottom - ((n - min) / (max - min)) * plotHeight;
     const line = (key: 'current' | 'saved') =>
         plot
             .filter((p) => typeof p[key] === 'number' && Number.isFinite(p[key]))
@@ -65,11 +68,11 @@ export default function CurvePlot({
                         <line
                             x1={left}
                             x2={right}
-                            y1={16 + 116 * f}
-                            y2={16 + 116 * f}
+                            y1={plotTop + plotHeight * f}
+                            y2={plotTop + plotHeight * f}
                             stroke="#30343b"
                         />
-                        <text x={4} y={20 + 116 * f}>
+                        <text x={4} y={plotTop + 4 + plotHeight * f}>
                             {Number(max - (max - min) * f).toFixed(2)}
                         </text>
                     </g>
@@ -78,7 +81,7 @@ export default function CurvePlot({
                     <text
                         key={f}
                         x={left + plotWidth * f}
-                        y={154}
+                        y={height - 10}
                         textAnchor={f === 1 ? 'end' : 'middle'}
                     >
                         {domain[0] + (domain[1] - domain[0]) * f}
@@ -105,8 +108,8 @@ export default function CurvePlot({
                         <line
                             x1={x(point.x)}
                             x2={x(point.x)}
-                            y1={12}
-                            y2={132}
+                            y1={plotTop}
+                            y2={plotBottom}
                             stroke="#bac0cc"
                             strokeDasharray="2 3"
                         />
