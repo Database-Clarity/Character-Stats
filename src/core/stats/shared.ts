@@ -52,7 +52,7 @@ export function localeFields(abilities = false): FieldSpec[] {
                     'object. You can see an example of how this should be formatted ' +
                     'here: ' +
                     'https://github.com/Database-Clarity/Character-Stats/' +
-                    'blob/master/CBSD_example.md',
+                    'blob/master/docs/CBSD_example.md',
             }),
         );
     }

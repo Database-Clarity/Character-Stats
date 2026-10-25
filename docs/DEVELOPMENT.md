@@ -9,6 +9,7 @@ sources/ + locale/en.json -> src/core -> CLI / web editor -> versions/<major>/
 - [`sources/`](../sources/) contains stat and movement input JSON. [`locale/en.json`](../locale/en.json) is the editable English source; translated locale files are Crowdin-managed.
 - [`src/core/`](../src/core/) is shared, browser-safe TypeScript. Field/entity/stat registries drive validation, export, schema generation, and editor forms.
 - [`src/cli/`](../src/cli/) contains validation, data-build, and schema-generation entry points. The React editor is in [`src/editor/`](../src/editor/).
+- [`config/`](../config/) contains the Vite, Vitest, and core-only TypeScript configurations. Prettier settings are in `package.json`; the root `tsconfig.json` remains for workspace/editor discovery.
 - [`versions/`](../versions/) contains published exports. [`update.json`](../update.json) identifies the current schema version.
 
 The current stat registry contains Health, Melee, Grenade, Super, Class, and Weapons. Historical 1.x exports remain unchanged.
@@ -226,7 +227,7 @@ export const statRegistry = [
 ] as const;
 ```
 
-Add `sources/stats/<stat>.json` with matching `Hash`, `Name`, `Fields`, and any registered collections. Add the stat's required English strings in [`locale/en.json`](../locale/en.json): `Overview`, `BaseStatTooltip`, and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` when a registered collection has `role: 'ability'`. Locale IDs are generated from the stat name and key. In `ChargeBasedScaling`, entry `i` is the charge-rate scalar while `i` charges are stored, and the array length is the ability's maximum charges. The `AbilityName`, `ChargeCount`, and `ChargeBasedScaling` tooltip tokens are supplied by the consumer per ability, not stat properties; see the [CBSD example](../CBSD_example.md). The registry drives the editor's stat navigation; no editor-specific wiring is needed.
+Add `sources/stats/<stat>.json` with matching `Hash`, `Name`, `Fields`, and any registered collections. Add the stat's required English strings in [`locale/en.json`](../locale/en.json): `Overview`, `BaseStatTooltip`, and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` when a registered collection has `role: 'ability'`. Locale IDs are generated from the stat name and key. In `ChargeBasedScaling`, entry `i` is the charge-rate scalar while `i` charges are stored, and the array length is the ability's maximum charges. The `AbilityName`, `ChargeCount`, and `ChargeBasedScaling` tooltip tokens are supplied by the consumer per ability, not stat properties; see the [CBSD example](CBSD_example.md). The registry drives the editor's stat navigation; no editor-specific wiring is needed.
 
 After changing a registry, run `npm run schema`; [`schema.json`](../schema.json) is generated and must never be hand-edited. Then run `npm test`, `npm run validate`, `npm run typecheck`, and `npm run format:check` as appropriate. Update focused tests if they assert a fixed stat list or generated schema.
 

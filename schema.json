@@ -25,7 +25,7 @@
         },
         "ChargeBasedScalingTooltip": {
             "$ref": "#/definitions/DynamicLocaleString",
-            "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/CBSD_example.md"
+            "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
         },
         "Ability": {
             "title": "Ability",
@@ -636,7 +636,7 @@
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
-                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/CBSD_example.md"
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
                 },
                 "CooldownScalars": {
                     "type": "array",
@@ -712,7 +712,7 @@
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
-                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/CBSD_example.md"
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
                 },
                 "CooldownScalars": {
                     "type": "array",
@@ -859,7 +859,7 @@
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
-                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/CBSD_example.md"
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
                 },
                 "CooldownScalars": {
                     "type": "array",

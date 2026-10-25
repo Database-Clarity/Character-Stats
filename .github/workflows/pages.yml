@@ -51,14 +51,12 @@ jobs:
             --exclude='_site/' \
             --exclude='coverage/' \
             --exclude='.vscode/' \
+            --exclude='config/' \
             --exclude='package.json' \
             --exclude='package-lock.json' \
             --exclude='tsconfig*.json' \
-            --exclude='vite.config.ts' \
-            --exclude='vitest.config.ts' \
             --exclude='.gitignore' \
             --exclude='.npmrc' \
-            --exclude='.prettierrc' \
             --exclude='.prettierignore' \
             ./ _site/
           cp -a dist/. _site/editor/

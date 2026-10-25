@@ -3,16 +3,22 @@
     "version": "2.0.0",
     "private": true,
     "type": "module",
+    "prettier": {
+        "printWidth": 100,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "trailingComma": "all"
+    },
     "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "test": "vitest run",
-        "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.core.json",
+        "dev": "vite --config config/vite.config.ts",
+        "build": "vite build --config config/vite.config.ts",
+        "test": "vitest run --config config/vitest.config.ts",
+        "typecheck": "tsc --noEmit && tsc --noEmit -p config/tsconfig.core.json",
         "validate": "tsx src/cli/validate.ts",
         "build:data": "tsx src/cli/build-data.ts",
         "schema": "tsx src/cli/schema.ts",
-        "format": "prettier --write src/core src/cli src/editor tests *config* .prettierrc package.json",
-        "format:check": "prettier --check src/core src/cli src/editor tests *config* .prettierrc package.json"
+        "format": "prettier --write src/core src/cli src/editor tests config/*.ts config/tsconfig.core.json tsconfig.json package.json",
+        "format:check": "prettier --check src/core src/cli src/editor tests config/*.ts config/tsconfig.core.json tsconfig.json package.json"
     },
     "dependencies": {
         "react": "^19.2.0",
