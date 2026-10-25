@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { statRegistry } from '../core';
 import type { DataSource, LoadedData } from './data';
 import { EditorProvider, useEditor } from './state/store';
@@ -41,10 +41,35 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         [request, setRequest] = useState<NavigationRequest | null>(null),
         [currentChange, setCurrentChange] = useState<string>();
     const [disconnecting, setDisconnecting] = useState(false);
+    const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+    const moreMenuRef = useRef<HTMLDivElement>(null);
+    const morePanelRef = useRef<HTMLDivElement>(null);
+    const moreTriggerRef = useRef<HTMLButtonElement>(null);
+    const accountLabel = state.source.readOnly ? 'Local dev' : state.source.label;
     function disconnect() {
         forgetLogin();
         onDisconnect();
     }
+    function focusMoreItem(last = false) {
+        requestAnimationFrame(() => {
+            const items = morePanelRef.current?.querySelectorAll<HTMLButtonElement>(
+                '[role="menuitem"]:not(:disabled)',
+            );
+            (last ? items?.[items.length - 1] : items?.[0])?.focus();
+        });
+    }
+    function openMoreMenu(last = false) {
+        setMoreMenuOpen(true);
+        focusMoreItem(last);
+    }
+    useEffect(() => {
+        if (!moreMenuOpen) return;
+        const closeOnOutsidePointer = (event: PointerEvent) => {
+            if (!moreMenuRef.current?.contains(event.target as Node)) setMoreMenuOpen(false);
+        };
+        document.addEventListener('pointerdown', closeOnOutsidePointer);
+        return () => document.removeEventListener('pointerdown', closeOnOutsidePointer);
+    }, [moreMenuOpen]);
     const errors = state.issues.filter((i) => i.severity === 'error'),
         warnings = state.issues.filter((i) => i.severity === 'warning');
     function go(target: ChangeTarget) {
@@ -168,39 +193,159 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     >
                         Publish
                     </button>
-                    <div className="account-area">
-                        <button onClick={() => setDialog('recovery')}>Recovery</button>
-                        <span className="account-repo" title={state.source.label}>
-                            {state.source.readOnly ? 'Local dev' : state.source.label}
-                        </span>
+                    <div className="toolbar-manifest">
                         <ManifestStatusBadge />
+                    </div>
+                    <div
+                        className="more-menu"
+                        ref={moreMenuRef}
+                        onBlur={(event) => {
+                            const nextTarget = event.relatedTarget as Node | null;
+                            if (
+                                !moreMenuRef.current?.contains(nextTarget) ||
+                                nextTarget === moreTriggerRef.current
+                            )
+                                setMoreMenuOpen(false);
+                        }}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Escape' && moreMenuOpen) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                setMoreMenuOpen(false);
+                                moreTriggerRef.current?.focus();
+                                return;
+                            }
+                            if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key))
+                                return;
+                            if (
+                                event.target === moreTriggerRef.current &&
+                                !moreMenuOpen &&
+                                (event.key === 'ArrowDown' || event.key === 'ArrowUp')
+                            ) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                openMoreMenu(event.key === 'ArrowUp');
+                                return;
+                            }
+                            const items = Array.from(
+                                morePanelRef.current?.querySelectorAll<HTMLButtonElement>(
+                                    '[role="menuitem"]:not(:disabled)',
+                                ) ?? [],
+                            );
+                            if (!items.length) return;
+                            event.preventDefault();
+                            event.stopPropagation();
+                            const index = items.indexOf(event.target as HTMLButtonElement);
+                            const next =
+                                event.key === 'Home'
+                                    ? 0
+                                    : event.key === 'End'
+                                      ? items.length - 1
+                                      : event.target === moreTriggerRef.current
+                                        ? event.key === 'ArrowDown'
+                                            ? 0
+                                            : items.length - 1
+                                        : (index +
+                                              (event.key === 'ArrowDown' ? 1 : -1) +
+                                              items.length) %
+                                          items.length;
+                            items[next]?.focus();
+                        }}
+                    >
                         <button
-                            className="account-button"
-                            title="Sign out of this repository"
-                            aria-label="Sign out"
+                            ref={moreTriggerRef}
+                            className="more-menu-trigger"
+                            type="button"
+                            aria-label="Repository options"
+                            aria-haspopup="menu"
+                            aria-expanded={moreMenuOpen}
+                            aria-controls={moreMenuOpen ? 'repository-options-menu' : undefined}
+                            title={`Repository options · ${accountLabel}`}
                             onClick={() => {
-                                if (
-                                    state.dirty.length ||
-                                    Object.keys(state.itemDrafts).length ||
-                                    Object.keys(state.drafts).length
-                                )
-                                    setDisconnecting(true);
-                                else disconnect();
+                                if (moreMenuOpen) setMoreMenuOpen(false);
+                                else openMoreMenu();
                             }}
                         >
                             <svg
-                                width="16"
-                                height="16"
+                                width="18"
+                                height="18"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                strokeWidth="1.7"
+                                strokeWidth="2"
+                                strokeLinecap="round"
                                 aria-hidden="true"
                             >
-                                <path d="M10 4H4v16h6M10 12h11m-5-5 5 5-5 5" />
+                                <path d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
-                            Sign out
                         </button>
+                        {moreMenuOpen && (
+                            <div
+                                ref={morePanelRef}
+                                id="repository-options-menu"
+                                className="more-menu-panel"
+                                role="menu"
+                                aria-label="Repository options"
+                            >
+                                <div
+                                    className="more-menu-identity"
+                                    role="group"
+                                    aria-label="Repository identity"
+                                >
+                                    <span>Repository</span>
+                                    <strong className="account-repo" title={state.source.label}>
+                                        {accountLabel}
+                                    </strong>
+                                </div>
+                                <div
+                                    className="more-menu-actions"
+                                    role="group"
+                                    aria-label="Actions"
+                                >
+                                    <button
+                                        role="menuitem"
+                                        tabIndex={-1}
+                                        type="button"
+                                        onClick={() => {
+                                            setMoreMenuOpen(false);
+                                            setDialog('recovery');
+                                        }}
+                                    >
+                                        Recovery
+                                    </button>
+                                    <button
+                                        role="menuitem"
+                                        tabIndex={-1}
+                                        type="button"
+                                        className="account-button"
+                                        title="Sign out of this repository"
+                                        onClick={() => {
+                                            setMoreMenuOpen(false);
+                                            if (
+                                                state.dirty.length ||
+                                                Object.keys(state.itemDrafts).length ||
+                                                Object.keys(state.drafts).length
+                                            )
+                                                setDisconnecting(true);
+                                            else disconnect();
+                                        }}
+                                    >
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="1.7"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="M10 4H4v16h6M10 12h11m-5-5 5 5-5 5" />
+                                        </svg>
+                                        Sign out
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </header>

@@ -149,15 +149,19 @@
 .field-label {
     margin: 4px 0;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     gap: 8px;
     color: #c3c8d2;
     font-weight: 400;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
 }
 .field-help {
+    display: inline-flex;
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
     color: var(--muted);
-    font-size: 11px;
     cursor: help;
 }
 .field-value {
