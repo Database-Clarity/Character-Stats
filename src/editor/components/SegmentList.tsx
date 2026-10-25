@@ -7,6 +7,7 @@ export default function SegmentList({
     fieldKey,
     segments,
     domain,
+    precision,
     onChange,
 }: {
     file: string;
@@ -14,6 +15,7 @@ export default function SegmentList({
     fieldKey: string;
     segments: CurveSegment[];
     domain: Domain;
+    precision: number;
     onChange(segments: CurveSegment[]): void;
 }) {
     function update(index: number, next: CurveSegment) {
@@ -37,6 +39,7 @@ export default function SegmentList({
                     index={index}
                     segmentCount={segments.length}
                     domain={domain}
+                    precision={precision}
                     onChange={(next) => update(index, next)}
                     onMoveUp={() => move(index, index - 1)}
                     onMoveDown={() => move(index, index + 1)}

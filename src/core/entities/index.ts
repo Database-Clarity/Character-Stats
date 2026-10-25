@@ -190,9 +190,10 @@ export const overrideSpec: EntitySpec = {
             items: { exclusiveMin: 0 },
             required: false,
             description:
-                'Dimensionless cooldown multipliers, one per Requirements entry. All matching ' +
-                'indices stack multiplicatively after CooldownOverride replaces BaseCooldown ' +
-                '(in seconds), and before CooldownScalars[min(stat value, 100)] for non-Super abilities.',
+                'Multiplies the cooldown duration for matching Requirements. After BaseCooldown or ' +
+                'CooldownOverride is selected, each active Scalar multiplies the result, then ' +
+                'non-Super abilities also multiply it by CooldownScalars[min(stat value, 100)]. ' +
+                'A Scalar of 0.8 makes the cooldown 20% shorter; 1.25 makes it 25% longer.',
         }),
 
         numberArrayField('ChunkEnergyOverride', {

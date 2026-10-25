@@ -1,11 +1,16 @@
 import type { NumericConstraints } from '../../core';
 
+type NumberStepConstraints = NumericConstraints & { precision?: number; round?: number };
+
 export function numberStep(
     value: unknown,
-    constraints: NumericConstraints = {},
+    constraints: NumberStepConstraints = {},
     integer = false,
 ): number {
     if (integer) return 1;
+    const precision = constraints.precision ?? constraints.round;
+    if (precision !== undefined && Number.isInteger(precision) && precision >= 0)
+        return 10 ** -precision;
     const min = constraints.min ?? constraints.exclusiveMin;
     const max = constraints.max ?? constraints.exclusiveMax;
     if (min !== undefined && min >= 0 && max !== undefined && max <= 1) return 0.01;

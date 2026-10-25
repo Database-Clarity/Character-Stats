@@ -42,6 +42,8 @@ export function CurveEditor({
     }
     const current = samples(value),
         original = compare ? samples(saved) : [];
+    const precision =
+        isRecord(value) && typeof value.Round === 'number' ? value.Round : (spec.precision ?? 3);
     const segmented = isRecord(value) && Array.isArray(value.Segments);
     const segments = segmented ? (value.Segments as CurveSegment[]) : [];
     const issues = validateField(spec, value);
@@ -124,6 +126,7 @@ export function CurveEditor({
                     fieldKey={spec.key}
                     segments={segments}
                     domain={domain}
+                    precision={precision}
                     onChange={setSegments}
                 />
             ) : (
@@ -134,7 +137,7 @@ export function CurveEditor({
                                 {domain[0] + i}
                                 <input
                                     type="number"
-                                    step={numberStep(n, spec)}
+                                    step={numberStep(n, { ...spec, precision })}
                                     aria-label={`${spec.key} value ${domain[0] + i}`}
                                     value={Number.isFinite(n) ? Number(n) : ''}
                                     onChange={(event) =>

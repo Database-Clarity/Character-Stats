@@ -7,7 +7,7 @@ function field(key: string, kind: FieldSpec['kind'], options: FieldOptions): Fie
 }
 
 export function numberField(key: string, options: FieldOptions): FieldSpec {
-    return field(key, 'number', options);
+    return field(key, 'number', { precision: 3, ...options });
 }
 
 export function integerField(key: string, options: FieldOptions): FieldSpec {
@@ -15,7 +15,10 @@ export function integerField(key: string, options: FieldOptions): FieldSpec {
 }
 
 export function numberArrayField(key: string, options: FieldOptions): FieldSpec {
-    return field(key, 'numberArray', options);
+    return field(key, 'numberArray', {
+        ...options,
+        items: { precision: 3, ...(options.items ?? {}) },
+    });
 }
 
 export function integerArrayField(key: string, options: FieldOptions): FieldSpec {
@@ -23,7 +26,7 @@ export function integerArrayField(key: string, options: FieldOptions): FieldSpec
 }
 
 export function curve(key: string, options: FieldOptions): FieldSpec {
-    return field(key, 'curve', { items: { min: 0 }, ...options });
+    return field(key, 'curve', { precision: 3, items: { min: 0 }, ...options });
 }
 
 export function localeField(key: string, options: FieldOptions): FieldSpec {

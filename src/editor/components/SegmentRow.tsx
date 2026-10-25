@@ -10,6 +10,7 @@ export default function SegmentRow({
     index,
     segmentCount,
     domain,
+    precision,
     onChange,
     onMoveUp,
     onMoveDown,
@@ -22,6 +23,7 @@ export default function SegmentRow({
     index: number;
     segmentCount: number;
     domain: Domain;
+    precision: number;
     onChange(segment: CurveSegment): void;
     onMoveUp(): void;
     onMoveDown(): void;
@@ -110,7 +112,7 @@ export default function SegmentRow({
                                 <input
                                     aria-label={`${fieldKey} segment ${index + 1} Value`}
                                     type="number"
-                                    step={numberStep(segment.Value)}
+                                    step={numberStep(segment.Value, { precision })}
                                     value={Number.isFinite(segment.Value) ? segment.Value : ''}
                                     onChange={(event) =>
                                         onChange({
@@ -177,7 +179,7 @@ export default function SegmentRow({
                                     <input
                                         aria-label={`${fieldKey} segment ${index + 1} point ${pointIndex} ${axis === 0 ? 'x' : 'y'}`}
                                         type="number"
-                                        step={numberStep(point[axis])}
+                                        step={numberStep(point[axis], { precision }, axis === 0)}
                                         value={Number.isFinite(point[axis]) ? point[axis] : ''}
                                         onChange={(event) =>
                                             onChange({
