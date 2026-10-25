@@ -35,13 +35,26 @@ export function validatePlaceholders(
     fieldKeys: readonly string[],
     path = '',
 ): ValidationIssue[] {
-    return extractPlaceholders(text)
-        .filter((key) => !fieldKeys.includes(key) && !Object.hasOwn(FORMATTING_TOKENS, key))
-        .map((key) => ({
-            path,
-            message: 'Unknown placeholder {{' + key + '}}',
-            severity: 'error',
-        }));
+    return extractPlaceholders(text).flatMap((placeholder) => {
+        const [key = '', formatter, ...extra] = placeholder.split('|').map((part) => part.trim());
+        if (formatter === undefined) {
+            return fieldKeys.includes(key) || Object.hasOwn(FORMATTING_TOKENS, key)
+                ? []
+                : [{ path, message: 'Unknown placeholder {{' + key + '}}', severity: 'error' }];
+        }
+        if (formatter !== 'ScalarPercent' || extra.length > 0 || !key) {
+            return [
+                {
+                    path,
+                    message: 'Unknown placeholder formatter in {{' + placeholder + '}}',
+                    severity: 'error',
+                },
+            ];
+        }
+        return fieldKeys.includes(key)
+            ? []
+            : [{ path, message: 'Unknown placeholder {{' + key + '}}', severity: 'error' }];
+    });
 }
 
 export const localeId = (stat: string, key: string): string =>
@@ -55,11 +68,20 @@ export function renderTooltip(
     context: Record<string, string | number> = {},
 ): string {
     return text.replace(/\{\{\s*([^{}]+?)\s*\}\}/g, (match: string, key: string) => {
-        if (Object.hasOwn(context, key)) {
-            return String(context[key]);
+        const [fieldKey = '', formatter, ...extra] = key.split('|').map((part) => part.trim());
+        if (formatter === undefined && Object.hasOwn(context, fieldKey)) {
+            return String(context[fieldKey]);
         }
-        const field = spec.fields.find((f) => f.key === key);
-        const value = source.Fields[key];
+        if (formatter !== undefined && (formatter !== 'ScalarPercent' || extra.length > 0)) {
+            return match;
+        }
+        const field = spec.fields.find((f) => f.key === fieldKey);
+        const value = source.Fields[fieldKey];
+        const renderNumber = (number: number): string => {
+            if (formatter === undefined) return String(number);
+            const percent = number * 100;
+            return Number.isFinite(percent) ? String(Number(percent.toPrecision(15))) + '%' : match;
+        };
         if (field && value !== undefined) {
             if (field.domain && isRecord(value)) {
                 const x = Math.max(
@@ -67,17 +89,17 @@ export function renderTooltip(
                     Math.min(field.domain[1], Math.trunc(statValue)),
                 );
                 try {
-                    return String(evaluateCurve(value as unknown as Curve, x, field.domain));
+                    return renderNumber(evaluateCurve(value as unknown as Curve, x, field.domain));
                 } catch {
                     return match;
                 }
             }
             if (typeof value === 'number') {
-                return String(value);
+                return renderNumber(value);
             }
         }
-        return Object.hasOwn(FORMATTING_TOKENS, key)
-            ? FORMATTING_TOKENS[key as keyof typeof FORMATTING_TOKENS]
+        return formatter === undefined && Object.hasOwn(FORMATTING_TOKENS, fieldKey)
+            ? FORMATTING_TOKENS[fieldKey as keyof typeof FORMATTING_TOKENS]
             : match;
     });
 }

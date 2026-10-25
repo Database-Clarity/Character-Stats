@@ -66,6 +66,7 @@ export type MovementEffectType =
     | 'ForwardMultiplier'
     | 'SprintMultiplier'
     | 'GroundedMultiplier'
+    | 'OverweightMultiplier'
     | 'ADSMultiplier';
 export interface MovementEffect {
     Type: MovementEffectType;
@@ -105,6 +106,7 @@ export const abilitySpec: EntitySpec = {
         numberField('ChunkEnergyScalar', {
             min: 0,
             round: 3,
+            label: 'Chunk energy scalar',
             description: 'Nonnegative scalar for chunk energy gains.',
         }),
 
@@ -113,6 +115,7 @@ export const abilitySpec: EntitySpec = {
             minItems: 1,
             items: { exclusiveMin: 0 },
             required: false,
+            label: 'Charge rate scalar',
             description:
                 'Entry i is the charge-rate scalar while i charges are stored ' +
                 '(starting at i = 0). Array length is the maximum number of charges. ' +
@@ -143,6 +146,7 @@ export const superAbilitySpec: EntitySpec = {
 
         numberField('ActiveRegenScalar', {
             min: 0,
+            label: 'Active regeneration scalar',
             description: 'Nonnegative active Super regeneration scalar.',
         }),
 
@@ -189,6 +193,7 @@ export const overrideSpec: EntitySpec = {
             lengthOf: 'Requirements',
             items: { exclusiveMin: 0 },
             required: false,
+            label: 'Cooldown scalar',
             description:
                 'Multiplies the cooldown duration for matching Requirements. After BaseCooldown or ' +
                 'CooldownOverride is selected, each active Scalar multiplies the result, then ' +
@@ -201,6 +206,7 @@ export const overrideSpec: EntitySpec = {
             lengthOf: 'Requirements',
             items: { min: 0 },
             required: false,
+            label: 'Chunk energy scalar',
             description:
                 'Chunk energy scalars for corresponding Requirements, applied in ' +
                 'place of ChunkEnergyScalar.',
@@ -303,6 +309,11 @@ export const movementEffectSpec: EntitySpec = {
                     value: 'GroundedMultiplier',
                     description:
                         'Multiply all grounded movement, including sprint; does not affect jump height.',
+                },
+                {
+                    value: 'OverweightMultiplier',
+                    description:
+                        'Multiply grounded movement except sprint; does not affect jump height.',
                 },
                 {
                     value: 'ADSMultiplier',

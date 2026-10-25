@@ -4,7 +4,7 @@ import SegmentRow from './SegmentRow';
 export default function SegmentList({
     file,
     path,
-    fieldKey,
+    fieldLabel,
     segments,
     domain,
     precision,
@@ -12,7 +12,7 @@ export default function SegmentList({
 }: {
     file: string;
     path: string;
-    fieldKey: string;
+    fieldLabel: string;
     segments: CurveSegment[];
     domain: Domain;
     precision: number;
@@ -34,7 +34,7 @@ export default function SegmentList({
                 <SegmentRow
                     file={file}
                     path={path}
-                    fieldKey={fieldKey}
+                    fieldLabel={fieldLabel}
                     segment={segment}
                     index={index}
                     segmentCount={segments.length}

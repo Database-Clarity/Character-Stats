@@ -9,6 +9,7 @@ export const weaponsSpec: StatSpec = {
         curve('ReloadSpeed', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Reload speed scalar',
             description:
                 'Values represent a scalar for the Reload animation durations of your ' +
                 'weapons at each stat point.',
@@ -17,6 +18,7 @@ export const weaponsSpec: StatSpec = {
         curve('Handling', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Handling scalar',
             description:
                 'Values represent a scalar for the Handling animation durations of your ' +
                 'weapons at each stat point.',
@@ -25,6 +27,7 @@ export const weaponsSpec: StatSpec = {
         curve('NonBossDamageIncrease', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Damage increase (%)',
             description:
                 'Values represent how much increased damage your weapons deal against ' +
                 'Minor, Elite, and Miniboss combatants.',
@@ -33,6 +36,7 @@ export const weaponsSpec: StatSpec = {
         curve('SpecialDamageIncrease', {
             domain: [101, 200],
             items: { min: 0 },
+            label: 'Special weapon damage increase (%)',
             description:
                 'Values represent how much increased damage Special weapons deal against ' +
                 'Bosses when the Weapons stat is enhanced.',
@@ -41,6 +45,7 @@ export const weaponsSpec: StatSpec = {
         curve('PowerDamageIncrease', {
             domain: [101, 200],
             items: { min: 0 },
+            label: 'Power weapon damage increase (%)',
             description:
                 'Values represent how much increased damage Power weapons deal against ' +
                 'Bosses when the Weapons stat is enhanced.',
@@ -49,6 +54,7 @@ export const weaponsSpec: StatSpec = {
         curve('PVPDamageIncrease', {
             domain: [101, 200],
             items: { min: 0 },
+            label: 'Player damage increase (%)',
             description:
                 'Values represent how much increased damage your weapons deal against ' +
                 'Players when the Weapons stat is enhanced.',
@@ -57,6 +63,7 @@ export const weaponsSpec: StatSpec = {
         curve('LargeAmmoBrickChance', {
             domain: [101, 200],
             items: { min: 0 },
+            label: 'Large ammo brick chance (%)',
             description:
                 'Values represent the chance of spawning Large Ammo Bricks through the ' +
                 'Ammo Meter system when the Weapons stat is enhanced.',

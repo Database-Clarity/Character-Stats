@@ -138,7 +138,7 @@
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "GroundedMultiplier",
+                    "Type": "OverweightMultiplier",
                     "Values": [
                         0.85
                     ]
@@ -152,7 +152,7 @@
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "GroundedMultiplier",
+                    "Type": "OverweightMultiplier",
                     "Values": [
                         0.85
                     ]

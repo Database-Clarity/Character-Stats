@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { GitHubDataSource } from '../data';
 import type { WorkflowRun } from '../github/client';
 import { useEditor } from '../state/store';
+import { AutoResizeTextarea } from './AutoResizeTextarea';
 import { Modal } from './Modal';
 export function PublishDialog({ onClose }: { onClose(): void }) {
     const { source, dirty } = useEditor();
@@ -60,7 +61,7 @@ export function PublishDialog({ onClose }: { onClose(): void }) {
                 <form onSubmit={publish}>
                     <label>
                         Release notes (optional)
-                        <textarea
+                        <AutoResizeTextarea
                             value={releaseNotes}
                             onChange={(e) => setReleaseNotes(e.target.value)}
                             disabled={busy}

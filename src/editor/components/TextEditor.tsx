@@ -1,43 +1,26 @@
 import { useState } from 'react';
 import {
-    isRecord,
     localeFields,
     localeId,
-    renderTooltip,
     resolveLocale,
-    validatePlaceholders,
     type LocaleData,
     type StatSource,
     type StatSpec,
 } from '../../core';
 import { useEditor } from '../state/store';
+import { localeEntryLabel, localeTextIds, updateLocaleText } from '../state/localeText';
 import { isPreviewAbility, previewCollections, tooltipAbilityContext } from './previewData';
 import { Collapse, LongPage, Modified, StatControl } from './EditorPrimitives';
-function setLocale(locale: LocaleData, id: string, text: string): LocaleData {
-    const keys = id.split('.'),
-        result = structuredClone(locale);
-    let node = result;
-    for (const key of keys.slice(0, -1)) {
-        if (!isRecord(node[key])) node[key] = {};
-        node = node[key] as LocaleData;
-    }
-    node[keys.at(-1)!] = text;
-    return result;
-}
-function leaves(value: unknown, prefix: string): string[] {
-    return typeof value === 'string'
-        ? [prefix]
-        : isRecord(value)
-          ? Object.entries(value).flatMap(([key, next]) => leaves(next, `${prefix}.${key}`))
-          : [];
-}
+import { LocaleTextField } from './LocaleTextField';
 export function TextEditor({
     spec,
     source,
+    entrySource,
     movementKeys,
 }: {
     spec: StatSpec;
     source: StatSource;
+    entrySource: Record<string, unknown>;
     movementKeys?: readonly string[];
 }) {
     const { locale, originals, dispatch } = useEditor(),
@@ -59,12 +42,19 @@ export function TextEditor({
                       ),
                       ...spec.fields.filter((f) => f.kind === 'localeRef'),
                   ].map((f) => localeId(spec.name, f.key))),
-            ...leaves(locale[spec.name], spec.name),
+            ...localeTextIds(locale, spec.name),
         ]),
     ];
     function change(id: string, text: string) {
-        dispatch({ type: 'set', file: 'locale/en.json', value: setLocale(locale, id, text) });
+        dispatch({
+            type: 'set',
+            file: 'locale/en.json',
+            value: updateLocaleText(locale, id, text),
+        });
     }
+    const labels = new Map(
+        ids.map((id) => [id, localeEntryLabel(id, spec.name, spec.collections, entrySource)]),
+    );
     return (
         <section className="text-editor">
             <div className="pinned-controls text-controls">
@@ -95,19 +85,21 @@ export function TextEditor({
             </div>
             <LongPage
                 label="Text"
-                items={ids.map((id) => ({
-                    id,
-                    label: id.startsWith(spec.name + '.') ? id.slice(spec.name.length + 1) : id,
-                }))}
+                items={ids.map((id) => {
+                    const label = labels.get(id) ?? id;
+                    return {
+                        id,
+                        label:
+                            label === id && id.startsWith(spec.name + '.')
+                                ? id.slice(spec.name.length + 1)
+                                : label,
+                    };
+                })}
             >
                 {ids.map((id) => {
                     const text = resolveLocale(locale, id) ?? '',
                         old = resolveLocale(saved, id) ?? '',
-                        issues = validatePlaceholders(
-                            text,
-                            spec.fields.map((f) => f.key),
-                            `locale.${id}`,
-                        );
+                        label = labels.get(id) ?? id;
                     return (
                         <div key={id} data-outline={id}>
                             <Modified
@@ -116,36 +108,14 @@ export function TextEditor({
                                 saved={old}
                                 onRevert={() => change(id, old)}
                             >
-                                <Collapse storageKey={`text:${id}`} title={id}>
-                                    <div className="text-entry">
-                                        <label className="text-source">
-                                            English source
-                                            <textarea
-                                                aria-label={id}
-                                                rows={4}
-                                                value={text}
-                                                aria-invalid={issues.length > 0}
-                                                onChange={(e) => change(id, e.target.value)}
-                                            />
-                                        </label>
-                                        <div className="preview-column">
-                                            <h4>Live preview</h4>
-                                            <div className="tooltip-preview">
-                                                {renderTooltip(
-                                                    text,
-                                                    source,
-                                                    spec,
-                                                    statValue,
-                                                    context,
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {issues.map((issue, i) => (
-                                        <p className="error" key={i}>
-                                            {issue.message}
-                                        </p>
-                                    ))}
+                                <Collapse storageKey={`text:${id}`} title={label}>
+                                    <LocaleTextField
+                                        id={id}
+                                        source={source}
+                                        spec={spec}
+                                        statValue={statValue}
+                                        context={context}
+                                    />
                                 </Collapse>
                             </Modified>
                         </div>

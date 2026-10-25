@@ -210,7 +210,11 @@ instead of a stale result. Active-source controls scroll independently below it.
 ability selector remain pinned. Each collapsible locale row has its textarea and
 live preview side by side at desktop widths. The preview uses the selected ability's
 base data only and does not apply overrides. Placeholder validation and rendering
-use core; unknown/unavailable placeholders remain visible in the preview.
+use core; unknown/unavailable placeholders remain visible in the preview. Text
+values associated with a specific entry can also be edited from that entry's own
+tab. Where an associated entry's name can be resolved, the Text tab shows the name
+while keeping its identifier or fallback visible. Unassociated entries retain
+their current presentation. Textareas expand automatically to fit their content.
 
 ## Review and save
 

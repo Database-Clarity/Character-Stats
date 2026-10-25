@@ -4,7 +4,7 @@ export default function CurveModeToggle({
     segmented,
     round,
     compare,
-    fieldKey,
+    fieldLabel,
     onModeChange,
     onRoundChange,
     onCompareChange,
@@ -12,7 +12,7 @@ export default function CurveModeToggle({
     segmented: boolean;
     round: string;
     compare: boolean;
-    fieldKey: string;
+    fieldLabel: string;
     onModeChange(mode: 'values' | 'segments'): void;
     onRoundChange(round: number | undefined): void;
     onCompareChange(compare: boolean): void;
@@ -37,7 +37,7 @@ export default function CurveModeToggle({
                 <label className="inline rounding">
                     Rounding digits
                     <NumberInput
-                        aria-label={`${fieldKey} rounding digits`}
+                        aria-label={`${fieldLabel} rounding digits`}
                         step={1}
                         constraints={{ min: 0, max: 15 }}
                         value={round}

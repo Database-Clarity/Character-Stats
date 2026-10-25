@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { GitHubDataSource } from '../data';
 import { useEditor } from '../state/store';
+import { AutoResizeTextarea } from './AutoResizeTextarea';
 import { Modal } from './Modal';
 
 function errorMessage(error: unknown): string {
@@ -202,7 +203,7 @@ export function SaveDialog({ onClose }: { onClose(): void }) {
                                 </label>
                                 <label>
                                     Pull request body
-                                    <textarea
+                                    <AutoResizeTextarea
                                         rows={4}
                                         value={body}
                                         onChange={(event) => setBody(event.target.value)}

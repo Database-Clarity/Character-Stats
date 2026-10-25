@@ -1,6 +1,6 @@
 .entity-layout {
     display: grid;
-    grid-template-columns: 248px minmax(360px, 1fr) minmax(380px, max-content);
+    grid-template-columns: 248px minmax(0, 1.2fr) minmax(320px, 0.8fr);
     height: 100%;
     min-height: 0;
     position: relative;

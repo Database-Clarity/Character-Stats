@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { isRecord, validateEntity, type EntitySpec, type StatSource } from '../../core';
+import {
+    isRecord,
+    validateEntity,
+    type EntitySpec,
+    type StatSource,
+    type StatSpec,
+} from '../../core';
 import { useEditor } from '../state/store';
 import {
     type EntityFormSession,
@@ -33,7 +39,9 @@ export function EntityList({
     file,
     collection,
     stat,
+    statSpec,
     source,
+    entrySource,
     selected,
     groupMembers: selectedGroupMembers,
     onSelect,
@@ -48,7 +56,9 @@ export function EntityList({
     file: string;
     collection: string;
     stat: string;
+    statSpec: StatSpec;
     source: StatSource;
+    entrySource: Record<string, unknown>;
     selected: string | null;
     groupMembers: string[] | undefined;
     onSelect(key: string | null): void;
@@ -302,6 +312,9 @@ export function EntityList({
             ) : (
                 <ItemEditorPane
                     spec={spec}
+                    stat={stat}
+                    statSpec={statSpec}
+                    source={source}
                     collection={collection}
                     file={file}
                     selected={selected}

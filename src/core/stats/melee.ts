@@ -11,6 +11,7 @@ export const meleeSpec: StatSpec = {
         curve('CooldownScalars', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Cooldown scalar',
             description:
                 'Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown ' +
                 'in seconds, replace it with applicable CooldownOverride (last matching replacement ' +
@@ -22,12 +23,14 @@ export const meleeSpec: StatSpec = {
         curve('EnergyGainScalar', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Energy gain scalar',
             description: 'Values represent how effective external sources of Melee Energy are.',
         }),
 
         curve('MeleeDamageIncrease', {
             domain: [101, 200],
             items: { min: 0 },
+            label: 'Melee damage increase (%)',
             description:
                 'Values represent how much increased damage your Melee Ability deals when ' +
                 'the Melee stat is enhanced.',

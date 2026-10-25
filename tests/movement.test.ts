@@ -162,7 +162,7 @@ describe('movement calculator', () => {
         ).toEqual({ tier: 12, speed: 9, cappedBy: 'ForwardSpeedCap' });
     });
     it('stacks forward, sprint and grounded multipliers before capping sprint, independent of source order', () => {
-        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }];
+        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }, { hash: 54 }];
         for (const order of [sources, [...sources].reverse()]) {
             const result = movementSpeed(input({ sprint: true, sources: order }));
             expect(result.tier).toBe(5);
@@ -175,19 +175,29 @@ describe('movement calculator', () => {
             ),
         ).toEqual({ tier: 5, speed: 9, cappedBy: 'ForwardSpeedCap' });
     });
-    it.each([12, 13, 54])(
-        'applies grounded penalty %i to walking, ADS/crouch, and sprint',
+    it.each([12, 13])(
+        'applies overweight penalty %i to grounded movement but not sprint',
         (hash) => {
             expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 0.85, 12);
             expect(
+                movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] })).speed,
+            ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
+            expect(
                 movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] })).speed,
             ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
-            expect(movementSpeed(input({ sprint: true, sources: [{ hash }] })).speed).toBeCloseTo(
-                8 * 0.85,
-                12,
-            );
+            expect(movementSpeed(input({ sprint: true, sources: [{ hash }] })).speed).toBe(8);
         },
     );
+    it.each([54])('applies grounded penalty %i to walking, ADS/crouch, and sprint', (hash) => {
+        expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 0.85, 12);
+        expect(
+            movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] })).speed,
+        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] })).speed).toBeCloseTo(
+            8 * 0.85,
+            12,
+        );
+    });
     it.each([
         ['Forward', 'Standing', 9, 'ForwardSpeedCap'],
         ['Strafe', 'Standing', 6, 'StrafeSpeedCap'],

@@ -250,6 +250,10 @@
         grid-template-columns: minmax(0, 1fr);
         gap: 4px;
     }
+    .nested-row .field {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
     .field-label {
         margin: 0;
     }

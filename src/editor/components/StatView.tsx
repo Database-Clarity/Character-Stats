@@ -222,7 +222,9 @@ export function StatView({
                         file={file}
                         collection={tab}
                         stat={spec.name}
+                        statSpec={spec}
                         source={source}
+                        entrySource={value}
                         {...(movement ? { context: <MovementContext value={value} /> } : {})}
                         selected={selected}
                         groupMembers={selection.groupMembers}
@@ -253,6 +255,7 @@ export function StatView({
                     <TextEditor
                         spec={spec}
                         source={source}
+                        entrySource={value}
                         {...(movement ? { movementKeys: movementSpec.localeKeys } : {})}
                     />
                 )}

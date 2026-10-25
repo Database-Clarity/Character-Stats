@@ -1,11 +1,15 @@
-import { type EntitySpec } from '../../core';
+import { type EntitySpec, type StatSource, type StatSpec } from '../../core';
 import { EntityForm } from './EntityForm';
+import { AssociatedEntryText } from './AssociatedEntryText';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
 
 export function ItemEditorPane({
     spec,
+    stat,
+    statSpec,
+    source,
     collection,
     file,
     selected,
@@ -32,6 +36,9 @@ export function ItemEditorPane({
     onChange,
 }: {
     spec: EntitySpec;
+    stat: string;
+    statSpec: StatSpec;
+    source: StatSource;
     collection: string;
     file: string;
     selected: string | null;
@@ -137,6 +144,16 @@ export function ItemEditorPane({
                                 abilities={abilities}
                                 onChange={onChange}
                             />
+                            {!isDraft && (
+                                <AssociatedEntryText
+                                    stat={stat}
+                                    collection={collection}
+                                    entitySpec={spec}
+                                    entry={editorValue}
+                                    statSpec={statSpec}
+                                    source={source}
+                                />
+                            )}
                         </>
                     )
                 ) : (

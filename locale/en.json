@@ -6,23 +6,23 @@
     },
     "Melee": {
         "Overview": "Melee governs your Melee Ability's passive cooldown and how much Melee Energy you gain from perks.\n\nIncreases Melee Damage when enhanced.",
-        "BaseStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and perks that grant you Melee Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Melee Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Melee Ability deals {{MeleeDamageIncrease}}{{Percent}} increased damage."
+        "BaseStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and perks that grant you Melee Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Melee Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Melee Ability deals {{MeleeDamageIncrease}}{{Percent}} increased damage."
     },
     "Grenade": {
         "Overview": "Grenade governs your Grenade Ability's passive cooldown and how much Grenade Energy you gain from perks.\n\nIncreases Grenade Damage when enhanced.",
-        "BaseStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{GrenadeDamageIncrease}}{{Percent}} increased damage."
+        "BaseStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{GrenadeDamageIncrease}}{{Percent}} increased damage."
     },
     "Super": {
         "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nIncreases Super Damage when enhanced.",
-        "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
+        "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
     },
     "Class": {
         "Overview": "Class governs your Class Ability's passive cooldown and how much Class Ability Energy you gain from perks.\n\nCasting your Class Ability grants you an Overshield when enhanced.",
-        "BaseStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar}}{{Percent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants you a(n) {{OvershieldHP}}{{HP}} Overshield."
+        "BaseStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
+        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants you a(n) {{OvershieldHP}}{{HP}} Overshield."
     },
     "Weapons": {
         "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor, Elite, and Miniboss combatants.\n\nWhen enhanced, it increases your weapons' damage against Boss combatants and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",

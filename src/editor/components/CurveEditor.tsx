@@ -105,7 +105,7 @@ export function CurveEditor({
                 segmented={segmented}
                 round={isRecord(value) ? String(value.Round ?? '') : ''}
                 compare={compare}
-                fieldKey={spec.key}
+                fieldLabel={spec.label ?? spec.key}
                 onModeChange={mode}
                 onRoundChange={setRound}
                 onCompareChange={setCompare}
@@ -124,7 +124,7 @@ export function CurveEditor({
                 <SegmentList
                     file={file}
                     path={path}
-                    fieldKey={spec.key}
+                    fieldLabel={spec.label ?? spec.key}
                     segments={segments}
                     domain={domain}
                     precision={precision}
@@ -138,7 +138,7 @@ export function CurveEditor({
                                 {domain[0] + i}
                                 <NumberInput
                                     step={numberStep(n, { ...spec, precision })}
-                                    aria-label={`${spec.key} value ${domain[0] + i}`}
+                                    aria-label={`${spec.label ?? spec.key} value ${domain[0] + i}`}
                                     constraints={spec}
                                     value={Number.isFinite(n) ? Number(n) : ''}
                                     onChangeValue={(raw) =>

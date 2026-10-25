@@ -8,6 +8,7 @@ import { EntityForm } from './EntityForm';
 import { numberStep } from './numberStep';
 import { ReferenceArrayInput } from './ReferenceArrayInput';
 import { NumberInput } from './NumberInput';
+import { AutoResizeTextarea } from './AutoResizeTextarea';
 
 export function NumberArrayInput({
     spec,
@@ -50,7 +51,7 @@ export function NumberArrayInput({
                                     {stackCounts ? 'Stacks' : (spec.indexLabel ?? 'Index')}:{' '}
                                     {stackCounts ? i + 1 : i}
                                     <NumberInput
-                                        aria-label={`${spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
+                                        aria-label={`${spec.label ?? spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
                                         step={numberStep(
                                             number,
                                             spec.items,
@@ -378,7 +379,7 @@ export function FieldInput({
                             />
                         ) : spec.kind === 'string' || spec.kind === 'localeRef' ? (
                             spec.multiline ? (
-                                <textarea
+                                <AutoResizeTextarea
                                     id={id}
                                     aria-required={!!spec.required}
                                     aria-invalid={issues.length > 0}

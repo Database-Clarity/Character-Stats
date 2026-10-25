@@ -92,7 +92,11 @@ describe('context calculations', () => {
 });
 describe('locale helpers', () => {
     it('extracts unique placeholders and recognizes the declarative formatting token list', () => {
-        expect(extractPlaceholders('{{HP}} {{ HP }} {{Value}}')).toEqual(['HP', 'Value']);
+        expect(extractPlaceholders('{{HP}} {{ HP }} {{Value}} {{Value|ScalarPercent}}')).toEqual([
+            'HP',
+            'Value',
+            'Value|ScalarPercent',
+        ]);
         expect(FORMATTING_TOKENS.Scalar).toBe('\u00d7');
         expect(
             validatePlaceholders(
@@ -104,6 +108,19 @@ describe('locale helpers', () => {
         ).toEqual([]);
         expect(validatePlaceholders('{{Good}} {{Bad}}', ['Good'])).toEqual([
             expect.objectContaining({ message: 'Unknown placeholder {{Bad}}', severity: 'error' }),
+        ]);
+        expect(validatePlaceholders('{{Value|ScalarPercent}}', ['Value'])).toEqual([]);
+        expect(
+            validatePlaceholders('{{Value|Percent}} {{Missing|ScalarPercent}}', ['Value']),
+        ).toEqual([
+            expect.objectContaining({
+                message: 'Unknown placeholder formatter in {{Value|Percent}}',
+                severity: 'error',
+            }),
+            expect.objectContaining({
+                message: 'Unknown placeholder {{Missing}}',
+                severity: 'error',
+            }),
         ]);
     });
     it('renders locale IDs and offset-domain curves', () => {
@@ -134,5 +151,32 @@ describe('locale helpers', () => {
             ),
         ).toBe('49% A {{Unknown}}');
         expect(renderTooltip('{{MeleeDamageIncrease}}', source, spec, 201)).toBe('99');
+    });
+    it.each([
+        [1, '100%'],
+        [0.01, '1%'],
+        [0.856, '85.6%'],
+        [0.29, '29%'],
+    ])('formats explicit scalar percentages: %s -> %s', (scalar, expected) => {
+        const source = fixture().stats.find((s) => s.Name === 'Melee')!;
+        source.Fields.EnergyGainScalar = { Values: Array(101).fill(scalar) };
+        const spec = {
+            name: 'Melee',
+            hash: source.Hash,
+            fields: [
+                {
+                    key: 'EnergyGainScalar',
+                    kind: 'curve' as const,
+                    description: '',
+                    domain: [0, 100] as const,
+                },
+            ],
+            collections: {},
+        };
+        expect(renderTooltip('{{EnergyGainScalar|ScalarPercent}}', source, spec, 0)).toBe(expected);
+        expect(renderTooltip('{{EnergyGainScalar}}', source, spec, 0)).toBe(String(scalar));
+        expect(renderTooltip('{{EnergyGainScalar}}{{Percent}}', source, spec, 0)).toBe(
+            String(scalar) + '%',
+        );
     });
 });

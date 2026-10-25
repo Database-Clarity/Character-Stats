@@ -9,11 +9,13 @@ import {
     parseStatSource,
     parseMovementSource,
     abilitySpec,
+    superAbilitySpec,
     movementSourceSpec,
     exportEntity,
     validateField,
     fieldSchema,
     healthSpec,
+    overrideSpec,
     validateSources,
 } from '../src/core';
 import { validateExport } from '../src/cli/io';
@@ -21,6 +23,11 @@ import { fixture } from './fixtures';
 describe('exports and generated schema', () => {
     it('exports manifest hash keys, locale IDs, expanded curves and no editor-only fields', () => {
         const sources = fixture();
+        const meleeSource = sources.stats.find((source) => source.Name === 'Melee')!;
+        meleeSource.Fields.EnergyGainScalar = {
+            Domain: [0, 100],
+            Segments: [{ Type: 'Constant', From: 0, To: 100, Value: 0.01 }],
+        };
         const result = exportSources(sources);
         expect(Object.keys(result).sort()).toEqual(
             [...statRegistry.map((s) => String(s.hash)), 'Movement'].sort(),
@@ -28,6 +35,7 @@ describe('exports and generated schema', () => {
         const melee = result['4244567218'] as Record<string, unknown>;
         expect(melee.CooldownScalars).toHaveLength(101);
         expect(melee.MeleeDamageIncrease).toHaveLength(100);
+        expect(melee.EnergyGainScalar).toEqual(Array(101).fill(0.01));
         expect(melee.Overview).toBe('Melee.Overview');
         expect(melee.ChargeBasedScalingTooltip).toBe('ChargeBasedScaling');
         expect(melee.Abilities).toEqual([
@@ -42,11 +50,61 @@ describe('exports and generated schema', () => {
         expect(JSON.stringify(result)).not.toContain('JumpHeight');
         expect(validateExport(result, generateSchema())).toEqual([]);
     });
+    it('labels percentage and scalar inputs with their units', () => {
+        const fields = statRegistry.flatMap((spec) => spec.fields);
+        for (const key of [
+            'FlinchResistance',
+            'PVEDamageResistance',
+            'HealthRegenSpeed',
+            'BaseShieldRechargeSpeed',
+            'ShieldRechargeSpeed',
+            'MeleeDamageIncrease',
+            'GrenadeDamageIncrease',
+            'SuperDamageIncrease',
+            'NonBossDamageIncrease',
+            'SpecialDamageIncrease',
+            'PowerDamageIncrease',
+            'PVPDamageIncrease',
+            'LargeAmmoBrickChance',
+        ]) {
+            expect(fields.find((field) => field.key === key)?.label).toContain('%');
+        }
+        for (const key of [
+            'CooldownScalars',
+            'EnergyGainScalar',
+            'ActiveRegenScalars',
+            'ReloadSpeed',
+            'Handling',
+        ]) {
+            expect(fields.find((field) => field.key === key)?.label?.toLowerCase()).toContain(
+                'scalar',
+            );
+        }
+        expect(abilitySpec.fields.find((field) => field.key === 'ChunkEnergyScalar')?.label).toBe(
+            'Chunk energy scalar',
+        );
+        expect(abilitySpec.fields.find((field) => field.key === 'ChargeBasedScaling')?.label).toBe(
+            'Charge rate scalar',
+        );
+        expect(
+            superAbilitySpec.fields.find((field) => field.key === 'ActiveRegenScalar')?.label,
+        ).toBe('Active regeneration scalar');
+        expect(overrideSpec.fields.find((field) => field.key === 'Scalar')?.label).toBe(
+            'Cooldown scalar',
+        );
+    });
     it('supports the single top-level placement switch in both export and schema', () => {
         const data = exportSources(fixture(), { placement: 'topLevel' });
         expect((data['4244567218'] as Record<string, unknown>).Abilities).toBeUndefined();
         expect(data.Abilities).toHaveProperty('4244567218');
         expect(validateExport(data, generateSchema({ placement: 'topLevel' }))).toEqual([]);
+    });
+    it('documents explicit scalar-percent formatting in the consumer schema', () => {
+        const definitions = generateSchema().definitions as Record<string, { description: string }>;
+        const dynamicLocale = definitions.DynamicLocaleString;
+        if (!dynamicLocale) throw new Error('Missing DynamicLocaleString schema definition');
+        expect(dynamicLocale.description).toContain('{{EnergyGainScalar|ScalarPercent}}');
+        expect(dynamicLocale.description).toContain('literal percent sign');
     });
     it('rounds base cooldown and rejects invalid exports', () => {
         expect(
@@ -78,6 +136,7 @@ describe('exports and generated schema', () => {
         expect(serializeSchema()).toBe(first);
         expect(await readFile('schema.json', 'utf8')).toBe(first);
         expect(first).toContain('CBSD_example.md');
+        expect(first).toContain('{{EnergyGainScalar|ScalarPercent}}');
         expect(first).not.toContain('stat point.s');
         const superDef = (generateSchema().definitions as Record<string, Record<string, unknown>>)
             .Super!;

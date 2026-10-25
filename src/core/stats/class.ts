@@ -11,6 +11,7 @@ export const classSpec: StatSpec = {
         curve('CooldownScalars', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Cooldown scalar',
             description:
                 'Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown ' +
                 'in seconds, replace it with applicable CooldownOverride (last matching replacement ' +
@@ -22,6 +23,7 @@ export const classSpec: StatSpec = {
         curve('EnergyGainScalar', {
             domain: [0, 100],
             items: { min: 0 },
+            label: 'Energy gain scalar',
             description:
                 'Values represent how effective external sources of Class Ability Energy ' + 'are.',
         }),

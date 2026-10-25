@@ -78,6 +78,17 @@ fields: [
 ```
 
 Use the actual helper for the data kind: `curve`, `numberField`, `integerField`, `numberArrayField`, `integerArrayField`, `enumField`, `objectField`, `objectArrayField`, or `localeField`. `curve` sets a default nonnegative item constraint; specify `domain` and any field-specific constraints. `hashField`, `nameField`, and `notesField` are the shared entity helpers. Most fields are required by default; set `required: false` for optional fields. Add matching values under `Fields` in the affected [`sources/stats/`](../sources/stats/) file(s). For a curve, source JSON may use raw `Values` or validated piecewise `Segments` (see below).
+Use `label` for a concise, unit-specific editor name such as `Damage increase (%)` or `Cooldown scalar`; keep the stable `key` unchanged for source and consumer compatibility.
+
+## Dynamic locale placeholders
+
+Dynamic locale strings can substitute a stat property with `{{Field}}`. Unit tokens such as
+`{{Percent}}` are literal suffixes, so `{{DamageIncrease}}{{Percent}}` keeps the property's
+stored percentage value unchanged. For a scalar that should be displayed as a percentage, use
+the explicit formatter `{{EnergyGainScalar|ScalarPercent}}`; it multiplies that value by 100 and
+adds `%` without changing the exported source value. Consumers that render dynamic locale strings
+must support this formatter. Unsupported formatter expressions and unknown fields are validation
+errors.
 
 ## Enum and nested-object fields
 
@@ -109,6 +120,7 @@ Class, Grenade and Melee cooldowns apply their `CooldownScalars` curve after bas
 ## Movement data and calculations
 
 `sources/movement.json` contains one `Rules` object, `Classes`, and `Sources`. Hidden Mobility is measured in tiers, not the old 0-100 stat points. Walk speed uses tiers 0-13; class bases differ by activity only when `BaseMobilityTierPVP` is present. Source `Effects` are generic object arrays with an enum `Type` and cumulative `Values`: index 0 is one stack, index 1 is two stacks, and so on. `BoostedValues` replaces that effect's values when every `BoostRequiresAll` item is equipped. Both arrays must have equal lengths. Unknown tiers use 0 and unknown multipliers use 1, with `Notes: "Value unknown — needs testing"`.
+Machine guns and rocket launchers use `OverweightMultiplier`, which affects grounded non-sprint speeds only. `GroundedMultiplier` continues to affect all grounded movement, including sprint.
 
 `RefType` selects `DestinyInventoryItemDefinition` (`item`) or `DestinyItemCategoryDefinition` (`itemCategory`). A source hash of 0 is allowed with a warning through `hashField(..., { warnIfZero: true })`; use it only for unverified references. Conditional sources need English text at `Movement.Sources.<Hash>.Condition`; missing text is a warning. Wraithwalk remains on the verified inventory-item Heartshadow Catalyst hash (3072857252), which links to sandbox perk 3936394000; no perk RefType is needed. MIDA's extra forward bonus, Wraithwalk's grounded bonus, and The Scientific Method's grounded bonus remain neutral placeholders. Other unmeasured frames/perks and unspecified Exotic Power Weapon penalties are not guessed.
 

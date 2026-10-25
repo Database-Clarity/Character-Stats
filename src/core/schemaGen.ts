@@ -136,6 +136,11 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
             'filled-in from a property of each Character Stat with the same ' +
             'name. For example, {{FlinchResistance}} will be replaced with the ' +
             'value of the <FlinchResistance> property of the Character Stat. ' +
+            'A numeric property can use an explicit formatter, such as ' +
+            '{{EnergyGainScalar|ScalarPercent}}, to multiply a scalar by 100 ' +
+            'and append a percent sign. This does not change the value of the ' +
+            'exported property or the behavior of the existing {{Field}}{{Percent}} ' +
+            'form, where Percent is a literal percent sign. ' +
             'AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens ' +
             'supplied by the consumer per ability, not stat properties.',
     };

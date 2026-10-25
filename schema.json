@@ -9,7 +9,7 @@
         },
         "DynamicLocaleString": {
             "type": "string",
-            "description": "The difference between this and LocaleString is that this one supports dynamically replaceable substrings, such as {{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be filled-in from a property of each Character Stat with the same name. For example, {{FlinchResistance}} will be replaced with the value of the <FlinchResistance> property of the Character Stat. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties."
+            "description": "The difference between this and LocaleString is that this one supports dynamically replaceable substrings, such as {{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be filled-in from a property of each Character Stat with the same name. For example, {{FlinchResistance}} will be replaced with the value of the <FlinchResistance> property of the Character Stat. A numeric property can use an explicit formatter, such as {{EnergyGainScalar|ScalarPercent}}, to multiply a scalar by 100 and append a percent sign. This does not change the value of the exported property or the behavior of the existing {{Field}}{{Percent}} form, where Percent is a literal percent sign. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties."
         },
         "Overview": {
             "$ref": "#/definitions/LocaleString",
@@ -291,6 +291,7 @@
                         "ForwardMultiplier",
                         "SprintMultiplier",
                         "GroundedMultiplier",
+                        "OverweightMultiplier",
                         "ADSMultiplier"
                     ],
                     "oneOf": [
@@ -309,6 +310,10 @@
                         {
                             "const": "GroundedMultiplier",
                             "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                        },
+                        {
+                            "const": "OverweightMultiplier",
+                            "description": "Multiply grounded movement except sprint; does not affect jump height."
                         },
                         {
                             "const": "ADSMultiplier",
@@ -420,6 +425,7 @@
                                     "ForwardMultiplier",
                                     "SprintMultiplier",
                                     "GroundedMultiplier",
+                                    "OverweightMultiplier",
                                     "ADSMultiplier"
                                 ],
                                 "oneOf": [
@@ -438,6 +444,10 @@
                                     {
                                         "const": "GroundedMultiplier",
                                         "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                                    },
+                                    {
+                                        "const": "OverweightMultiplier",
+                                        "description": "Multiply grounded movement except sprint; does not affect jump height."
                                     },
                                     {
                                         "const": "ADSMultiplier",
