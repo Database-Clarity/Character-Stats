@@ -27,6 +27,42 @@ const source: DataSource = {
 };
 const initial = () => createEditorState({ source, loaded: { files, head: 'original' } });
 describe('editor in-memory state', () => {
+    it('restores generic values, raw and item drafts, and the original branch base', () => {
+        const state = initial();
+        const values = {
+            ...state.values,
+            'locale/en.json': {
+                ...(state.values['locale/en.json'] as Record<string, unknown>),
+                RecoveryTest: 'unsaved',
+            },
+        };
+        const snapshot = {
+            id: 'recovered',
+            timestamp: Date.now(),
+            head: 'older-head',
+            originals: state.originals,
+            values,
+            drafts: { 'sources/movement.json:raw': { text: '[', error: 'Invalid JSON' } },
+            itemDrafts: { 'sources/movement.json:new': { Name: 'unfinished' } },
+            changeCount: 3,
+        };
+        const restored = editorReducer(state, { type: 'restore', snapshot });
+        expect(restored.source).toBe(state.source);
+        expect(restored.head).toBe('older-head');
+        expect(restored.values).toEqual(values);
+        expect(restored.drafts).toEqual(snapshot.drafts);
+        expect(restored.itemDrafts).toEqual(snapshot.itemDrafts);
+        expect(deriveEditorState(restored).dirty).toContain('locale/en.json');
+        const rebased = editorReducer(restored, {
+            type: 'rebase',
+            files: state.originals,
+            head: 'newer-head',
+            preserve: deriveEditorState(restored).dirty,
+        });
+        expect(rebased.head).toBe('newer-head');
+        expect(rebased.values['locale/en.json']).toEqual(values['locale/en.json']);
+        expect(rebased.itemDrafts).toEqual(snapshot.itemDrafts);
+    });
     it('loads the real source set with no dirty files or validation issues', () => {
         const state = deriveEditorState(initial());
         expect(state.dirty).toEqual([]);

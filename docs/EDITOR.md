@@ -210,6 +210,39 @@ manually.
 a PR. On `master`, this redeploys the site and sends English text to Crowdin,
 but **does not change the data apps download**. Hover Save for this distinction.
 
+## Local recovery
+
+The editor stores local recovery snapshots in IndexedDB, separately from GitHub
+credentials. GitHub snapshots are scoped by owner, repository, and branch;
+**Local (read-only dev)** has its own scope and does not share snapshots with a
+GitHub branch. Each edit queues an asynchronous write of the latest working
+state; the rolling snapshot history is debounced by 750 ms, keeps up to 30
+snapshots, and retains them for up to 7 days. This is local recovery, not an
+undo/redo history.
+
+When stored work is found at startup, choose a timestamped snapshot to **Restore**
+or **Discard** the stored recovery data and start fresh. The normal **Recovery**
+toolbar opens the same snapshot list; each entry shows its change count and
+offers **Restore snapshot** or **Export JSON**, and the dialog can discard stored
+data. If the editor hits a React error boundary, its recovery screen likewise
+offers snapshots to restore or export, or lets you discard recovery data and
+reload the editor. Corrupt or incompatible recovery data is reported explicitly
+and can be discarded.
+
+Restoring preserves the snapshot's original branch head. Save still performs
+the normal branch-head reconciliation; if tracked source files have changed,
+**Reload** keeps the restored edits for a rebase attempt, or you can cancel.
+After a successful Save, recovery data for both the original scope and the
+resulting branch scope is cleared. Signing out does not erase local recovery;
+use **Recovery** to discard stored snapshots when you want them removed.
+
+If startup cannot read IndexedDB, you can choose **Continue without local
+recovery**; an alert and notice explain that recovery will not persist for that
+session. Other storage or quota failures are also surfaced as recovery errors.
+The existing leave/reload warning for unsaved edits and drafts remains in place.
+Writes are asynchronous, so an edit can be lost if the browser or process crashes
+before its IndexedDB transaction completes; recovery is not a backup guarantee.
+
 ## Publish
 
 Choose **Publish** only after the source changes are committed to the selected
@@ -246,12 +279,13 @@ published data.
 Run `npm run dev -- --port 5199 --strictPort`. Vite reads `.env.local` at the
 repository root; set `VITE_BUNGIE_API_KEY` there for live manifest access (never
 commit it). Manifest data is cached locally by its module; source edits and drafts
-live only in memory. There is no autosave, merge UI, offline source persistence,
-undo stack, or non-English editing. Subclass applicability is not inferred.
-If a concurrent branch update changes tracked source files, use the offered
-**Reload** path to keep pending edits for a rebase attempt, or cancel and resolve
-the change separately. Save/Publish remain disabled for local dev data; browser
-verification does not make GitHub writes or dispatch workflows.
+are held in memory and also recorded by local recovery as described above; this
+does not commit source files. There is no merge UI, undo/redo stack, or
+non-English editing. Subclass applicability is not inferred. If a concurrent
+branch update changes tracked source files, use the offered **Reload** path to
+keep pending edits for a rebase attempt, or cancel and resolve the change
+separately. Save/Publish remain disabled for local dev data; browser verification
+does not make GitHub writes or dispatch workflows.
 
 Viewport captures from the redesign walkthrough are in [editor-screenshots](editor-screenshots/).
 

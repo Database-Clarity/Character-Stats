@@ -13,6 +13,8 @@ import {
 } from '../../core';
 import type { DataSource, LoadedData } from '../data';
 import { collectChanges } from './editing';
+import type { RecoverySnapshot } from './recovery';
+import { useRecovery } from './useRecovery';
 export interface Draft {
     text: string;
     error: string;
@@ -26,8 +28,10 @@ export interface EditorState {
     values: Record<string, unknown>;
     drafts: Record<string, Draft>;
     itemDrafts: Record<string, Record<string, unknown>>;
+    saveRevision: number;
 }
 type Action =
+    | { type: 'restore'; snapshot: RecoverySnapshot }
     | { type: 'item-draft'; key: string; value?: Record<string, unknown> }
     | { type: 'clear-drafts'; prefix: string }
     | { type: 'set'; file: string; value: unknown }
@@ -214,6 +218,19 @@ function originalSerialization(values: Record<string, unknown>): Record<string, 
 
 export function editorReducer(state: EditorState, action: Action): EditorState {
     switch (action.type) {
+        case 'restore': {
+            const originalValues = parseFiles(action.snapshot.originals);
+            return {
+                ...state,
+                head: action.snapshot.head,
+                originals: action.snapshot.originals,
+                originalValues,
+                originalSerialized: originalSerialization(originalValues),
+                values: action.snapshot.values,
+                drafts: action.snapshot.drafts,
+                itemDrafts: action.snapshot.itemDrafts,
+            };
+        }
         case 'item-draft': {
             const itemDrafts = { ...state.itemDrafts };
             if (action.value) itemDrafts[action.key] = action.value;
@@ -280,6 +297,7 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
                 originalValues,
                 originalSerialized: { ...state.originalSerialized, ...action.files },
                 drafts: {},
+                saveRevision: state.saveRevision + 1,
             };
         }
     }
@@ -302,6 +320,7 @@ export function createEditorState({
         values: originalValues,
         drafts: {},
         itemDrafts: {},
+        saveRevision: 0,
     };
 }
 
@@ -393,25 +412,31 @@ export function deriveEditorState(state: EditorState) {
     };
 }
 
-function useEditorState(source: DataSource, loaded: LoadedData) {
-    const [state, dispatch] = useReducer(editorReducer, { source, loaded }, createEditorState);
+function useEditorState(source: DataSource, loaded: LoadedData, snapshot?: RecoverySnapshot) {
+    const [state, dispatch] = useReducer(editorReducer, { source, loaded }, (initial) => {
+        const state = createEditorState(initial);
+        return snapshot ? editorReducer(state, { type: 'restore', snapshot }) : state;
+    });
     const derived = useMemo(
         () => deriveEditorState(state),
         [state.values, state.originals, state.originalSerialized, state.drafts],
     );
-    return { ...state, ...derived, dispatch };
+    const recovery = useRecovery(state, derived.changes.length, derived.dirty.length > 0, snapshot);
+    return { ...state, ...derived, dispatch, recovery };
 }
 const Context = createContext<ReturnType<typeof useEditorState> | null>(null);
 export function EditorProvider({
     source,
     loaded,
     children,
+    snapshot,
 }: {
     source: DataSource;
     loaded: LoadedData;
     children: ReactNode;
+    snapshot?: RecoverySnapshot | undefined;
 }) {
-    const value = useEditorState(source, loaded);
+    const value = useEditorState(source, loaded, snapshot);
     return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 export function useEditor() {

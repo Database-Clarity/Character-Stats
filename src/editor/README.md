@@ -75,6 +75,19 @@ middleware or configuration changes are needed.
   `locale/en.json` are unchanged, the stored head fast-forwards; otherwise the user
   can reload while keeping pending edits for a rebase attempt, or cancel. A PR failure
   after commit is reported separately, and the editor switches to the saved branch.
+- Local recovery uses IndexedDB with independent scopes for each GitHub owner/repository/branch
+  and for Local (read-only dev); it never stores GitHub credentials. Each edit queues an
+  asynchronous latest-state write, while the rolling history is debounced by 750 ms,
+  capped at 30 snapshots, and retained for 7 days. Startup offers restore or discard;
+  the Recovery toolbar and React error-boundary fallback show timestamped snapshots with
+  change counts and restore/export JSON/discard actions. Recovery data preserves the
+  snapshot's original base head and is cleared for both the original and resulting branch
+  scopes after a successful Save. If startup storage fails, the user can explicitly continue
+  without local recovery; an alert and notice warn that recovery will not persist for that
+  session. Other IndexedDB errors, including quota failures, are surfaced, and the existing
+  beforeunload warning remains. Signing out leaves local recovery intact and directs the user
+  to Recovery to discard it. An edit can still be lost if a crash occurs before its
+  asynchronous transaction completes; snapshots are recovery, not backup or undo/redo history.
 - `PublishDialog` dispatches `build-data.yml` on the saved branch and shows recent
   runs. It states that `master` builds data and deploys Pages, while other branches
   build data only. Version selection is automatic; there is no manual schema-version
@@ -147,15 +160,19 @@ complete interaction walkthrough.
 Use a repository-scoped fine-grained PAT with Contents R/W, Pull requests R/W,
 Actions R/W and Metadata R. Session storage is the default; Remember me opts into
 local storage. Tokens are sent only to `api.github.com`. Disconnect clears both
-stores. Browser storage is not encrypted: use a trusted device.
+credential stores, but leaves local recovery snapshots intact; use **Recovery**
+to discard those snapshots. Browser storage is not encrypted: use a trusted device.
 
-Edits and unadded item drafts live only in memory. Navigation within the app retains them; closing/reloading
-warns for dirty files or unadded item drafts. There is no merge UI, autosave, offline persistence, undo stack or
-non-English editing. Concurrent source changes during editing offer reload with
-pending edits as a rebase attempt, or cancel. A workflow run may not be listed immediately after dispatch;
-use Refresh runs or the Actions link. Subclass-filter overrides remain unresolved
-as reported by core. Tooltip charge preview uses the first stored charge scaling
-entry; cooldown preview uses the selected ability and current overrides.
+Edits and unadded item drafts remain in memory while editing and are also recorded
+by local recovery; closing/reloading still warns for dirty files or unadded item
+drafts. Recovery writes are asynchronous and do not guarantee that the last edit
+survives a crash before its IndexedDB transaction completes. There is no merge UI,
+undo/redo stack, or non-English editing. Concurrent source changes during editing
+offer reload with pending edits as a rebase attempt, or cancel. A workflow run may
+not be listed immediately after dispatch; use Refresh runs or the Actions link.
+Subclass-filter overrides remain unresolved as reported by core. Tooltip charge
+preview uses the first stored charge scaling entry; cooldown preview uses the
+selected ability and current overrides.
 
 Validation: `npm run format`, `npm run typecheck`, `npm test`, `npm run build`,
 `npm run validate`. Run `npm run schema` and check `git diff -- schema.json` when

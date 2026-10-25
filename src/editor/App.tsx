@@ -19,10 +19,25 @@ import { ManifestStatusBadge } from './components/ManifestUI';
 import logo from './assets/clarity-logo.svg';
 import mobility from './assets/mobility.png';
 import { ConfirmDialog } from './components/ConfirmDialog';
+import { EditorCrashBoundary, RecoveryDialog, RecoveryGate } from './components/Recovery';
+import type { RecoverySnapshot } from './state/recovery';
+function ConnectionObserver({
+    onChange,
+}: {
+    onChange(connection: { source: DataSource; loaded: LoadedData }): void;
+}) {
+    const { source, head, originals } = useEditor();
+    useEffect(() => {
+        onChange({ source, loaded: { head, files: originals } });
+    }, [source, head, originals, onChange]);
+    return null;
+}
 function Workspace({ onDisconnect }: { onDisconnect(): void }) {
     const state = useEditor(),
         [section, setSection] = useState<string>(statRegistry[0]!.name),
-        [dialog, setDialog] = useState<'pending' | 'save' | 'publish' | 'jump' | null>(null),
+        [dialog, setDialog] = useState<'pending' | 'save' | 'publish' | 'jump' | 'recovery' | null>(
+            null,
+        ),
         [request, setRequest] = useState<NavigationRequest | null>(null),
         [currentChange, setCurrentChange] = useState<string>();
     const [disconnecting, setDisconnecting] = useState(false);
@@ -49,10 +64,14 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         const listener = (event: BeforeUnloadEvent) => {
             event.preventDefault();
         };
-        if (state.dirty.length || Object.keys(state.itemDrafts).length)
+        if (
+            state.dirty.length ||
+            Object.keys(state.itemDrafts).length ||
+            Object.keys(state.drafts).length
+        )
             window.addEventListener('beforeunload', listener);
         return () => window.removeEventListener('beforeunload', listener);
-    }, [state.dirty.length, state.itemDrafts]);
+    }, [state.dirty.length, state.itemDrafts, state.drafts]);
     useEffect(() => {
         const listener = (event: KeyboardEvent) => {
             if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
@@ -150,6 +169,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                         Publish
                     </button>
                     <div className="account-area">
+                        <button onClick={() => setDialog('recovery')}>Recovery</button>
                         <span className="account-repo" title={state.source.label}>
                             {state.source.readOnly ? 'Local dev' : state.source.label}
                         </span>
@@ -159,7 +179,11 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                             title="Sign out of this repository"
                             aria-label="Sign out"
                             onClick={() => {
-                                if (state.dirty.length || Object.keys(state.itemDrafts).length)
+                                if (
+                                    state.dirty.length ||
+                                    Object.keys(state.itemDrafts).length ||
+                                    Object.keys(state.drafts).length
+                                )
                                     setDisconnecting(true);
                                 else disconnect();
                             }}
@@ -207,7 +231,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                 })}
                 <div className="sidebar-footer">
                     <span className="status-dot" />
-                    {state.source.readOnly ? 'Local · in-memory edits' : 'Connected to GitHub'}
+                    {state.source.readOnly ? 'Local · recovery enabled' : 'Connected to GitHub'}
                     <p className="help">
                         Ctrl K · Quick jump
                         <br />
@@ -216,6 +240,12 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                 </div>
             </nav>
             <main id="main" className="main" tabIndex={-1}>
+                {state.recovery.error && (
+                    <p role="alert" className="error">
+                        {state.recovery.error}
+                    </p>
+                )}
+                {state.recovery.notice && <p role="status">{state.recovery.notice}</p>}
                 <details className={`validation ${errors.length ? 'has-errors' : ''}`}>
                     <summary aria-live="polite">
                         <span className={errors.length ? 'error' : 'success'}>
@@ -260,11 +290,12 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             {dialog === 'save' && <SaveDialog onClose={() => setDialog(null)} />}{' '}
             {dialog === 'publish' && <PublishDialog onClose={() => setDialog(null)} />}{' '}
             {dialog === 'jump' && <QuickJump onClose={() => setDialog(null)} onGo={go} />}
+            {dialog === 'recovery' && <RecoveryDialog onClose={() => setDialog(null)} />}
             {disconnecting && (
                 <ConfirmDialog
                     title="Sign out"
-                    message="Sign out and discard unsaved edits and drafts?"
-                    confirmLabel="Sign out and discard"
+                    message="Sign out? Unsaved work remains in local recovery on this browser. Use Recovery to discard stored data."
+                    confirmLabel="Sign out"
                     onClose={() => setDisconnecting(false)}
                     onConfirm={disconnect}
                 />
@@ -273,15 +304,41 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
     );
 }
 export default function App() {
+    const [recovery, setRecovery] = useState<{
+        revision: number;
+        snapshot?: RecoverySnapshot | undefined;
+    }>({
+        revision: 0,
+    });
     const [connection, setConnection] = useState<{ source: DataSource; loaded: LoadedData } | null>(
         null,
     );
     return connection ? (
-        <ManifestProvider>
-            <EditorProvider source={connection.source} loaded={connection.loaded}>
-                <Workspace onDisconnect={() => setConnection(null)} />
-            </EditorProvider>
-        </ManifestProvider>
+        <EditorCrashBoundary
+            key={recovery.revision}
+            source={connection.source}
+            recover={(snapshot) =>
+                setRecovery(({ revision }) => ({ revision: revision + 1, snapshot }))
+            }
+        >
+            <ManifestProvider>
+                <EditorProvider
+                    source={connection.source}
+                    loaded={connection.loaded}
+                    snapshot={recovery.snapshot}
+                >
+                    <ConnectionObserver onChange={setConnection} />
+                    <RecoveryGate>
+                        <Workspace
+                            onDisconnect={() => {
+                                setRecovery({ revision: 0 });
+                                setConnection(null);
+                            }}
+                        />
+                    </RecoveryGate>
+                </EditorProvider>
+            </ManifestProvider>
+        </EditorCrashBoundary>
     ) : (
         <LoginScreen onLoad={(source, loaded) => setConnection({ source, loaded })} />
     );
