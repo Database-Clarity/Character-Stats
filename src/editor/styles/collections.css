@@ -457,7 +457,7 @@
     min-height: 0;
 }
 .context-slot-with-group {
-    width: max-content;
+    width: 100%;
     min-width: min(380px, 100%);
     max-width: 100%;
 }
