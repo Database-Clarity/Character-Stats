@@ -50,34 +50,34 @@
         },
         "Sources": {
             "12": {
-                "Description": "A readied Machine Gun multiplies grounded movement speed by 0.85."
+                "Description": "A readied Machine Gun decreases movement speed by 15%. Sprinting is exempt from the reduction."
             },
             "13": {
-                "Description": "A readied Rocket Launcher multiplies grounded movement speed by 0.85."
+                "Description": "A readied Rocket Launcher decreases movement speed by 15%. Sprinting is exempt from the reduction."
             },
             "14": {
                 "Description": "A readied sidearm replaces the normal ADS multiplier with 0.85."
             },
             "54": {
-                "Description": "Guarding with a sword multiplies grounded movement speed by 0.85.",
+                "Description": "Guarding with a sword decreases movement speed by 15%.",
                 "Condition": "While guarding with a sword."
             },
             "25692695": {
-                "Description": "The Scientific Method increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",
+                "Description": "The Scientific Method increases grounded movement speed without increasing jump height. The speed bonus has not been measured yet.",
                 "Condition": "For a short time after dealing damage with Tractor Cannon."
             },
             "1133590731": {
-                "Description": "Enhanced Athletics grants 3, 5, or 6 Mobility tiers with 1, 2, or 3 mods."
+                "Description": "Enhanced Athletics grants 3|5|6 Mobility tiers with 1|2|3 mods equipped."
             },
             "1458010786": {
-                "Description": "While held, a Lightweight Frame grants 2 Mobility tiers, a 1.075 multiplier to forward walking (standing or crouched) and sprinting (not strafing), and a 1.0625 sprint multiplier. The forward and sprint multipliers stack while sprinting."
-            },
-            "2213377102": {
-                "Description": "MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward multiplier further; that value has not been measured. Forward multipliers affect forward walking and sprint, but never strafing."
+                "Description": "Grants Lightweight benefits while held: 2 Mobility tiers and a 6.25% forward movement speed multiplier."
             },
             "1888623310": {
-                "Description": "While MIDA Multi-Tool is equipped, MIDA Macro-Tool grants a 1.1 multiplier to forward walking and sprinting, but not strafing. It does not grant Lightweight Mobility tiers or a separate sprint multiplier.",
+                "Description": "While MIDA Multi-Tool is equipped, MIDA Synergy shotguns also grant an increase in forward movement speed. As opposed to MIDA Synergy Submachine Guns, it does not grant lightweight movement benefits.",
                 "Condition": "While MIDA Macro-Tool is held and MIDA Multi-Tool is equipped."
+            },
+            "2213377102": {
+                "Description": "MIDA Synergy grants lightweight movement bonuses and increases forward movement speed on Submachine Guns. MIDA Multi-Tool increases the forward multiplier even further when equipped."
             },
             "2470575005": {
                 "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward multiplier further; that value has not been measured. Forward multipliers affect forward walking and sprint, but never strafing."
