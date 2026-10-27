@@ -39,13 +39,13 @@
         "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS bonuses are evaluated for one held weapon at a time. ADS stacks with strafe and crouch multipliers, and all applicable direction and posture caps still apply.",
         "Classes": {
             "671679327": {
-                "Description": "Hunter: base hidden Mobility tier 10 in PvE and tier 7 in PvP."
+                "Description": "Hunters have a Tier 7|10 baseline Mobility stat in PvP|PvE."
             },
             "2271682572": {
-                "Description": "Warlock: base hidden Mobility tier 3."
+                "Description": "Warlocks have a Tier 3 baseline Mobility stat."
             },
             "3655393761": {
-                "Description": "Titan: base hidden Mobility tier 3."
+                "Description": "Titans have a Tier 3 baseline Mobility stat."
             }
         },
         "Sources": {

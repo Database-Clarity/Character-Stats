@@ -9,10 +9,17 @@
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            10
+                        ]
+                    ]
                 }
             ]
         },
@@ -21,35 +28,64 @@
                 0,
                 100
             ],
+            "Round": 0,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            70
+                        ]
+                    ]
                 }
             ]
         },
-        "PVPHealthHP": 0,
-        "PVEHealthHP": 0,
-        "HealthRegenDelay": 0,
-        "HealthRegenSpeed": 0,
-        "BaseShieldHP": 0,
+        "PVPHealthHP": 100,
+        "PVEHealthHP": 70,
+        "HealthRegenDelay": 1.75,
+        "HealthRegenSpeed": 31.25,
+        "BaseShieldHP": 130,
         "PVEBonusShieldHP": {
             "Domain": [
                 101,
                 200
             ],
+            "Round": 0,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            101,
+                            0.3
+                        ],
+                        [
+                            150,
+                            15
+                        ]
+                    ]
+                },
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            151,
+                            15.3
+                        ],
+                        [
+                            200,
+                            20
+                        ]
+                    ]
                 }
             ]
         },
-        "BaseShieldRechargeDelay": 0,
+        "BaseShieldRechargeDelay": 4.9,
         "ShieldRechargeDelay": {
             "Domain": [
                 101,
@@ -57,14 +93,21 @@
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            101,
+                            4.88775
+                        ],
+                        [
+                            200,
+                            3.675
+                        ]
+                    ]
                 }
             ]
         },
-        "BaseShieldRechargeSpeed": 0,
+        "BaseShieldRechargeSpeed": 34.48275862,
         "ShieldRechargeSpeed": {
             "Domain": [
                 101,
@@ -72,10 +115,17 @@
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            101,
+                            34.6379310345
+                        ],
+                        [
+                            200,
+                            50
+                        ]
+                    ]
                 }
             ]
         },
