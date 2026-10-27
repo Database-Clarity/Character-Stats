@@ -7,12 +7,20 @@
                 0,
                 100
             ],
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 1
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            100,
+                            0.9
+                        ]
+                    ]
                 }
             ]
         },
@@ -21,12 +29,20 @@
                 0,
                 100
             ],
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 1
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            1
+                        ],
+                        [
+                            100,
+                            0.9
+                        ]
+                    ]
                 }
             ]
         },
@@ -35,68 +51,107 @@
                 0,
                 100
             ],
+            "Round": 2,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 0,
-                    "To": 100,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0.15
+                        ],
+                        [
+                            100,
+                            15
+                        ]
+                    ]
                 }
             ]
         },
         "SpecialDamageIncrease": {
             "Domain": [
-                101,
+                100,
                 200
             ],
+            "Round": 2,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            15
+                        ]
+                    ]
                 }
             ]
         },
         "PowerDamageIncrease": {
             "Domain": [
-                101,
+                100,
                 200
             ],
+            "Round": 1,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            10
+                        ]
+                    ]
                 }
             ]
         },
         "PVPDamageIncrease": {
             "Domain": [
-                101,
+                100,
                 200
             ],
+            "Round": 2,
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            5
+                        ]
+                    ]
                 }
             ]
         },
         "LargeAmmoBrickChance": {
             "Domain": [
-                101,
+                100,
                 200
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            100
+                        ]
+                    ]
                 }
             ]
         }

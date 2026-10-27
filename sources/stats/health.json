@@ -7,6 +7,7 @@
                 0,
                 100
             ],
+            "Round": 1,
             "Segments": [
                 {
                     "Type": "Linear",
@@ -52,7 +53,7 @@
         "BaseShieldHP": 130,
         "PVEBonusShieldHP": {
             "Domain": [
-                101,
+                100,
                 200
             ],
             "Round": 0,
@@ -61,21 +62,12 @@
                     "Type": "Linear",
                     "Points": [
                         [
-                            101,
-                            0.3
+                            100,
+                            0
                         ],
                         [
                             150,
                             15
-                        ]
-                    ]
-                },
-                {
-                    "Type": "Linear",
-                    "Points": [
-                        [
-                            151,
-                            15.3
                         ],
                         [
                             200,
@@ -88,16 +80,17 @@
         "BaseShieldRechargeDelay": 4.9,
         "ShieldRechargeDelay": {
             "Domain": [
-                101,
+                100,
                 200
             ],
+            "Round": 2,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
                         [
-                            101,
-                            4.88775
+                            100,
+                            4.9
                         ],
                         [
                             200,
@@ -107,19 +100,20 @@
                 }
             ]
         },
-        "BaseShieldRechargeSpeed": 34.48275862,
+        "BaseShieldRechargeSpeed": 34.48,
         "ShieldRechargeSpeed": {
             "Domain": [
-                101,
+                100,
                 200
             ],
+            "Round": 2,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
                         [
-                            101,
-                            34.6379310345
+                            100,
+                            34.48
                         ],
                         [
                             200,

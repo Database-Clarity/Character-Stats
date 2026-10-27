@@ -32,138 +32,139 @@
         },
         "OvershieldHP": {
             "Domain": [
-                101,
+                100,
                 200
             ],
             "Segments": [
                 {
                     "Type": "Constant",
-                    "From": 101,
+                    "From": 100,
                     "To": 200,
                     "Value": 0
                 }
             ]
         }
     },
+    "Notes": "Placeholder field values — replace with tested data.",
     "Abilities": [
         {
             "Hash": 3636300852,
             "Name": "Acrobat's Dodge",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2711519343,
             "Name": "Acrobat's Dodge - Prismatic",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 25156514,
             "Name": "Empowering Rift - Arc",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664839,
             "Name": "Empowering Rift - Prismatic",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2979486802,
             "Name": "Empowering Rift - Solar",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047640,
             "Name": "Empowering Rift - Stasis",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852321,
             "Name": "Empowering Rift - Strand",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081648,
             "Name": "Empowering Rift - Void",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 426473317,
             "Name": "Gambler's Dodge - Arc",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2711519340,
             "Name": "Gambler's Dodge - Prismatic",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3636300855,
             "Name": "Gambler's Dodge - Solar",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3933525367,
             "Name": "Gambler's Dodge - Stasis",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 1282157890,
             "Name": "Gambler's Dodge - Strand",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2816982785,
             "Name": "Gambler's Dodge - Void",
-            "BaseCooldown": 38.0,
+            "BaseCooldown": 38,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 25156515,
             "Name": "Healing Rift - Arc",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664838,
             "Name": "Healing Rift - Prismatic",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2979486803,
             "Name": "Healing Rift - Solar",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047641,
             "Name": "Healing Rift - Stasis",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852320,
             "Name": "Healing Rift - Strand",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081649,
             "Name": "Healing Rift - Void",
-            "BaseCooldown": 82.0,
+            "BaseCooldown": 82,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -176,7 +177,7 @@
             "Hash": 2711519341,
             "Name": "Marksman's Dodge - Prismatic",
             "BaseCooldown": 28.5,
-            "ChunkEnergyScalar": 1.0
+            "ChunkEnergyScalar": 1
         },
         {
             "Hash": 3636300854,
@@ -205,13 +206,13 @@
         {
             "Hash": 2979486801,
             "Name": "Phoenix Dive",
-            "BaseCooldown": 55.0,
+            "BaseCooldown": 55,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 1444664836,
             "Name": "Phoenix Dive - Prismatic",
-            "BaseCooldown": 55.0,
+            "BaseCooldown": 55,
             "ChunkEnergyScalar": 0.8
         },
         {
@@ -223,8 +224,8 @@
         {
             "Hash": 2868073560,
             "Name": "Rally Barricade - Prismatic",
-            "BaseCooldown": 38.0,
-            "ChunkEnergyScalar": 1.0
+            "BaseCooldown": 38,
+            "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2495523341,
@@ -259,43 +260,43 @@
         {
             "Hash": 2868073563,
             "Name": "Thruster - Prismatic",
-            "BaseCooldown": 36.0,
-            "ChunkEnergyScalar": 1.0
+            "BaseCooldown": 36,
+            "ChunkEnergyScalar": 1
         },
         {
             "Hash": 489583096,
             "Name": "Towering Barricade - Arc",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2868073561,
             "Name": "Towering Barricade - Prismatic",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2495523340,
             "Name": "Towering Barricade - Solar",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3260056808,
             "Name": "Towering Barricade - Stasis",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2087010645,
             "Name": "Towering Barricade - Strand",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2722641740,
             "Name": "Towering Barricade - Void",
-            "BaseCooldown": 70.0,
+            "BaseCooldown": 70,
             "ChunkEnergyScalar": 0.5
         }
     ],
@@ -403,6 +404,5 @@
                 1.6666666667
             ]
         }
-    ],
-    "Notes": "Placeholder field values — replace with tested data."
+    ]
 }

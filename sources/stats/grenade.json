@@ -32,13 +32,13 @@
         },
         "GrenadeDamageIncrease": {
             "Domain": [
-                101,
+                100,
                 200
             ],
             "Segments": [
                 {
                     "Type": "Constant",
-                    "From": 101,
+                    "From": 100,
                     "To": 200,
                     "Value": 0
                 }

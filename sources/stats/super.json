@@ -32,291 +32,298 @@
         },
         "SuperDamageIncrease": {
             "Domain": [
-                101,
+                100,
                 200
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 101,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            45
+                        ]
+                    ]
                 }
             ]
         }
     },
+    "Notes": "Placeholder field values — replace with tested data.",
+    "Overrides": [],
     "SuperAbilities": [
         {
             "Hash": 3769507633,
             "Name": "Arc Staff",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 375052471,
             "Name": "Blade Barrage",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 3574662354,
             "Name": "Bladefury",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2529942642,
             "Name": "Bladefury - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2747500760,
             "Name": "Burning Maul",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1081893461,
             "Name": "Chaos Reach",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2274196886,
             "Name": "Daybreak",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 119041299,
             "Name": "Fists Of Havoc",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 3769507632,
             "Name": "Gathering Storm",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 2021620139,
             "Name": "Glacial Quake",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2529942645,
             "Name": "Glacial Quake - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 375052469,
             "Name": "Golden Gun: Deadshot",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 375052468,
             "Name": "Golden Gun: Marksman",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2370269390,
             "Name": "Golden Gun: Marksman - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2747500761,
             "Name": "Hammer of Sol",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2529942647,
             "Name": "Hammer of Sol - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 1885339915,
             "Name": "Needle Storm",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1869939001,
             "Name": "Needlestorm",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1656118682,
             "Name": "Nova Bomb: Cataclysm",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1869939004,
             "Name": "Nova Bomb: Cataclysm - Prismatic",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1656118681,
             "Name": "Nova Bomb: Vortex",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1656118680,
             "Name": "Nova Warp",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 4260353952,
             "Name": "Sentinel Shield",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2722573683,
             "Name": "Shadowshot: Deadfall",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2370269389,
             "Name": "Shadowshot: Deadfall - Prismatic",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2722573681,
             "Name": "Shadowshot: Moebius Quiver",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 2625980631,
             "Name": "Silence and Squal",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2370269391,
             "Name": "Silence and Squall - Prismatic",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2463983862,
             "Name": "Silkstrike",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2370269384,
             "Name": "Silkstrike - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2274196884,
             "Name": "Song of Flame",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 1869939005,
             "Name": "Song of Flame - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2722573682,
             "Name": "Spectral Blades",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 3769507635,
             "Name": "Storm's Edge",
-            "BaseCooldown": 625.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 625,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 2370269388,
             "Name": "Storm's Edge - Prismatic",
-            "BaseCooldown": 625.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 625,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 1081893460,
             "Name": "Stormtrance",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 1869939007,
             "Name": "Stormtrance - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 119041298,
             "Name": "Thundercrash",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 2529942644,
             "Name": "Thundercrash - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 4260353955,
             "Name": "Twilight Arsenal",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 2529942646,
             "Name": "Twilight Arsenal - Prismatic",
-            "BaseCooldown": 500.0,
-            "ActiveRegenScalar": 1.0
+            "BaseCooldown": 500,
+            "ActiveRegenScalar": 1
         },
         {
             "Hash": 4260353953,
             "Name": "Ward of Dawn",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 2274196887,
             "Name": "Well of Radiance",
-            "BaseCooldown": 455.0,
+            "BaseCooldown": 455,
             "ActiveRegenScalar": 1.1
         },
         {
             "Hash": 3683904166,
             "Name": "Winter's Wrath",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
         {
             "Hash": 1869939006,
             "Name": "Winter's Wrath - Prismatic",
-            "BaseCooldown": 556.0,
+            "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         }
-    ],
-    "Overrides": [],
-    "Notes": "Placeholder field values — replace with tested data."
+    ]
 }
