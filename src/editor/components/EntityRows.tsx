@@ -3,6 +3,7 @@ import { equal, groupRowsByBaseCooldown, type EntityRow } from '../state/editing
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
+import { collectionLabel, plural } from './textFormat';
 
 export function EntityRows({
     collection,
@@ -95,10 +96,10 @@ export function EntityRows({
             ?.scrollIntoView({ block: 'nearest' });
     }, [selected]);
     return (
-        <section className="entity-list" aria-label={collection}>
+        <section className="entity-list" aria-label={collectionLabel(collection)}>
             <div className="list-controls">
                 <div className="pane-header">
-                    <strong>{collection}</strong>
+                    <strong>{collectionLabel(collection)}</strong>
                     <span className="muted mono">{rows.filter((row) => !row.deleted).length}</span>
                     <div className="toolbar">
                         <button
@@ -121,7 +122,7 @@ export function EntityRows({
                     </div>
                 </div>
                 <input
-                    aria-label={`Search ${collection}`}
+                    aria-label={`Search ${collectionLabel(collection)}`}
                     data-collection-search
                     type="search"
                     value={search}
@@ -160,8 +161,7 @@ export function EntityRows({
                                                 <strong>Base cooldown</strong>
                                                 <span className="mono">{cooldown} s</span>
                                                 <span className="muted">
-                                                    {groupRows.length}{' '}
-                                                    {groupRows.length === 1 ? 'entry' : 'entries'}
+                                                    {plural(groupRows.length, 'entry', 'entries')}
                                                 </span>
                                             </summary>
                                             {active.length > 1 && onEditGroup && (
@@ -198,6 +198,9 @@ export function EntityRows({
                     )}
                 </ul>
                 {!rows.length && <p className="empty-state">No items. Use + to start a draft.</p>}
+                {rows.length > 0 && search && !rows.some(matchesSearch) && (
+                    <p className="empty-state">No items match “{search}”.</p>
+                )}
             </div>
         </section>
     );

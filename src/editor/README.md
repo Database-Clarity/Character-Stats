@@ -109,7 +109,12 @@ middleware or configuration changes are needed.
 
 - Plots measure their container with `ResizeObserver` and render in CSS-pixel SVG
   coordinates, preserving tick text proportions. The hover label follows pointer
-  coordinates independently of the nearest-value crosshair.
+  coordinates independently of the nearest-value crosshair. `curveValueRange.ts`
+  widens the value axis to round 1/2/2.5/5 × 10ⁿ ticks and labels the stat domain
+  with integer ticks, so gridlines never show unrounded values.
+- `textFormat.ts` holds count pluralization (`1 error`, `2 files`) and the display
+  name for collection keys (`SuperAbilities` shows as **Super abilities**; Quick jump
+  still matches the raw key).
 - `numberStep.ts` is the tested numeric-step helper: integer fields step by one,
   fields constrained to 0–1 by hundredths, and other values by their decimal
   precision (including scientific notation). Numeric arrays and curve values use it.

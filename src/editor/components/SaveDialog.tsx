@@ -3,6 +3,7 @@ import { GitHubDataSource } from '../data';
 import { useEditor } from '../state/store';
 import { AutoResizeTextarea } from './AutoResizeTextarea';
 import { Modal } from './Modal';
+import { plural } from './textFormat';
 
 function errorMessage(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
@@ -71,7 +72,7 @@ export function SaveDialog({ onClose }: { onClose(): void }) {
             const nextSource = new GitHubDataSource(source.client.forBranch(result.branch));
             state.dispatch({ type: 'saved', files, head: result.sha, source: nextSource });
             setSuccess(
-                `Saved ${Object.keys(files).length} file(s) in one commit on ${result.branch}.`,
+                `Saved ${plural(Object.keys(files).length, 'file')} in one commit on ${result.branch}.`,
             );
             if (mode === 'pr')
                 setPrUrl(await source.client.createPR(result.branch, title.trim(), body));
@@ -133,8 +134,8 @@ export function SaveDialog({ onClose }: { onClose(): void }) {
             ) : (
                 <form onSubmit={save}>
                     <p>
-                        {state.dirty.length} file(s) will be saved as a single commit. Warnings do
-                        not block saving.
+                        {plural(state.dirty.length, 'file')} will be saved as a single commit.
+                        Warnings do not block saving.
                     </p>
                     <p className="help">
                         Save writes sources/ and locale/en.json to the branch, or opens a PR. On
@@ -144,8 +145,8 @@ export function SaveDialog({ onClose }: { onClose(): void }) {
                     {notice && <p role="status">{notice}</p>}
                     {errors.length > 0 && (
                         <p role="alert" className="error">
-                            Save blocked by {errors.length} validation error(s). Close this dialog
-                            to fix them.
+                            Save blocked by {plural(errors.length, 'validation error')}. Close this
+                            dialog to fix them.
                         </p>
                     )}
                     {state.source.readOnly && (

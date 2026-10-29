@@ -5,6 +5,7 @@ import type { EditorChange } from '../state/editing';
 import { Collapse } from './EditorPrimitives';
 import { Modal } from './Modal';
 import { formatChangeValue, structuredDiff, type StructuredChange } from './structuredDiff';
+import { collectionLabel, plural } from './textFormat';
 function lineDiff(before: string, after: string): { type: string; text: string }[] {
     const a = before.replace(/\r\n/g, '\n').split('\n'),
         b = after.replace(/\r\n/g, '\n').split('\n');
@@ -141,34 +142,36 @@ export function PendingChanges({
             )}
             <div className="section-bar">
                 <p className="muted">
-                    {changes.length} changes · {dirty.length} files
+                    {plural(changes.length, 'change')} · {plural(dirty.length, 'file')}
                 </p>
                 <button className="danger" disabled={!dirty.length} onClick={() => discard()}>
                     Discard all
                 </button>
             </div>
-            <div className="toolbar change-collapse-actions">
-                <button
-                    onClick={(e) =>
-                        e.currentTarget
-                            .closest('dialog')
-                            ?.querySelectorAll('details')
-                            .forEach((d) => (d.open = false))
-                    }
-                >
-                    Collapse all
-                </button>
-                <button
-                    onClick={(e) =>
-                        e.currentTarget
-                            .closest('dialog')
-                            ?.querySelectorAll('details')
-                            .forEach((d) => (d.open = true))
-                    }
-                >
-                    Expand all
-                </button>
-            </div>
+            {changes.length > 0 && (
+                <div className="toolbar change-collapse-actions">
+                    <button
+                        onClick={(e) =>
+                            e.currentTarget
+                                .closest('dialog')
+                                ?.querySelectorAll('details')
+                                .forEach((d) => (d.open = false))
+                        }
+                    >
+                        Collapse all
+                    </button>
+                    <button
+                        onClick={(e) =>
+                            e.currentTarget
+                                .closest('dialog')
+                                ?.querySelectorAll('details')
+                                .forEach((d) => (d.open = true))
+                        }
+                    >
+                        Expand all
+                    </button>
+                </div>
+            )}
             {!changes.length && <p className="empty-state">No pending changes.</p>}
             {[...new Set(changes.map((c) => c.stat))].map((stat) => (
                 <Collapse
@@ -185,7 +188,11 @@ export function PendingChanges({
                 >
                     {[...new Set(changes.filter((c) => c.stat === stat).map((c) => c.tab))].map(
                         (tab) => (
-                            <Collapse key={tab} storageKey={`changes:${stat}:${tab}`} title={tab}>
+                            <Collapse
+                                key={tab}
+                                storageKey={`changes:${stat}:${tab}`}
+                                title={collectionLabel(tab)}
+                            >
                                 {[
                                     ...new Set(
                                         changes

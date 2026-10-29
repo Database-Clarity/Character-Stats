@@ -8,6 +8,7 @@ import {
 } from '../state/recovery';
 import { useEditor } from '../state/store';
 import { Modal } from './Modal';
+import { plural } from './textFormat';
 
 function detail(error: unknown) {
     return error instanceof Error ? error.message : String(error);
@@ -47,7 +48,7 @@ function SnapshotList({
                     <li key={snapshot.id}>
                         <strong>{new Date(snapshot.timestamp).toLocaleString()}</strong>
                         {' · '}
-                        {snapshot.changeCount} changes · base {snapshot.head.slice(0, 7)}
+                        {plural(snapshot.changeCount, 'change')} · base {snapshot.head.slice(0, 7)}
                         {head && head !== snapshot.head && (
                             <p className="warning">
                                 The loaded branch head differs. The original draft base is

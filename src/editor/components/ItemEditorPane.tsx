@@ -4,6 +4,7 @@ import { AssociatedEntryText } from './AssociatedEntryText';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
+import { plural } from './textFormat';
 
 export function ItemEditorPane({
     spec,
@@ -109,7 +110,9 @@ export function ItemEditorPane({
                     </button>
                     <button onClick={onDiscardDraft}>Discard</button>
                     {duplicate && <span className="error">Hash already in list</span>}
-                    {errors > 0 && <span className="error">{errors} validation error(s)</span>}
+                    {errors > 0 && (
+                        <span className="error">{plural(errors, 'validation error')}</span>
+                    )}
                 </div>
             )}
             <div className="scroll-pane editor-body">

@@ -4,6 +4,7 @@ import { useEditor } from '../state/store';
 import { identityKey, type ChangeTarget } from '../state/editing';
 import { movementViewSpec } from './StatView';
 import { Modal } from './Modal';
+import { collectionLabel } from './textFormat';
 export function QuickJump({
     onClose,
     onGo,
@@ -29,7 +30,12 @@ export function QuickJump({
                 },
                 { stat: spec.name, tab: 'Text', field: '', label: `${spec.name} / Text` },
                 ...Object.entries(spec.collections).flatMap(([tab, entity]) => [
-                    { stat: spec.name, tab, field: '', label: `${spec.name} / ${tab}` },
+                    {
+                        stat: spec.name,
+                        tab,
+                        field: '',
+                        label: `${spec.name} / ${collectionLabel(tab)}`,
+                    },
                     ...(isRecord(file) && Array.isArray(file[tab])
                         ? file[tab].filter(isRecord)
                         : []
@@ -38,12 +44,14 @@ export function QuickJump({
                         tab,
                         field: '',
                         itemKey: String(item[identityKey(entity)]),
-                        label: `${spec.name} / ${tab} / ${item.Name} ${item[identityKey(entity)]}`,
+                        label: `${spec.name} / ${collectionLabel(tab)} / ${item.Name} ${item[identityKey(entity)]}`,
                     })),
                 ]),
             ];
         })
-        .filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))
+        .filter((option) =>
+            `${option.label} ${option.tab}`.toLowerCase().includes(query.toLowerCase()),
+        )
         .slice(0, 80);
     return (
         <Modal title="Quick jump" onClose={onClose}>

@@ -48,6 +48,12 @@ button.primary {
     border-color: var(--accent);
     font-weight: 650;
 }
+button.primary:disabled {
+    color: var(--muted);
+    background: transparent;
+    border-color: var(--border);
+    opacity: 1;
+}
 button.primary:hover:not(:disabled) {
     background: #76f993;
     color: #09200f;

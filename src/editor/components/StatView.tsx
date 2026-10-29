@@ -8,6 +8,7 @@ import { LongPage, Collapse } from './EditorPrimitives';
 import { TextEditor } from './TextEditor';
 import { MovementContext } from './MovementContext';
 import type { EditorNavigationSelection, NavigationMode } from './navigationHistory';
+import { collectionLabel } from './textFormat';
 export interface NavigationRequest extends ChangeTarget {
     sequence: number;
 }
@@ -131,7 +132,7 @@ export function StatView({
                                 onNavigate({ stat: spec.name, tab: name, itemKey: null }, 'click');
                             }}
                         >
-                            {movement && name === 'Fields' ? 'Rules' : name}
+                            {movement && name === 'Fields' ? 'Rules' : collectionLabel(name)}
                             {count > 0 && <span className="count-badge">{count}</span>}
                         </button>
                     );

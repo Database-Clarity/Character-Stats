@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Domain } from '../../core';
-import { curveValueRange } from './curveValueRange';
+import { domainTicks, niceValueAxis } from './curveValueRange';
 export default function CurvePlot({
     plot,
     domain,
@@ -23,7 +23,7 @@ export default function CurvePlot({
     const values = plot
         .flatMap((p) => [p.current, ...(compare ? [p.saved] : [])])
         .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-    const { min, max } = curveValueRange(values);
+    const { min, max, ticks, decimals } = niceValueAxis(values);
     const height = 240,
         left = 52,
         right = width - 16,
@@ -63,28 +63,22 @@ export default function CurvePlot({
                 }}
                 onPointerLeave={() => setHover(null)}
             >
-                {[0, 0.5, 1].map((f) => (
-                    <g key={f}>
-                        <line
-                            x1={left}
-                            x2={right}
-                            y1={plotTop + plotHeight * f}
-                            y2={plotTop + plotHeight * f}
-                            stroke="#30343b"
-                        />
-                        <text x={4} y={plotTop + 4 + plotHeight * f}>
-                            {Number(max - (max - min) * f).toFixed(2)}
+                {ticks.map((tick) => (
+                    <g key={tick}>
+                        <line x1={left} x2={right} y1={y(tick)} y2={y(tick)} stroke="#30343b" />
+                        <text x={4} y={y(tick) + 4}>
+                            {tick.toFixed(decimals)}
                         </text>
                     </g>
                 ))}
-                {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+                {domainTicks(domain).map((tick) => (
                     <text
-                        key={f}
-                        x={left + plotWidth * f}
+                        key={tick}
+                        x={x(tick)}
                         y={height - 10}
-                        textAnchor={f === 1 ? 'end' : 'middle'}
+                        textAnchor={tick === domain[1] ? 'end' : 'middle'}
                     >
-                        {domain[0] + (domain[1] - domain[0]) * f}
+                        {tick}
                     </text>
                 ))}
                 <polyline

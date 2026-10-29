@@ -37,6 +37,7 @@ import {
     type EditorNavigationSelection,
     type NavigationMode,
 } from './components/navigationHistory';
+import { plural } from './components/textFormat';
 
 const mainNavigationItems = [...statRegistry, movementViewSpec];
 const initialNavigationSelection: EditorNavigationSelection = {
@@ -625,8 +626,8 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                         <span className={errors.length ? 'error' : 'success'}>
                             {errors.length ? '!' : '✓'}
                         </span>{' '}
-                        {errors.length ? `${errors.length} errors` : 'Sources valid'}
-                        <span className="muted"> · {warnings.length} warnings</span>
+                        {errors.length ? plural(errors.length, 'error') : 'Sources valid'}
+                        <span className="muted"> · {plural(warnings.length, 'warning')}</span>
                         <span className="validation-hint">Shared core validation</span>
                     </summary>
                     <div className="validation-issues">

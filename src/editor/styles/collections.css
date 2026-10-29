@@ -70,6 +70,9 @@
     cursor: pointer;
     font-size: 11px;
 }
+.cooldown-group > details > summary > * {
+    white-space: nowrap;
+}
 .cooldown-group > details > summary .muted {
     margin-left: auto;
 }
