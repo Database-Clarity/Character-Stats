@@ -327,8 +327,9 @@
 }
 .segment-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: end;
-    gap: 12px;
+    gap: 8px 12px;
 }
 .segment-row > label {
     display: grid;
@@ -337,13 +338,13 @@
     gap: 8px;
     margin: 4px 0 0;
     font-size: 11px;
-    flex: 1;
+    flex: 1 1 120px;
 }
 .segment-row > label:first-child {
-    flex: 1.5;
+    flex: 1.5 1 160px;
 }
 .segment-row > .expression {
-    flex: 3;
+    flex: 3 1 240px;
 }
 .segment-row select {
     min-width: 96px;

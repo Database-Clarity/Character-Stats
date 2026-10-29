@@ -90,7 +90,7 @@ export function ItemEditorPane({
                             aria-pressed={contextOpen}
                             onClick={onToggleContext}
                         >
-                            Context
+                            {stat === 'Movement' ? 'Speed preview' : 'Context'}
                         </button>
                     )}
                     {editorValue && !isDraft && (

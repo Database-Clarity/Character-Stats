@@ -65,7 +65,9 @@ middleware or configuration changes are needed.
   why and allow creation of a blank draft. `ClassIcon` supplies accurate local
   class glyphs when a class definition has no icon URL. `QuickJump`
   searches registered stats/tabs and source item names/hashes. The UI still works without a manifest.
-- Movement shows Rules plus Classes/Sources collections. `MovementContext`
+- Movement shows Rules plus Classes/Sources collections. The Rules tab lists the
+  `Rules` object's fields directly with an outline, using the same `FieldsPage` as stat
+  Fields tabs. `MovementContext`
   validates working data before calling core `movementSpeed` and keeps Mobility,
   Sprint, Walk, Strafe, Crouch and ADS results visible together. Class and activity
   are global settings; every row shows its signed delta against the same settings
@@ -73,7 +75,8 @@ middleware or configuration changes are needed.
   Active sources retain their stack, boosted and per-held-weapon ADS controls;
   selecting a WhileHeld source replaces the previous one, and unchecking it clears
   that selection without removing Always or Conditional sources. The summary and
-  source selector remain visible together on narrow screens.
+  source selector stay together in one panel; below 1280px that panel is a toggled
+  overlay opened with **Speed preview**, like Context on other stats.
   Invalid data and conflicting ADS choices show errors, not fallback speeds.
   Source RefType scopes lookups/icons/hash pickers to items or item categories;
   collection manifest drafts infer RefType from the picked definition table.

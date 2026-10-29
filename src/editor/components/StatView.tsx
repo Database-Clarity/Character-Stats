@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { isRecord, movementSpec, type StatSource, type StatSpec } from '../../core';
+import {
+    isRecord,
+    movementRulesSpec,
+    movementSpec,
+    type FieldSpec,
+    type StatSource,
+    type StatSpec,
+} from '../../core';
 import { updateProperty, useEditor } from '../state/store';
 import { changeAffectsStat, type ChangeTarget } from '../state/editing';
 import { EntityList } from './EntityList';
@@ -160,67 +167,14 @@ export function StatView({
                             onChange={setValue}
                         />
                     ) : (
-                        <LongPage
-                            label="Fields"
-                            items={visible.map((f) => ({ id: f.key, label: f.label ?? f.key }))}
-                        >
-                            {visible.map((field) => (
-                                <div key={field.key} data-outline={field.key}>
-                                    {field.kind === 'curve' ? (
-                                        <FieldInput
-                                            spec={field}
-                                            value={fields[field.key]}
-                                            saved={originalFields[field.key]}
-                                            siblings={fields}
-                                            file={file}
-                                            path={`${movement ? '' : 'Fields.'}${field.key}`}
-                                            onChange={(next) =>
-                                                setValue(
-                                                    movement
-                                                        ? updateProperty(value, field.key, next)
-                                                        : {
-                                                              ...value,
-                                                              Fields: updateProperty(
-                                                                  fields,
-                                                                  field.key,
-                                                                  next,
-                                                              ),
-                                                          },
-                                                )
-                                            }
-                                        />
-                                    ) : (
-                                        <Collapse
-                                            storageKey={`${file}:${field.group ?? field.key}`}
-                                            title={field.group ?? <FieldName spec={field} />}
-                                        >
-                                            <FieldInput
-                                                spec={field}
-                                                value={fields[field.key]}
-                                                saved={originalFields[field.key]}
-                                                siblings={fields}
-                                                file={file}
-                                                path={`${movement ? '' : 'Fields.'}${field.key}`}
-                                                onChange={(next) =>
-                                                    setValue(
-                                                        movement
-                                                            ? updateProperty(value, field.key, next)
-                                                            : {
-                                                                  ...value,
-                                                                  Fields: updateProperty(
-                                                                      fields,
-                                                                      field.key,
-                                                                      next,
-                                                                  ),
-                                                              },
-                                                    )
-                                                }
-                                            />
-                                        </Collapse>
-                                    )}
-                                </div>
-                            ))}
-                        </LongPage>
+                        <FieldsPage
+                            fields={visible}
+                            values={fields}
+                            saved={originalFields}
+                            file={file}
+                            pathPrefix="Fields."
+                            onChange={(next) => setValue({ ...value, Fields: next })}
+                        />
                     ))}
                 {collectionSpec && (
                     <EntityList
@@ -271,6 +225,60 @@ export function StatView({
         </section>
     );
 }
+/** Top-level field list with an outline; curves render directly, other fields in a section. */
+function FieldsPage({
+    fields,
+    values,
+    saved,
+    file,
+    pathPrefix,
+    fieldPathPrefix = '',
+    onChange,
+}: {
+    fields: readonly FieldSpec[];
+    values: Record<string, unknown>;
+    saved: Record<string, unknown>;
+    file: string;
+    pathPrefix: string;
+    fieldPathPrefix?: string;
+    onChange(values: Record<string, unknown>): void;
+}) {
+    return (
+        <LongPage
+            label="Fields"
+            items={fields.map((f) => ({ id: f.key, label: f.label ?? f.key }))}
+        >
+            {fields.map((field) => {
+                const input = (
+                    <FieldInput
+                        spec={field}
+                        value={values[field.key]}
+                        saved={saved[field.key]}
+                        siblings={values}
+                        file={file}
+                        path={`${pathPrefix}${field.key}`}
+                        fieldPath={`${fieldPathPrefix}${field.key}`}
+                        onChange={(next) => onChange(updateProperty(values, field.key, next))}
+                    />
+                );
+                return (
+                    <div key={field.key} data-outline={field.key}>
+                        {field.kind === 'curve' ? (
+                            input
+                        ) : (
+                            <Collapse
+                                storageKey={`${file}:${field.group ?? field.key}`}
+                                title={field.group ?? <FieldName spec={field} />}
+                            >
+                                {input}
+                            </Collapse>
+                        )}
+                    </div>
+                );
+            })}
+        </LongPage>
+    );
+}
 function MovementRules({
     value,
     saved,
@@ -282,28 +290,40 @@ function MovementRules({
     file: string;
     onChange(value: unknown): void;
 }) {
+    const [contextOpen, setContextOpen] = useState(false);
+    const rules = isRecord(value.Rules) ? value.Rules : {},
+        savedRules = isRecord(saved.Rules) ? saved.Rules : {};
     return (
-        <div className="entity-layout movement-rules-layout">
+        <div className={`entity-layout movement-rules-layout${contextOpen ? ' context-open' : ''}`}>
             <section className="item-editor">
-                <header className="pane-header">
+                <header className="pane-header movement-rules-header">
                     <strong>Rules</strong>
+                    <button
+                        className="context-toggle"
+                        aria-pressed={contextOpen}
+                        onClick={() => setContextOpen(!contextOpen)}
+                    >
+                        Speed preview
+                    </button>
                 </header>
-                <div className="scroll-pane editor-body">
-                    {movementSpec.fields.map((field) => (
-                        <FieldInput
-                            key={field.key}
-                            spec={field}
-                            value={value[field.key]}
-                            saved={saved[field.key]}
-                            siblings={value}
-                            file={file}
-                            path={field.key}
-                            onChange={(next) => onChange(updateProperty(value, field.key, next))}
-                        />
-                    ))}
-                </div>
+                <FieldsPage
+                    fields={movementRulesSpec.fields}
+                    values={rules}
+                    saved={savedRules}
+                    file={file}
+                    pathPrefix="Rules."
+                    fieldPathPrefix="Rules."
+                    onChange={(next) => onChange(updateProperty(value, 'Rules', next))}
+                />
             </section>
             <div className="context-slot">
+                <button
+                    className="context-close icon-button"
+                    aria-label="Close speed preview"
+                    onClick={() => setContextOpen(false)}
+                >
+                    ×
+                </button>
                 <MovementContext value={value} />
             </div>
         </div>

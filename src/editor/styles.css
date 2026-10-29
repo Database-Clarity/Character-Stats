@@ -6,6 +6,17 @@
 .movement-rules-layout {
     grid-template-columns: minmax(0, 1fr) 340px;
 }
+.movement-rules-layout > .item-editor > .long-page {
+    flex: 1;
+    height: auto;
+}
+/* Only needed for the Speed preview toggle once the preview becomes an overlay. */
+.movement-rules-header {
+    display: none;
+}
+.movement-rules-header .context-toggle {
+    margin-left: auto;
+}
 @media (min-width: 1280px) {
     .movement-preview-layout {
         grid-template-columns: 248px minmax(0, 1fr) 25rem;
@@ -220,59 +231,8 @@
     .context .pane-header {
         padding-right: 44px;
     }
-    .movement-context .pane-header {
-        padding-right: 12px;
-    }
-    .entity-layout.movement-preview-layout {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: minmax(140px, 0.62fr) minmax(420px, 1fr);
-        overflow-y: auto;
-    }
-    .movement-preview-layout > .entity-list {
-        grid-column: 1;
-        grid-row: 1;
-    }
-    .movement-preview-layout > .item-editor {
-        grid-column: 2;
-        grid-row: 1;
-    }
-    .movement-preview-layout > .context-slot,
-    .movement-preview-layout.context-open > .context-slot {
-        display: block;
-        position: static;
-        grid-column: 1 / -1;
-        grid-row: 2;
-        width: auto;
-        min-width: 0;
-        max-width: none;
-        border-top: 1px solid var(--border);
-        border-left: 0;
-        overflow: hidden;
-    }
-    .movement-preview-layout .context-close,
-    .movement-preview-layout .context-toggle {
-        display: none;
-    }
-    .entity-layout.movement-rules-layout {
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: minmax(140px, 0.62fr) minmax(420px, 1fr);
-        overflow-y: auto;
-    }
-    .movement-rules-layout > .item-editor {
-        grid-row: 1;
-    }
-    .movement-rules-layout > .context-slot {
-        display: block;
-        position: static;
-        grid-row: 2;
-        min-width: 0;
-        border-top: 1px solid var(--border);
-        border-left: 0;
-        overflow: hidden;
-    }
-    .movement-rules-layout .context-close,
-    .movement-rules-layout .context-toggle {
-        display: none;
+    .movement-rules-header {
+        display: flex;
     }
     .field {
         grid-template-columns: 152px minmax(0, 1fr);
