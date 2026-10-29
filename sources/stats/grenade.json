@@ -9,10 +9,16 @@
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
+                    "Type": "Expression",
                     "From": 0,
+                    "To": 70,
+                    "Expression": "1/(1 + (219.5/76 - 1)*x/70 + 0.000298916*x*(x-70))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 71,
                     "To": 100,
-                    "Value": 1
+                    "Expression": "(26600/219.5)/(x + 280)"
                 }
             ]
         },
@@ -78,259 +84,259 @@
         {
             "Hash": 1582574009,
             "Name": "Arcbolt Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 3897682694,
             "Name": "Arcbolt Grenade - Prismatic",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 3232422679,
             "Name": "Axion Bolt",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1399219,
             "Name": "Coldsnap Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 4265391440,
             "Name": "Coldsnap Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1399216,
             "Name": "Duskfield Grenade",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 4051767608,
             "Name": "Duskfield Grenade - Prismatic",
-            "BaseCooldown": 105,
-            "ChunkEnergyScalar": 0.75
+            "BaseCooldown": 131.7,
+            "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 2202441959,
             "Name": "Firebolt Grenade",
-            "BaseCooldown": 64,
+            "BaseCooldown": 92.2,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2909720723,
             "Name": "Flashbang Grenade",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 4198689901,
             "Name": "Flux Grenade",
-            "BaseCooldown": 152,
-            "ChunkEnergyScalar": 0.5
+            "BaseCooldown": 105.4,
+            "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 1013086087,
             "Name": "Fusion Grenade",
-            "BaseCooldown": 73,
+            "BaseCooldown": 105.4,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 1399217,
             "Name": "Glacier Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 934199459,
             "Name": "Glacier Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2470512752,
             "Name": "Grapple",
-            "BaseCooldown": 82,
-            "ChunkEnergyScalar": 0.85
+            "BaseCooldown": 118.7,
+            "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 1225978592,
             "Name": "Grapple - Prismatic",
-            "BaseCooldown": 82,
-            "ChunkEnergyScalar": 0.85
+            "BaseCooldown": 118.7,
+            "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 1841016428,
             "Name": "Healing Grenade",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 3040080535,
             "Name": "Healing Grenade - Prismatic",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 2581086849,
             "Name": "Incendiary Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 2994412667,
             "Name": "Lightning Grenade",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1547656727,
             "Name": "Magnetic Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 886607940,
             "Name": "Magnetic Grenade - Prismatic",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 1713935764,
             "Name": "Pulse Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1323461861,
             "Name": "Pulse Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1514173218,
             "Name": "Scatter Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 2809342386,
             "Name": "Shackle Grenade",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1517917190,
             "Name": "Shackle Grenade - Prismatic",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 146194908,
             "Name": "Skip Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 2216698406,
             "Name": "Solar Grenade",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2481624867,
             "Name": "Storm Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 4241856103,
             "Name": "Storm Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2265076177,
             "Name": "Suppressor Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 3923577992,
             "Name": "Suppressor Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 3199702642,
             "Name": "Swarm Grenade",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 2842514288,
             "Name": "Swarm Grenade - Prismatic",
-            "BaseCooldown": 105,
+            "BaseCooldown": 151.5,
             "ChunkEnergyScalar": 0.75
         },
         {
             "Hash": 3969294337,
             "Name": "Thermite Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2400634603,
             "Name": "Thermite Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 4228170798,
             "Name": "Threadling Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 3994381207,
             "Name": "Threadling Grenade - Prismatic",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2946990961,
             "Name": "Tripmine Grenade",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1255073825,
             "Name": "Void Spike",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2809141585,
             "Name": "Void Wall",
-            "BaseCooldown": 121,
+            "BaseCooldown": 175.6,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1016030582,
             "Name": "Vortex Grenade",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1048847436,
             "Name": "Vortex Grenade - Prismatic",
-            "BaseCooldown": 152,
+            "BaseCooldown": 219.5,
             "ChunkEnergyScalar": 0.5
         }
     ],
@@ -341,7 +347,8 @@
             "Requirements": [
                 3040080535
             ],
-            "CooldownOverride": 121
+            "CooldownOverride": 175.6,
+            "Notes": "Replacement cooldown at stat 0 before the Warlock override. The sheet lists 159.6 s in its Warlock table, which already includes the Warlock 1.1x grenade regen; the Warlock override (cooldown x0.909) applies on top of this value, giving the same 159.6 s."
         },
         {
             "Hash": 2642597904,
@@ -365,7 +372,7 @@
             "Requirements": [
                 0
             ],
-            "CooldownOverride": 73,
+            "CooldownOverride": 105.4,
             "ChunkEnergyOverride": [
                 1
             ]
@@ -376,7 +383,7 @@
             "Requirements": [
                 0
             ],
-            "CooldownOverride": 152
+            "CooldownOverride": 219.5
         },
         {
             "Hash": 1602994571,
@@ -384,7 +391,7 @@
             "Requirements": [
                 0
             ],
-            "CooldownOverride": 152
+            "CooldownOverride": 219.5
         },
         {
             "Hash": 2271682572,

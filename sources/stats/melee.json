@@ -9,10 +9,16 @@
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
+                    "Type": "Expression",
                     "From": 0,
+                    "To": 70,
+                    "Expression": "1/(1 + (219.5/76 - 1)*x/70 + 0.000298916*x*(x-70))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 71,
                     "To": 100,
-                    "Value": 1
+                    "Expression": "(26600/219.5)/(x + 280)"
                 }
             ]
         },
@@ -78,7 +84,7 @@
         {
             "Hash": 2307689415,
             "Name": "Arcane Needle",
-            "BaseCooldown": 86.5,
+            "BaseCooldown": 125.9,
             "ChunkEnergyScalar": 0.8,
             "ChargeBasedScaling": [
                 1,
@@ -89,7 +95,7 @@
         {
             "Hash": 3644045871,
             "Name": "Arcane Needle - Prismatic",
-            "BaseCooldown": 124,
+            "BaseCooldown": 125.9,
             "ChunkEnergyScalar": 0.8,
             "ChargeBasedScaling": [
                 1,
@@ -100,55 +106,55 @@
         {
             "Hash": 1232050830,
             "Name": "Ball Lightning",
-            "BaseCooldown": 114,
+            "BaseCooldown": 164.6,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 2708585276,
             "Name": "Ballsitic Slam",
-            "BaseCooldown": 114,
+            "BaseCooldown": 164.6,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 1470370539,
             "Name": "Celestial Fire",
-            "BaseCooldown": 112,
+            "BaseCooldown": 162.6,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 1232050831,
             "Name": "Chain Lightning",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 3644045868,
             "Name": "Chain Lightning - Prismatic",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2716335211,
             "Name": "Combination Blow",
-            "BaseCooldown": 40,
+            "BaseCooldown": 58.1,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2657901005,
             "Name": "Combination Blow - Prismatic",
-            "BaseCooldown": 40,
+            "BaseCooldown": 58.1,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2716335210,
             "Name": "Disorienting Blow",
-            "BaseCooldown": 82,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 4094417246,
             "Name": "Frenzied Blade",
-            "BaseCooldown": 99,
+            "BaseCooldown": 143.1,
             "ChunkEnergyScalar": 0.7,
             "ChargeBasedScaling": [
                 1,
@@ -159,7 +165,7 @@
         {
             "Hash": 1980796564,
             "Name": "Frenzied Blade - Prismatic",
-            "BaseCooldown": 141,
+            "BaseCooldown": 143.1,
             "ChunkEnergyScalar": 0.7,
             "ChargeBasedScaling": [
                 1,
@@ -170,43 +176,43 @@
         {
             "Hash": 852252788,
             "Name": "Hammer Strike",
-            "BaseCooldown": 91,
-            "ChunkEnergyScalar": 0.9
+            "BaseCooldown": 131.7,
+            "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 1980796562,
             "Name": "Hammer Strike - Prismatic",
-            "BaseCooldown": 91,
-            "ChunkEnergyScalar": 0.9
+            "BaseCooldown": 131.7,
+            "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 1470370538,
             "Name": "Incinerator Snap",
-            "BaseCooldown": 83,
+            "BaseCooldown": 119.8,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 3644045869,
             "Name": "Incinerator Snap - Prismatic",
-            "BaseCooldown": 83,
+            "BaseCooldown": 119.8,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 4016776972,
             "Name": "Knife Trick",
-            "BaseCooldown": 82,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2657901004,
             "Name": "Knife Trick - Prismatic",
-            "BaseCooldown": 82,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 4016776974,
             "Name": "Lightweight Knife",
-            "BaseCooldown": 100,
+            "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8,
             "ChargeBasedScaling": [
                 1,
@@ -216,121 +222,121 @@
         {
             "Hash": 2543177538,
             "Name": "Penumbral Blast",
-            "BaseCooldown": 101,
+            "BaseCooldown": 146.3,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3644045867,
             "Name": "Penumbral Blast - Prismatic",
-            "BaseCooldown": 101,
+            "BaseCooldown": 146.3,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2299867342,
             "Name": "Pocket Singularity",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 3644045870,
             "Name": "Pocket Singularity - Prismatic",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 4016776973,
             "Name": "Proximity Explosive Knife",
-            "BaseCooldown": 111,
+            "BaseCooldown": 161.3,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 2708585277,
             "Name": "Seismic Strike",
-            "BaseCooldown": 91,
-            "ChunkEnergyScalar": 0.9
+            "BaseCooldown": 131.7,
+            "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 4220332375,
             "Name": "Shield Bash",
-            "BaseCooldown": 91,
-            "ChunkEnergyScalar": 0.9
+            "BaseCooldown": 131.7,
+            "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 4220332374,
             "Name": "Shield Throw",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 1980796560,
             "Name": "Shield Throw - Prismatic",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2028772231,
             "Name": "Shiver Strike",
-            "BaseCooldown": 114,
+            "BaseCooldown": 146.3,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 1980796561,
             "Name": "Shiver Strike - Prismatic",
-            "BaseCooldown": 114,
+            "BaseCooldown": 146.3,
             "ChunkEnergyScalar": 0.7
         },
         {
             "Hash": 1139822081,
             "Name": "Snare Bomb",
-            "BaseCooldown": 90,
+            "BaseCooldown": 130.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2657901007,
             "Name": "Snare Bomb - Prismatic",
-            "BaseCooldown": 90,
+            "BaseCooldown": 130.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 1680616210,
             "Name": "Threaded Spike",
-            "BaseCooldown": 100,
+            "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2657901002,
             "Name": "Threaded Spike - Prismatic",
-            "BaseCooldown": 100,
+            "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 852252789,
             "Name": "Throwing Hammer",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2708585279,
             "Name": "Thunderclap",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 1980796563,
             "Name": "Thunderclap - Prismatic",
-            "BaseCooldown": 91,
+            "BaseCooldown": 131.7,
             "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 4016776975,
             "Name": "Weighted Throwing Knife",
-            "BaseCooldown": 137,
+            "BaseCooldown": 197.9,
             "ChunkEnergyScalar": 0.6
         },
         {
             "Hash": 1341767667,
             "Name": "Withering Blade",
-            "BaseCooldown": 100,
+            "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8,
             "ChargeBasedScaling": [
                 1,
@@ -340,7 +346,7 @@
         {
             "Hash": 2657901006,
             "Name": "Withering Blade - Prismatic",
-            "BaseCooldown": 100,
+            "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8,
             "ChargeBasedScaling": [
                 1,
@@ -348,5 +354,26 @@
             ]
         }
     ],
-    "Overrides": []
+    "Overrides": [
+        {
+            "Hash": 1616346845,
+            "Name": "Prismatic Titan - Subclass",
+            "Requirements": [
+                1980796564
+            ],
+            "Scalar": [
+                1.4285714286
+            ]
+        },
+        {
+            "Hash": 3893112950,
+            "Name": "Prismatic Warlock - Subclass",
+            "Requirements": [
+                3644045871
+            ],
+            "Scalar": [
+                1.4285714286
+            ]
+        }
+    ]
 }

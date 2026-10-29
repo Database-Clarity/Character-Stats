@@ -101,7 +101,7 @@ export const abilitySpec: EntitySpec = {
             exclusiveMin: 0,
             round: 3,
             description:
-                'Base cooldown in seconds. Applicable CooldownOverride values replace this ' +
+                'Base cooldown in seconds at a stat value of 0. Applicable CooldownOverride values replace this ' +
                 'base first (last matching replacement wins in collection order), then ' +
                 'all matching Scalar entries multiply it, then ' +
                 'CooldownScalars[min(stat value, 100)] multiplies the result.',
@@ -204,7 +204,8 @@ export const overrideSpec: EntitySpec = {
             round: 3,
             required: false,
             description:
-                'Replacement base cooldown in seconds for matching Requirements. Applied ' +
+                'Replacement base cooldown in seconds for matching Requirements (at a stat value of 0 ' +
+                'for non-Super abilities). Applied ' +
                 'before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. ' +
                 'If multiple replacements match, the last in collection order wins.',
         }),

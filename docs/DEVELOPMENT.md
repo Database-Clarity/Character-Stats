@@ -128,7 +128,7 @@ Set `published: false` on a field whose source data must be retained and validat
 
 ## Ability cooldown calculations
 
-Class, Grenade and Melee cooldowns apply their `CooldownScalars` curve after base replacements and override multipliers. Super cooldowns are independent of the Super stat. They use `BaseCooldown`, with applicable `CooldownOverride` replacements and `Scalar` multipliers only. `effectiveCooldown` handles both kinds. `calculateCooldown` ignores its curve argument for Super abilities. When a stat has no `CooldownScalars`, both calculators use identity scaling (factor 1), preserving base replacements and override multipliers. `ActiveRegenScalars` and `EnergyGainScalar` still scale Super regeneration and external energy gains.
+Class, Grenade and Melee cooldowns apply their `CooldownScalars` curve after base replacements and override multipliers. Their `BaseCooldown` and `CooldownOverride` values are cooldowns at a stat value of 0, so `CooldownScalars` is 1 at stat 0. Super cooldowns are independent of the Super stat. They use `BaseCooldown`, with applicable `CooldownOverride` replacements and `Scalar` multipliers only. `effectiveCooldown` handles both kinds. `calculateCooldown` ignores its curve argument for Super abilities. When a stat has no `CooldownScalars`, both calculators use identity scaling (factor 1), preserving base replacements and override multipliers. `ActiveRegenScalars` and `EnergyGainScalar` still scale Super regeneration and external energy gains.
 
 ## Movement data and calculations
 

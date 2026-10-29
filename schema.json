@@ -46,7 +46,7 @@
                 "BaseCooldown": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Base cooldown in seconds. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
+                    "description": "Base cooldown in seconds at a stat value of 0. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
                 },
                 "ChunkEnergyScalar": {
                     "type": "number",
@@ -146,7 +146,7 @@
                 "CooldownOverride": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Replacement base cooldown in seconds for matching Requirements. Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
+                    "description": "Replacement base cooldown in seconds for matching Requirements (at a stat value of 0 for non-Super abilities). Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
                 },
                 "Scalar": {
                     "type": "array",
