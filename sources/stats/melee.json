@@ -30,7 +30,7 @@
                 }
             ]
         },
-        "MeleeDamageIncrease": {
+        "PVEMeleeDamageIncrease": {
             "Domain": [
                 100,
                 200
@@ -46,6 +46,27 @@
                         [
                             200,
                             30
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PVPMeleeDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            20
                         ]
                     ]
                 }

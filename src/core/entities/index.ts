@@ -11,6 +11,7 @@ import {
     enumField,
     objectArrayField,
     curve,
+    localeField,
 } from '../fields/builders';
 
 export interface Ability {
@@ -27,6 +28,8 @@ export interface SuperAbility {
     Name: string;
     BaseCooldown: number;
     ActiveRegenScalar: number;
+    BaseDuration?: number;
+    EnhancedDurationTooltip?: string;
     Notes?: string;
 }
 
@@ -149,6 +152,23 @@ export const superAbilitySpec: EntitySpec = {
             min: 0,
             label: 'Active regeneration scalar',
             description: 'Nonnegative active Super regeneration scalar.',
+        }),
+
+        numberField('BaseDuration', {
+            exclusiveMin: 0,
+            round: 2,
+            required: false,
+            label: 'Base duration (s)',
+            description:
+                'Base active duration in seconds. Set only for Supers with a measured ' +
+                'duration benefit from enhanced Super stat.',
+        }),
+
+        localeField('EnhancedDurationTooltip', {
+            required: false,
+            description:
+                'Locale ID for the enhanced-duration tooltip. Set only for Supers with ' +
+                'a measured duration benefit.',
         }),
 
         notesField(),

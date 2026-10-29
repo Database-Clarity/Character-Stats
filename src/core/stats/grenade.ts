@@ -27,13 +27,22 @@ export const grenadeSpec: StatSpec = {
             description: 'Values represent how effective external sources of Grenade Energy are.',
         }),
 
-        curve('GrenadeDamageIncrease', {
+        curve('PVEGrenadeDamageIncrease', {
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
-            label: 'Grenade damage increase (%)',
+            label: 'PvE Grenade damage increase (%)',
             description:
-                'Values represent how much increased damage your Grenade Ability deals ' +
-                'when the Grenade stat is enhanced.',
+                'Percentage increase to Grenade Ability damage in PvE at each enhanced ' +
+                'Grenade stat value. No ability-specific exceptions are currently known.',
+        }),
+
+        curve('PVPGrenadeDamageIncrease', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'PvP Grenade damage increase (%)',
+            description:
+                'Percentage increase to Grenade Ability damage in PvP at each enhanced ' +
+                'Grenade stat value. No ability-specific exceptions are currently known.',
         }),
     ],
 };

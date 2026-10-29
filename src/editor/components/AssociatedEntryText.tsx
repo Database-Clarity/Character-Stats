@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     isRecord,
     resolveLocale,
@@ -7,8 +8,9 @@ import {
 } from '../../core';
 import { useEditor } from '../state/store';
 import { entryLocaleTextIds, updateLocaleText } from '../state/localeText';
+import { useManifest } from '../manifest';
 import { isPreviewAbility, tooltipAbilityContext } from './previewData';
-import { Collapse, Modified } from './EditorPrimitives';
+import { Collapse, Modified, StatControl } from './EditorPrimitives';
 import { LocaleTextField } from './LocaleTextField';
 
 export function AssociatedEntryText({
@@ -27,18 +29,25 @@ export function AssociatedEntryText({
     source: StatSource;
 }) {
     const { locale, originalValues, dispatch } = useEditor();
+    const [statValue, setStatValue] = useState(100);
+    const { lookup, status } = useManifest();
     const ids = entryLocaleTextIds(locale, stat, collection, entitySpec, entry);
     const savedLocale = originalValues['locale/en.json'];
     if (!ids.length) return null;
     if (!isRecord(savedLocale)) throw new Error('Original English locale must be an object');
 
     const ability = isPreviewAbility(entry) ? entry : undefined;
-    const context = tooltipAbilityContext(source, ability, 100);
+    const manifestName =
+        status.state === 'ready' && ability ? lookup(ability.Hash, 'item')?.name : undefined;
+    const context = tooltipAbilityContext(source, ability, statValue, manifestName);
     return (
         <section className="entity-associated-text">
             <div className="section-bar">
                 <strong>Associated text</strong>
             </div>
+            {ability?.BaseDuration !== undefined && (
+                <StatControl label="Preview stat value" value={statValue} onChange={setStatValue} />
+            )}
             {ids.map((id) => {
                 const text = resolveLocale(locale, id) ?? '',
                     old = resolveLocale(savedLocale, id) ?? '',
@@ -62,7 +71,7 @@ export function AssociatedEntryText({
                                 id={id}
                                 source={source}
                                 spec={statSpec}
-                                statValue={100}
+                                statValue={statValue}
                                 context={context}
                             />
                         </Collapse>

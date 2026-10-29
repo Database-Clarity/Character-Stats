@@ -74,7 +74,7 @@ export function validateField(
         if (typeof value !== 'string') {
             return [issue('Please provide a string')];
         }
-        return (spec.required || spec.kind === 'localeRef') && value.trim().length === 0
+        return spec.required && value.trim().length === 0
             ? [issue('Please provide a non-empty string')]
             : [];
     }

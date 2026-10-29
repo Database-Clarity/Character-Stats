@@ -3,158 +3,95 @@
     "Name": "Weapons",
     "Fields": {
         "ReloadSpeed": {
-            "Domain": [
-                0,
-                100
-            ],
+            "Domain": [0, 100],
             "Round": 3,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            100,
-                            0.9
-                        ]
+                        [0, 0],
+                        [100, 10]
                     ]
                 }
             ]
         },
         "Handling": {
-            "Domain": [
-                0,
-                100
-            ],
+            "Domain": [0, 100],
             "Round": 3,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            0,
-                            1
-                        ],
-                        [
-                            100,
-                            0.9
-                        ]
+                        [0, 0],
+                        [100, 10]
                     ]
                 }
             ]
         },
         "NonBossDamageIncrease": {
-            "Domain": [
-                0,
-                100
-            ],
+            "Domain": [0, 100],
             "Round": 2,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            0,
-                            0.15
-                        ],
-                        [
-                            100,
-                            15
-                        ]
+                        [0, 0.15],
+                        [100, 15]
                     ]
                 }
             ]
         },
         "SpecialDamageIncrease": {
-            "Domain": [
-                100,
-                200
-            ],
+            "Domain": [100, 200],
             "Round": 2,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            200,
-                            15
-                        ]
+                        [100, 0],
+                        [200, 15]
                     ]
                 }
             ]
         },
         "PowerDamageIncrease": {
-            "Domain": [
-                100,
-                200
-            ],
+            "Domain": [100, 200],
             "Round": 1,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            200,
-                            10
-                        ]
+                        [100, 0],
+                        [200, 10]
                     ]
                 }
             ]
         },
         "PVPDamageIncrease": {
-            "Domain": [
-                100,
-                200
-            ],
+            "Domain": [100, 200],
             "Round": 2,
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            200,
-                            5
-                        ]
+                        [100, 0],
+                        [200, 5]
                     ]
                 }
             ]
         },
         "LargeAmmoBrickChance": {
-            "Domain": [
-                100,
-                200
-            ],
+            "Domain": [100, 200],
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            200,
-                            100
-                        ]
+                        [100, 0],
+                        [200, 100]
                     ]
                 }
             ]
         }
     },
-    "Notes": "Placeholder field values — replace with tested data."
+    "Notes": "Unverified placeholder values; see docs/DEVELOPMENT.md for duration conversion."
 }

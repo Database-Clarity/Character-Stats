@@ -12,7 +12,7 @@ Stat values in this build are placeholders. Expect most of them to change once w
 
 - The six old stats are gone. The top-level keys are now the manifest hashes of the new stats, as strings: Weapons `2996146975`, Health `392767087`, Class `1943323491`, Grenade `1735777505`, Super `144602215` and Melee `4244567218`.
 - The top-level `Movement` key holds shared movement rules, class base values and movement sources. See the Movement section below.
-- Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Arrays for the enhanced range (101 to 200) have 100 entries, so index 0 is stat 101. Stat values above 100 use the last entry of a 0 to 100 array.
+- Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Enhanced arrays cover 100 to 200 and have 101 entries, so index 0 is stat 100. Stat values above 100 use the last entry of a 0 to 100 array.
 - `schema.json` describes the new shape in full and is the reference for every property.
 - `update.json.schemaVersion` now contains the full semantic version `X.Y.Z`. All compatible v2 releases use `versions/2/`, not a directory named after the full version. Publishing changed consumer data automatically increments the patch and records a dated changelog entry. A code-defined major/minor increase publishes `X.Y.0`, even with identical data, to signal new schema/API support; unchanged data within the same major/minor does not create a release.
 
@@ -44,8 +44,13 @@ Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro
 - `locale/en.json` uses the new keys. The other languages still contain the v1.9 text until translations catch up.
 - Health's PvE damage resistance (not Shield damage resistance) is now a fixed 34.5% in
   `PVEDamageResistance`.
-- Health's shield values follow the same split. `BaseShieldHP` is the Shield HP in every activity, PvE and PvP. `PVEBonusShieldHP` is a 101 to 200 array of extra Shield HP that only applies in PvE. `BaseShieldRechargeDelay` and `BaseShieldRechargeSpeed` are plain numbers for stat values up to 100, and `ShieldRechargeDelay` and `ShieldRechargeSpeed` are 101 to 200 arrays for the enhanced range.
+- Health's shield values follow the same split. `BaseShieldHP` is the Shield HP in every activity, PvE and PvP. `PVEBonusShieldHP` is a 100 to 200 array of extra Shield HP that only applies in PvE. `BaseShieldRechargeDelay` and `BaseShieldRechargeSpeed` are plain numbers for stat values up to 100, and `ShieldRechargeDelay` and `ShieldRechargeSpeed` are 100 to 200 arrays for the enhanced range.
 - `PVPShieldHP` is gone because PvP shields always use `BaseShieldHP`.
+- Enhanced Class stat tooltips use separate PvE and PvP Class Ability damage and
+  raw Overshield HP placeholders. PvP Overshields have 50% damage resistance;
+  resistance is distinct from raw HP, and no PvE Overshield resistance is
+  specified. Each enhanced benefit scales linearly from 0 at stat 100 to its
+  measured maximum at stat 200.
 
 ## v1.9.10 - February 4, 2025
 

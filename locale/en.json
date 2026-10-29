@@ -7,27 +7,35 @@
     "Melee": {
         "Overview": "Melee governs your Melee Ability's passive cooldown and how much Melee Energy you gain from perks.\n\nIncreases Melee Damage when enhanced.",
         "BaseStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and perks that grant you Melee Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Melee Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Melee Ability deals {{MeleeDamageIncrease}}{{Percent}} increased damage."
+        "EnhancedStatTooltip": "Your Melee Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Melee Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Melee Ability deals {{PVEMeleeDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPMeleeDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Grenade": {
         "Overview": "Grenade governs your Grenade Ability's passive cooldown and how much Grenade Energy you gain from perks.\n\nIncreases Grenade Damage when enhanced.\n\nWarlock grenades inherently recharge 10% faster and deal 5%|2.5% more damage in PvE|PvP.",
         "BaseStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown, and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown, and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{GrenadeDamageIncrease}}{{Percent}} increased damage."
+        "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown, and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{PVEGrenadeDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPGrenadeDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Super": {
-        "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nIncreases Super Damage when enhanced.",
+        "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nEnhanced Super stat data tracks Super damage changes. Well of Radiance and Ward of Dawn have an enhanced duration benefit; whether that replaces or adds to any Super damage change is unconfirmed.",
         "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage."
+        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} For Well of Radiance and Ward of Dawn, the enhanced benefit is increased duration (shown in their ability details). Whether this replaces or adds to the Super damage increase is unconfirmed. The SuperDamageIncrease value is {{SuperDamageIncrease}}{{Percent}}.",
+        "SuperAbilities": {
+            "4260353953": {
+                "EnhancedDurationTooltip": "Enhanced Super stat increases {{AbilityName}}'s duration by {{SuperDurationIncrease}}{{Percent}}, from {{BaseDuration}}{{Time}} to {{SuperDuration}}{{Time}}. Whether this duration benefit replaces or adds to the Super Damage increase is unconfirmed."
+            },
+            "2274196887": {
+                "EnhancedDurationTooltip": "Enhanced Super stat increases {{AbilityName}}'s duration by {{SuperDurationIncrease}}{{Percent}}, from {{BaseDuration}}{{Time}} to {{SuperDuration}}{{Time}}. Whether this duration benefit replaces or adds to the Super Damage increase is unconfirmed."
+            }
+        }
     },
     "Class": {
         "Overview": "Class governs your Class Ability's passive cooldown and how much Class Ability Energy you gain from perks.\n\nCasting your Class Ability grants you an Overshield when enhanced.",
         "BaseStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants you a(n) {{OvershieldHP}}{{HP}} Overshield."
+        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants {{PVEOvershieldHP}}{{HP}} raw Overshield HP in PvE and {{PVPOvershieldHP}}{{HP}} raw Overshield HP in PvP. PvP Overshields have {{PVPOvershieldDamageResistance}}{{Percent}} damage resistance; this resistance is separate from raw Overshield HP. Your Class Ability deals {{PVEClassAbilityDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPClassAbilityDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Weapons": {
         "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor, Elite, and Miniboss combatants.\n\nWhen enhanced, it increases your weapons' damage against Boss combatants and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
-        "BaseStatTooltip": "Passively grants your weapons {{ReloadSpeed}}{{Scalar}} Reload Speed and {{Handling}}{{Scalar}} Handling.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.",
-        "EnhancedStatTooltip": "Passively grants your weapons {{ReloadSpeed}}{{Scalar}} Reload Speed and {{Handling}}{{Scalar}} Handling.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.\n\n{{Enhancement}} Special and Power weapons deal {{SpecialDamageIncrease}}{{Percent}} and {{PowerDamageIncrease}}{{Percent}} increased damage against Bosses, respectively. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
+        "BaseStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.",
+        "EnhancedStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.\n\n{{Enhancement}} Special and Power weapons deal {{SpecialDamageIncrease}}{{Percent}} and {{PowerDamageIncrease}}{{Percent}} increased damage against Bosses, respectively. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
     },
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling}} when you have {{ChargeCount}} active charges stored up.",
     "Movement": {

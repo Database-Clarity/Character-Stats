@@ -59,6 +59,33 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
         }
         for (const [key, entity] of Object.entries(spec.collections)) {
             issues.push(...validateCollection(entity, source[key], path + '.' + key));
+            if (locale && Array.isArray(source[key])) {
+                source[key].forEach((entry: unknown, index: number) => {
+                    if (!isRecord(entry)) return;
+                    for (const field of entity.fields.filter((item) => item.kind === 'localeRef')) {
+                        const id = entry[field.key];
+                        if (typeof id !== 'string') continue;
+                        const text = resolveLocale(locale, id);
+                        if (text === undefined) {
+                            error(
+                                path + '.' + key + '[' + index + '].' + field.key,
+                                'Missing locale string ' + id,
+                            );
+                        } else {
+                            issues.push(
+                                ...validatePlaceholders(
+                                    text,
+                                    [
+                                        ...spec.fields.map((item) => item.key),
+                                        ...entity.fields.map((item) => item.key),
+                                    ],
+                                    'locale.' + id,
+                                ),
+                            );
+                        }
+                    }
+                });
+            }
         }
         const abilities = collectionItems(source, spec.collections, (entity) =>
             isAbilityRole(entity.role),

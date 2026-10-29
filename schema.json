@@ -9,7 +9,7 @@
         },
         "DynamicLocaleString": {
             "type": "string",
-            "description": "The difference between this and LocaleString is that this one supports dynamically replaceable substrings, such as {{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be filled-in from a property of each Character Stat with the same name. For example, {{FlinchResistance}} will be replaced with the value of the <FlinchResistance> property of the Character Stat. A numeric property can use an explicit formatter, such as {{EnergyGainScalar|ScalarPercent}}, to multiply a scalar by 100 and append a percent sign. This does not change the value of the exported property or the behavior of the existing {{Field}}{{Percent}} form, where Percent is a literal percent sign. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties."
+            "description": "The difference between this and LocaleString is that this one supports dynamically replaceable substrings, such as {{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be filled-in from a property of each Character Stat with the same name. For example, {{FlinchResistance}} will be replaced with the value of the <FlinchResistance> property of the Character Stat. A numeric property can use an explicit formatter, such as {{EnergyGainScalar|ScalarPercent}}, to multiply a scalar by 100 and append a percent sign. This does not change the value of the exported property or the behavior of the existing {{Field}}{{Percent}} form, where Percent is a literal percent sign. AbilityName, ChargeCount, ChargeBasedScaling, BaseDuration and SuperDuration are contextual tokens supplied by the consumer per ability, not stat properties. BaseDuration is the source ability duration; SuperDuration is the calculated duration after applying SuperDurationIncrease where BaseDuration is defined."
         },
         "Overview": {
             "$ref": "#/definitions/LocaleString",
@@ -70,6 +70,10 @@
                 "ChunkEnergyScalar"
             ]
         },
+        "EnhancedDurationTooltip": {
+            "$ref": "#/definitions/DynamicLocaleString",
+            "description": "Locale ID for the enhanced-duration tooltip. Set only for Supers with a measured duration benefit."
+        },
         "SuperAbility": {
             "title": "SuperAbility",
             "type": "object",
@@ -95,6 +99,15 @@
                     "type": "number",
                     "minimum": 0,
                     "description": "Nonnegative active Super regeneration scalar."
+                },
+                "BaseDuration": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Base active duration in seconds. Set only for Supers with a measured duration benefit from enhanced Super stat."
+                },
+                "EnhancedDurationTooltip": {
+                    "$ref": "#/definitions/EnhancedDurationTooltip",
+                    "description": "Locale ID for the enhanced-duration tooltip. Set only for Supers with a measured duration benefit."
                 }
             },
             "required": [
@@ -541,7 +554,7 @@
                 "OrbOfPowerHealthRestore": {
                     "type": "array",
                     "items": {
-                        "type": "integer",
+                        "type": "number",
                         "minimum": 0
                     },
                     "minItems": 101,
@@ -679,7 +692,7 @@
                     "maxItems": 101,
                     "description": "Values represent how effective external sources of Melee Energy are. Stat values 0-100: index = stat value."
                 },
-                "MeleeDamageIncrease": {
+                "PVEMeleeDamageIncrease": {
                     "type": "array",
                     "items": {
                         "type": "number",
@@ -687,7 +700,17 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how much increased damage your Melee Ability deals when the Melee stat is enhanced. Stat values 100-200: index = stat value - 100."
+                    "description": "Percentage increase to Melee Ability damage in PvE at each enhanced Melee stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPMeleeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Melee Ability damage in PvP at each enhanced Melee stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -709,7 +732,8 @@
                 "ChargeBasedScalingTooltip",
                 "CooldownScalars",
                 "EnergyGainScalar",
-                "MeleeDamageIncrease",
+                "PVEMeleeDamageIncrease",
+                "PVPMeleeDamageIncrease",
                 "Abilities",
                 "Overrides"
             ]
@@ -755,7 +779,7 @@
                     "maxItems": 101,
                     "description": "Values represent how effective external sources of Grenade Energy are. Stat values 0-100: index = stat value."
                 },
-                "GrenadeDamageIncrease": {
+                "PVEGrenadeDamageIncrease": {
                     "type": "array",
                     "items": {
                         "type": "number",
@@ -763,7 +787,17 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how much increased damage your Grenade Ability deals when the Grenade stat is enhanced. Stat values 100-200: index = stat value - 100."
+                    "description": "Percentage increase to Grenade Ability damage in PvE at each enhanced Grenade stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPGrenadeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Grenade Ability damage in PvP at each enhanced Grenade stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -785,7 +819,8 @@
                 "ChargeBasedScalingTooltip",
                 "CooldownScalars",
                 "EnergyGainScalar",
-                "GrenadeDamageIncrease",
+                "PVEGrenadeDamageIncrease",
+                "PVPGrenadeDamageIncrease",
                 "Abilities",
                 "Overrides"
             ]
@@ -837,6 +872,16 @@
                     "maxItems": 101,
                     "description": "Values represent how much increased damage your Super Ability deals when the Super stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
+                "SuperDurationIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage duration increase for SuperAbilities that define BaseDuration. Supers without BaseDuration do not receive a duration change through this field. Stat values 100-200: index = stat value - 100."
+                },
                 "SuperAbilities": {
                     "type": "array",
                     "items": {
@@ -857,6 +902,7 @@
                 "EnergyGainScalar",
                 "ActiveRegenScalars",
                 "SuperDamageIncrease",
+                "SuperDurationIncrease",
                 "SuperAbilities",
                 "Overrides"
             ]
@@ -902,15 +948,50 @@
                     "maxItems": 101,
                     "description": "Values represent how effective external sources of Class Ability Energy are. Stat values 0-100: index = stat value."
                 },
-                "OvershieldHP": {
+                "PVEOvershieldHP": {
                     "type": "array",
                     "items": {
-                        "type": "integer",
+                        "type": "number",
                         "minimum": 0
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how much Overshield HP casting your Class Ability grants when the Class stat is enhanced. Stat values 100-200: index = stat value - 100."
+                    "description": "Values represent how much Overshield HP casting your Class Ability grants in PvE when the Class stat is enhanced. This is raw HP, not effective HP after damage resistance. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPOvershieldHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much raw Overshield HP casting your Class Ability grants in PvP when the Class stat is enhanced. PvP Overshields have 50% damage resistance; this value is not effective HP. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPOvershieldDamageResistance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "PvP Overshield damage resistance as a percentage. Do not apply this value to PvE; PvE Overshield damage resistance is unknown."
+                },
+                "PVEClassAbilityDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Class Ability damage in PvE at each enhanced Class stat value. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPClassAbilityDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Class Ability damage in PvP at each enhanced Class stat value. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -932,7 +1013,11 @@
                 "ChargeBasedScalingTooltip",
                 "CooldownScalars",
                 "EnergyGainScalar",
-                "OvershieldHP",
+                "PVEOvershieldHP",
+                "PVPOvershieldHP",
+                "PVPOvershieldDamageResistance",
+                "PVEClassAbilityDamageIncrease",
+                "PVPClassAbilityDamageIncrease",
                 "Abilities",
                 "Overrides"
             ]
@@ -958,21 +1043,23 @@
                     "type": "array",
                     "items": {
                         "type": "number",
-                        "minimum": 0
+                        "minimum": 0,
+                        "maximum": 100
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent a scalar for the Reload animation durations of your weapons at each stat point. Stat values 0-100: index = stat value."
+                    "description": "Values are the percentage decrease in weapon Reload animation duration at each stat point. Convert a duration multiplier to a decrease with (1 - multiplier) × 100. Stat values 0-100: index = stat value."
                 },
                 "Handling": {
                     "type": "array",
                     "items": {
                         "type": "number",
-                        "minimum": 0
+                        "minimum": 0,
+                        "maximum": 100
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent a scalar for the Handling animation durations of your weapons at each stat point. Stat values 0-100: index = stat value."
+                    "description": "Values are the percentage decrease in weapon Handling animation duration at each stat point. Convert a duration multiplier to a decrease with (1 - multiplier) × 100. Stat values 0-100: index = stat value."
                 },
                 "NonBossDamageIncrease": {
                     "type": "array",

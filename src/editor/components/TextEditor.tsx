@@ -9,6 +9,7 @@ import {
 } from '../../core';
 import { useEditor } from '../state/store';
 import { localeEntryLabel, localeTextIds, updateLocaleText } from '../state/localeText';
+import { useManifest } from '../manifest';
 import { isPreviewAbility, previewCollections, tooltipAbilityContext } from './previewData';
 import { Collapse, LongPage, Modified, StatControl } from './EditorPrimitives';
 import { LocaleTextField } from './LocaleTextField';
@@ -26,10 +27,13 @@ export function TextEditor({
     const { locale, originals, dispatch } = useEditor(),
         [statValue, setStatValue] = useState(100),
         [abilityIndex, setAbilityIndex] = useState(0);
+    const { lookup, status } = useManifest();
     const saved = JSON.parse(originals['locale/en.json']!) as LocaleData;
     const abilities = previewCollections(source).abilities.filter(isPreviewAbility),
         ability = abilities[abilityIndex];
-    const context = tooltipAbilityContext(source, ability, statValue);
+    const manifestName =
+        status.state === 'ready' && ability ? lookup(ability.Hash, 'item')?.name : undefined;
+    const context = tooltipAbilityContext(source, ability, statValue, manifestName);
     const ids = [
         ...new Set([
             ...(movementKeys

@@ -142,8 +142,10 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
             'and append a percent sign. This does not change the value of the ' +
             'exported property or the behavior of the existing {{Field}}{{Percent}} ' +
             'form, where Percent is a literal percent sign. ' +
-            'AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens ' +
-            'supplied by the consumer per ability, not stat properties.',
+            'AbilityName, ChargeCount, ChargeBasedScaling, BaseDuration and SuperDuration ' +
+            'are contextual tokens supplied by the consumer per ability, not stat properties. ' +
+            'BaseDuration is the source ability duration; SuperDuration is the calculated ' +
+            'duration after applying SuperDurationIncrease where BaseDuration is defined.',
     };
     for (const f of localeFields(true)) {
         definitions[f.key] = {
@@ -153,6 +155,12 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
         };
     }
     for (const spec of Object.values(entityRegistry)) {
+        for (const field of spec.fields.filter((entry) => entry.kind === 'localeRef')) {
+            definitions[field.key] = {
+                $ref: '#/definitions/DynamicLocaleString',
+                description: field.description,
+            };
+        }
         definitions[spec.name] = entitySchema(spec);
     }
     const topLevelCollections: Record<string, Record<string, JsonSchema>> = {};

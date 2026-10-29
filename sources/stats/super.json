@@ -3,10 +3,7 @@
     "Name": "Super",
     "Fields": {
         "EnergyGainScalar": {
-            "Domain": [
-                0,
-                100
-            ],
+            "Domain": [0, 100],
             "Segments": [
                 {
                     "Type": "Constant",
@@ -17,10 +14,7 @@
             ]
         },
         "ActiveRegenScalars": {
-            "Domain": [
-                0,
-                100
-            ],
+            "Domain": [0, 100],
             "Segments": [
                 {
                     "Type": "Constant",
@@ -31,22 +25,25 @@
             ]
         },
         "SuperDamageIncrease": {
-            "Domain": [
-                100,
-                200
-            ],
+            "Domain": [100, 200],
             "Segments": [
                 {
                     "Type": "Linear",
                     "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            200,
-                            45
-                        ]
+                        [100, 0],
+                        [200, 45]
+                    ]
+                }
+            ]
+        },
+        "SuperDurationIncrease": {
+            "Domain": [100, 200],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [100, 0],
+                        [200, 33]
                     ]
                 }
             ]
@@ -305,13 +302,17 @@
             "Hash": 4260353953,
             "Name": "Ward of Dawn",
             "BaseCooldown": 455,
-            "ActiveRegenScalar": 1.1
+            "ActiveRegenScalar": 1.1,
+            "BaseDuration": 30,
+            "EnhancedDurationTooltip": "Super.SuperAbilities.4260353953.EnhancedDurationTooltip"
         },
         {
             "Hash": 2274196887,
             "Name": "Well of Radiance",
             "BaseCooldown": 455,
-            "ActiveRegenScalar": 1.1
+            "ActiveRegenScalar": 1.1,
+            "BaseDuration": 30,
+            "EnhancedDurationTooltip": "Super.SuperAbilities.2274196887.EnhancedDurationTooltip"
         },
         {
             "Hash": 3683904166,

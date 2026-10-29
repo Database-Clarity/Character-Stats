@@ -203,13 +203,18 @@ function MovementControls({ source }: { source: MovementSource }) {
                                                 aria-label={`${entry.Name} stacks`}
                                             >
                                                 {Array.from(
-                                                    { length: movementStackCount(entry, state.boosted) },
+                                                    {
+                                                        length: movementStackCount(
+                                                            entry,
+                                                            state.boosted,
+                                                        ),
+                                                    },
                                                     (_, index) => index + 1,
                                                 ).map((stacks) => (
                                                     <button
                                                         key={stacks}
                                                         type="button"
-                                                        aria-label={`${stacks} stack${stacks === 1 ? '' : 's'}`}
+                                                        aria-label={`${entry.Name}, ${stacks} stack${stacks === 1 ? '' : 's'}`}
                                                         aria-pressed={state.stacks === stacks}
                                                         onClick={() =>
                                                             update(entry.Hash, { stacks })

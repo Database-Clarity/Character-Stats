@@ -34,7 +34,8 @@ describe('exports and generated schema', () => {
         );
         const melee = result['4244567218'] as Record<string, unknown>;
         expect(melee.CooldownScalars).toHaveLength(101);
-        expect(melee.MeleeDamageIncrease).toHaveLength(101);
+        expect(melee.PVEMeleeDamageIncrease).toHaveLength(101);
+        expect(melee.PVPMeleeDamageIncrease).toHaveLength(101);
         expect(melee.EnergyGainScalar).toEqual(Array(101).fill(0.01));
         expect(melee.Overview).toBe('Melee.Overview');
         expect(melee.ChargeBasedScalingTooltip).toBe('ChargeBasedScaling');
@@ -64,9 +65,12 @@ describe('exports and generated schema', () => {
             'HealthRegenSpeed',
             'BaseShieldRechargeSpeed',
             'ShieldRechargeSpeed',
-            'MeleeDamageIncrease',
-            'GrenadeDamageIncrease',
+            'PVEMeleeDamageIncrease',
+            'PVPMeleeDamageIncrease',
+            'PVEGrenadeDamageIncrease',
+            'PVPGrenadeDamageIncrease',
             'SuperDamageIncrease',
+            'SuperDurationIncrease',
             'NonBossDamageIncrease',
             'SpecialDamageIncrease',
             'PowerDamageIncrease',
@@ -79,8 +83,6 @@ describe('exports and generated schema', () => {
             'CooldownScalars',
             'EnergyGainScalar',
             'ActiveRegenScalars',
-            'ReloadSpeed',
-            'Handling',
         ]) {
             expect(fields.find((field) => field.key === key)?.label?.toLowerCase()).toContain(
                 'scalar',
@@ -154,6 +156,32 @@ describe('exports and generated schema', () => {
             .Super!;
         expect(superDef.required).not.toContain('CooldownScalars');
         expect(superDef.properties).not.toHaveProperty('CooldownScalars');
+    });
+    it('exports optional support Super duration data and a dynamic tooltip reference', () => {
+        const superAbility = superAbilitySpec.fields;
+        expect(superAbility.find((field) => field.key === 'BaseDuration')).toMatchObject({
+            kind: 'number',
+            required: false,
+            exclusiveMin: 0,
+        });
+        expect(superAbility.find((field) => field.key === 'EnhancedDurationTooltip')).toMatchObject(
+            {
+                kind: 'localeRef',
+                required: false,
+            },
+        );
+        const definitions = generateSchema().definitions as Record<
+            string,
+            {
+                description?: string;
+                properties?: Record<string, Record<string, unknown>>;
+            }
+        >;
+        expect(definitions.SuperAbility?.properties?.BaseDuration).toBeDefined();
+        expect(definitions.SuperAbility?.properties?.EnhancedDurationTooltip).toBeDefined();
+        expect(definitions.DynamicLocaleString?.description).toContain(
+            'SuperDuration is the calculated',
+        );
     });
     it('places movement aliases immediately after identity fields in forms, exports and schema', () => {
         const fields = ['Hash', 'Name', 'RefType', 'AlsoMatches', 'Activation', 'Effects'];

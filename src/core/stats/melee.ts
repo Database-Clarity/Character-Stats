@@ -27,13 +27,22 @@ export const meleeSpec: StatSpec = {
             description: 'Values represent how effective external sources of Melee Energy are.',
         }),
 
-        curve('MeleeDamageIncrease', {
+        curve('PVEMeleeDamageIncrease', {
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
-            label: 'Melee damage increase (%)',
+            label: 'PvE Melee damage increase (%)',
             description:
-                'Values represent how much increased damage your Melee Ability deals when ' +
-                'the Melee stat is enhanced.',
+                'Percentage increase to Melee Ability damage in PvE at each enhanced ' +
+                'Melee stat value. No ability-specific exceptions are currently known.',
+        }),
+
+        curve('PVPMeleeDamageIncrease', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'PvP Melee damage increase (%)',
+            description:
+                'Percentage increase to Melee Ability damage in PvP at each enhanced ' +
+                'Melee stat value. No ability-specific exceptions are currently known.',
         }),
     ],
 };

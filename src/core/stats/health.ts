@@ -17,7 +17,7 @@ export const healthSpec: StatSpec = {
 
         curve('OrbOfPowerHealthRestore', {
             domain: [0, 100],
-            items: { min: 0, integer: true },
+            items: { min: 0 },
             description:
                 'How much HP picking up an Orb of Power restores at each Health ' +
                 'stat value. Stat values above 100 use the value at 100.',

@@ -30,17 +30,45 @@
                 }
             ]
         },
-        "GrenadeDamageIncrease": {
+        "PVEGrenadeDamageIncrease": {
             "Domain": [
                 100,
                 200
             ],
             "Segments": [
                 {
-                    "Type": "Constant",
-                    "From": 100,
-                    "To": 200,
-                    "Value": 0
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            65
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PVPGrenadeDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            20
+                        ]
+                    ]
                 }
             ]
         }

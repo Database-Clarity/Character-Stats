@@ -34,5 +34,14 @@ export const superSpec: StatSpec = {
                 'Values represent how much increased damage your Super Ability deals when ' +
                 'the Super stat is enhanced.',
         }),
+
+        curve('SuperDurationIncrease', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'Super duration increase (%)',
+            description:
+                'Percentage duration increase for SuperAbilities that define BaseDuration. ' +
+                'Supers without BaseDuration do not receive a duration change through this field.',
+        }),
     ],
 };

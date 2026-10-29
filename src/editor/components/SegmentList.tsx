@@ -1,4 +1,4 @@
-import type { CurveSegment, Domain } from '../../core';
+import type { CurveSegment, Domain, NumericConstraints } from '../../core';
 import SegmentRow from './SegmentRow';
 
 export default function SegmentList({
@@ -8,6 +8,7 @@ export default function SegmentList({
     segments,
     domain,
     precision,
+    itemConstraints,
     onChange,
 }: {
     file: string;
@@ -16,6 +17,7 @@ export default function SegmentList({
     segments: CurveSegment[];
     domain: Domain;
     precision: number;
+    itemConstraints: NumericConstraints;
     onChange(segments: CurveSegment[]): void;
 }) {
     function update(index: number, next: CurveSegment) {
@@ -40,6 +42,7 @@ export default function SegmentList({
                     segmentCount={segments.length}
                     domain={domain}
                     precision={precision}
+                    itemConstraints={itemConstraints}
                     onChange={(next) => update(index, next)}
                     onMoveUp={() => move(index, index - 1)}
                     onMoveDown={() => move(index, index + 1)}

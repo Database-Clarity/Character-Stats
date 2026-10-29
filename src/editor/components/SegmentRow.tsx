@@ -1,4 +1,4 @@
-import type { CurveSegment, Domain } from '../../core';
+import type { CurveSegment, Domain, NumericConstraints } from '../../core';
 import { Collapse } from './EditorPrimitives';
 import { numberStep } from './numberStep';
 import { NumberInput } from './NumberInput';
@@ -12,6 +12,7 @@ export default function SegmentRow({
     segmentCount,
     domain,
     precision,
+    itemConstraints,
     onChange,
     onMoveUp,
     onMoveDown,
@@ -25,6 +26,7 @@ export default function SegmentRow({
     segmentCount: number;
     domain: Domain;
     precision: number;
+    itemConstraints: NumericConstraints;
     onChange(segment: CurveSegment): void;
     onMoveUp(): void;
     onMoveDown(): void;
@@ -111,6 +113,7 @@ export default function SegmentRow({
                                 <NumberInput
                                     aria-label={`${fieldLabel} segment ${index + 1} Value`}
                                     step={numberStep(segment.Value, { precision })}
+                                    constraints={itemConstraints}
                                     value={Number.isFinite(segment.Value) ? segment.Value : ''}
                                     onChangeValue={(raw) =>
                                         onChange({

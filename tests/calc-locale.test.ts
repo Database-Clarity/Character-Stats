@@ -127,13 +127,15 @@ describe('locale helpers', () => {
         expect(resolveLocale({ Melee: { Overview: 'Text' } }, 'Melee.Overview')).toBe('Text');
         expect(resolveLocale({}, 'Missing')).toBeUndefined();
         const source = fixture().stats.find((s) => s.Name === 'Melee')!;
-        source.Fields.MeleeDamageIncrease = { Values: Array.from({ length: 100 }, (_, i) => i) };
+        source.Fields.PVEMeleeDamageIncrease = {
+            Values: Array.from({ length: 100 }, (_, i) => i),
+        };
         const spec = {
             name: 'Melee',
             hash: source.Hash,
             fields: [
                 {
-                    key: 'MeleeDamageIncrease',
+                    key: 'PVEMeleeDamageIncrease',
                     kind: 'curve' as const,
                     description: '',
                     domain: [101, 200] as const,
@@ -143,14 +145,19 @@ describe('locale helpers', () => {
         };
         expect(
             renderTooltip(
-                '{{MeleeDamageIncrease}}{{Percent}} {{AbilityName}} {{Unknown}}',
+                '{{PVEMeleeDamageIncrease}}{{Percent}} {{AbilityName}} {{AbilityName}} {{Unknown}}',
                 source,
                 spec,
                 150,
-                { AbilityName: 'A' },
+                { AbilityName: 'Manifest ability', ChargeCount: 2 },
             ),
-        ).toBe('49% A {{Unknown}}');
-        expect(renderTooltip('{{MeleeDamageIncrease}}', source, spec, 201)).toBe('99');
+        ).toBe('49% Manifest ability Manifest ability {{Unknown}}');
+        expect(
+            renderTooltip('{{AbilityName}} {{ChargeCount}} {{Unknown}}', source, spec, 150, {
+                ChargeCount: 2,
+            }),
+        ).toBe('{{AbilityName}} 2 {{Unknown}}');
+        expect(renderTooltip('{{PVEMeleeDamageIncrease}}', source, spec, 201)).toBe('99');
     });
     it.each([
         [1, '100%'],

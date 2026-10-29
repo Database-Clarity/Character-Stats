@@ -93,6 +93,35 @@ export function calculateActiveRegen(
     );
 }
 
+export function calculateSuperDuration(
+    ability: SuperAbility,
+    durationIncrease: Curve | undefined,
+    statValue: number,
+): number | undefined {
+    if (!Number.isFinite(statValue)) {
+        throw new Error('Stat value must be finite');
+    }
+    if (ability.BaseDuration === undefined) return undefined;
+    if (durationIncrease === undefined) {
+        throw new Error('Super duration increase curve is required for timed Supers');
+    }
+    const enhancedStat = Math.max(100, Math.min(200, Math.trunc(statValue)));
+    const increase = evaluateCurve(durationIncrease, enhancedStat, [100, 200]);
+    return roundValue(ability.BaseDuration * (1 + increase / 100), 2);
+}
+
+export function effectiveSuperDuration(
+    source: StatSource,
+    ability: SuperAbility,
+    statValue: number,
+): number | undefined {
+    return calculateSuperDuration(
+        ability,
+        source.Fields.SuperDurationIncrease as Curve | undefined,
+        statValue,
+    );
+}
+
 export interface MovementSpeedInput {
     classHash: number;
     activity: 'PVE' | 'PVP';

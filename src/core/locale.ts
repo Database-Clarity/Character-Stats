@@ -16,6 +16,8 @@ export const FORMATTING_TOKENS = {
     AbilityName: '{{AbilityName}}',
     ChargeCount: '{{ChargeCount}}',
     ChargeBasedScaling: '{{ChargeBasedScaling}}',
+    BaseDuration: '{{BaseDuration}}',
+    SuperDuration: '{{SuperDuration}}',
 } as const;
 
 export function resolveLocale(locale: LocaleData, id: string): string | undefined {

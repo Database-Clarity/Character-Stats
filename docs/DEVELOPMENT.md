@@ -90,6 +90,19 @@ adds `%` without changing the exported source value. Consumers that render dynam
 must support this formatter. Unsupported formatter expressions and unknown fields are validation
 errors.
 
+When a measured value differs by activity, model it as separate properties
+(for example, PvE and PvP curves) and place each property in the relevant
+locale text as its own placeholder. Do not add a separate activity selector
+solely to display those values. Keep raw HP and damage resistance as distinct
+properties; do not infer effective HP or an unmeasured activity value.
+
+Weapon ReloadSpeed and Handling curves are percentages by which their animation
+durations decrease, not duration multipliers. Convert a measured duration
+multiplier with `(1 - multiplier) * 100` (for example, `0.9` becomes `10%`
+shorter). The current weapon values are placeholders carried over from the
+previous `1.0` to `0.9` multiplier curves; they are not verified gameplay
+measurements and must be replaced with tested data.
+
 ## Enum and nested-object fields
 
 Enums store strings. Give each allowed value a description; validation and generated schema use the same list:

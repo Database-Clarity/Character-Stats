@@ -31,6 +31,8 @@ const superAbilityKeys = {
     Name: true,
     BaseCooldown: true,
     ActiveRegenScalar: true,
+    BaseDuration: true,
+    EnhancedDurationTooltip: true,
     Notes: true,
 } satisfies Record<keyof SuperAbility, true>;
 

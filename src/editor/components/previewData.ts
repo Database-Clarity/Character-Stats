@@ -1,5 +1,6 @@
 import {
     effectiveCooldown,
+    effectiveSuperDuration,
     type StatSource,
     collectionItems,
     isAbilityRole,
@@ -52,15 +53,27 @@ export function tooltipAbilityContext(
     source: StatSource,
     ability: Ability | SuperAbility | undefined,
     statValue: number,
+    manifestName?: string,
 ) {
     const context: Record<string, string | number> = {};
     if (!ability) return context;
-    context.AbilityName = ability.Name;
+    if (manifestName) context.AbilityName = manifestName;
     try {
         const cooldown = effectiveCooldown(source, ability, statValue, []).cooldown;
         if (Number.isFinite(cooldown)) context.Cooldown = cooldown;
     } catch {
         // Invalid source curves have no calculated preview.
+    }
+    if ('ActiveRegenScalar' in ability && ability.BaseDuration !== undefined) {
+        try {
+            const duration = effectiveSuperDuration(source, ability, statValue);
+            if (duration !== undefined) {
+                context.BaseDuration = ability.BaseDuration;
+                context.SuperDuration = duration;
+            }
+        } catch {
+            // Invalid source curves have no calculated duration preview.
+        }
     }
     if ('ChargeBasedScaling' in ability && ability.ChargeBasedScaling?.length) {
         context.ChargeCount = 0;

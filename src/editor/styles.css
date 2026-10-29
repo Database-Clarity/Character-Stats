@@ -463,6 +463,8 @@
         right: 12px;
         z-index: 15;
         width: 220px;
+        min-width: 0;
+        max-width: min(90vw, 360px);
         max-height: min(65vh, 600px);
         border: 1px solid var(--border);
         border-radius: 3px;

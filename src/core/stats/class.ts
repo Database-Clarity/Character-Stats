@@ -1,5 +1,5 @@
 import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
-import { curve } from '../fields/builders';
+import { curve, numberField } from '../fields/builders';
 import { abilitySpec, overrideSpec } from '../entities';
 
 export const classSpec: StatSpec = {
@@ -28,12 +28,48 @@ export const classSpec: StatSpec = {
                 'Values represent how effective external sources of Class Ability Energy ' + 'are.',
         }),
 
-        curve('OvershieldHP', {
+        curve('PVEOvershieldHP', {
             domain: ENHANCED_STAT_DOMAIN,
-            items: { min: 0, integer: true },
+            items: { min: 0 },
             description:
                 'Values represent how much Overshield HP casting your Class Ability ' +
-                'grants when the Class stat is enhanced.',
+                'grants in PvE when the Class stat is enhanced. This is raw HP, not ' +
+                'effective HP after damage resistance.',
+        }),
+
+        curve('PVPOvershieldHP', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            description:
+                'Values represent how much raw Overshield HP casting your Class Ability ' +
+                'grants in PvP when the Class stat is enhanced. PvP Overshields have ' +
+                '50% damage resistance; this value is not effective HP.',
+        }),
+
+        numberField('PVPOvershieldDamageResistance', {
+            min: 0,
+            label: 'PvP Overshield damage resistance (%)',
+            description:
+                'PvP Overshield damage resistance as a percentage. Do not apply this ' +
+                'value to PvE; PvE Overshield damage resistance is unknown.',
+        }),
+
+        curve('PVEClassAbilityDamageIncrease', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'PvE Class Ability damage increase (%)',
+            description:
+                'Percentage increase to Class Ability damage in PvE at each enhanced ' +
+                'Class stat value.',
+        }),
+
+        curve('PVPClassAbilityDamageIncrease', {
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'PvP Class Ability damage increase (%)',
+            description:
+                'Percentage increase to Class Ability damage in PvP at each enhanced ' +
+                'Class stat value.',
         }),
     ],
 };

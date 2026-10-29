@@ -32,6 +32,14 @@ describe('audit editor regressions', () => {
     it('previews the base ability without stacking overrides', () => {
         expect(tooltipAbilityContext(source, ability, 100).Cooldown).toBe(64);
     });
+    it('uses a manifest ability name for tooltip context and leaves it unavailable otherwise', () => {
+        expect(tooltipAbilityContext(source, ability, 100, 'Manifest Firebolt')).toMatchObject({
+            AbilityName: 'Manifest Firebolt',
+            Cooldown: 64,
+        });
+        expect(tooltipAbilityContext(source, ability, 100)).not.toHaveProperty('AbilityName');
+        expect(tooltipAbilityContext(source, undefined, 100, 'Unused')).toEqual({});
+    });
     it('renders fixed Super cooldowns without a stat control', () => {
         const superAbility = {
             Hash: 7,

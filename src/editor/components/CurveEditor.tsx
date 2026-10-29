@@ -128,6 +128,7 @@ export function CurveEditor({
                     segments={segments}
                     domain={domain}
                     precision={precision}
+                    itemConstraints={spec.items ?? {}}
                     onChange={setSegments}
                 />
             ) : (
@@ -139,7 +140,7 @@ export function CurveEditor({
                                 <NumberInput
                                     step={numberStep(n, { ...spec, precision })}
                                     aria-label={`${spec.label ?? spec.key} value ${domain[0] + i}`}
-                                    constraints={spec}
+                                    constraints={spec.items}
                                     value={Number.isFinite(n) ? Number(n) : ''}
                                     onChangeValue={(raw) =>
                                         onChange({
