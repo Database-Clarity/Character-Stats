@@ -87,9 +87,6 @@
             "2213377102": {
                 "Description": "MIDA Synergy grants lightweight movement bonuses and increases forward movement speed on Submachine Guns. MIDA Multi-Tool increases the forward multiplier even further when equipped."
             },
-            "2470575005": {
-                "Description": "Enhanced MIDA Synergy grants lightweight movement bonuses. Equipping MIDA Multi-Tool increases the forward multiplier further; that value has not been measured. Forward multipliers affect forward walking and sprint, but never strafing."
-            },
             "3072857252": {
                 "Description": "Wraithwalk increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",
                 "Condition": "While invisible with the Heartshadow Catalyst equipped."
