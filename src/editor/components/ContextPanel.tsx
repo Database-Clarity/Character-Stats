@@ -321,10 +321,15 @@ export function ContextPanel({
                                                 <tr key={row.hash}>
                                                     <th>
                                                         {row.member ? (
-                                                            memberIconGrid(
-                                                                [row.member],
-                                                                `Ability affected by ${selectedOverride?.Name ?? 'selected override'}`,
-                                                            )
+                                                            <span className="context-ability">
+                                                                {memberIconGrid(
+                                                                    [row.member],
+                                                                    `Ability affected by ${selectedOverride?.Name ?? 'selected override'}`,
+                                                                )}
+                                                                <span className="context-ability-name">
+                                                                    {row.name}
+                                                                </span>
+                                                            </span>
                                                         ) : (
                                                             <HashIdentity
                                                                 hash={row.hash}

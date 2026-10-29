@@ -161,7 +161,8 @@ Manual hashes remain available without a manifest.
 The stat slider and adjacent numeric input remain pinned above the scrolling
 context content. An ability selection shows only that ability's base cooldown
 and one before-to-after / delta row for each applicable override. An override
-selection still shows the abilities it affects. For a cooldown group,
+selection still shows the abilities it affects, each with its icon (hover or click for
+details) and source name; long names wrap. For a cooldown group,
 **Applicable overrides** shows each override's individual effect and affected
 members, grouping members with identical results; it does not repeat that data
 in a separate aggregate cooldown table. The group view omits the otherwise-empty
