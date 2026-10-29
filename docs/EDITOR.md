@@ -17,6 +17,9 @@ independently; the page itself stays in place. At narrower widths, **Context** i
 item header opens the cooldown panel over the right side; its close button closes it.
 Movement uses the same Context overlay for its speed preview.
 
+Expand the validation bar to list every error and warning; **Go to** opens the stat, tab and
+item that holds the value and focuses the closest field.
+
 Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item names, or hashes.
 Press **/** outside an input to focus the current collection filter (or open Jump).
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes

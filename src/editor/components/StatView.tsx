@@ -59,9 +59,16 @@ export function StatView({
         )
             return;
         const timer = setTimeout(() => {
+            // Validation paths can point below the deepest control, so use the closest ancestor.
             const field = Array.from(
                 root.current?.querySelectorAll<HTMLElement>('[data-field]') ?? [],
-            ).find((el) => el.dataset.field === request.field);
+            )
+                .filter(
+                    (el) =>
+                        el.dataset.field === request.field ||
+                        (!!el.dataset.field && request.field.startsWith(el.dataset.field + '.')),
+                )
+                .sort((a, b) => b.dataset.field!.length - a.dataset.field!.length)[0];
             if (!field) return;
             let ancestor: HTMLElement | null = field;
             while (ancestor) {

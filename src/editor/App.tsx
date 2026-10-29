@@ -6,6 +6,7 @@ import {
     adjacentChange,
     changeAffectsStat,
     identityKey,
+    issueTarget,
     type ChangeTarget,
     type EditorChange,
 } from './state/editing';
@@ -636,14 +637,29 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                                 All sources and English placeholders are valid.
                             </p>
                         ) : (
-                            state.issues.map((issue, i) => (
-                                <p
-                                    key={i}
-                                    className={issue.severity === 'error' ? 'error' : 'warning'}
-                                >
-                                    <code>{issue.path}</code>: {issue.message}
-                                </p>
-                            ))
+                            state.issues.map((issue, i) => {
+                                const target = issueTarget(issue.path, state.sources);
+                                return (
+                                    <div className="validation-issue" key={i}>
+                                        <p
+                                            className={
+                                                issue.severity === 'error' ? 'error' : 'warning'
+                                            }
+                                        >
+                                            <code>{issue.path}</code>: {issue.message}
+                                        </p>
+                                        {target && (
+                                            <button
+                                                type="button"
+                                                aria-label={`Go to ${issue.path}`}
+                                                onClick={() => go(target)}
+                                            >
+                                                Go to
+                                            </button>
+                                        )}
+                                    </div>
+                                );
+                            })
                         )}
                     </div>
                 </details>

@@ -11,6 +11,7 @@ import {
     groupRowsByBaseCooldown,
     hasDraftIdentity,
     indexEntityRows,
+    issueTarget,
     revertRequirementTable,
     selectEntityFormSession,
     sharedEntityFields,
@@ -411,5 +412,47 @@ describe('shared locale change routing', () => {
         });
         expect(changeAffectsStat(changes[0]!, 'Grenade')).toBe(true);
         expect(changeAffectsStat(changes[0]!, 'Health')).toBe(false);
+    });
+});
+
+describe('issueTarget', () => {
+    const sources = {
+        stats: [
+            { Name: 'Health', Fields: {} },
+            { Name: 'Melee', Fields: {}, Abilities: [{ Hash: 11, Name: 'A' }, { Hash: 22 }] },
+        ],
+        movement: { Rules: {}, Sources: [{ Hash: 7 }] },
+    };
+
+    it.each([
+        ['stats[0].Fields.PVPHealthHP', { stat: 'Health', tab: 'Fields', field: 'PVPHealthHP' }],
+        [
+            'stats[0].Fields.CooldownScalars.Segments[1].Expression',
+            { stat: 'Health', tab: 'Fields', field: 'CooldownScalars.Segments.1.Expression' },
+        ],
+        [
+            'stats[1].Abilities[1].Name',
+            { stat: 'Melee', tab: 'Abilities', itemKey: '22', field: 'Name' },
+        ],
+        ['stats[1].Abilities[9].Name', { stat: 'Melee', tab: 'Abilities', field: '' }],
+        ['stats[1].Hash', { stat: 'Melee', tab: 'Fields', field: '' }],
+        ['movement.Rules.WalkSpeed', { stat: 'Movement', tab: 'Fields', field: 'Rules.WalkSpeed' }],
+        [
+            'movement.Sources[0].Effects[0].Type',
+            { stat: 'Movement', tab: 'Sources', itemKey: '7', field: 'Effects.0.Type' },
+        ],
+        [
+            'locale.Melee.BaseStatTooltip',
+            { stat: 'Melee', tab: 'Text', field: 'Melee.BaseStatTooltip' },
+        ],
+        ['locale.ChargeBasedScaling', { stat: 'Melee', tab: 'Text', field: 'ChargeBasedScaling' }],
+    ])('maps %s to its editor location', (path, target) => {
+        expect(issueTarget(path, sources)).toEqual(target);
+    });
+
+    it('ignores paths without an editor location', () => {
+        expect(issueTarget('$', sources)).toBeUndefined();
+        expect(issueTarget('stats[5].Name', sources)).toBeUndefined();
+        expect(issueTarget('sources/stats/melee.json:Abilities', sources)).toBeUndefined();
     });
 });

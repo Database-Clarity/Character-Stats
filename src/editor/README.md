@@ -11,6 +11,9 @@ middleware or configuration changes are needed.
 - `App` mounts the manifest provider and one `EditorProvider`. The compact shell
   provides stat navigation, validation, quick jump (Ctrl/Command+K), semantic change counts,
   previous/next change (Alt+Up/Down), Save, Publish, and account disconnect.
+  Validation issues offer **Go to**: `issueTarget` in `state/editing.ts` maps core issue paths
+  to a stat/tab/item/field target, and navigation falls back to the closest rendered
+  ancestor `data-field` when the path points inside a control.
   Clicked editor selections are recorded in browser history; Back/Forward restores
   the stat, tab, group, or item selection without changing working values. Wheel
   selection bursts are committed after five seconds of inactivity.

@@ -487,6 +487,20 @@ kbd {
     overflow: auto;
     padding: 0 12px;
 }
+.validation-issue {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.validation-issue p {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.validation-issue button {
+    flex: none;
+    margin-top: 6px;
+}
 .validation.has-errors {
     background: #231c1d;
 }

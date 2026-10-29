@@ -373,18 +373,7 @@ export function collectChanges(
             for (const key of new Set([...Object.keys(saved), ...Object.keys(value)])) {
                 const ownSection =
                     key === movementSpec.name || statRegistry.some((spec) => spec.name === key);
-                const consumers = ownSection
-                    ? []
-                    : statRegistry.filter((spec) =>
-                          [
-                              ...localeFields(
-                                  Object.values(spec.collections).some(
-                                      (entity) => entity.role === 'ability',
-                                  ),
-                              ),
-                              ...spec.fields.filter((f) => f.kind === 'localeRef'),
-                          ].some((field) => localeId(spec.name, field.key) === key),
-                      );
+                const consumers = ownSection ? [] : sharedLocaleConsumers(key);
                 const start = changes.length;
                 localeLeaves(
                     file,
@@ -437,6 +426,67 @@ export function collectChanges(
     }
     return changes;
 }
+/** Stats whose text uses a top-level shared locale ID such as `ChargeBasedScaling`. */
+export function sharedLocaleConsumers(key: string) {
+    return statRegistry.filter((spec) =>
+        [
+            ...localeFields(
+                Object.values(spec.collections).some((entity) => entity.role === 'ability'),
+            ),
+            ...spec.fields.filter((f) => f.kind === 'localeRef'),
+        ].some((field) => localeId(spec.name, field.key) === key),
+    );
+}
+
+/**
+ * Maps a core validation path (`stats[3].Abilities[16].Name`, `movement.Rules.WalkSpeed`,
+ * `locale.Melee.BaseStatTooltip`) to the editor location that holds the value. `field` may
+ * point below the deepest rendered control; navigation falls back to its closest ancestor.
+ */
+export function issueTarget(
+    path: string,
+    sources: { stats: readonly unknown[]; movement: unknown },
+): ChangeTarget | undefined {
+    const [root, ...parts] = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+    if (root === 'locale') {
+        const section = parts[0];
+        if (!section) return undefined;
+        const own =
+            section === movementSpec.name || statRegistry.some((spec) => spec.name === section);
+        const stat = own ? section : sharedLocaleConsumers(section)[0]?.name;
+        return stat ? { stat, tab: 'Text', field: parts.join('.') } : undefined;
+    }
+    let source: unknown, rest: string[];
+    if (root === 'stats') {
+        source = sources.stats[Number(parts[0])];
+        rest = parts.slice(1);
+    } else if (root === 'movement') {
+        source = sources.movement;
+        rest = parts;
+    } else return undefined;
+    if (!isRecord(source)) return undefined;
+    const movement = root === 'movement';
+    const spec = movement ? movementSpec : statRegistry.find((s) => s.name === source.Name);
+    if (!spec) return undefined;
+    const [head, index, ...below] = rest;
+    const collections: Readonly<Record<string, EntitySpec>> = spec.collections;
+    const entity = head === undefined ? undefined : collections[head];
+    if (head !== undefined && entity) {
+        const items = source[head];
+        const item = Array.isArray(items) ? items[Number(index)] : undefined;
+        return isRecord(item)
+            ? {
+                  stat: spec.name,
+                  tab: head,
+                  itemKey: String(item[identityKey(entity)]),
+                  field: below.join('.'),
+              }
+            : { stat: spec.name, tab: head, field: '' };
+    }
+    const fieldPath = movement ? rest : head === 'Fields' ? rest.slice(1) : [];
+    return { stat: spec.name, tab: 'Fields', field: fieldPath.join('.') };
+}
+
 export function adjacentChange(
     changes: EditorChange[],
     current: string | undefined,
