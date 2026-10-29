@@ -20,6 +20,30 @@ export const FORMATTING_TOKENS = {
     SuperDuration: '{{SuperDuration}}',
 } as const;
 
+/** Contextual tokens that accept the `ChargeList` formatter. */
+export const CHARGE_LIST_TOKENS = ['ChargeBasedScaling', 'ChargeCount'] as const;
+
+/**
+ * Formats an ability's ChargeBasedScaling array the way tooltips list it per stored charge:
+ * `[1, 1.415, 2.25]` becomes `0%|41.5%|125%` (increase over the base rate) and the charge
+ * counts become `0|1|2`. `{{ChargeBasedScaling|ChargeList}}` and
+ * `{{ChargeCount|ChargeList}}` render these values.
+ */
+export function formatChargeList(scalars: readonly number[]): {
+    ChargeBasedScaling: string;
+    ChargeCount: string;
+} {
+    return {
+        ChargeBasedScaling: scalars
+            .map((scalar) => String(Number(((scalar - 1) * 100).toPrecision(12))) + '%')
+            .join('|'),
+        ChargeCount: scalars.map((_, index) => index).join('|'),
+    };
+}
+
+const isChargeListToken = (key: string): boolean =>
+    (CHARGE_LIST_TOKENS as readonly string[]).includes(key);
+
 export function resolveLocale(locale: LocaleData, id: string): string | undefined {
     let node: unknown = locale;
     for (const key of id.split('.')) {
@@ -43,6 +67,9 @@ export function validatePlaceholders(
             return fieldKeys.includes(key) || Object.hasOwn(FORMATTING_TOKENS, key)
                 ? []
                 : [{ path, message: 'Unknown placeholder {{' + key + '}}', severity: 'error' }];
+        }
+        if (formatter === 'ChargeList' && extra.length === 0 && isChargeListToken(key)) {
+            return [];
         }
         if (formatter !== 'ScalarPercent' || extra.length > 0 || !key) {
             return [
@@ -71,7 +98,13 @@ export function renderTooltip(
 ): string {
     return text.replace(/\{\{\s*([^{}]+?)\s*\}\}/g, (match: string, key: string) => {
         const [fieldKey = '', formatter, ...extra] = key.split('|').map((part) => part.trim());
-        if (formatter === undefined && Object.hasOwn(context, fieldKey)) {
+        if (
+            (formatter === undefined ||
+                (formatter === 'ChargeList' &&
+                    extra.length === 0 &&
+                    isChargeListToken(fieldKey))) &&
+            Object.hasOwn(context, fieldKey)
+        ) {
             return String(context[fieldKey]);
         }
         if (formatter !== undefined && (formatter !== 'ScalarPercent' || extra.length > 0)) {

@@ -144,6 +144,9 @@ export function generateSchema(options: Partial<ExportConfig> = {}): JsonSchema 
             'form, where Percent is a literal percent sign. ' +
             'AbilityName, ChargeCount, ChargeBasedScaling, BaseDuration and SuperDuration ' +
             'are contextual tokens supplied by the consumer per ability, not stat properties. ' +
+            '{{ChargeBasedScaling|ChargeList}} lists the increase per stored charge joined ' +
+            'by | (for example 0%|41.5%|125%) and {{ChargeCount|ChargeList}} lists the matching ' +
+            'charge counts (0|1|2). ' +
             'BaseDuration is the source ability duration; SuperDuration is the calculated ' +
             'duration after applying SuperDurationIncrease where BaseDuration is defined.',
     };

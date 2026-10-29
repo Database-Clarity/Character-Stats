@@ -1,6 +1,7 @@
 import {
     effectiveCooldown,
     effectiveSuperDuration,
+    formatChargeList,
     type StatSource,
     collectionItems,
     isAbilityRole,
@@ -76,8 +77,7 @@ export function tooltipAbilityContext(
         }
     }
     if ('ChargeBasedScaling' in ability && ability.ChargeBasedScaling?.length) {
-        context.ChargeCount = 0;
-        context.ChargeBasedScaling = ability.ChargeBasedScaling[0]!;
+        Object.assign(context, formatChargeList(ability.ChargeBasedScaling));
     }
     return context;
 }

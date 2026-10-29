@@ -4,9 +4,11 @@ import {
     calculateActiveRegen,
     effectiveCooldown,
     extractPlaceholders,
+    formatChargeList,
     validatePlaceholders,
     renderTooltip,
     resolveLocale,
+    statRegistry,
     FORMATTING_TOKENS,
     type Curve,
     type Override,
@@ -185,5 +187,38 @@ describe('locale helpers', () => {
         expect(renderTooltip('{{EnergyGainScalar}}{{Percent}}', source, spec, 0)).toBe(
             String(scalar) + '%',
         );
+    });
+});
+
+describe('ChargeList formatter', () => {
+    it('lists the increase per stored charge and the matching charge counts', () => {
+        expect(formatChargeList([1, 1.415, 2.25])).toEqual({
+            ChargeBasedScaling: '0%|41.5%|125%',
+            ChargeCount: '0|1|2',
+        });
+    });
+
+    it('is valid only on the charge tokens', () => {
+        expect(
+            validatePlaceholders(
+                '{{ChargeBasedScaling|ChargeList}} {{ChargeCount|ChargeList}}',
+                [],
+            ),
+        ).toEqual([]);
+        expect(validatePlaceholders('{{Value|ChargeList}}', ['Value'])).toEqual([
+            expect.objectContaining({
+                message: 'Unknown placeholder formatter in {{Value|ChargeList}}',
+            }),
+        ]);
+    });
+
+    it('renders from the supplied context and leaves the token without one', () => {
+        const source = fixture().stats.find((s) => s.Name === 'Melee')!;
+        const spec = statRegistry.find((s) => s.name === 'Melee')!;
+        const text = 'by {{ChargeBasedScaling|ChargeList}} with {{ChargeCount|ChargeList}}';
+        expect(renderTooltip(text, source, spec, 0, formatChargeList([1, 1.35, 1.7]))).toBe(
+            'by 0%|35%|70% with 0|1|2',
+        );
+        expect(renderTooltip(text, source, spec, 0)).toBe(text);
     });
 });

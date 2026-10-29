@@ -90,6 +90,13 @@ adds `%` without changing the exported source value. Consumers that render dynam
 must support this formatter. Unsupported formatter expressions and unknown fields are validation
 errors.
 
+`{{ChargeBasedScaling|ChargeList}}` and `{{ChargeCount|ChargeList}}` mark the per-charge list
+format from the [CBSD example](CBSD_example.md): the ability's `ChargeBasedScaling` scalars
+become their increase over the base rate joined by `|` (`[1, 1.415, 2.25]` →
+`0%|41.5%|125%`), and the charge counts become `0|1|2`. Core `formatChargeList` produces both
+strings. `ChargeList` is valid only on these two contextual tokens; the bare tokens remain valid
+and mean the same thing.
+
 When a measured value differs by activity, model it as separate properties
 (for example, PvE and PvP curves) and place each property in the relevant
 locale text as its own placeholder. Do not add a separate activity selector
