@@ -16,6 +16,7 @@ export function AbilityGroupEditor({
     hasContext,
     contextOpen,
     onToggleContext,
+    onBack,
     onOpenMember,
     onChange,
 }: {
@@ -31,6 +32,7 @@ export function AbilityGroupEditor({
     hasContext: boolean;
     contextOpen: boolean;
     onToggleContext(): void;
+    onBack(): void;
     onOpenMember(member: Record<string, unknown>): void;
     onChange(next: Record<string, unknown>[]): void;
 }) {
@@ -39,6 +41,9 @@ export function AbilityGroupEditor({
     return (
         <section className="item-editor" aria-label="Edit cooldown group">
             <header className="pane-header editor-header">
+                <button className="list-back" type="button" onClick={onBack}>
+                    ← List
+                </button>
                 <div className="cooldown-group-title">
                     <strong>Cooldown group</strong>
                     <span className="muted">

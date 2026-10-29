@@ -39,7 +39,9 @@ middleware or configuration changes are needed.
   source/deleted rows, and per-item actions. Hash edits keep the selected item and
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
   portaled outside scrolling panes, so it cannot be clipped by list boundaries.
-  On widths below 1280px, Context becomes an explicitly toggled side overlay.
+  On widths below 1280px, Context becomes an explicitly toggled side overlay. At 600px
+  and below the list and the editor take turns in one column: selecting an item or group
+  shows its editor, and **← List** (or browser Back) returns to the list.
 - `RequirementEditor` handles reference arrays with subclass/parallel-column
   semantics; `ReferenceArrayInput` handles ordinary `intArray` + `itemRef` fields.
   Reference chips, grouped pickers, and enabled parallel columns use `lengthOf`, not field

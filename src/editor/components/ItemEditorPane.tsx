@@ -30,6 +30,7 @@ export function ItemEditorPane({
     draftReady,
     actions,
     onToggleContext,
+    onBack,
     onAddDraft,
     onDiscardDraft,
     onRestoreDeleted,
@@ -59,6 +60,8 @@ export function ItemEditorPane({
     draftReady: boolean;
     actions: ItemAction[];
     onToggleContext(): void;
+    /** Returns to the item list where list and editor share one column (phones). */
+    onBack(): void;
     onAddDraft(): void;
     onDiscardDraft(): void;
     onRestoreDeleted(): void;
@@ -68,6 +71,9 @@ export function ItemEditorPane({
     return (
         <section className="item-editor">
             <header className="pane-header editor-header">
+                <button className="list-back" type="button" onClick={onBack}>
+                    ← List
+                </button>
                 <div>
                     {editorValue ? (
                         Number.isFinite(hash) ? (

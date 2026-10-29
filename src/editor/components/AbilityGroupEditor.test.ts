@@ -33,6 +33,7 @@ describe('cooldown group member details', () => {
                 hasContext: false,
                 contextOpen: false,
                 onToggleContext: () => {},
+                onBack: () => {},
                 onOpenMember: () => {},
                 onChange: () => {},
             }),

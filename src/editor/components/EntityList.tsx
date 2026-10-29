@@ -266,7 +266,7 @@ export function EntityList({
     return (
         <div
             ref={layout}
-            className={`entity-layout ${stat === 'Movement' ? 'movement-preview-layout ' : ''}${contextOpen ? 'context-open ' : ''}${hasContext ? '' : 'without-context'}`}
+            className={`entity-layout ${stat === 'Movement' ? 'movement-preview-layout ' : ''}${contextOpen ? 'context-open ' : ''}${selected !== null || editingGroup ? 'detail-open ' : ''}${hasContext ? '' : 'without-context'}`}
         >
             <EntityRows
                 collection={collection}
@@ -306,6 +306,7 @@ export function EntityList({
                     hasContext={hasContext}
                     contextOpen={contextOpen}
                     onToggleContext={() => setContextOpen(!contextOpen)}
+                    onBack={() => navigateItem(null, 'click')}
                     onOpenMember={(member) => openMember(collection, String(member[idKey]))}
                     onChange={onChange}
                 />
@@ -336,6 +337,7 @@ export function EntityList({
                         editorValue && selected !== 'draft' ? actions(editorValue, deleted) : []
                     }
                     onToggleContext={() => setContextOpen(!contextOpen)}
+                    onBack={() => navigateItem(null, 'click')}
                     onAddDraft={addDraftToList}
                     onDiscardDraft={() => {
                         setDraft();

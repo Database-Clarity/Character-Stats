@@ -674,8 +674,6 @@ th {
     padding: 8px 4px;
 }
 .requirements-editor .help {
-    max-height: 32px;
-    overflow: hidden;
     margin-bottom: 12px;
 }
 .requirement-table th {
@@ -683,9 +681,13 @@ th {
     position: relative;
     font-size: 11px;
 }
+/* Narrow editors scroll the table sideways rather than splitting header words. */
+.requirement-table {
+    min-width: 380px;
+}
 .requirement-table th .check {
     align-items: start;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
     font-size: 10px;
     gap: 6px;
 }

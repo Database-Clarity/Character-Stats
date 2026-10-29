@@ -16,6 +16,8 @@ icons and change counts. Tabs and list rows also indicate changes. Each pane scr
 independently; the page itself stays in place. At narrower widths, **Context** in the
 item header opens the cooldown panel over the right side; its close button closes it.
 Movement uses the same overlay for its speed preview; open it with **Speed preview**.
+On phones (600px and below) a collection shows either its list or the selected item;
+use **← List** or browser Back to return to the list.
 
 Expand the validation bar to list every error and warning; **Go to** opens the stat, tab and
 item that holds the value and focuses the closest field.

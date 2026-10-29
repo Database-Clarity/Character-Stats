@@ -479,3 +479,23 @@ span[role='img']::after {
         grid-template-columns: 180px minmax(0, 1fr);
     }
 }
+
+/* Phones: the list and the selected item's editor take turns in one column. */
+.list-back {
+    display: none;
+}
+@media (max-width: 600px) {
+    .entity-layout,
+    .entity-layout.without-context {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .entity-layout.detail-open > .entity-list,
+    .entity-layout:not(.detail-open) > .item-editor {
+        display: none;
+    }
+    .list-back {
+        display: inline-block;
+        flex: none;
+        font-size: 11px;
+    }
+}
