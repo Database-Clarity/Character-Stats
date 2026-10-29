@@ -21,7 +21,7 @@
         },
         "EnhancedStatTooltip": {
             "$ref": "#/definitions/DynamicLocaleString",
-            "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+            "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
         },
         "ChargeBasedScalingTooltip": {
             "$ref": "#/definitions/DynamicLocaleString",
@@ -291,6 +291,7 @@
                         "ForwardMultiplier",
                         "SprintMultiplier",
                         "GroundedMultiplier",
+                        "GroundedNonSprintMultiplier",
                         "OverweightMultiplier",
                         "ADSMultiplier"
                     ],
@@ -310,6 +311,10 @@
                         {
                             "const": "GroundedMultiplier",
                             "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                        },
+                        {
+                            "const": "GroundedNonSprintMultiplier",
+                            "description": "Multiply grounded movement except sprint; does not affect jump height."
                         },
                         {
                             "const": "OverweightMultiplier",
@@ -386,6 +391,7 @@
                         "maximum": 4294967295
                     },
                     "minItems": 1,
+                    "uniqueItems": true,
                     "description": "Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once."
                 },
                 "Activation": {
@@ -425,6 +431,7 @@
                                     "ForwardMultiplier",
                                     "SprintMultiplier",
                                     "GroundedMultiplier",
+                                    "GroundedNonSprintMultiplier",
                                     "OverweightMultiplier",
                                     "ADSMultiplier"
                                 ],
@@ -444,6 +451,10 @@
                                     {
                                         "const": "GroundedMultiplier",
                                         "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                                    },
+                                    {
+                                        "const": "GroundedNonSprintMultiplier",
+                                        "description": "Multiply grounded movement except sprint; does not affect jump height."
                                     },
                                     {
                                         "const": "OverweightMultiplier",
@@ -515,7 +526,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "FlinchResistance": {
                     "type": "array",
@@ -525,7 +536,7 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Percentage flinch resistance while aiming down sights at each Health stat value. Stat values above 100 use the value at 100. Stat values 0-100: index = stat value."
+                    "description": "Percentage ADS-only flinch resistance at each Health stat value. Stat values above 100 use the value at 100. Stat values 0-100: index = stat value."
                 },
                 "OrbOfPowerHealthRestore": {
                     "type": "array",
@@ -538,12 +549,12 @@
                     "description": "How much HP picking up an Orb of Power restores at each Health stat value. Stat values above 100 use the value at 100. Stat values 0-100: index = stat value."
                 },
                 "PVPHealthHP": {
-                    "type": "integer",
+                    "type": "number",
                     "minimum": 0,
                     "description": "This number represents how much HP your Health has in most PVP activities."
                 },
                 "PVEHealthHP": {
-                    "type": "integer",
+                    "type": "number",
                     "minimum": 0,
                     "description": "This number represents how much HP your Health has in PVE activities."
                 },
@@ -558,19 +569,19 @@
                     "description": "This number represents how fast your Health regens is % of total Health per second. Total Health can be found in the <PVPHealthHP> and <PVEHealthHP> properties."
                 },
                 "BaseShieldHP": {
-                    "type": "integer",
+                    "type": "number",
                     "minimum": 0,
                     "description": "How much HP your Shields have in all activities (PVE and PVP), independent of the Health stat value."
                 },
                 "PVEBonusShieldHP": {
                     "type": "array",
                     "items": {
-                        "type": "integer",
+                        "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Extra Shield HP in PVE activities at each enhanced Health stat value, added on top of <BaseShieldHP>. Below 101 there is no bonus. Does not apply in PVP. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Extra Shield HP in PVE activities at each enhanced Health stat value, added on top of <BaseShieldHP>. Below 101 there is no bonus. Does not apply in PVP. Stat values 100-200: index = stat value - 100."
                 },
                 "BaseShieldRechargeDelay": {
                     "type": "number",
@@ -583,9 +594,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "How many seconds after taking damage your Shields start recharging at each enhanced Health stat value. Below 101, use <BaseShieldRechargeDelay>. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "How many seconds after taking damage your Shields start recharging at each enhanced Health stat value. Below 101, use <BaseShieldRechargeDelay>. Stat values 100-200: index = stat value - 100."
                 },
                 "BaseShieldRechargeSpeed": {
                     "type": "number",
@@ -598,14 +609,14 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "How fast your Shields recharge, in % of total Shield HP per second, at each enhanced Health stat value. Below 101, use <BaseShieldRechargeSpeed>. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "How fast your Shields recharge, in % of total Shield HP per second, at each enhanced Health stat value. Below 101, use <BaseShieldRechargeSpeed>. Stat values 100-200: index = stat value - 100."
                 },
                 "PVEDamageResistance": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "This number represents the percentage damage resistance granted in PVE activities, independent of the Health stat value. The current value is 34.5."
+                    "description": "This number represents the percentage damage resistance applied to Health, not Shields, in PVE activities, independent of the Health stat value. The current value is 34.5."
                 }
             },
             "required": [
@@ -642,7 +653,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
@@ -674,9 +685,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage your Melee Ability deals when the Melee stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your Melee Ability deals when the Melee stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -718,7 +729,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
@@ -750,9 +761,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage your Grenade Ability deals when the Grenade stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your Grenade Ability deals when the Grenade stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -794,7 +805,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "EnergyGainScalar": {
                     "type": "array",
@@ -822,9 +833,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage your Super Ability deals when the Super stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your Super Ability deals when the Super stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "SuperAbilities": {
                     "type": "array",
@@ -865,7 +876,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "ChargeBasedScalingTooltip": {
                     "$ref": "#/definitions/ChargeBasedScalingTooltip",
@@ -897,9 +908,9 @@
                         "type": "integer",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much Overshield HP casting your Class Ability grants when the Class stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much Overshield HP casting your Class Ability grants when the Class stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -941,7 +952,7 @@
                 },
                 "EnhancedStatTooltip": {
                     "$ref": "#/definitions/EnhancedStatTooltip",
-                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
                 },
                 "ReloadSpeed": {
                     "type": "array",
@@ -979,9 +990,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage Special weapons deal against Bosses when the Weapons stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage Special weapons deal against Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "PowerDamageIncrease": {
                     "type": "array",
@@ -989,9 +1000,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage Power weapons deal against Bosses when the Weapons stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage Power weapons deal against Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "PVPDamageIncrease": {
                     "type": "array",
@@ -999,9 +1010,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent how much increased damage your weapons deal against Players when the Weapons stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your weapons deal against Players when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
                 },
                 "LargeAmmoBrickChance": {
                     "type": "array",
@@ -1009,9 +1020,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 100,
-                    "maxItems": 100,
-                    "description": "Values represent the chance of spawning Large Ammo Bricks through the Ammo Meter system when the Weapons stat is enhanced. Stat values 101-200: index = stat value - 101."
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent the chance of spawning Large Ammo Bricks through the Ammo Meter system when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
                 }
             },
             "required": [

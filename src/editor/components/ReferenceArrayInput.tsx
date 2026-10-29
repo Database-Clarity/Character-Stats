@@ -17,17 +17,27 @@ export function ReferenceArrayInput({
 }) {
     const [picker, setPicker] = useState(false);
     const [manual, setManual] = useState('');
+    const [duplicateError, setDuplicateError] = useState<string>();
     const refs: unknown[] = Array.isArray(value) ? value : [];
     const full = spec.maxItems !== undefined && refs.length >= spec.maxItems;
+    const candidateIssues =
+        manual.trim() === ''
+            ? []
+            : validateField(
+                  { ...spec, required: true, minItems: 1 },
+                  [...refs, Number(manual)],
+                  {},
+              );
     const canAdd =
-        manual.trim() !== '' &&
-        validateField(
-            { ...spec, required: true, minItems: 1 },
-            [...refs, Number(manual)],
-            {},
-        ).every((issue) => issue.severity !== 'error');
+        manual.trim() !== '' && candidateIssues.every((issue) => issue.severity !== 'error');
     function add(hash: number) {
+        if (spec.uniqueItems && refs.includes(hash)) {
+            setDuplicateError(`Duplicate ${spec.key} reference: ${hash}`);
+            setPicker(false);
+            return;
+        }
         onChange([...refs, hash]);
+        setDuplicateError(undefined);
         setPicker(false);
         setManual('');
     }
@@ -73,12 +83,23 @@ export function ReferenceArrayInput({
                             step={1}
                             constraints={{ min: 0, max: 4294967295 }}
                             value={manual}
-                            onChangeValue={setManual}
+                            onChangeValue={(next) => {
+                                setManual(next);
+                                setDuplicateError(undefined);
+                            }}
                         />
                     </label>
                     <button disabled={full || !canAdd} onClick={() => add(Number(manual))}>
                         Add hash
                     </button>
+                    {duplicateError && <p className="error">{duplicateError}</p>}
+                    {candidateIssues
+                        .filter((issue) => issue.message.startsWith('Duplicate'))
+                        .map((issue, index) => (
+                            <p className="error" key={index}>
+                                {issue.message}
+                            </p>
+                        ))}
                 </>
             )}
             {picker && (

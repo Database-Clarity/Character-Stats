@@ -28,6 +28,7 @@ export interface FieldSpec extends NumericConstraints {
     description: string;
     minItems?: number;
     maxItems?: number;
+    uniqueItems?: boolean;
     lengthOf?: string;
     items?: NumericConstraints & { integer?: boolean; precision?: number };
     domain?: Domain;

@@ -6,35 +6,126 @@
 .movement-rules-layout {
     grid-template-columns: minmax(0, 1fr) 340px;
 }
-.movement-context .inline {
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 8px;
-    margin: 0 0 4px;
+@media (min-width: 1280px) {
+    .movement-preview-layout {
+        grid-template-columns: 248px minmax(0, 1fr) 25rem;
+    }
 }
-.movement-result {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 4px 12px;
-    border-top: 1px solid var(--border);
-    margin-top: 8px;
-    padding-top: 8px;
+.movement-settings {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+    padding: 8px;
+    border-bottom: 1px solid var(--border);
+    background: #191c21;
+}
+.movement-settings .inline {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 6px;
+    margin: 0;
     font-size: 11px;
 }
-.movement-result > strong {
-    color: var(--accent);
-    font-size: 18px;
+.movement-settings .inline select {
+    max-width: 100%;
 }
-.movement-result > .muted {
-    flex-basis: 100%;
+.movement-summary {
+    flex-shrink: 0;
+    padding: 6px 8px 8px;
+    border-bottom: 1px solid var(--border);
+    background: #191c21;
+}
+.movement-summary-heading,
+.movement-source-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+.movement-summary-heading > strong,
+.movement-source-heading > strong {
+    font-size: 11px;
+}
+.movement-summary-heading > span,
+.movement-source-heading > small {
+    color: var(--muted);
+    font-size: 10px;
+}
+.movement-stats {
+    display: grid;
+    gap: 2px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.movement-stat {
+    display: grid;
+    grid-template-columns: 46px minmax(64px, 1fr) 64px minmax(84px, 1.1fr);
+    align-items: center;
+    gap: 2px 4px;
+    min-width: 0;
+    padding: 3px 4px;
+    border-bottom: 1px solid #2a2e35;
+    font-variant-numeric: tabular-nums;
+}
+.movement-stat-label {
+    min-width: 0;
+    color: #c3c8d2;
+    font-size: 11px;
+}
+.movement-stat-value {
+    min-width: 0;
+}
+.movement-stat-value > strong {
+    font-size: 11px;
+    white-space: nowrap;
+}
+.movement-stat-cap {
+    font-size: 9px;
+    white-space: nowrap;
+}
+.movement-delta {
+    justify-self: end;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.movement-delta--increase {
+    color: var(--accent);
+}
+.movement-delta--decrease {
+    color: var(--error);
+}
+.movement-delta--neutral {
+    color: var(--muted);
+}
+.movement-stat-error {
+    grid-column: 2 / -1;
+    color: var(--error);
+    font-size: 10px;
+    overflow-wrap: anywhere;
+}
+.movement-source-selection {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    padding: 6px 8px 8px;
+}
+.movement-source-selection > .help {
+    flex-shrink: 0;
+    margin: 4px 0 6px;
+}
+.movement-source-list {
+    flex: 1;
 }
 .movement-source {
-    padding: 8px 0;
+    padding: 6px 0;
     border-bottom: 1px solid var(--border);
 }
 .movement-source > small {
     display: block;
     margin-left: 22px;
+    font-size: 10px;
 }
 .movement-source-controls {
     display: flex;
@@ -50,8 +141,30 @@
     align-items: center;
     margin: 0;
 }
-.movement-source-controls .stepped-number-input {
-    width: 52px;
+.movement-stack-control {
+    display: flex;
+    flex: 1 1 100%;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+.movement-stack-control > span {
+    color: var(--muted);
+    font-size: 10px;
+}
+.movement-stack-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    max-width: 100%;
+}
+.movement-stack-options > button {
+    min-width: 24px;
+    min-height: 23px;
+    padding: 1px 5px;
+    font-size: 10px;
+    line-height: 16px;
 }
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -93,6 +206,9 @@
         z-index: 20;
         border-left: 1px solid #687280;
     }
+    .movement-preview-layout.context-open > .context-slot {
+        min-width: min(380px, 100%);
+    }
     .context-close {
         display: block;
         position: absolute;
@@ -103,6 +219,60 @@
     }
     .context .pane-header {
         padding-right: 44px;
+    }
+    .movement-context .pane-header {
+        padding-right: 12px;
+    }
+    .entity-layout.movement-preview-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: minmax(140px, 0.62fr) minmax(420px, 1fr);
+        overflow-y: auto;
+    }
+    .movement-preview-layout > .entity-list {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .movement-preview-layout > .item-editor {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .movement-preview-layout > .context-slot,
+    .movement-preview-layout.context-open > .context-slot {
+        display: block;
+        position: static;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+        border-top: 1px solid var(--border);
+        border-left: 0;
+        overflow: hidden;
+    }
+    .movement-preview-layout .context-close,
+    .movement-preview-layout .context-toggle {
+        display: none;
+    }
+    .entity-layout.movement-rules-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(140px, 0.62fr) minmax(420px, 1fr);
+        overflow-y: auto;
+    }
+    .movement-rules-layout > .item-editor {
+        grid-row: 1;
+    }
+    .movement-rules-layout > .context-slot {
+        display: block;
+        position: static;
+        grid-row: 2;
+        min-width: 0;
+        border-top: 1px solid var(--border);
+        border-left: 0;
+        overflow: hidden;
+    }
+    .movement-rules-layout .context-close,
+    .movement-rules-layout .context-toggle {
+        display: none;
     }
     .field {
         grid-template-columns: 152px minmax(0, 1fr);
@@ -118,6 +288,12 @@
     }
     .text-controls .help {
         display: none;
+    }
+}
+@media (max-width: 480px) {
+    .movement-source-selection > .help {
+        font-size: 10px;
+        line-height: 13px;
     }
 }
 @media (max-width: 1050px) {

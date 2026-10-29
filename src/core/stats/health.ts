@@ -1,5 +1,5 @@
-import type { StatSpec } from './types';
-import { curve, integerField, numberField } from '../fields/builders';
+import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
+import { curve, numberField } from '../fields/builders';
 
 export const healthSpec: StatSpec = {
     name: 'Health',
@@ -9,10 +9,10 @@ export const healthSpec: StatSpec = {
         curve('FlinchResistance', {
             domain: [0, 100],
             items: { min: 0 },
-            label: 'Flinch resistance (%)',
+            label: 'ADS-only flinch resistance (%)',
             description:
-                'Percentage flinch resistance while aiming down sights at each ' +
-                'Health stat value. Stat values above 100 use the value at 100.',
+                'Percentage ADS-only flinch resistance at each Health stat value. ' +
+                'Stat values above 100 use the value at 100.',
         }),
 
         curve('OrbOfPowerHealthRestore', {
@@ -23,13 +23,13 @@ export const healthSpec: StatSpec = {
                 'stat value. Stat values above 100 use the value at 100.',
         }),
 
-        integerField('PVPHealthHP', {
+        numberField('PVPHealthHP', {
             min: 0,
             description:
                 'This number represents how much HP your Health has in most PVP ' + 'activities.',
         }),
 
-        integerField('PVEHealthHP', {
+        numberField('PVEHealthHP', {
             min: 0,
             description:
                 'This number represents how much HP your Health has in PVE ' + 'activities.',
@@ -51,7 +51,7 @@ export const healthSpec: StatSpec = {
                 'and <PVEHealthHP> properties.',
         }),
 
-        integerField('BaseShieldHP', {
+        numberField('BaseShieldHP', {
             min: 0,
             description:
                 'How much HP your Shields have in all activities (PVE and PVP), ' +
@@ -59,8 +59,8 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('PVEBonusShieldHP', {
-            domain: [101, 200],
-            items: { min: 0, integer: true },
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
             description:
                 'Extra Shield HP in PVE activities at each enhanced Health stat ' +
                 'value, added on top of <BaseShieldHP>. Below 101 there is no ' +
@@ -75,7 +75,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('ShieldRechargeDelay', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:
                 'How many seconds after taking damage your Shields start ' +
@@ -92,7 +92,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('ShieldRechargeSpeed', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Shield recharge speed (%/s)',
             description:
@@ -103,11 +103,11 @@ export const healthSpec: StatSpec = {
 
         numberField('PVEDamageResistance', {
             min: 0,
-            label: 'PVE damage resistance (%)',
+            label: 'PVE Health Damage Resist (%)',
             description:
-                'This number represents the percentage damage resistance granted ' +
-                'in PVE activities, independent of the Health stat value. The ' +
-                'current value is 34.5.',
+                'This number represents the percentage damage resistance applied ' +
+                'to Health, not Shields, in PVE activities, independent of the ' +
+                'Health stat value. The current value is 34.5.',
         }),
     ],
 };

@@ -124,19 +124,27 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
             issues.push(...validateCollection(spec, movement[key], 'movement.' + key));
         }
         if (Array.isArray(movement.Sources)) {
-            const sourceHashes = new Set<number>();
+            const sourceHashes = new Map<number, { sourceIndex: number; isPrimary: boolean }>();
             movement.Sources.forEach((source: unknown, index: number) => {
                 if (!isRecord(source)) return;
-                const registerHash = (hash: unknown, path: string) => {
+                const registerHash = (hash: unknown, path: string, isPrimary: boolean) => {
                     if (typeof hash !== 'number') return;
-                    if (sourceHashes.has(hash))
+                    const previous = sourceHashes.get(hash);
+                    if (
+                        previous &&
+                        (previous.sourceIndex !== index || previous.isPrimary || isPrimary)
+                    )
                         error(path, 'Duplicate movement source hash or alias: ' + hash);
-                    sourceHashes.add(hash);
+                    if (!previous) sourceHashes.set(hash, { sourceIndex: index, isPrimary });
                 };
-                registerHash(source.Hash, `movement.Sources[${index}].Hash`);
+                registerHash(source.Hash, `movement.Sources[${index}].Hash`, true);
                 if (Array.isArray(source.AlsoMatches))
                     source.AlsoMatches.forEach((hash: unknown, aliasIndex: number) =>
-                        registerHash(hash, `movement.Sources[${index}].AlsoMatches[${aliasIndex}]`),
+                        registerHash(
+                            hash,
+                            `movement.Sources[${index}].AlsoMatches[${aliasIndex}]`,
+                            false,
+                        ),
                     );
             });
             movement.Sources.forEach((source: unknown, index: number) => {

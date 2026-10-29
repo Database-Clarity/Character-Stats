@@ -68,6 +68,7 @@ export function fieldSchema(field: FieldSpec): JsonSchema {
                       ...(field.minItems === undefined ? {} : { minItems: field.minItems }),
                       ...(field.maxItems === undefined ? {} : { maxItems: field.maxItems }),
                   }),
+            ...(field.uniqueItems ? { uniqueItems: true } : {}),
             ...schema,
         };
     }

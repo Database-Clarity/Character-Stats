@@ -1,14 +1,17 @@
-import { useState } from 'react';
-import {
-    movementSpeed,
-    validateSources,
-    type MovementSource,
-    type MovementSpeedInput,
-    type MovementSpeedResult,
-} from '../../core';
+import { useEffect, useMemo, useState } from 'react';
+import { validateSources, type MovementSource, type MovementSpeedInput } from '../../core';
 import { HashIdentity } from './ManifestUI';
 import { formatMovementSpeed } from './previewData';
-import { NumberInput } from './NumberInput';
+import {
+    calculateMovementStats,
+    formatMovementDelta,
+    movementStackCount,
+    reconcileMovementSources,
+    reconcileWhileHeldSources,
+    setMovementSourceActive,
+    type ActiveMovementSource,
+    type ActiveMovementSources,
+} from './movementPreview';
 
 function validMovement(value: unknown): value is MovementSource {
     return !validateSources({ stats: [], movement: value }).some(
@@ -36,48 +39,35 @@ export function MovementContext({ value }: { value: unknown }) {
 function MovementControls({ source }: { source: MovementSource }) {
     const [classHash, setClassHash] = useState(source.Classes[0]?.ClassHash ?? 0);
     const [activity, setActivity] = useState<MovementSpeedInput['activity']>('PVE');
-    const [direction, setDirection] = useState<MovementSpeedInput['direction']>('Forward');
-    const [posture, setPosture] = useState<MovementSpeedInput['posture']>('Standing');
-    const [sprint, setSprint] = useState(false);
-    const [ads, setAds] = useState(false);
-    const [active, setActive] = useState<
-        Record<string, { stacks: number; boosted: boolean; held: boolean }>
-    >({});
-    const selected = source.Sources.filter((entry) => active[entry.Hash]);
-    let result: MovementSpeedResult | undefined;
-    let error = '';
-    try {
-        result = movementSpeed(
-            {
-                classHash,
-                activity,
-                direction,
-                posture,
-                sprint,
-                ads,
-                sources: selected.map((entry) => ({ hash: entry.Hash, ...active[entry.Hash]! })),
-                heldWeaponSources: selected
-                    .filter((entry) => active[entry.Hash]!.held)
-                    .map((entry) => entry.Hash),
-            },
-            source,
-        );
-    } catch (cause) {
-        error = cause instanceof Error ? cause.message : String(cause);
+    const [activeState, setActiveState] = useState<ActiveMovementSources>({});
+    const active = useMemo(
+        () => reconcileMovementSources(activeState, source.Sources),
+        [activeState, source.Sources],
+    );
+    useEffect(() => {
+        if (active !== activeState) setActiveState(active);
+    }, [active, activeState]);
+    const stats = calculateMovementStats(source, classHash, activity, active);
+
+    function update(hash: number, patch: Partial<ActiveMovementSource>) {
+        setActiveState((current) => {
+            const reconciled = reconcileMovementSources(current, source.Sources);
+            const state = reconciled[hash];
+            return state
+                ? reconcileMovementSources(
+                      { ...reconciled, [hash]: { ...state, ...patch } },
+                      source.Sources,
+                  )
+                : reconciled;
+        });
     }
-    function update(
-        hash: number,
-        patch: Partial<{ stacks: number; boosted: boolean; held: boolean }>,
-    ) {
-        setActive((current) => ({ ...current, [hash]: { ...current[hash]!, ...patch } }));
-    }
+
     return (
         <aside className="context movement-context" aria-label="Movement preview">
             <header className="pane-header">
                 <strong>Speed preview</strong>
-                <span className="muted">m/s</span>
             </header>
-            <div className="pinned-controls">
+            <section className="movement-settings" aria-label="Global movement settings">
                 <label className="inline">
                     Class
                     <select
@@ -106,167 +96,177 @@ function MovementControls({ source }: { source: MovementSource }) {
                         <option value="PVP">PvP</option>
                     </select>
                 </label>
-                <label className="inline">
-                    Direction
-                    <select
-                        aria-label="Direction"
-                        value={direction}
-                        onChange={(e) => {
-                            setDirection(e.target.value === 'Strafe' ? 'Strafe' : 'Forward');
-                            setSprint(false);
-                        }}
-                    >
-                        <option>Forward</option>
-                        <option>Strafe</option>
-                    </select>
-                </label>
-                <label className="inline">
-                    Posture
-                    <select
-                        aria-label="Posture"
-                        value={posture}
-                        onChange={(e) => {
-                            setPosture(e.target.value === 'Crouched' ? 'Crouched' : 'Standing');
-                            setSprint(false);
-                        }}
-                    >
-                        <option>Standing</option>
-                        <option>Crouched</option>
-                    </select>
-                </label>
-                <div className="toolbar">
-                    <label className="check">
-                        <input
-                            type="checkbox"
-                            checked={sprint}
-                            onChange={(e) => {
-                                setSprint(e.target.checked);
-                                if (e.target.checked) {
-                                    setDirection('Forward');
-                                    setPosture('Standing');
-                                    setAds(false);
-                                }
-                            }}
-                        />
-                        Sprint
-                    </label>
-                    <label className="check">
-                        <input
-                            type="checkbox"
-                            checked={ads}
-                            onChange={(e) => {
-                                setAds(e.target.checked);
-                                if (e.target.checked) setSprint(false);
-                            }}
-                        />
-                        ADS
-                    </label>
+            </section>
+            <section
+                className="movement-summary"
+                aria-label="Calculated movement stats"
+                aria-describedby="movement-summary-baseline"
+            >
+                <div className="movement-summary-heading">
+                    <strong>Movement stats</strong>
+                    <span id="movement-summary-baseline">Δ vs global-only baseline</span>
                 </div>
-                <div className="movement-result" aria-live="polite">
-                    {result ? (
-                        <>
-                            <strong className="mono">
-                                {formatMovementSpeed(result.speed)} m/s
-                            </strong>
-                            <span>Tier {result.tier}</span>
-                            <span className="muted">Cap: {result.cappedBy ?? 'none'}</span>
-                        </>
-                    ) : (
-                        <p className="error">{error}</p>
-                    )}
-                </div>
-            </div>
-            <div className="scroll-pane context-body">
-                <strong>Active sources</strong>
+                <ul className="movement-stats">
+                    {stats.map((stat) => {
+                        const delta =
+                            stat.delta === undefined
+                                ? undefined
+                                : formatMovementDelta(stat.delta, stat.unit);
+                        return (
+                            <li
+                                className="movement-stat"
+                                data-stat-key={stat.key}
+                                data-value={stat.value}
+                                data-baseline={stat.baseline}
+                                data-delta={stat.delta}
+                                key={stat.key}
+                            >
+                                <span className="movement-stat-label">{stat.label}</span>
+                                <span className="movement-stat-value">
+                                    <strong>
+                                        {stat.value === undefined
+                                            ? 'Unavailable'
+                                            : stat.key === 'mobility'
+                                              ? `Tier ${formatMovementTier(stat.value)}`
+                                              : `${formatMovementSpeed(stat.value)} m/s`}
+                                    </strong>
+                                </span>
+                                <span className="movement-stat-cap" title={stat.cappedBy}>
+                                    {stat.unit === 'm/s' && stat.value !== undefined
+                                        ? `Cap: ${stat.cappedBy?.replace('SpeedCap', '') ?? 'none'}`
+                                        : ''}
+                                </span>
+                                {delta && (
+                                    <span
+                                        className={`movement-delta movement-delta--${delta.direction}`}
+                                        data-delta-direction={delta.direction}
+                                        aria-label={delta.accessibleLabel}
+                                    >
+                                        <span aria-hidden="true">{delta.arrow}</span> {delta.text}
+                                    </span>
+                                )}
+                                {stat.error && (
+                                    <small className="movement-stat-error" role="alert">
+                                        {stat.error}
+                                    </small>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </section>
+            <section className="movement-source-selection" aria-label="Active sources">
+                <header className="movement-source-heading">
+                    <strong>Active sources</strong>
+                </header>
                 <p className="help">
-                    Select only sources whose activation conditions are met. Held ADS selects
-                    sources for one weapon, not the whole loadout. Boosted asserts all prerequisites
-                    are equipped.
+                    Select only sources whose conditions are met. Another WhileHeld choice replaces
+                    the current one; uncheck it to clear it. Other sources stay selected.
                 </p>
-                {source.Sources.map((entry) => {
-                    const state = active[entry.Hash];
-                    return (
-                        <div className="movement-source" key={entry.Hash}>
-                            <label className="check">
-                                <input
-                                    type="checkbox"
-                                    aria-label={`Activate ${entry.Name}`}
-                                    checked={!!state}
-                                    onChange={(e) => {
-                                        const next = { ...active };
-                                        if (e.target.checked)
-                                            next[entry.Hash] = {
-                                                stacks: 1,
-                                                boosted: false,
-                                                held: false,
-                                            };
-                                        else delete next[entry.Hash];
-                                        setActive(next);
-                                    }}
-                                />
-                                <HashIdentity
-                                    hash={entry.Hash}
-                                    name={entry.Name}
-                                    table={entry.RefType}
-                                    compact
-                                />
-                            </label>
-                            <small className="muted">{entry.Activation}</small>
-                            {state && (
-                                <div className="movement-source-controls">
-                                    <label>
-                                        Stacks{' '}
-                                        <NumberInput
-                                            aria-label={`${entry.Name} stacks`}
-                                            step={1}
-                                            constraints={{ min: 1 }}
-                                            value={
-                                                Number.isFinite(state.stacks) ? state.stacks : ''
-                                            }
-                                            onChangeValue={(raw) =>
-                                                update(entry.Hash, {
-                                                    stacks: raw === '' ? NaN : Number(raw),
-                                                })
-                                            }
-                                        />
-                                    </label>
-                                    {!!entry.BoostRequiresAll?.length && (
-                                        <label
-                                            className="check"
-                                            title={`Requires all: ${entry.BoostRequiresAll.join(', ')}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={state.boosted}
-                                                onChange={(e) =>
-                                                    update(entry.Hash, {
-                                                        boosted: e.target.checked,
-                                                    })
-                                                }
-                                            />
-                                            Boosted
-                                        </label>
-                                    )}
-                                    {entry.Effects.some(
-                                        (effect) => effect.Type === 'ADSMultiplier',
-                                    ) && (
-                                        <label className="check">
-                                            <input
-                                                type="checkbox"
-                                                checked={state.held}
-                                                onChange={(e) =>
-                                                    update(entry.Hash, { held: e.target.checked })
-                                                }
-                                            />
-                                            Held ADS
-                                        </label>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
+                <div className="scroll-pane movement-source-list">
+                    {source.Sources.map((entry) => {
+                        const state = active[entry.Hash];
+                        return (
+                            <div className="movement-source" key={entry.Hash}>
+                                <label className="check">
+                                    <input
+                                        type="checkbox"
+                                        aria-label={`Activate ${entry.Name}`}
+                                        checked={!!state}
+                                        onChange={(e) => {
+                                            const enabled = e.currentTarget.checked;
+                                            setActiveState((current) =>
+                                                setMovementSourceActive(
+                                                    current,
+                                                    source.Sources,
+                                                    entry.Hash,
+                                                    enabled,
+                                                ),
+                                            );
+                                        }}
+                                    />
+                                    <HashIdentity
+                                        hash={entry.Hash}
+                                        name={entry.Name}
+                                        table={entry.RefType}
+                                        compact
+                                    />
+                                </label>
+                                <small className="muted">{entry.Activation}</small>
+                                {state && (
+                                    <div className="movement-source-controls">
+                                        <div className="movement-stack-control">
+                                            <span>Stacks</span>
+                                            <div
+                                                className="movement-stack-options"
+                                                role="group"
+                                                aria-label={`${entry.Name} stacks`}
+                                            >
+                                                {Array.from(
+                                                    { length: movementStackCount(entry, state.boosted) },
+                                                    (_, index) => index + 1,
+                                                ).map((stacks) => (
+                                                    <button
+                                                        key={stacks}
+                                                        type="button"
+                                                        aria-label={`${stacks} stack${stacks === 1 ? '' : 's'}`}
+                                                        aria-pressed={state.stacks === stacks}
+                                                        onClick={() =>
+                                                            update(entry.Hash, { stacks })
+                                                        }
+                                                    >
+                                                        {stacks}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        {!!entry.BoostRequiresAll?.length && (
+                                            <label
+                                                className="check"
+                                                title={`Requires all: ${entry.BoostRequiresAll.join(', ')}`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={state.boosted}
+                                                    onChange={(e) =>
+                                                        update(entry.Hash, {
+                                                            boosted: e.target.checked,
+                                                        })
+                                                    }
+                                                />
+                                                Boosted
+                                            </label>
+                                        )}
+                                        {entry.Effects.some(
+                                            (effect) => effect.Type === 'ADSMultiplier',
+                                        ) && (
+                                            <label className="check">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={state.held}
+                                                    onChange={(e) =>
+                                                        update(entry.Hash, {
+                                                            held: e.currentTarget.checked,
+                                                        })
+                                                    }
+                                                />
+                                                Held ADS
+                                            </label>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
         </aside>
     );
+}
+
+function formatMovementTier(tier: number): string {
+    return new Intl.NumberFormat('en-US', {
+        maximumFractionDigits: 6,
+        useGrouping: false,
+    }).format(tier);
 }

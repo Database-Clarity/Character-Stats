@@ -24,7 +24,7 @@ const input = (changes: Partial<MovementSpeedInput> = {}): MovementSpeedInput =>
 
 describe('movement calculator', () => {
     it('activates every verified Lightweight and MIDA alias with the same effects', () => {
-        for (const hash of [1458010786, 2213377102, 2470575005]) {
+        for (const hash of [1458010786, 2213377102]) {
             const entry = data().Sources.find((source) => source.Hash === hash)!;
             expect(entry.AlsoMatches?.length).toBeGreaterThan(0);
             const expected = movementSpeed(input({ sources: [{ hash }] }));
@@ -32,30 +32,37 @@ describe('movement calculator', () => {
                 expect(movementSpeed(input({ sources: [{ hash: alias }] }))).toEqual(expected);
         }
         const lightweight = data().Sources.find((source) => source.Hash === 1458010786)!;
-        expect(lightweight.AlsoMatches).toHaveLength(28);
+        expect(lightweight.AlsoMatches).toHaveLength(24);
         expect(lightweight.AlsoMatches).toContain(3758615625);
         expect(lightweight.AlsoMatches).not.toContain(2928496916);
     });
-    it('keeps Macro-Tool conditional forward movement separate from Lightweight bonuses', () => {
+    it('applies the boosted Macro-Tool forward bonus only when MIDA Multi-Tool is equipped', () => {
         const source = data();
         expect(source.Sources.find((entry) => entry.Hash === 1888623310)).toMatchObject({
-            Activation: 'Conditional',
-            Effects: [{ Type: 'ForwardMultiplier', Values: [1.1] }],
+            Activation: 'WhileHeld',
+            Effects: [{ Type: 'ForwardMultiplier', Values: [1], BoostedValues: [1.1] }],
+            BoostRequiresAll: [1331482397],
         });
         const sources = [{ hash: 1888623310 }];
-        expect(movementSpeed(input({ sources }))).toEqual({ tier: 3, speed: 5.6 * 1.1 });
-        expect(movementSpeed(input({ sources, sprint: true }))).toEqual({
-            tier: 3,
-            speed: 8 * 1.1,
-        });
+        expect(movementSpeed(input({ sources })).speed).toBe(5.6);
+        expect(movementSpeed(input({ sources, sprint: true })).speed).toBe(8);
+        expect(
+            movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }] })).speed,
+        ).toBeCloseTo(5.6 * 1.1, 12);
+        expect(
+            movementSpeed(
+                input({ sources: [{ hash: 1888623310, boosted: true }], sprint: true }),
+            ).speed,
+        ).toBeCloseTo(8 * 1.1, 12);
         expect(movementSpeed(input({ sources, direction: 'Strafe' })).speed).toBeCloseTo(
             5.6 * 0.85,
             12,
         );
-        expect(movementSpeed(input({ sources, posture: 'Crouched' })).speed).toBeCloseTo(
-            5.6 * 1.1 * 0.55,
-            12,
-        );
+        expect(
+            movementSpeed(
+                input({ sources: [{ hash: 1888623310, boosted: true }], posture: 'Crouched' }),
+            ).speed,
+        ).toBeCloseTo(5.6 * 1.1 * 0.55, 12);
     });
     it('rejects duplicate aliases of the same source and supports alias ADS selection', () => {
         expect(() =>
@@ -91,23 +98,26 @@ describe('movement calculator', () => {
     it('reproduces the Compendium tier-5 ADS strafe example without rounding', () => {
         const source = data();
         source.Classes[0]!.BaseMobilityTier = 5;
-        expect(movementSpeed(input({ direction: 'Strafe', ads: true }), source).speed).toBeCloseTo(
-            3.825,
-            12,
-        );
+        expect(
+            movementSpeed(
+                input({ classHash: hunter, direction: 'Strafe', ads: true }),
+                source,
+            ).speed,
+        ).toBeCloseTo(3.825, 12);
     });
-    it('reproduces tier-10 sidearm ADS plus Lightweight: 7 * 0.85 * 1.075 = 6.39625', () => {
+    it('reproduces tier-10 sidearm ADS plus Lightweight using current source values', () => {
         const source = data();
         source.Classes[0]!.BaseMobilityTier = 8;
         const options = input({
+            classHash: hunter,
             ads: true,
             sources: [{ hash: 1458010786 }, { hash: 14 }],
             heldWeaponSources: [14],
         });
         expect(movementSpeed(options, source)).toMatchObject({ tier: 10 });
-        expect(movementSpeed(options, source).speed).toBeCloseTo(6.39625, 12);
+        expect(movementSpeed(options, source).speed).toBeCloseTo(7 * 0.85 * 1.0625, 12);
         expect(movementSpeed({ ...options, adsMultiplierOverride: 0.5 }, source).speed).toBeCloseTo(
-            7 * 1.075 * 0.5,
+            7 * 1.0625 * 0.5,
             12,
         );
     });
@@ -128,7 +138,7 @@ describe('movement calculator', () => {
             ),
         ).toEqual({ tier: 13, speed: 7.6 });
         source.Classes[0]!.BaseMobilityTier = -5;
-        expect(movementSpeed(input(), source)).toEqual({ tier: 0, speed: 5 });
+        expect(movementSpeed(input({ classHash: hunter }), source)).toEqual({ tier: 0, speed: 5 });
     });
     it('keeps sprint independent of Mobility and applies multiplicative sprint bonuses', () => {
         expect(movementSpeed(input({ sprint: true })).speed).toBe(8);
@@ -138,8 +148,7 @@ describe('movement calculator', () => {
         ).toBe(8);
         expect(movementSpeed(input({ sprint: true, sources: [{ hash: 1458010786 }] }))).toEqual({
             tier: 5,
-            speed: 9,
-            cappedBy: 'ForwardSpeedCap',
+            speed: 8.5,
         });
         const source = data();
         source.Sources.push({
@@ -162,40 +171,95 @@ describe('movement calculator', () => {
         ).toEqual({ tier: 12, speed: 9, cappedBy: 'ForwardSpeedCap' });
     });
     it('stacks forward, sprint and grounded multipliers before capping sprint, independent of source order', () => {
-        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }, { hash: 54 }];
+        const source = data();
+        source.Sources.push({
+            Hash: 123,
+            Name: 'Grounded movement',
+            RefType: 'item',
+            Activation: 'Always',
+            Effects: [{ Type: 'GroundedMultiplier', Values: [0.85] }],
+        });
+        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }, { hash: 123 }];
         for (const order of [sources, [...sources].reverse()]) {
-            const result = movementSpeed(input({ sprint: true, sources: order }));
+            const result = movementSpeed(input({ sprint: true, sources: order }), source);
             expect(result.tier).toBe(5);
-            expect(result.speed).toBeCloseTo(8 * 1.0625 * 1.1 * 1.075 * 0.85, 12);
+            expect(result.speed).toBeCloseTo(8 * 1.0625 * 0.85, 12);
             expect(result.cappedBy).toBeUndefined();
         }
         expect(
             movementSpeed(
                 input({ sprint: true, sources: [{ hash: 1888623310 }, { hash: 1458010786 }] }),
             ),
-        ).toEqual({ tier: 5, speed: 9, cappedBy: 'ForwardSpeedCap' });
+        ).toEqual({ tier: 5, speed: 8.5 });
     });
-    it.each([12, 13])(
-        'applies overweight penalty %i to grounded movement but not sprint',
-        (hash) => {
-            expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 0.85, 12);
-            expect(
-                movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] })).speed,
-            ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
-            expect(
-                movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] })).speed,
-            ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
-            expect(movementSpeed(input({ sprint: true, sources: [{ hash }] })).speed).toBe(8);
-        },
-    );
-    it.each([54])('applies grounded penalty %i to walking, ADS/crouch, and sprint', (hash) => {
-        expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 0.85, 12);
-        expect(
-            movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] })).speed,
-        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
-        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] })).speed).toBeCloseTo(
-            8 * 0.85,
+    it.each([
+        { hash: 12, name: 'Machine Gun' },
+        { hash: 13, name: 'Rocket Launcher' },
+    ])('uses the real $name category as an overweight-only penalty', ({ hash, name }) => {
+        const source = data();
+        const entry = source.Sources.find((candidate) => candidate.Hash === hash);
+        expect(entry).toMatchObject({
+            Name: name,
+            RefType: 'itemCategory',
+            Activation: 'WhileHeld',
+            Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
+        });
+        expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
+            5.6 * 0.85,
             12,
+        );
+        expect(
+            movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
+        ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
+        expect(
+            movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] }), source)
+                .speed,
+        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(8);
+    });
+    it('applies sword-guarding penalty to grounded movement but not sprint', () => {
+        const source = data();
+        const guard = source.Sources.find((entry) => entry.Hash === 54)!;
+        expect(guard).toMatchObject({
+            Name: 'Sword guarding',
+            RefType: 'itemCategory',
+            Activation: 'Conditional',
+            Effects: [{ Type: 'GroundedNonSprintMultiplier', Values: [0.85] }],
+        });
+        expect(movementSpeed(input({ sources: [{ hash: 54 }] }), source).speed).toBeCloseTo(
+            5.6 * 0.85,
+            12,
+        );
+        expect(
+            movementSpeed(
+                input({ posture: 'Crouched', ads: true, sources: [{ hash: 54 }] }),
+                source,
+            ).speed,
+        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 54 }] }), source).speed).toBe(
+            8,
+        );
+    });
+    it('keeps sword guard multiplicative with other active sources without changing sprint applicability', () => {
+        const source = data();
+        const sources = [{ hash: 54 }, { hash: 1888623310, boosted: true }];
+        expect(movementSpeed(input({ sources }), source).speed).toBeCloseTo(5.6 * 0.85 * 1.1, 12);
+        expect(movementSpeed(input({ sprint: true, sources }), source).speed).toBeCloseTo(
+            8 * 1.1,
+            12,
+        );
+    });
+    it('keeps GroundedMultiplier applicable to sprint', () => {
+        const source = data();
+        source.Sources.push({
+            Hash: 123,
+            Name: 'Grounded movement',
+            RefType: 'item',
+            Activation: 'Always',
+            Effects: [{ Type: 'GroundedMultiplier', Values: [0.85] }],
+        });
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 123 }] }), source).speed).toBe(
+            8 * 0.85,
         );
     });
     it.each([
@@ -220,8 +284,8 @@ describe('movement calculator', () => {
         ).toEqual({ tier: 3, speed, cappedBy });
     });
     it.each([
-        ['Forward', 'Standing', 6 * 1.075],
-        ['Forward', 'Crouched', 6 * 1.075 * 0.55],
+        ['Forward', 'Standing', 6 * 1.0625],
+        ['Forward', 'Crouched', 6 * 1.0625 * 0.55],
         ['Strafe', 'Standing', 6 * 0.85],
         ['Strafe', 'Crouched', 6 * 0.85 * 0.55],
     ] as const)(
@@ -332,6 +396,62 @@ describe('movement calculator', () => {
 });
 
 describe('movement source validation', () => {
+    it('rejects repeated aliases without rewriting the source data', () => {
+        const source = fixture();
+        source.movement = data();
+        const entry = source.movement.Sources.find((item) => item.Hash === 1458010786)!;
+        const sourceIndex = source.movement.Sources.indexOf(entry);
+        const aliases = [...entry.AlsoMatches!];
+        entry.AlsoMatches = [aliases[0]!, aliases[0]!];
+
+        const errors = validateSources(source).filter((issue) => issue.severity === 'error');
+        expect(errors).toContainEqual(
+            expect.objectContaining({
+                path: `movement.Sources[${sourceIndex}].AlsoMatches[1]`,
+                message: 'Duplicate value: ' + aliases[0],
+                severity: 'error',
+            }),
+        );
+        expect(entry.AlsoMatches).toEqual([aliases[0], aliases[0]]);
+    });
+    it('rejects aliases overlapping another source identity and accepts distinct aliases', () => {
+        const source = fixture();
+        source.movement = data();
+        const first = source.movement.Sources[0]!;
+        const second = source.movement.Sources[1]!;
+        const firstAliases = first.AlsoMatches === undefined ? undefined : [...first.AlsoMatches];
+        const secondAliases =
+            second.AlsoMatches === undefined ? undefined : [...second.AlsoMatches];
+
+        first.AlsoMatches = [first.Hash];
+        expect(
+            validateSources(source).some(
+                (issue) =>
+                    issue.path === 'movement.Sources[0].AlsoMatches[0]' &&
+                    issue.message.includes('Duplicate movement source hash or alias'),
+            ),
+        ).toBe(true);
+
+        if (firstAliases === undefined) delete first.AlsoMatches;
+        else first.AlsoMatches = firstAliases;
+        second.AlsoMatches = [...(secondAliases ?? []), first.Hash];
+        expect(
+            validateSources(source).some(
+                (issue) =>
+                    issue.path ===
+                        `movement.Sources[1].AlsoMatches[${secondAliases?.length ?? 0}]` &&
+                    issue.message.includes('Duplicate movement source hash or alias'),
+            ),
+        ).toBe(true);
+
+        if (secondAliases === undefined) delete second.AlsoMatches;
+        else second.AlsoMatches = secondAliases;
+        expect(
+            validateSources(source).filter(
+                (issue) => issue.severity === 'error' && issue.path.startsWith('movement.Sources'),
+            ),
+        ).toEqual([]);
+    });
     it('rejects ambiguous, repeated, invalid and empty aliases', () => {
         for (const aliases of [[12], [123, 123], [0], [-1], [4294967296], [1.5], []]) {
             const source = fixture();

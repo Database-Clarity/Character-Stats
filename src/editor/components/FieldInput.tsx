@@ -15,15 +15,17 @@ export function NumberArrayInput({
     value,
     onChange,
     stackCounts = false,
+    integerValues = false,
 }: {
     spec: FieldSpec;
     value: unknown;
     onChange(value: unknown): void;
     stackCounts?: boolean;
+    integerValues?: boolean;
 }) {
     const array = Array.isArray(value) ? (value as number[]) : [];
     return (
-        <div className="number-array">
+        <div className={`number-array${stackCounts ? ' number-array-stacks' : ''}`}>
             {!spec.required && (
                 <label className="check">
                     <input
@@ -55,7 +57,9 @@ export function NumberArrayInput({
                                         step={numberStep(
                                             number,
                                             spec.items,
-                                            spec.kind === 'intArray' || spec.items?.integer,
+                                            integerValues ||
+                                                spec.kind === 'intArray' ||
+                                                spec.items?.integer,
                                         )}
                                         constraints={spec.items}
                                         value={Number.isFinite(number) ? number : ''}
@@ -372,6 +376,10 @@ export function FieldInput({
                                 spec={spec}
                                 value={value}
                                 onChange={onChange}
+                                integerValues={
+                                    siblings.Type === 'MobilityTiers' &&
+                                    (spec.key === 'Values' || spec.key === 'BoostedValues')
+                                }
                                 stackCounts={
                                     typeof siblings.Type === 'string' &&
                                     (spec.key === 'Values' || spec.key === 'BoostedValues')

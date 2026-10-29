@@ -1,4 +1,4 @@
-import type { StatSpec } from './types';
+import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
 import { curve } from '../fields/builders';
 import { superAbilitySpec, overrideSpec } from '../entities';
 
@@ -27,7 +27,7 @@ export const superSpec: StatSpec = {
         }),
 
         curve('SuperDamageIncrease', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Super damage increase (%)',
             description:

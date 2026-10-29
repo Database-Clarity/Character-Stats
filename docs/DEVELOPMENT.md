@@ -120,7 +120,7 @@ Class, Grenade and Melee cooldowns apply their `CooldownScalars` curve after bas
 ## Movement data and calculations
 
 `sources/movement.json` contains one `Rules` object, `Classes`, and `Sources`. Hidden Mobility is measured in tiers, not the old 0-100 stat points. Walk speed uses tiers 0-13; class bases differ by activity only when `BaseMobilityTierPVP` is present. Source `Effects` are generic object arrays with an enum `Type` and cumulative `Values`: index 0 is one stack, index 1 is two stacks, and so on. `BoostedValues` replaces that effect's values when every `BoostRequiresAll` item is equipped. Both arrays must have equal lengths. Unknown tiers use 0 and unknown multipliers use 1, with `Notes: "Value unknown — needs testing"`.
-Machine guns and rocket launchers use `OverweightMultiplier`, which affects grounded non-sprint speeds only. `GroundedMultiplier` continues to affect all grounded movement, including sprint.
+Machine guns and rocket launchers use `OverweightMultiplier`, which affects grounded non-sprint speeds only. Sword guarding uses `GroundedNonSprintMultiplier` because sprinting is unavailable while guarding; it preserves the guard penalty on walking, crouching, and ADS movement without affecting sprint. `GroundedMultiplier` continues to affect all grounded movement, including sprint.
 
 `RefType` selects `DestinyInventoryItemDefinition` (`item`) or `DestinyItemCategoryDefinition` (`itemCategory`). A source hash of 0 is allowed with a warning through `hashField(..., { warnIfZero: true })`; use it only for unverified references. Conditional sources need English text at `Movement.Sources.<Hash>.Condition`; missing text is a warning. Wraithwalk remains on the verified inventory-item Heartshadow Catalyst hash (3072857252), which links to sandbox perk 3936394000; no perk RefType is needed. MIDA's extra forward bonus, Wraithwalk's grounded bonus, and The Scientific Method's grounded bonus remain neutral placeholders. Other unmeasured frames/perks and unspecified Exotic Power Weapon penalties are not guessed.
 
@@ -245,7 +245,7 @@ After changing a registry, run `npm run schema`; [`schema.json`](../schema.json)
 
 ## Curve sources and expressions
 
-A curve is either raw `{"Values":[...]}` with one finite value per integer x, or a piecewise object with `Domain`, optional `Round`, and `Segments`. The field builder specifies its domain, commonly `0-100`, `0-200`, or `101-200`. Raw values are ordered from the domain's lower bound.
+A curve is either raw `{"Values":[...]}` with one finite value per integer x, or a piecewise object with `Domain`, optional `Round`, and `Segments`. The field builder specifies its domain, commonly `0-100`, `0-200`, or `100-200`. Enhanced-only curves start at 100 so the base/zero-enhancement value is explicit; exported array index 0 is stat 100, and indices 1-100 preserve values for stats 101-200. Raw values are ordered from the domain's lower bound.
 
 These are separate valid segment examples for a `0-100` field; each covers that domain exactly once:
 

@@ -42,7 +42,8 @@ Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro
 - Stat descriptions are now the locale IDs `Overview`, `BaseStatTooltip` and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` on stats with abilities. They replace `Description`, `ChunkEnergyScalarDescription` and the other `*Description` keys.
 - Tooltips contain `{{Placeholder}}` tokens. Replace each one with the value of the stat property that has the same name, read at the player's stat value.
 - `locale/en.json` uses the new keys. The other languages still contain the v1.9 text until translations catch up.
-- Health's PvE damage resistance is now a fixed 34.5% in `PVEDamageResistance`.
+- Health's PvE damage resistance (not Shield damage resistance) is now a fixed 34.5% in
+  `PVEDamageResistance`.
 - Health's shield values follow the same split. `BaseShieldHP` is the Shield HP in every activity, PvE and PvP. `PVEBonusShieldHP` is a 101 to 200 array of extra Shield HP that only applies in PvE. `BaseShieldRechargeDelay` and `BaseShieldRechargeSpeed` are plain numbers for stat values up to 100, and `ShieldRechargeDelay` and `ShieldRechargeSpeed` are 101 to 200 arrays for the enhanced range.
 - `PVPShieldHP` is gone because PvP shields always use `BaseShieldHP`.
 

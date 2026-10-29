@@ -274,21 +274,11 @@ function MovementRules({
     file: string;
     onChange(value: unknown): void;
 }) {
-    const [contextOpen, setContextOpen] = useState(false);
     return (
-        <div className={`entity-layout movement-rules-layout ${contextOpen ? 'context-open' : ''}`}>
+        <div className="entity-layout movement-rules-layout">
             <section className="item-editor">
                 <header className="pane-header">
                     <strong>Rules</strong>
-                    <div className="toolbar">
-                        <button
-                            className="context-toggle"
-                            aria-pressed={contextOpen}
-                            onClick={() => setContextOpen(!contextOpen)}
-                        >
-                            Context
-                        </button>
-                    </div>
                 </header>
                 <div className="scroll-pane editor-body">
                     {movementSpec.fields.map((field) => (
@@ -306,13 +296,6 @@ function MovementRules({
                 </div>
             </section>
             <div className="context-slot">
-                <button
-                    className="context-close icon-button"
-                    aria-label="Close context"
-                    onClick={() => setContextOpen(false)}
-                >
-                    ×
-                </button>
                 <MovementContext value={value} />
             </div>
         </div>

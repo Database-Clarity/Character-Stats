@@ -146,6 +146,7 @@ export function movementSpeed(
         ForwardMultiplier: 1,
         SprintMultiplier: 1,
         GroundedMultiplier: 1,
+        GroundedNonSprintMultiplier: 1,
         OverweightMultiplier: 1,
     };
     const seen = new Set<number>();
@@ -202,7 +203,10 @@ export function movementSpeed(
     if (input.posture === 'Crouched') speed *= rules.CrouchMultiplier;
     if (input.ads) speed *= adsMultiplier;
     speed *= multipliers.GroundedMultiplier;
-    if (!input.sprint) speed *= multipliers.OverweightMultiplier;
+    if (!input.sprint) {
+        speed *= multipliers.GroundedNonSprintMultiplier;
+        speed *= multipliers.OverweightMultiplier;
+    }
     let cappedBy: NonNullable<MovementSpeedResult['cappedBy']> = 'ForwardSpeedCap';
     if (input.direction === 'Strafe' && rules.StrafeSpeedCap < rules[cappedBy])
         cappedBy = 'StrafeSpeedCap';

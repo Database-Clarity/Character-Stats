@@ -45,7 +45,9 @@ middleware or configuration changes are needed.
 - `CurveEditor` uses core expansion/validation; converting Values to Segments
   preserves every expanded value exactly and verifies equality before applying.
   `CurvePlot` is a small SVG plot with x/y crosshair and saved overlay. Segment
-  controls and raw-domain values are structured inputs. Optional **View JSON** is read-only.
+  controls and raw-domain values are structured inputs. Enhanced-only curves use
+  the 100-200 domain, so the editor can set the base/zero-enhancement value at
+  stat 100 while retaining the existing 101-200 values. Optional **View JSON** is read-only.
 - `TextEditor` uses core locale rendering/placeholder validation and previews
   the base ability without applying overrides. Its preview controls are outside the
   scrolling content; the context slider follows the same structure. `ContextPanel`
@@ -61,9 +63,14 @@ middleware or configuration changes are needed.
   class glyphs when a class definition has no icon URL. `QuickJump`
   searches registered stats/tabs and source item names/hashes. The UI still works without a manifest.
 - Movement shows Rules plus Classes/Sources collections. `MovementContext`
-  validates working data before calling core `movementSpeed`, with pinned class,
-  activity, direction/posture, Sprint/ADS controls and two-decimal speed/tier/cap
-  results. Active sources have stack, boosted and per-held-weapon ADS selection.
+  validates working data before calling core `movementSpeed` and keeps Mobility,
+  Sprint, Walk, Strafe, Crouch and ADS results visible together. Class and activity
+  are global settings; every row shows its signed delta against the same settings
+  with no active optional sources. Caps and calculation errors remain visible.
+  Active sources retain their stack, boosted and per-held-weapon ADS controls;
+  selecting a WhileHeld source replaces the previous one, and unchecking it clears
+  that selection without removing Always or Conditional sources. The summary and
+  source selector remain visible together on narrow screens.
   Invalid data and conflicting ADS choices show errors, not fallback speeds.
   Source RefType scopes lookups/icons/hash pickers to items or item categories;
   collection manifest drafts infer RefType from the picked definition table.

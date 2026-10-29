@@ -1,4 +1,4 @@
-import type { StatSpec } from './types';
+import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
 import { curve } from '../fields/builders';
 import { abilitySpec, overrideSpec } from '../entities';
 
@@ -29,7 +29,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('OvershieldHP', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0, integer: true },
             description:
                 'Values represent how much Overshield HP casting your Class Ability ' +

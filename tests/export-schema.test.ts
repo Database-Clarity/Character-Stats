@@ -34,7 +34,7 @@ describe('exports and generated schema', () => {
         );
         const melee = result['4244567218'] as Record<string, unknown>;
         expect(melee.CooldownScalars).toHaveLength(101);
-        expect(melee.MeleeDamageIncrease).toHaveLength(100);
+        expect(melee.MeleeDamageIncrease).toHaveLength(101);
         expect(melee.EnergyGainScalar).toEqual(Array(101).fill(0.01));
         expect(melee.Overview).toBe('Melee.Overview');
         expect(melee.ChargeBasedScalingTooltip).toBe('ChargeBasedScaling');
@@ -52,6 +52,12 @@ describe('exports and generated schema', () => {
     });
     it('labels percentage and scalar inputs with their units', () => {
         const fields = statRegistry.flatMap((spec) => spec.fields);
+        expect(healthSpec.fields.find((field) => field.key === 'PVEDamageResistance')?.label).toBe(
+            'PVE Health Damage Resist (%)',
+        );
+        expect(healthSpec.fields.find((field) => field.key === 'FlinchResistance')?.label).toBe(
+            'ADS-only flinch resistance (%)',
+        );
         for (const key of [
             'FlinchResistance',
             'PVEDamageResistance',
@@ -105,6 +111,12 @@ describe('exports and generated schema', () => {
         if (!dynamicLocale) throw new Error('Missing DynamicLocaleString schema definition');
         expect(dynamicLocale.description).toContain('{{EnergyGainScalar|ScalarPercent}}');
         expect(dynamicLocale.description).toContain('literal percent sign');
+        const health = definitions.Health as unknown as {
+            properties: Record<string, { description: string }>;
+        };
+        const flinchResistance = health.properties.FlinchResistance;
+        if (!flinchResistance) throw new Error('Missing FlinchResistance schema field');
+        expect(flinchResistance.description).toContain('ADS-only');
     });
     it('rounds base cooldown and rejects invalid exports', () => {
         expect(
@@ -159,12 +171,13 @@ describe('exports and generated schema', () => {
         expect(Object.keys(exportEntity(movementSourceSpec, entry))).toEqual(fields);
         const definitions = generateSchema().definitions as Record<
             string,
-            { properties: Record<string, unknown> }
+            { properties: Record<string, Record<string, unknown>> }
         >;
         expect(Object.keys(definitions.MovementSource!.properties)).toEqual([
             ...fields,
             'BoostRequiresAll',
         ]);
+        expect(definitions.MovementSource!.properties.AlsoMatches!.uniqueItems).toBe(true);
         expect(Object.keys(JSON.parse(serializeSource(entry)))).toEqual(fields);
     });
     it('derives index mappings from domains without repeating Health fallback sentences', () => {
@@ -172,12 +185,13 @@ describe('exports and generated schema', () => {
             [0, 100],
             [0, 200],
             [101, 200],
+            [100, 200],
         ] as const) {
             expect(
                 fieldSchema({ key: 'Curve', kind: 'curve', description: 'Example.', domain })
                     .description,
             ).toBe(
-                `Example. Stat values ${domain[0]}-${domain[1]}: index = stat value${domain[0] === 0 ? '' : ' - 101'}.`,
+                `Example. Stat values ${domain[0]}-${domain[1]}: index = stat value${domain[0] === 0 ? '' : ' - ' + domain[0]}.`,
             );
         }
         const flinch = fieldSchema(
@@ -189,7 +203,7 @@ describe('exports and generated schema', () => {
         );
         expect(String(shield.description).match(/Below 101/g)).toHaveLength(1);
         expect(flinch.minItems).toBe(101);
-        expect(shield.minItems).toBe(100);
+        expect(shield.minItems).toBe(101);
         expect(generateSchema().$id).toBe(
             'https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json',
         );

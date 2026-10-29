@@ -66,6 +66,7 @@ export type MovementEffectType =
     | 'ForwardMultiplier'
     | 'SprintMultiplier'
     | 'GroundedMultiplier'
+    | 'GroundedNonSprintMultiplier'
     | 'OverweightMultiplier'
     | 'ADSMultiplier';
 export interface MovementEffect {
@@ -311,6 +312,11 @@ export const movementEffectSpec: EntitySpec = {
                         'Multiply all grounded movement, including sprint; does not affect jump height.',
                 },
                 {
+                    value: 'GroundedNonSprintMultiplier',
+                    description:
+                        'Multiply grounded movement except sprint; does not affect jump height.',
+                },
+                {
                     value: 'OverweightMultiplier',
                     description:
                         'Multiply grounded movement except sprint; does not affect jump height.',
@@ -362,6 +368,7 @@ export const movementSourceSpec: EntitySpec = {
         integerArrayField('AlsoMatches', {
             itemRef: 'item',
             minItems: 1,
+            uniqueItems: true,
             items: { min: 1, max: 4294967295 },
             required: false,
             description:

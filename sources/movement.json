@@ -222,7 +222,7 @@
             "Activation": "Conditional",
             "Effects": [
                 {
-                    "Type": "GroundedMultiplier",
+                    "Type": "GroundedNonSprintMultiplier",
                     "Values": [
                         0.85
                     ]

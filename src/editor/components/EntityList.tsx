@@ -266,7 +266,7 @@ export function EntityList({
     return (
         <div
             ref={layout}
-            className={`entity-layout ${contextOpen ? 'context-open' : ''} ${hasContext ? '' : 'without-context'}`}
+            className={`entity-layout ${stat === 'Movement' ? 'movement-preview-layout ' : ''}${contextOpen ? 'context-open ' : ''}${hasContext ? '' : 'without-context'}`}
         >
             <EntityRows
                 collection={collection}

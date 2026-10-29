@@ -35,7 +35,8 @@ export function localeFields(abilities = false): FieldSpec[] {
                 '<FlinchResistance> property is an array, then ' +
                 '{{FlinchResistance}} will be replaced with the value at the index ' +
                 'corresponding to the stat value, clamped to the field domain (0-100 for ' +
-                'FlinchResistance).',
+                'FlinchResistance). Enhanced-only curves use 100-200 and store the base value ' +
+                'at stat 100; their array index is the stat value minus 100.',
         }),
     ];
 

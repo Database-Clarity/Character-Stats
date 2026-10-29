@@ -1,4 +1,4 @@
-import type { StatSpec } from './types';
+import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
 import { curve } from '../fields/builders';
 
 export const weaponsSpec: StatSpec = {
@@ -34,7 +34,7 @@ export const weaponsSpec: StatSpec = {
         }),
 
         curve('SpecialDamageIncrease', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Special weapon damage increase (%)',
             description:
@@ -43,7 +43,7 @@ export const weaponsSpec: StatSpec = {
         }),
 
         curve('PowerDamageIncrease', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Power weapon damage increase (%)',
             description:
@@ -52,7 +52,7 @@ export const weaponsSpec: StatSpec = {
         }),
 
         curve('PVPDamageIncrease', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Player damage increase (%)',
             description:
@@ -61,7 +61,7 @@ export const weaponsSpec: StatSpec = {
         }),
 
         curve('LargeAmmoBrickChance', {
-            domain: [101, 200],
+            domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Large ammo brick chance (%)',
             description:

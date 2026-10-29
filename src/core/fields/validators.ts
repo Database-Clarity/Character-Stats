@@ -125,13 +125,18 @@ export function validateField(
                     : [issue('Object array field has no entity spec')]),
             ];
         }
-        value.forEach((n, i) =>
+        const seen = new Set<unknown>();
+        value.forEach((n, i) => {
+            if (spec.uniqueItems && seen.has(n)) {
+                errors.push(issue('Duplicate value: ' + String(n), path + '[' + i + ']'));
+            }
+            seen.add(n);
             errors.push(
                 ...validateNumber(n, spec.items ?? {}, spec.kind === 'intArray').map((m) =>
                     issue(m, path + '[' + i + ']'),
                 ),
-            ),
-        );
+            );
+        });
         return errors;
     }
     const errors = validateNumber(

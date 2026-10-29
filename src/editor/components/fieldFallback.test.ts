@@ -16,17 +16,33 @@ import { MovementContext } from './MovementContext';
 describe('declarative nested field controls', () => {
     it('previews validated working data and blocks invalid movement instead of showing a fallback', () => {
         const html = renderToStaticMarkup(createElement(MovementContext, { value: movementData }));
-        expect(html).toContain('5.60');
+        expect(html).toContain('7.00 m/s');
         expect(html).toContain('Cap: ');
         expect(html).toContain('Preview class');
+        for (const key of ['mobility', 'sprint', 'walk', 'strafe', 'crouch', 'ads'])
+            expect(html).toContain(`data-stat-key="${key}"`);
+        expect(html).toContain('global-only baseline');
+        expect(html).not.toContain('aria-label="Direction"');
+        expect(html).not.toContain('aria-label="Posture"');
         const invalid = { ...movementData, Rules: { ...movementData.Rules, StrafeMultiplier: -1 } };
         const error = renderToStaticMarkup(createElement(MovementContext, { value: invalid }));
         expect(error).toContain('Fix Movement validation errors');
         expect(error).not.toContain('5.60');
     });
+    it('shows a compact cap label without changing the stat value', () => {
+        const capped = {
+            ...movementData,
+            Rules: { ...movementData.Rules, ForwardSpeedCap: 7 },
+        };
+        const html = renderToStaticMarkup(createElement(MovementContext, { value: capped }));
+        expect(html).toContain('7.00 m/s');
+        expect(html).toContain('title="ForwardSpeedCap"');
+        expect(html).toContain('Cap: Forward');
+        expect(html).toContain('Cap: none');
+    });
     it('formats editor speed previews to two decimal places without rounding the core result', () => {
         const source = structuredClone(movementData) as unknown as MovementSource;
-        source.Classes[0]!.BaseMobilityTier = 8;
+        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobilityTier = 8;
         const result = movementSpeed(
             {
                 classHash: 3655393761,
@@ -39,9 +55,9 @@ describe('declarative nested field controls', () => {
             },
             source,
         );
-        expect(result.speed).toBeCloseTo(6.39625, 12);
-        expect(formatMovementSpeed(result.speed)).toBe('6.40');
-        source.Classes[0]!.BaseMobilityTier = 5;
+        expect(result.speed).toBeCloseTo(6.321875, 12);
+        expect(formatMovementSpeed(result.speed)).toBe('6.32');
+        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobilityTier = 5;
         const strafe = movementSpeed(
             {
                 classHash: 3655393761,
@@ -55,7 +71,7 @@ describe('declarative nested field controls', () => {
         );
         expect(formatMovementSpeed(strafe.speed)).toBe('3.83');
         expect(formatMovementSpeed(9)).toBe('9.00');
-        expect(result.speed).toBeCloseTo(6.39625, 12);
+        expect(result.speed).toBeCloseTo(6.321875, 12);
     });
     it('renders Rules without a manifest or editor context and marks JumpHeight unpublished', () => {
         const html = renderToStaticMarkup(
