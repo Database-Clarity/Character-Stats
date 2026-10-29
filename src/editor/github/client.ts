@@ -1,3 +1,4 @@
+import { LOCALE_FILE } from '../state/paths';
 export interface Repository {
     owner: string;
     name: string;
@@ -154,7 +155,7 @@ export class GitHubClient {
             const item = record(entry, 'tree entry');
             const path = stringField(item, 'path', 'tree path');
             const type = stringField(item, 'type', 'tree entry type');
-            if (type !== 'blob' || (path !== 'locale/en.json' && !path.startsWith('sources/'))) {
+            if (type !== 'blob' || (path !== LOCALE_FILE && !path.startsWith('sources/'))) {
                 continue;
             }
             tracked.set(path, stringField(item, 'sha', 'tracked file SHA'));

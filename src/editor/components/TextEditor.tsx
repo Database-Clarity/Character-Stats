@@ -8,6 +8,7 @@ import {
     type StatSpec,
 } from '../../core';
 import { useEditor } from '../state/store';
+import { LOCALE_FILE } from '../state/paths';
 import { localeEntryLabel, localeTextIds, updateLocaleText } from '../state/localeText';
 import { useManifest } from '../manifest';
 import { isPreviewAbility, previewCollections, tooltipAbilityContext } from './previewData';
@@ -28,7 +29,7 @@ export function TextEditor({
         [statValue, setStatValue] = useState(100),
         [abilityIndex, setAbilityIndex] = useState(0);
     const { lookup, status } = useManifest();
-    const saved = JSON.parse(originals['locale/en.json']!) as LocaleData;
+    const saved = JSON.parse(originals[LOCALE_FILE]!) as LocaleData;
     const abilities = previewCollections(source).abilities.filter(isPreviewAbility),
         ability = abilities[abilityIndex];
     const manifestName =
@@ -52,7 +53,7 @@ export function TextEditor({
     function change(id: string, text: string) {
         dispatch({
             type: 'set',
-            file: 'locale/en.json',
+            file: LOCALE_FILE,
             value: updateLocaleText(locale, id, text),
         });
     }

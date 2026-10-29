@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { isRecord, statRegistry } from '../core';
 import type { DataSource, LoadedData } from './data';
 import { EditorProvider, useEditor } from './state/store';
+import { statFilePath } from './state/paths';
 import {
     adjacentChange,
     changeAffectsStat,
     identityKey,
-    issueTarget,
     type ChangeTarget,
     type EditorChange,
 } from './state/editing';
@@ -38,7 +38,8 @@ import {
     type EditorNavigationSelection,
     type NavigationMode,
 } from './components/navigationHistory';
-import { plural } from './components/textFormat';
+import { RepositoryMenu } from './components/RepositoryMenu';
+import { ValidationPanel } from './components/ValidationPanel';
 
 const mainNavigationItems = [...statRegistry, movementViewSpec];
 const initialNavigationSelection: EditorNavigationSelection = {
@@ -69,11 +70,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         [request, setRequest] = useState<NavigationRequest | null>(null),
         [currentChange, setCurrentChange] = useState<string>();
     const [disconnecting, setDisconnecting] = useState(false);
-    const [moreMenuOpen, setMoreMenuOpen] = useState(false);
     const [statNavigationActive, setStatNavigationActive] = useState(false);
-    const moreMenuRef = useRef<HTMLDivElement>(null);
-    const morePanelRef = useRef<HTMLDivElement>(null);
-    const moreTriggerRef = useRef<HTMLButtonElement>(null);
     const workspaceRef = useRef<HTMLDivElement>(null);
     const navigationHistoryRef = useRef<NavigationHistoryController | null>(null);
     const normalizeNavigationRef = useRef<
@@ -99,28 +96,6 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         forgetLogin();
         onDisconnect();
     }
-    function focusMoreItem(last = false) {
-        requestAnimationFrame(() => {
-            const items = morePanelRef.current?.querySelectorAll<HTMLButtonElement>(
-                '[role="menuitem"]:not(:disabled)',
-            );
-            (last ? items?.[items.length - 1] : items?.[0])?.focus();
-        });
-    }
-    function openMoreMenu(last = false) {
-        setMoreMenuOpen(true);
-        focusMoreItem(last);
-    }
-    useEffect(() => {
-        if (!moreMenuOpen) return;
-        const closeOnOutsidePointer = (event: PointerEvent) => {
-            if (!moreMenuRef.current?.contains(event.target as Node)) setMoreMenuOpen(false);
-        };
-        document.addEventListener('pointerdown', closeOnOutsidePointer);
-        return () => document.removeEventListener('pointerdown', closeOnOutsidePointer);
-    }, [moreMenuOpen]);
-    const errors = state.issues.filter((i) => i.severity === 'error'),
-        warnings = state.issues.filter((i) => i.severity === 'warning');
     function navigateSelection(
         selection: EditorNavigationSelection,
         mode: NavigationMode = 'click',
@@ -135,14 +110,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         const tab = ['Fields', ...Object.keys(spec.collections), 'Text'].includes(selection.tab)
             ? selection.tab
             : 'Fields';
-        const file =
-            stat === 'Movement'
-                ? 'sources/movement.json'
-                : Object.keys(state.values).find(
-                      (path) =>
-                          path.startsWith('sources/stats/') &&
-                          (state.values[path] as { Name?: string }).Name === stat,
-                  );
+        const file = statFilePath(state.values, stat);
         if (!file || !isRecord(state.values[file])) {
             return { stat, tab: 'Fields', itemKey: null };
         }
@@ -242,6 +210,8 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             window.addEventListener('beforeunload', listener);
         return () => window.removeEventListener('beforeunload', listener);
     }, [state.dirty.length, state.itemDrafts, state.drafts]);
+    const latest = useRef({ next, selectStat, dialog });
+    latest.current = { next, selectStat, dialog };
     useEffect(() => {
         const workspace = workspaceRef.current;
         if (!workspace) return;
@@ -260,11 +230,11 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                 setDialog('jump');
             } else if (event.altKey && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
                 event.preventDefault();
-                next(event.key === 'ArrowDown' ? 1 : -1);
+                latest.current.next(event.key === 'ArrowDown' ? 1 : -1);
             } else if (
                 event.key === '/' &&
                 !['INPUT', 'TEXTAREA', 'SELECT'].includes((event.target as HTMLElement).tagName) &&
-                !dialog
+                !latest.current.dialog
             ) {
                 event.preventDefault();
                 const input = document.querySelector<HTMLInputElement>('[data-collection-search]');
@@ -322,7 +292,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             );
             const nextTarget = targets.find(({ name }) => name === nextName);
             if (!nextTarget) return;
-            selectStat(nextTarget.name, 'scroll');
+            latest.current.selectStat(nextTarget.name, 'scroll');
             nextTarget.button.scrollIntoView({ block: 'nearest' });
         };
         const wheelOptions: AddEventListenerOptions = { capture: true, passive: false };
@@ -342,17 +312,10 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             window.removeEventListener('compositionend', endComposition);
             workspace.removeEventListener('wheel', onWheel, wheelOptions);
         };
-    });
+    }, []);
     const spec =
         section === 'Movement' ? movementViewSpec : statRegistry.find((s) => s.name === section)!;
-    const file =
-        section === 'Movement'
-            ? 'sources/movement.json'
-            : Object.keys(state.values).find(
-                  (path) =>
-                      path.startsWith('sources/stats/') &&
-                      (state.values[path] as { Name?: string }).Name === section,
-              );
+    const file = statFilePath(state.values, section);
     return (
         <div className="workspace" ref={workspaceRef}>
             <a className="skip-link" href="#main">
@@ -420,157 +383,20 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     <div className="toolbar-manifest">
                         <ManifestStatusBadge />
                     </div>
-                    <div
-                        className="more-menu"
-                        ref={moreMenuRef}
-                        onBlur={(event) => {
-                            const nextTarget = event.relatedTarget as Node | null;
+                    <RepositoryMenu
+                        accountLabel={accountLabel}
+                        sourceLabel={state.source.label}
+                        onRecovery={() => setDialog('recovery')}
+                        onSignOut={() => {
                             if (
-                                !moreMenuRef.current?.contains(nextTarget) ||
-                                nextTarget === moreTriggerRef.current
+                                state.dirty.length ||
+                                Object.keys(state.itemDrafts).length ||
+                                Object.keys(state.drafts).length
                             )
-                                setMoreMenuOpen(false);
+                                setDisconnecting(true);
+                            else disconnect();
                         }}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Escape' && moreMenuOpen) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                setMoreMenuOpen(false);
-                                moreTriggerRef.current?.focus();
-                                return;
-                            }
-                            if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key))
-                                return;
-                            if (
-                                event.target === moreTriggerRef.current &&
-                                !moreMenuOpen &&
-                                (event.key === 'ArrowDown' || event.key === 'ArrowUp')
-                            ) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                openMoreMenu(event.key === 'ArrowUp');
-                                return;
-                            }
-                            const items = Array.from(
-                                morePanelRef.current?.querySelectorAll<HTMLButtonElement>(
-                                    '[role="menuitem"]:not(:disabled)',
-                                ) ?? [],
-                            );
-                            if (!items.length) return;
-                            event.preventDefault();
-                            event.stopPropagation();
-                            const index = items.indexOf(event.target as HTMLButtonElement);
-                            const next =
-                                event.key === 'Home'
-                                    ? 0
-                                    : event.key === 'End'
-                                      ? items.length - 1
-                                      : event.target === moreTriggerRef.current
-                                        ? event.key === 'ArrowDown'
-                                            ? 0
-                                            : items.length - 1
-                                        : (index +
-                                              (event.key === 'ArrowDown' ? 1 : -1) +
-                                              items.length) %
-                                          items.length;
-                            items[next]?.focus();
-                        }}
-                    >
-                        <button
-                            ref={moreTriggerRef}
-                            className="more-menu-trigger"
-                            type="button"
-                            aria-label="Repository options"
-                            aria-haspopup="menu"
-                            aria-expanded={moreMenuOpen}
-                            aria-controls={moreMenuOpen ? 'repository-options-menu' : undefined}
-                            title={`Repository options · ${accountLabel}`}
-                            onClick={() => {
-                                if (moreMenuOpen) setMoreMenuOpen(false);
-                                else openMoreMenu();
-                            }}
-                        >
-                            <svg
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                aria-hidden="true"
-                            >
-                                <path d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </button>
-                        {moreMenuOpen && (
-                            <div
-                                ref={morePanelRef}
-                                id="repository-options-menu"
-                                className="more-menu-panel"
-                                role="menu"
-                                aria-label="Repository options"
-                            >
-                                <div
-                                    className="more-menu-identity"
-                                    role="group"
-                                    aria-label="Repository identity"
-                                >
-                                    <span>Repository</span>
-                                    <strong className="account-repo" title={state.source.label}>
-                                        {accountLabel}
-                                    </strong>
-                                </div>
-                                <div
-                                    className="more-menu-actions"
-                                    role="group"
-                                    aria-label="Actions"
-                                >
-                                    <button
-                                        role="menuitem"
-                                        tabIndex={-1}
-                                        type="button"
-                                        onClick={() => {
-                                            setMoreMenuOpen(false);
-                                            setDialog('recovery');
-                                        }}
-                                    >
-                                        Recovery
-                                    </button>
-                                    <button
-                                        role="menuitem"
-                                        tabIndex={-1}
-                                        type="button"
-                                        className="account-button"
-                                        title="Sign out of this repository"
-                                        onClick={() => {
-                                            setMoreMenuOpen(false);
-                                            if (
-                                                state.dirty.length ||
-                                                Object.keys(state.itemDrafts).length ||
-                                                Object.keys(state.drafts).length
-                                            )
-                                                setDisconnecting(true);
-                                            else disconnect();
-                                        }}
-                                    >
-                                        <svg
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="1.7"
-                                            aria-hidden="true"
-                                        >
-                                            <path d="M10 4H4v16h6M10 12h11m-5-5 5 5-5 5" />
-                                        </svg>
-                                        Sign out
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    />
                 </div>
             </header>
             <nav
@@ -622,47 +448,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     </p>
                 )}
                 {state.recovery.notice && <p role="status">{state.recovery.notice}</p>}
-                <details className={`validation ${errors.length ? 'has-errors' : ''}`}>
-                    <summary aria-live="polite">
-                        <span className={errors.length ? 'error' : 'success'}>
-                            {errors.length ? '!' : '✓'}
-                        </span>{' '}
-                        {errors.length ? plural(errors.length, 'error') : 'Sources valid'}
-                        <span className="muted"> · {plural(warnings.length, 'warning')}</span>
-                        <span className="validation-hint">Shared core validation</span>
-                    </summary>
-                    <div className="validation-issues">
-                        {!state.issues.length ? (
-                            <p className="success">
-                                All sources and English placeholders are valid.
-                            </p>
-                        ) : (
-                            state.issues.map((issue, i) => {
-                                const target = issueTarget(issue.path, state.sources);
-                                return (
-                                    <div className="validation-issue" key={i}>
-                                        <p
-                                            className={
-                                                issue.severity === 'error' ? 'error' : 'warning'
-                                            }
-                                        >
-                                            <code>{issue.path}</code>: {issue.message}
-                                        </p>
-                                        {target && (
-                                            <button
-                                                type="button"
-                                                aria-label={`Go to ${issue.path}`}
-                                                onClick={() => go(target)}
-                                            >
-                                                Go to
-                                            </button>
-                                        )}
-                                    </div>
-                                );
-                            })
-                        )}
-                    </div>
-                </details>
+                <ValidationPanel onGo={go} />
                 {file ? (
                     <StatView
                         key={section}
@@ -679,9 +465,9 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             </main>
             {dialog === 'pending' && (
                 <PendingChanges onClose={() => setDialog(null)} onGo={goChange} />
-            )}{' '}
-            {dialog === 'save' && <SaveDialog onClose={() => setDialog(null)} />}{' '}
-            {dialog === 'publish' && <PublishDialog onClose={() => setDialog(null)} />}{' '}
+            )}
+            {dialog === 'save' && <SaveDialog onClose={() => setDialog(null)} />}
+            {dialog === 'publish' && <PublishDialog onClose={() => setDialog(null)} />}
             {dialog === 'jump' && <QuickJump onClose={() => setDialog(null)} onGo={go} />}
             {dialog === 'recovery' && <RecoveryDialog onClose={() => setDialog(null)} />}
             {disconnecting && (

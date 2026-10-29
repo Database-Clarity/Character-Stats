@@ -14,6 +14,9 @@ middleware or configuration changes are needed.
   Validation issues offer **Go to**: `issueTarget` in `state/editing.ts` maps core issue paths
   to a stat/tab/item/field target, and navigation falls back to the closest rendered
   ancestor `data-field` when the path points inside a control.
+  `RepositoryMenu` (account menu with Recovery and Sign out) and `ValidationPanel` (the issues
+  list) are separate components. `App`'s keyboard/wheel listeners register once and read the latest
+  state through a ref.
   Clicked editor selections are recorded in browser history; Back/Forward restores
   the stat, tab, group, or item selection without changing working values. Wheel
   selection bursts are committed after five seconds of inactivity.
@@ -24,6 +27,8 @@ middleware or configuration changes are needed.
   and saves but never enter source serialization, validation, or pending changes
   until explicitly added. Discarding a source clears its corresponding drafts.
   Core validation and serialization remain authoritative.
+- `state/paths.ts` holds the source path constants (`MOVEMENT_FILE`, `LOCALE_FILE`, `STATS_DIR`)
+  and `statFilePath`, which finds a stat's file; use them instead of path literals.
 - `state/editing.ts` contains tested pure helpers: identity-based change targets,
   cyclic change navigation (including shared locale consumers), spec-based draft defaults, atomic requirement /
   `lengthOf` parallel-array row edits and table reverts. Collection order alone is not a field change.

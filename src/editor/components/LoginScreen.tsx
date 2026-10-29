@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { GitHubDataSource, LocalDevDataSource, type DataSource, type LoadedData } from '../data';
 import { GitHubClient } from '../github/client';
+import { LOCALE_FILE, MOVEMENT_FILE } from '../state/paths';
 import logo from '../assets/clarity-logo.svg';
 export interface LoginSettings {
     token: string;
@@ -125,8 +126,8 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                 if (!value || typeof value !== 'object' || Array.isArray(value))
                     throw new Error(`${path}: expected a JSON object`);
             }
-            if (!loaded.files['sources/movement.json'] || !loaded.files['locale/en.json'])
-                throw new Error('Repository is missing sources/movement.json or locale/en.json.');
+            if (!loaded.files[MOVEMENT_FILE] || !loaded.files[LOCALE_FILE])
+                throw new Error(`Repository is missing ${MOVEMENT_FILE} or ${LOCALE_FILE}.`);
             if (!local) {
                 forgetLogin();
                 try {

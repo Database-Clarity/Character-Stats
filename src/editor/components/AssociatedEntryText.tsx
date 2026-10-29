@@ -7,6 +7,7 @@ import {
     type StatSpec,
 } from '../../core';
 import { useEditor } from '../state/store';
+import { LOCALE_FILE } from '../state/paths';
 import { entryLocaleTextIds, updateLocaleText } from '../state/localeText';
 import { useManifest } from '../manifest';
 import { isPreviewAbility, tooltipAbilityContext } from './previewData';
@@ -32,7 +33,7 @@ export function AssociatedEntryText({
     const [statValue, setStatValue] = useState(100);
     const { lookup, status } = useManifest();
     const ids = entryLocaleTextIds(locale, stat, collection, entitySpec, entry);
-    const savedLocale = originalValues['locale/en.json'];
+    const savedLocale = originalValues[LOCALE_FILE];
     if (!ids.length) return null;
     if (!isRecord(savedLocale)) throw new Error('Original English locale must be an object');
 
@@ -61,7 +62,7 @@ export function AssociatedEntryText({
                         onRevert={() =>
                             dispatch({
                                 type: 'set',
-                                file: 'locale/en.json',
+                                file: LOCALE_FILE,
                                 value: updateLocaleText(locale, id, old),
                             })
                         }

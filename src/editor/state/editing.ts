@@ -7,6 +7,7 @@ import {
     type EntitySpec,
     type FieldSpec,
 } from '../../core';
+import { LOCALE_FILE, MOVEMENT_FILE } from './paths';
 
 export const equal = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 export const identityKey = (spec: EntitySpec) =>
@@ -369,7 +370,7 @@ export function collectChanges(
             ? parsedOriginals[file]
             : JSON.parse(originals[file] ?? '{}');
         if (!isRecord(value) || !isRecord(saved)) continue;
-        if (file === 'locale/en.json') {
+        if (file === LOCALE_FILE) {
             for (const key of new Set([...Object.keys(saved), ...Object.keys(value)])) {
                 const ownSection =
                     key === movementSpec.name || statRegistry.some((spec) => spec.name === key);
@@ -390,7 +391,7 @@ export function collectChanges(
             }
             continue;
         }
-        const movement = file === 'sources/movement.json';
+        const movement = file === MOVEMENT_FILE;
         const spec = movement ? movementSpec : statRegistry.find((s) => s.name === value.Name);
         if (!spec) continue;
         const a = movement ? saved : isRecord(saved.Fields) ? saved.Fields : {};

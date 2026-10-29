@@ -34,12 +34,13 @@ export function StatView({
     selection: EditorNavigationSelection;
     onNavigate(selection: EditorNavigationSelection, mode: NavigationMode): void;
 }) {
-    const { values, originals, dispatch, changes } = useEditor(),
+    const { values, originalValues, dispatch, changes } = useEditor(),
         tab = selection.tab,
         selected = selection.itemKey,
         root = useRef<HTMLElement>(null);
     const value = values[file] as Record<string, unknown>,
-        saved = JSON.parse(originals[file]!) as Record<string, unknown>;
+        original = originalValues[file],
+        saved: Record<string, unknown> = isRecord(original) ? original : {};
     const fields = (movement ? value : isRecord(value.Fields) ? value.Fields : {}) as Record<
             string,
             unknown
@@ -212,7 +213,7 @@ export function StatView({
                         }}
                         onChange={(next) => setValue({ ...value, [tab]: next })}
                     />
-                )}{' '}
+                )}
                 {tab === 'Text' && (
                     <TextEditor
                         spec={spec}

@@ -13,6 +13,7 @@ import {
 } from '../../core';
 import type { DataSource, LoadedData } from '../data';
 import { collectChanges } from './editing';
+import { LOCALE_FILE, MOVEMENT_FILE, isStatFile } from './paths';
 import type { RecoverySnapshot } from './recovery';
 import { useRecovery } from './useRecovery';
 export interface Draft {
@@ -63,9 +64,9 @@ function jsonText(value: unknown): string {
 }
 
 export function serializeFile(path: string, value: unknown): string {
-    if (path === 'locale/en.json') return jsonText(value);
-    if (path === 'sources/movement.json' && isMovementSource(value)) return serializeSource(value);
-    if (path.startsWith('sources/stats/') && isStatSource(value)) return serializeSource(value);
+    if (path === LOCALE_FILE) return jsonText(value);
+    if (path === MOVEMENT_FILE && isMovementSource(value)) return serializeSource(value);
+    if (isStatFile(path) && isStatSource(value)) return serializeSource(value);
     return jsonText(value);
 }
 
@@ -82,7 +83,7 @@ function parseFiles(files: Record<string, string>): Record<string, unknown> {
             }
             if (!isRecord(value)) {
                 throw new Error(
-                    path === 'locale/en.json'
+                    path === LOCALE_FILE
                         ? 'English locale must be an object'
                         : `${path}: Expected source object`,
                 );
@@ -339,16 +340,16 @@ function validateLocaleSection(
 
 export function deriveEditorState(state: EditorState) {
     const stats = Object.entries(state.values)
-        .filter(([path]) => path.startsWith('sources/stats/'))
+        .filter(([path]) => isStatFile(path))
         .map(([, value]) => value);
-    const movement = state.values['sources/movement.json'];
-    const localeValue = state.values['locale/en.json'];
+    const movement = state.values[MOVEMENT_FILE];
+    const localeValue = state.values[LOCALE_FILE];
     const locale = isRecord(localeValue) ? localeValue : undefined;
     const allIssues = stats.flatMap((value, index) => statIssues(value, locale, index));
     allIssues.push(...movementIssues(movement));
     if (!locale) {
         allIssues.push({
-            path: 'locale/en.json',
+            path: LOCALE_FILE,
             message: 'English locale must be an object',
             severity: 'error',
         });

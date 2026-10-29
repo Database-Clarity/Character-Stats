@@ -1,4 +1,5 @@
 import { GitHubClient } from '../github/client';
+import { LOCALE_FILE } from '../state/paths';
 export interface LoadedData {
     files: Record<string, string>;
     head: string;
@@ -17,7 +18,7 @@ export class GitHubDataSource implements DataSource {
     }
     async load(): Promise<LoadedData> {
         const head = await this.client.branchHead();
-        const paths = [...(await this.client.listFiles('sources')), 'locale/en.json'];
+        const paths = [...(await this.client.listFiles('sources')), LOCALE_FILE];
         const files = Object.fromEntries(
             await Promise.all(paths.map(async (path) => [path, await this.client.getFile(path)])),
         );

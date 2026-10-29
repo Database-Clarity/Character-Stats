@@ -6,6 +6,7 @@ import {
     type StatSpec,
 } from '../../core';
 import { useEditor } from '../state/store';
+import { LOCALE_FILE } from '../state/paths';
 import { updateLocaleText } from '../state/localeText';
 import { AutoResizeTextarea } from './AutoResizeTextarea';
 
@@ -42,7 +43,7 @@ export function LocaleTextField({
                         onChange={(event) =>
                             dispatch({
                                 type: 'set',
-                                file: 'locale/en.json',
+                                file: LOCALE_FILE,
                                 value: updateLocaleText(locale, id, event.target.value),
                             })
                         }

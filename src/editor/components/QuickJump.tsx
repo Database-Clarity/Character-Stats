@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { isRecord, statRegistry } from '../../core';
 import { useEditor } from '../state/store';
 import { identityKey, type ChangeTarget } from '../state/editing';
+import { statFilePath } from '../state/paths';
 import { movementViewSpec } from './StatView';
 import { Modal } from './Modal';
 import { collectionLabel } from './textFormat';
@@ -16,11 +17,8 @@ export function QuickJump({
         [query, setQuery] = useState('');
     const options = [...statRegistry, movementViewSpec]
         .flatMap((spec) => {
-            const file = Object.entries(values).find(([path, v]) =>
-                spec.name === 'Movement'
-                    ? path === 'sources/movement.json'
-                    : isRecord(v) && v.Name === spec.name,
-            )?.[1];
+            const filePath = statFilePath(values, spec.name),
+                file = filePath && values[filePath];
             return [
                 {
                     stat: spec.name,

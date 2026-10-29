@@ -1,5 +1,6 @@
 import { isRecord } from '../../core';
 import { GitHubDataSource, LocalDevDataSource, type DataSource } from '../data';
+import { LOCALE_FILE, MOVEMENT_FILE } from './paths';
 
 export interface RecoverySnapshot {
     id: string;
@@ -83,9 +84,7 @@ function isJsonValue(value: unknown, ancestors = new WeakSet<object>()): boolean
 
 function isTrackedFile(path: string): boolean {
     return (
-        path === 'sources/movement.json' ||
-        path === 'locale/en.json' ||
-        /^sources\/stats\/[^/]+\.json$/.test(path)
+        path === MOVEMENT_FILE || path === LOCALE_FILE || /^sources\/stats\/[^/]+\.json$/.test(path)
     );
 }
 
