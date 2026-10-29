@@ -9,7 +9,7 @@ describe('field outline layout', () => {
         const pageLayout = forms.match(/\.long-page\s*\{([^}]*)\}/)?.[1] ?? '';
         const buttonStyles = forms.match(/\.outline\s*>\s*button\s*\{([^}]*)\}/)?.[1] ?? '';
 
-        expect(pageLayout).toContain('fit-content(min(32vw, 360px))');
+        expect(pageLayout).toContain('fit-content(min(30vw, 480px))');
         expect(buttonStyles).toContain('white-space: normal');
         expect(buttonStyles).toContain('overflow-wrap: anywhere');
         expect(buttonStyles).not.toContain('text-overflow: ellipsis');

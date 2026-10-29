@@ -131,7 +131,8 @@ middleware or configuration changes are needed.
   Resolved hash chips show the manifest name followed by the hash in muted monospace text.
   Plain reference arrays have no wildcard or negative-subclass semantics; requirement
   tables retain those spec-declared semantics and their atomic parallel columns.
-- The outline can collapse; below 1100px it automatically becomes a closed floating
+- The outline grows to fit its labels up to `min(30vw, 480px)` and wraps beyond that.
+  It can collapse; below 1100px it automatically becomes a closed floating
   disclosure. Labels ellipsize rather than breaking into individual letters.
 - First manifest load blocks editing with a modal showing the current loading step
   and indexing progress. Errors (including missing API-key configuration) offer an
