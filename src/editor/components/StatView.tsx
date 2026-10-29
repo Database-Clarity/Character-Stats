@@ -265,13 +265,12 @@ function FieldsPage({
                     <div key={field.key} data-outline={field.key}>
                         {field.kind === 'curve' ? (
                             input
-                        ) : (
-                            <Collapse
-                                storageKey={`${file}:${field.group ?? field.key}`}
-                                title={field.group ?? <FieldName spec={field} />}
-                            >
+                        ) : field.group ? (
+                            <Collapse storageKey={`${file}:${field.group}`} title={field.group}>
                                 {input}
                             </Collapse>
+                        ) : (
+                            <div className="field-card">{input}</div>
                         )}
                     </div>
                 );

@@ -70,6 +70,12 @@
 .long-content {
     padding: 12px 16px 32px;
 }
+/* A single top-level field: its own label already names it, so no section heading. */
+.field-card {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 4px 12px;
+}
 .long-content > [data-outline] {
     scroll-margin: 8px;
     margin-bottom: 8px;

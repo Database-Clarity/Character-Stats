@@ -111,7 +111,7 @@ export const healthSpec: StatSpec = {
 
         numberField('PVEDamageResistance', {
             min: 0,
-            label: 'PVE Health Damage Resist (%)',
+            label: 'PvE health damage resistance (%)',
             description:
                 'This number represents the percentage damage resistance applied ' +
                 'to Health, not Shields, in PVE activities, independent of the ' +

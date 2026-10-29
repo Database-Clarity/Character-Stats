@@ -54,7 +54,7 @@ describe('exports and generated schema', () => {
     it('labels percentage and scalar inputs with their units', () => {
         const fields = statRegistry.flatMap((spec) => spec.fields);
         expect(healthSpec.fields.find((field) => field.key === 'PVEDamageResistance')?.label).toBe(
-            'PVE Health Damage Resist (%)',
+            'PvE health damage resistance (%)',
         );
         expect(healthSpec.fields.find((field) => field.key === 'FlinchResistance')?.label).toBe(
             'ADS-only flinch resistance (%)',
