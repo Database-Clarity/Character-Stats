@@ -127,7 +127,7 @@ export function FieldInput({
     const id = useId();
     const [picker, setPicker] = useState(false);
     const issues = validateField(spec, value, siblings);
-    const label = `${spec.label ?? spec.key}${spec.required ? ' *' : ''}`;
+    const label = spec.label ?? spec.key;
     const table =
         siblings.RefType === 'itemCategory'
             ? 'itemCategory'
@@ -155,7 +155,7 @@ export function FieldInput({
                     storageKey={`${file}:${path}`}
                     title={
                         <span title={spec.description}>
-                            <FieldName spec={spec} markRequired />
+                            <FieldName spec={spec} markOptional />
                         </span>
                     }
                     className="nested-object"
@@ -320,7 +320,7 @@ export function FieldInput({
             ) : (
                 <div className="field">
                     <label className="field-label" htmlFor={id} title={spec.description}>
-                        <FieldName spec={spec} markRequired />
+                        <FieldName spec={spec} markOptional />
                         <span className="field-help" title={spec.description}>
                             <svg
                                 width="16"

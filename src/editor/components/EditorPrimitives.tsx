@@ -186,20 +186,21 @@ export function LongPage({
     );
 }
 
-/** A field's readable label with its required marker, followed by the source key in dimmed text. */
+/**
+ * A field's readable label, followed by the source key in dimmed text. Most fields are required,
+ * so form labels tag the exceptions as optional instead of marking every required field.
+ */
 export function FieldName({
     spec,
-    markRequired = false,
+    markOptional = false,
 }: {
     spec: { key: string; label?: string | undefined; required?: boolean | undefined };
-    markRequired?: boolean;
+    markOptional?: boolean;
 }) {
     return (
         <span className="field-name">
-            <span>
-                {spec.label ?? spec.key}
-                {markRequired && spec.required ? ' *' : ''}
-            </span>
+            <span>{spec.label ?? spec.key}</span>
+            {markOptional && !spec.required && <span className="field-optional">optional</span>}
             {spec.label !== undefined && spec.label !== spec.key && (
                 <span className="field-key" aria-hidden="true">
                     {spec.key}

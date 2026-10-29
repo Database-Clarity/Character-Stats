@@ -550,3 +550,9 @@
     min-width: 0;
     max-width: 100%;
 }
+.field-optional {
+    color: #7d8590;
+    font-size: 10px;
+    font-weight: 400;
+    font-style: italic;
+}
