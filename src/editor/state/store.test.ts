@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
-import { statRegistry } from '../../core';
+import { statRegistry, validateSources, type LocaleData } from '../../core';
 import type { DataSource } from '../data';
 import {
     createEditorState,
@@ -118,6 +118,34 @@ describe('editor in-memory state', () => {
             severity: 'error',
             message: 'Unknown placeholder {{UnknownToken}}',
         });
+    });
+    it('reports the missing Condition text warning that npm run validate reports', () => {
+        const state = initial();
+        const locale = structuredClone(state.values['locale/en.json']) as {
+            Movement: { Sources: Record<string, { Condition?: string }> };
+        };
+        const movement = state.values['sources/movement.json'] as {
+            Sources: { Hash: number; Activation: string }[];
+        };
+        const conditional = movement.Sources.find((s) => s.Activation === 'Conditional')!;
+        delete locale.Movement.Sources[String(conditional.Hash)]!.Condition;
+        const changed = editorReducer(state, {
+            type: 'set',
+            file: 'locale/en.json',
+            value: locale,
+        });
+        const expected = validateSources(
+            {
+                stats: Object.entries(changed.values)
+                    .filter(([path]) => path.startsWith('sources/stats/'))
+                    .map(([, value]) => value),
+                movement,
+            },
+            locale as unknown as LocaleData,
+        );
+        expect(expected.length).toBeGreaterThan(0);
+        for (const issue of expected)
+            expect(deriveEditorState(changed).issues).toContainEqual(issue);
     });
     it('preserves locale key order and serializes with four-space indent and trailing LF', () => {
         expect(serializeFile('locale/en.json', { Z: 'last', A: 'first' })).toBe(

@@ -147,7 +147,7 @@ function changesForFile(
 }
 
 const statValidationCache = new WeakMap<object, WeakMap<object, ValidationIssue[]>>();
-const movementValidationCache = new WeakMap<object, ValidationIssue[]>();
+const movementValidationCache = new WeakMap<object, WeakMap<object, ValidationIssue[]>>();
 const localeValidationCache = new WeakMap<object, ValidationIssue[]>();
 
 function statIssues(
@@ -182,19 +182,27 @@ function statIssues(
     );
 }
 
-function movementIssues(value: unknown): ValidationIssue[] {
-    if (typeof value === 'object' && value !== null) {
-        const cached = movementValidationCache.get(value);
-        if (cached) return cached;
-        const issues = validateSources({ stats: [], movement: value }).filter(
-            (issue) => issue.path === 'movement' || issue.path.startsWith('movement.'),
+function movementIssues(value: unknown, locale: LocaleData | undefined): ValidationIssue[] {
+    // Pass the locale so locale checks that depend on movement data (Conditional source text) run.
+    const run = () =>
+        validateSources({ stats: [], movement: value }, locale).filter(
+            (issue) =>
+                issue.path === 'movement' ||
+                issue.path.startsWith('movement.') ||
+                issue.path.startsWith('locale.Movement.'),
         );
-        movementValidationCache.set(value, issues);
-        return issues;
+    if (typeof value !== 'object' || value === null || !locale) return run();
+    let byLocale = movementValidationCache.get(value);
+    if (!byLocale) {
+        byLocale = new WeakMap();
+        movementValidationCache.set(value, byLocale);
     }
-    return validateSources({ stats: [], movement: value }).filter(
-        (issue) => issue.path === 'movement' || issue.path.startsWith('movement.'),
-    );
+    let issues = byLocale.get(locale);
+    if (!issues) {
+        issues = run();
+        byLocale.set(locale, issues);
+    }
+    return issues;
 }
 
 function localeIssues(locale: LocaleData): ValidationIssue[] {
@@ -346,7 +354,7 @@ export function deriveEditorState(state: EditorState) {
     const localeValue = state.values[LOCALE_FILE];
     const locale = isRecord(localeValue) ? localeValue : undefined;
     const allIssues = stats.flatMap((value, index) => statIssues(value, locale, index));
-    allIssues.push(...movementIssues(movement));
+    allIssues.push(...movementIssues(movement, locale));
     if (!locale) {
         allIssues.push({
             path: LOCALE_FILE,
