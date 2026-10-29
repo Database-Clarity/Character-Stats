@@ -281,6 +281,8 @@ These are separate valid segment examples for a `0-100` field; each covers that 
 
 `npm run validate` checks sources, locale placeholders, and exported JSON against the committed draft-06 schema. `npm run schema` regenerates that schema from the registries. Warnings do not block data builds; errors do.
 
+The `ci.yml` workflow runs `typecheck`, `format:check`, `test` (which includes the check that the committed `schema.json` matches the registries), `validate` and the editor build on every pull request and on pushes to `master` and `v2.0-overhaul`, so editor saves that break validation show up as a failed check before anyone publishes.
+
 Numeric limits encode structure and mathematical meaning, not guessed game-balance ranges. Keep finite numbers, integer hashes/HP/counts, uint32 manifest ranges, curve domains, parallel-array lengths, and nonnegative magnitudes. Cooldowns, recharge-rate multipliers and movement multipliers remain positive. Energy scalars can be zero and have no upper bound. Base Mobility tiers have no upper bound; the calculator clamps effective tiers to the configured curve cap. Mobility tier effects may be negative penalties.
 
 In the editor, **Publish** dispatches `build-data.yml` on the selected branch. The

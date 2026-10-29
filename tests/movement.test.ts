@@ -50,9 +50,8 @@ describe('movement calculator', () => {
             movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }] })).speed,
         ).toBeCloseTo(5.6 * 1.1, 12);
         expect(
-            movementSpeed(
-                input({ sources: [{ hash: 1888623310, boosted: true }], sprint: true }),
-            ).speed,
+            movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }], sprint: true }))
+                .speed,
         ).toBeCloseTo(8 * 1.1, 12);
         expect(movementSpeed(input({ sources, direction: 'Strafe' })).speed).toBeCloseTo(
             5.6 * 0.85,
@@ -99,10 +98,8 @@ describe('movement calculator', () => {
         const source = data();
         source.Classes[0]!.BaseMobilityTier = 5;
         expect(
-            movementSpeed(
-                input({ classHash: hunter, direction: 'Strafe', ads: true }),
-                source,
-            ).speed,
+            movementSpeed(input({ classHash: hunter, direction: 'Strafe', ads: true }), source)
+                .speed,
         ).toBeCloseTo(3.825, 12);
     });
     it('reproduces tier-10 sidearm ADS plus Lightweight using current source values', () => {
