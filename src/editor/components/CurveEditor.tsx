@@ -7,7 +7,7 @@ import {
     type CurveSegment,
     type FieldSpec,
 } from '../../core';
-import { Collapse } from './EditorPrimitives';
+import { Collapse, FieldName } from './EditorPrimitives';
 import CurveModeToggle from './CurveModeToggle';
 import CurvePlot from './CurvePlot';
 import SegmentList from './SegmentList';
@@ -93,7 +93,7 @@ export function CurveEditor({
             title={
                 <>
                     <strong id={id} title={spec.description}>
-                        {spec.label ?? spec.key}
+                        <FieldName spec={spec} />
                     </strong>
                     <span className="mono muted">
                         {domain[0]}–{domain[1]}

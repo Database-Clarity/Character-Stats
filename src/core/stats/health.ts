@@ -16,6 +16,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('OrbOfPowerHealthRestore', {
+            label: 'Orb of Power health restore (HP)',
             domain: [0, 100],
             items: { min: 0 },
             description:
@@ -24,18 +25,21 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('PVPHealthHP', {
+            label: 'PvP health (HP)',
             min: 0,
             description:
                 'This number represents how much HP your Health has in most PVP ' + 'activities.',
         }),
 
         numberField('PVEHealthHP', {
+            label: 'PvE health (HP)',
             min: 0,
             description:
                 'This number represents how much HP your Health has in PVE ' + 'activities.',
         }),
 
         numberField('HealthRegenDelay', {
+            label: 'Health regeneration delay (s)',
             min: 0,
             description:
                 'This number represents how many seconds after taking damage ' +
@@ -52,6 +56,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('BaseShieldHP', {
+            label: 'Base shield (HP)',
             min: 0,
             description:
                 'How much HP your Shields have in all activities (PVE and PVP), ' +
@@ -59,6 +64,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('PVEBonusShieldHP', {
+            label: 'PvE bonus shield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:
@@ -68,6 +74,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('BaseShieldRechargeDelay', {
+            label: 'Base shield recharge delay (s)',
             min: 0,
             description:
                 'How many seconds after taking damage your Shields start ' +
@@ -75,6 +82,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('ShieldRechargeDelay', {
+            label: 'Shield recharge delay (s)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:

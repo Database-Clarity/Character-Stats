@@ -527,3 +527,17 @@
     padding: 2px 4px;
     background: #20242a;
 }
+.field-name {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 6px;
+    min-width: 0;
+}
+.field-key {
+    color: #7d8590;
+    font-family: 'Cascadia Code', Consolas, ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+}

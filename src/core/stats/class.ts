@@ -29,6 +29,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVEOvershieldHP', {
+            label: 'PvE overshield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:
@@ -38,6 +39,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVPOvershieldHP', {
+            label: 'PvP overshield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:

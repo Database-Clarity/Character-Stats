@@ -4,7 +4,7 @@ import { updateProperty, useEditor } from '../state/store';
 import { changeAffectsStat, type ChangeTarget } from '../state/editing';
 import { EntityList } from './EntityList';
 import { FieldInput } from './FieldInput';
-import { LongPage, Collapse } from './EditorPrimitives';
+import { LongPage, Collapse, FieldName } from './EditorPrimitives';
 import { TextEditor } from './TextEditor';
 import { MovementContext } from './MovementContext';
 import type { EditorNavigationSelection, NavigationMode } from './navigationHistory';
@@ -185,7 +185,7 @@ export function StatView({
                                     ) : (
                                         <Collapse
                                             storageKey={`${file}:${field.group ?? field.key}`}
-                                            title={field.group ?? field.label ?? field.key}
+                                            title={field.group ?? <FieldName spec={field} />}
                                         >
                                             <FieldInput
                                                 spec={field}

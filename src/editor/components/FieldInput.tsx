@@ -2,7 +2,7 @@ import { useId, useState } from 'react';
 import { isRecord, validateField, type FieldSpec } from '../../core';
 import { CurveEditor } from './CurveEditor';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
-import { Modified, Collapse } from './EditorPrimitives';
+import { Modified, Collapse, FieldName } from './EditorPrimitives';
 import { fieldDefault, numericDefault, updateNestedField } from '../state/editing';
 import { EntityForm } from './EntityForm';
 import { numberStep } from './numberStep';
@@ -153,7 +153,11 @@ export function FieldInput({
             {(spec.kind === 'object' || spec.kind === 'objectArray') && nested ? (
                 <Collapse
                     storageKey={`${file}:${path}`}
-                    title={<span title={spec.description}>{label}</span>}
+                    title={
+                        <span title={spec.description}>
+                            <FieldName spec={spec} markRequired />
+                        </span>
+                    }
                     className="nested-object"
                 >
                     {!spec.required && (
@@ -316,7 +320,7 @@ export function FieldInput({
             ) : (
                 <div className="field">
                     <label className="field-label" htmlFor={id} title={spec.description}>
-                        {label}
+                        <FieldName spec={spec} markRequired />
                         <span className="field-help" title={spec.description}>
                             <svg
                                 width="16"

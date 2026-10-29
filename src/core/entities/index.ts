@@ -98,6 +98,7 @@ export const abilitySpec: EntitySpec = {
         nameField(),
 
         numberField('BaseCooldown', {
+            label: 'Base cooldown (s)',
             exclusiveMin: 0,
             round: 3,
             description:
@@ -140,6 +141,7 @@ export const superAbilitySpec: EntitySpec = {
         nameField(),
 
         numberField('BaseCooldown', {
+            label: 'Base cooldown (s)',
             exclusiveMin: 0,
             round: 3,
             description:
@@ -165,6 +167,7 @@ export const superAbilitySpec: EntitySpec = {
         }),
 
         localeField('EnhancedDurationTooltip', {
+            label: 'Enhanced duration tooltip',
             required: false,
             description:
                 'Locale ID for the enhanced-duration tooltip. Set only for Supers with ' +
@@ -188,6 +191,7 @@ export const overrideSpec: EntitySpec = {
         }),
 
         integerArrayField('Requirements', {
+            label: 'Requirements',
             itemRef: 'ability',
             refSubclassFilters: true,
             minItems: 1,
@@ -200,6 +204,7 @@ export const overrideSpec: EntitySpec = {
         }),
 
         numberField('CooldownOverride', {
+            label: 'Cooldown override (s)',
             exclusiveMin: 0,
             round: 3,
             required: false,
@@ -244,19 +249,22 @@ export const movementClassSpec: EntitySpec = {
     role: 'movementClass',
     uniqueKey: 'ClassHash',
     fields: [
-        hashField('ClassHash', { description: 'D2 Manifest class hash.' }),
+        hashField('ClassHash', { label: 'Class hash', description: 'D2 Manifest class hash.' }),
         nameField(),
         integerField('BaseMobilityTier', {
+            label: 'Base Mobility tier',
             min: 0,
             description:
                 'Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified.',
         }),
         integerField('BaseMobilityTierPVP', {
+            label: 'PvP base Mobility tier',
             min: 0,
             required: false,
             description: 'Base hidden Mobility tier in PvP when it differs from PvE.',
         }),
         numberField('BaseSprintSpeed', {
+            label: 'Base sprint speed (m/s)',
             exclusiveMin: 0,
             description: 'Base sprint speed in m/s, independent of Mobility.',
         }),
@@ -268,40 +276,49 @@ export const movementRulesSpec: EntitySpec = {
     name: 'MovementRules',
     fields: [
         curve('WalkSpeed', {
+            label: 'Walk speed (m/s)',
             domain: [0, 13],
             description: 'Forward walk speed in m/s by hidden Mobility tier.',
         }),
         curve('JumpHeight', {
+            label: 'Jump height',
             domain: [0, 13],
             published: false,
             description: 'Unpublished jump-height placeholder; measured values are not available.',
         }),
         numberField('StrafeMultiplier', {
+            label: 'Strafe multiplier',
             exclusiveMin: 0,
             description: 'Multiplier for left, right, and backward walking.',
         }),
         numberField('CrouchMultiplier', {
+            label: 'Crouch multiplier',
             exclusiveMin: 0,
             description: 'Multiplier for crouched walking.',
         }),
         numberField('ADSMultiplier', {
+            label: 'ADS multiplier',
             exclusiveMin: 0,
             description:
                 'Default walking multiplier while aiming down sights; active source effects can replace it.',
         }),
         numberField('ForwardSpeedCap', {
+            label: 'Forward speed cap (m/s)',
             exclusiveMin: 0,
             description: 'Maximum forward movement speed, including sprint, in m/s.',
         }),
         numberField('StrafeSpeedCap', {
+            label: 'Strafe speed cap (m/s)',
             exclusiveMin: 0,
             description: 'Maximum strafe speed in m/s, including while aiming down sights.',
         }),
         numberField('CrouchSpeedCap', {
+            label: 'Crouch speed cap (m/s)',
             exclusiveMin: 0,
             description: 'Maximum crouched movement speed in m/s.',
         }),
         integerField('MaxMobilityTier', {
+            label: 'Max Mobility tier',
             min: 0,
             max: 13,
             description:
@@ -348,14 +365,16 @@ export const movementEffectSpec: EntitySpec = {
                         'Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value.',
                 },
             ],
-            { description: 'Movement effect to apply.' },
+            { label: 'Effect type', description: 'Movement effect to apply.' },
         ),
         numberArrayField('Values', {
+            label: 'Values',
             minItems: 1,
             description:
                 'Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1.',
         }),
         numberArrayField('BoostedValues', {
+            label: 'Boosted values',
             minItems: 1,
             lengthOf: 'Values',
             required: false,
@@ -384,9 +403,10 @@ export const movementSourceSpec: EntitySpec = {
                 },
                 { value: 'itemCategory', description: 'DestinyItemCategoryDefinition hash.' },
             ],
-            { description: 'Manifest definition table used by Hash.' },
+            { label: 'Reference type', description: 'Manifest definition table used by Hash.' },
         ),
         integerArrayField('AlsoMatches', {
+            label: 'Also matches',
             itemRef: 'item',
             minItems: 1,
             uniqueItems: true,
@@ -405,13 +425,18 @@ export const movementSourceSpec: EntitySpec = {
                     description: 'Active only while the localized Condition is satisfied.',
                 },
             ],
-            { description: 'When this source applies; callers select active sources.' },
+            {
+                label: 'Activation',
+                description: 'When this source applies; callers select active sources.',
+            },
         ),
         objectArrayField('Effects', movementEffectSpec, {
+            label: 'Effects',
             minItems: 1,
             description: 'Effects from this source, with at most one entry for each effect type.',
         }),
         integerArrayField('BoostRequiresAll', {
+            label: 'Boost requires all',
             itemRef: 'item',
             minItems: 1,
             items: { min: 1, max: 4294967295 },

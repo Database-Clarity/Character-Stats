@@ -185,3 +185,26 @@ export function LongPage({
         </div>
     );
 }
+
+/** A field's readable label with its required marker, followed by the source key in dimmed text. */
+export function FieldName({
+    spec,
+    markRequired = false,
+}: {
+    spec: { key: string; label?: string | undefined; required?: boolean | undefined };
+    markRequired?: boolean;
+}) {
+    return (
+        <span className="field-name">
+            <span>
+                {spec.label ?? spec.key}
+                {markRequired && spec.required ? ' *' : ''}
+            </span>
+            {spec.label !== undefined && spec.label !== spec.key && (
+                <span className="field-key" aria-hidden="true">
+                    {spec.key}
+                </span>
+            )}
+        </span>
+    );
+}

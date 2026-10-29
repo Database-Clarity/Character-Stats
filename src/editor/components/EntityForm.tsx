@@ -1,7 +1,7 @@
 import { validateEntity, type EntitySpec } from '../../core';
 import { updateProperty } from '../state/store';
 import { FieldInput } from './FieldInput';
-import { Collapse } from './EditorPrimitives';
+import { Collapse, FieldName } from './EditorPrimitives';
 import { RequirementEditor } from './RequirementEditor';
 
 export function EntityForm({
@@ -61,7 +61,7 @@ export function EntityForm({
                 <Collapse
                     key={field.key}
                     storageKey={`${file}:${path}:${field.key}`}
-                    title={field.label ?? field.key}
+                    title={<FieldName spec={field} />}
                 >
                     <RequirementEditor
                         field={field}

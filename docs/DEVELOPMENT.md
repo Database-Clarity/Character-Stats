@@ -78,7 +78,7 @@ fields: [
 ```
 
 Use the actual helper for the data kind: `curve`, `numberField`, `integerField`, `numberArrayField`, `integerArrayField`, `enumField`, `objectField`, `objectArrayField`, or `localeField`. `curve` sets a default nonnegative item constraint; specify `domain` and any field-specific constraints. `hashField`, `nameField`, and `notesField` are the shared entity helpers. Most fields are required by default; set `required: false` for optional fields. Add matching values under `Fields` in the affected [`sources/stats/`](../sources/stats/) file(s). For a curve, source JSON may use raw `Values` or validated piecewise `Segments` (see below).
-Use `label` for a concise, unit-specific editor name such as `Damage increase (%)` or `Cooldown scalar`; keep the stable `key` unchanged for source and consumer compatibility.
+Use `label` for a concise, unit-specific editor name such as `Damage increase (%)` or `Cooldown scalar`; keep the stable `key` unchanged for source and consumer compatibility. Every form field needs a `label` (`tests/field-labels.test.ts` enforces this); the editor shows it with the key in dimmed monospace text beside it. `hashField`, `nameField` and `notesField` supply default labels.
 
 ## Dynamic locale placeholders
 

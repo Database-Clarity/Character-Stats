@@ -27,17 +27,20 @@ function renderEffectValues(
 }
 
 describe('movement effect numeric stepping', () => {
-    it.each(['Values', 'BoostedValues'] as const)(
+    it.each([
+        ['Values', 'Values'],
+        ['BoostedValues', 'Boosted values'],
+    ] as const)(
         'uses whole-tier increments for %s only when the effect is MobilityTiers',
-        (key) => {
+        (key, label) => {
             const tiers = renderEffectValues(key, 'MobilityTiers', [2.5]);
-            expect(tiers.html).toContain(`aria-label="Increase ${key} stacks 1 by 1"`);
+            expect(tiers.html).toContain(`aria-label="Increase ${label} stacks 1 by 1"`);
             expect(tiers.html).toContain('value="2.5"');
             expect(tiers.changes).toEqual([]);
             expect(boundedStepNumericValue(2.5, 1, 1)).toBe('3.5');
 
             const multiplier = renderEffectValues(key, 'ForwardMultiplier', [0.875]);
-            expect(multiplier.html).toContain(`aria-label="Increase ${key} stacks 1 by 0.01"`);
+            expect(multiplier.html).toContain(`aria-label="Increase ${label} stacks 1 by 0.01"`);
             expect(multiplier.html).toContain('value="0.875"');
             expect(multiplier.changes).toEqual([]);
             expect(boundedStepNumericValue(0.875, 0.01, 1)).toBe('0.885');

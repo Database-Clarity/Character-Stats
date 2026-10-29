@@ -61,7 +61,7 @@ describe('fractional HP values', () => {
         expect(html).toContain('step="any"');
         expect(html).toContain('min="0"');
         expect(html).toContain('value="1.25"');
-        expect(html).toContain('Increase OrbOfPowerHealthRestore segment 1 Value by 0.01');
+        expect(html).toContain('Increase Orb of Power health restore (HP) segment 1 Value by 0.01');
     });
 
     it('validates, serializes and exports fractional Health and Shield HP values', () => {

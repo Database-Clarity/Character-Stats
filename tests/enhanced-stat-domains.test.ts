@@ -320,7 +320,7 @@ describe('enhanced stat curve domains', () => {
         );
 
         expect(html).toContain('100–200');
-        expect(html).toContain('PVEBonusShieldHP segment 1 point 0 stat value');
+        expect(html).toContain('PvE bonus shield (HP) segment 1 point 0 stat value');
         expect(html).toContain('min="100"');
         expect(html).toContain('max="200"');
     });

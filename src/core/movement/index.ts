@@ -5,6 +5,7 @@ export const movementSpec = {
     name: 'Movement',
     fields: [
         objectField('Rules', movementRulesSpec, {
+            label: 'Rules',
             description: 'Shared movement curves, state multipliers, and caps.',
         }),
     ],

@@ -35,6 +35,7 @@ export function localeField(key: string, options: FieldOptions): FieldSpec {
 
 export function hashField(key = 'Hash', options: Partial<FieldOptions> = {}): FieldSpec {
     return field(key, 'hash', {
+        label: 'Manifest hash',
         description: 'D2 Manifest inventoryItem hash',
         ...options,
     });
@@ -42,6 +43,7 @@ export function hashField(key = 'Hash', options: Partial<FieldOptions> = {}): Fi
 
 export function nameField(options: Partial<FieldOptions> = {}): FieldSpec {
     return field('Name', 'string', {
+        label: 'Name',
         description:
             'For organization/debugging purposes only. Does not necessarily ' +
             'match the inventoryItem entry name from the D2 Manifest.',
@@ -51,6 +53,7 @@ export function nameField(options: Partial<FieldOptions> = {}): FieldSpec {
 
 export function notesField(): FieldSpec {
     return field('Notes', 'string', {
+        label: 'Notes',
         required: false,
         exported: false,
         multiline: true,
