@@ -235,7 +235,6 @@
         display: flex;
     }
     .field {
-        grid-template-columns: 152px minmax(0, 1fr);
         gap: 12px;
     }
     .manifest-status {
@@ -351,7 +350,6 @@
         padding: 8px 4px;
     }
     .field {
-        grid-template-columns: 120px minmax(0, 1fr);
         gap: 8px;
     }
     .text-controls {

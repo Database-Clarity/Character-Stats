@@ -141,9 +141,10 @@
 .is-modified > .collapse > summary {
     padding-right: 44px;
 }
+/* The label column scales with the row (not the viewport), so narrow panes keep room for labels. */
 .field {
     display: grid;
-    grid-template-columns: 224px minmax(0, 1fr);
+    grid-template-columns: clamp(140px, 34%, 260px) minmax(0, 1fr);
     gap: 16px;
     padding: 8px 4px;
     align-items: start;
@@ -160,7 +161,7 @@
     gap: 8px;
     color: #c3c8d2;
     font-weight: 400;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
 }
 .field-help {
     display: inline-flex;
@@ -237,7 +238,7 @@
     flex-wrap: wrap;
 }
 .nested-row .field {
-    grid-template-columns: 116px minmax(0, 1fr);
+    grid-template-columns: clamp(110px, 30%, 200px) minmax(0, 1fr);
     gap: 12px;
 }
 .nested-row .array-element input,
@@ -545,5 +546,7 @@
     font-family: 'Cascadia Code', Consolas, ui-monospace, monospace;
     font-size: 10px;
     font-weight: 400;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    min-width: 0;
+    max-width: 100%;
 }
