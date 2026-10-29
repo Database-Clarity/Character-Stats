@@ -9,6 +9,7 @@ export const meleeSpec: StatSpec = {
     collections: { Abilities: abilitySpec, Overrides: overrideSpec },
     fields: [
         curve('CooldownScalars', {
+            help: "Multiplier on every ability's cooldown at each stat value (0–100): 1 keeps the base cooldown, 0.5 halves it. Stat values above 100 use the value at 100. Cooldown = Base cooldown (or a matching Cooldown override) × matching override Cooldown scalars × this value. Pick an ability to see the result in the Cooldown context panel.",
             domain: [0, 100],
             items: { min: 0 },
             label: 'Cooldown scalar',
@@ -21,6 +22,7 @@ export const meleeSpec: StatSpec = {
         }),
 
         curve('EnergyGainScalar', {
+            help: 'How effective outside sources of Melee energy (such as perks) are at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'Energy gain scalar',
@@ -28,6 +30,7 @@ export const meleeSpec: StatSpec = {
         }),
 
         curve('PVEMeleeDamageIncrease', {
+            help: 'Extra Melee ability damage in PvE, in %, for an enhanced Melee stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'PvE Melee damage increase (%)',
@@ -37,6 +40,7 @@ export const meleeSpec: StatSpec = {
         }),
 
         curve('PVPMeleeDamageIncrease', {
+            help: 'Extra Melee ability damage in PvP, in %, for an enhanced Melee stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'PvP Melee damage increase (%)',

@@ -26,6 +26,8 @@ export interface FieldSpec extends NumericConstraints {
     entity?: EntitySpec;
     required?: boolean;
     description: string;
+    /** Editor-only guidance for data authors; `description` stays the consumer-facing schema text. */
+    help?: string;
     minItems?: number;
     maxItems?: number;
     uniqueItems?: boolean;

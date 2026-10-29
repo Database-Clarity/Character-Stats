@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { equal } from '../state/editing';
 import { NumberInput } from './NumberInput';
 
@@ -206,6 +206,81 @@ export function FieldName({
                     {spec.key}
                 </span>
             )}
+        </span>
+    );
+}
+
+/** Author-facing help for a field: editor `help` when present, else the schema description. */
+export const fieldHelpText = (spec: { help?: string | undefined; description: string }) =>
+    spec.help ?? spec.description;
+
+/**
+ * Info button with a help popover. Click, tap, Enter or Space pins it open; a mouse hover previews
+ * it; Escape, a second press or a click elsewhere closes it. Safe inside a `<summary>`: it never
+ * toggles the surrounding disclosure.
+ */
+export function FieldHelp({ label, text }: { label: string; text: string }) {
+    const [pinned, setPinned] = useState(false);
+    const [hovered, setHovered] = useState(false);
+    const root = useRef<HTMLSpanElement>(null);
+    const id = useId();
+    const open = pinned || hovered;
+    useEffect(() => {
+        if (!pinned) return;
+        const close = (event: PointerEvent) => {
+            if (!root.current?.contains(event.target as Node)) setPinned(false);
+        };
+        document.addEventListener('pointerdown', close);
+        return () => document.removeEventListener('pointerdown', close);
+    }, [pinned]);
+    return (
+        <span
+            className="field-help-root"
+            ref={root}
+            onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
+            onPointerLeave={(e) => e.pointerType === 'mouse' && setHovered(false)}
+        >
+            <button
+                type="button"
+                className="field-help"
+                aria-label={`About ${label}`}
+                aria-expanded={open}
+                aria-controls={id}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setPinned(!pinned);
+                    setHovered(false);
+                }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Escape' && open) {
+                        e.stopPropagation();
+                        setPinned(false);
+                        setHovered(false);
+                    }
+                    // Space and Enter would also toggle a surrounding <summary>.
+                    if (e.key === ' ' || e.key === 'Enter') e.stopPropagation();
+                }}
+            >
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                    focusable="false"
+                >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 11v6" />
+                    <circle cx="12" cy="7" r="1" fill="currentColor" stroke="none" />
+                </svg>
+            </button>
+            <span id={id} role="note" className="field-help-popover" hidden={!open}>
+                {text}
+            </span>
         </span>
     );
 }

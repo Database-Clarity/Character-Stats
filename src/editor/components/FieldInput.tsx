@@ -2,7 +2,7 @@ import { useId, useState } from 'react';
 import { isRecord, validateField, type FieldSpec } from '../../core';
 import { CurveEditor } from './CurveEditor';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
-import { Modified, Collapse, FieldName } from './EditorPrimitives';
+import { Modified, Collapse, FieldHelp, FieldName, fieldHelpText } from './EditorPrimitives';
 import { fieldDefault, numericDefault, updateNestedField } from '../state/editing';
 import { EntityForm } from './EntityForm';
 import { numberStep } from './numberStep';
@@ -154,9 +154,10 @@ export function FieldInput({
                 <Collapse
                     storageKey={`${file}:${path}`}
                     title={
-                        <span title={spec.description}>
+                        <>
                             <FieldName spec={spec} markOptional />
-                        </span>
+                            <FieldHelp label={label} text={fieldHelpText(spec)} />
+                        </>
                     }
                     className="nested-object"
                 >
@@ -319,26 +320,12 @@ export function FieldInput({
                 />
             ) : (
                 <div className="field">
-                    <label className="field-label" htmlFor={id} title={spec.description}>
-                        <FieldName spec={spec} markOptional />
-                        <span className="field-help" title={spec.description}>
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                aria-hidden="true"
-                                focusable="false"
-                            >
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 11v6" />
-                                <circle cx="12" cy="7" r="1" fill="currentColor" stroke="none" />
-                            </svg>
-                        </span>
-                    </label>
+                    <div className="field-label">
+                        <label htmlFor={id}>
+                            <FieldName spec={spec} markOptional />
+                        </label>
+                        <FieldHelp label={label} text={fieldHelpText(spec)} />
+                    </div>
                     <div
                         className={`field-value ${spec.kind === 'hash' ? 'hash-field-value' : ''}`}
                     >
@@ -453,7 +440,7 @@ export function FieldInput({
                             </>
                         )}
                         <span className="sr-only" id={`${id}-help`}>
-                            {spec.description}
+                            {fieldHelpText(spec)}
                         </span>
                         {issues.map((issue, i) => (
                             <p key={i} className={issue.severity}>

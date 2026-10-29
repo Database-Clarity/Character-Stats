@@ -120,6 +120,10 @@ middleware or configuration changes are needed.
   coordinates independently of the nearest-value crosshair. `curveValueRange.ts`
   widens the value axis to round 1/2/2.5/5 × 10ⁿ ticks and labels the stat domain
   with integer ticks, so gridlines never show unrounded values.
+- `FieldHelp` (in `EditorPrimitives`) is the field info button: a real button with a
+  popover that opens on click, tap or keyboard, previews on mouse hover, and closes on
+  Escape or an outside click. It shows the spec's editor-only `help`, falling back to
+  `description`, and is safe inside `<summary>` headings.
 - `textFormat.ts` holds count pluralization (`1 error`, `2 files`) and the display
   name for collection keys (`SuperAbilities` shows as **Super abilities**; Quick jump
   still matches the raw key).

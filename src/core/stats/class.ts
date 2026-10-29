@@ -9,6 +9,7 @@ export const classSpec: StatSpec = {
     collections: { Abilities: abilitySpec, Overrides: overrideSpec },
     fields: [
         curve('CooldownScalars', {
+            help: "Multiplier on every ability's cooldown at each stat value (0–100): 1 keeps the base cooldown, 0.5 halves it. Stat values above 100 use the value at 100. Cooldown = Base cooldown (or a matching Cooldown override) × matching override Cooldown scalars × this value. Pick an ability to see the result in the Cooldown context panel.",
             domain: [0, 100],
             items: { min: 0 },
             label: 'Cooldown scalar',
@@ -21,6 +22,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('EnergyGainScalar', {
+            help: 'How effective outside sources of Class ability energy (such as perks) are at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'Energy gain scalar',
@@ -29,6 +31,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVEOvershieldHP', {
+            help: 'Raw Overshield HP from casting your Class ability in PvE, for an enhanced Class stat (100–200). Stat 100 means no enhancement. Enter raw HP, not effective HP after damage resistance.',
             label: 'PvE overshield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
@@ -39,6 +42,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVPOvershieldHP', {
+            help: 'Raw Overshield HP from casting your Class ability in PvP, for an enhanced Class stat (100–200). Stat 100 means no enhancement. Enter raw HP; the PvP damage resistance below is separate.',
             label: 'PvP overshield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
@@ -49,6 +53,7 @@ export const classSpec: StatSpec = {
         }),
 
         numberField('PVPOvershieldDamageResistance', {
+            help: 'Damage resistance of the Class ability Overshield in PvP, in %. The PvE value is unknown, so this does not apply to PvE.',
             min: 0,
             label: 'PvP Overshield damage resistance (%)',
             description:
@@ -57,6 +62,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVEClassAbilityDamageIncrease', {
+            help: 'Extra Class ability damage in PvE, in %, for an enhanced Class stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'PvE Class Ability damage increase (%)',
@@ -66,6 +72,7 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVPClassAbilityDamageIncrease', {
+            help: 'Extra Class ability damage in PvP, in %, for an enhanced Class stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'PvP Class Ability damage increase (%)',

@@ -89,9 +89,7 @@ export function RequirementEditor({
                     </span>
                     <button onClick={() => setPicker(true)}>+ Add requirement</button>
                 </div>
-                <p className="help" title={field.description}>
-                    {field.description}
-                </p>
+                <p className="help">{field.help ?? field.description}</p>
                 <div className="table-scroll">
                     <table className="requirement-table">
                         <thead>
@@ -105,7 +103,7 @@ export function RequirementEditor({
                                             !equal(value[f.key], saved[f.key]) ? 'is-modified' : ''
                                         }
                                     >
-                                        <label className="check" title={f.description}>
+                                        <label className="check" title={f.help ?? f.description}>
                                             <input
                                                 type="checkbox"
                                                 checked={value[f.key] !== undefined}

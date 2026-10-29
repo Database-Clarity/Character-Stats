@@ -25,7 +25,7 @@ item that holds the value and focuses the closest field.
 Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item names, or hashes.
 Press **/** outside an input to focus the current collection filter (or open Jump).
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes
-menus and dialogs. Every input has a label and keyboard focus ring. Field labels are readable names; the source key appears beside each one in dimmed monospace text. Fields are required unless tagged *optional*.
+menus and dialogs. Every input has a label and keyboard focus ring. Field labels are readable names; the source key appears beside each one in dimmed monospace text. Fields are required unless tagged *optional*. Select or tap a field's **ⓘ** button for guidance on what to enter; Escape or a click elsewhere closes it.
 Hold **Ctrl+Alt** and scroll anywhere in the editor to navigate the character stats:
 wheel up selects the previous section and wheel down selects the next, stopping at
 either end. The whole stats sidebar highlights while the exact modifiers are held;

@@ -556,3 +556,45 @@
     font-weight: 400;
     font-style: italic;
 }
+/* Help popovers anchor to the label row or disclosure heading so they never clip at the pane edge. */
+.field-label,
+.collapse > summary {
+    position: relative;
+}
+.field-label > label {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    font-weight: inherit;
+}
+.field-help {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 50%;
+}
+.field-help:hover:not(:disabled),
+.field-help[aria-expanded='true'] {
+    color: var(--info);
+    background: transparent;
+}
+.field-help-popover {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 30;
+    width: max-content;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 8px 10px;
+    border: 1px solid #505969;
+    border-radius: 3px;
+    background: #20242b;
+    color: #d5d9e0;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 17px;
+    white-space: normal;
+    text-align: left;
+    cursor: auto;
+}

@@ -7,7 +7,7 @@ import {
     type CurveSegment,
     type FieldSpec,
 } from '../../core';
-import { Collapse, FieldName } from './EditorPrimitives';
+import { Collapse, FieldHelp, FieldName, fieldHelpText } from './EditorPrimitives';
 import CurveModeToggle from './CurveModeToggle';
 import CurvePlot from './CurvePlot';
 import SegmentList from './SegmentList';
@@ -92,12 +92,13 @@ export function CurveEditor({
             className="curve"
             title={
                 <>
-                    <strong id={id} title={spec.description}>
+                    <strong id={id}>
                         <FieldName spec={spec} />
                     </strong>
                     <span className="mono muted">
                         {domain[0]}–{domain[1]}
                     </span>
+                    <FieldHelp label={spec.label ?? spec.key} text={fieldHelpText(spec)} />
                 </>
             }
         >
@@ -110,7 +111,7 @@ export function CurveEditor({
                 onRoundChange={setRound}
                 onCompareChange={setCompare}
             />
-            <p className="help curve-description sr-only">{spec.description}</p>
+            <p className="help curve-description sr-only">{fieldHelpText(spec)}</p>
             <CurvePlot
                 plot={Array.from({ length: domain[1] - domain[0] + 1 }, (_, i) => ({
                     x: domain[0] + i,

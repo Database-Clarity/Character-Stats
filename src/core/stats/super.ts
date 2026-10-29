@@ -9,6 +9,7 @@ export const superSpec: StatSpec = {
     collections: { SuperAbilities: superAbilitySpec, Overrides: overrideSpec },
     fields: [
         curve('EnergyGainScalar', {
+            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'Energy gain scalar',
@@ -18,6 +19,7 @@ export const superSpec: StatSpec = {
         }),
 
         curve('ActiveRegenScalars', {
+            help: "Multiplier on each Super's Active regeneration scalar at each Super stat value (0–100), giving its active regeneration rate. Stat values above 100 use the value at 100.",
             domain: [0, 100],
             items: { min: 0 },
             label: 'Active regeneration scalar',
@@ -27,6 +29,7 @@ export const superSpec: StatSpec = {
         }),
 
         curve('SuperDamageIncrease', {
+            help: 'Extra Super damage, in %, for an enhanced Super stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Super damage increase (%)',
@@ -36,6 +39,7 @@ export const superSpec: StatSpec = {
         }),
 
         curve('SuperDurationIncrease', {
+            help: 'Longer Super duration, in %, for an enhanced Super stat (100–200). Stat 100 means no enhancement. Only Supers with a Base duration get this increase.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Super duration increase (%)',

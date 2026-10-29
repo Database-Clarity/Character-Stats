@@ -7,6 +7,7 @@ export const healthSpec: StatSpec = {
     collections: {},
     fields: [
         curve('FlinchResistance', {
+            help: 'Flinch resistance while aiming down sights, in %, at each Health stat value (0–100). Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'ADS-only flinch resistance (%)',
@@ -16,6 +17,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('OrbOfPowerHealthRestore', {
+            help: 'HP restored when you pick up an Orb of Power, at each Health stat value (0–100). Stat values above 100 use the value at 100.',
             label: 'Orb of Power health restore (HP)',
             domain: [0, 100],
             items: { min: 0 },
@@ -25,6 +27,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('PVPHealthHP', {
+            help: 'Total Health HP in most PvP activities. Health regeneration (%/s) is a percentage of this.',
             label: 'PvP health (HP)',
             min: 0,
             description:
@@ -32,6 +35,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('PVEHealthHP', {
+            help: 'Total Health HP in PvE activities. Health regeneration (%/s) is a percentage of this.',
             label: 'PvE health (HP)',
             min: 0,
             description:
@@ -39,6 +43,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('HealthRegenDelay', {
+            help: 'Seconds after taking damage before Health starts regenerating.',
             label: 'Health regeneration delay (s)',
             min: 0,
             description:
@@ -47,6 +52,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('HealthRegenSpeed', {
+            help: 'How fast Health regenerates once it starts, as a percentage of total Health (PvP health or PvE health) per second.',
             min: 0,
             label: 'Health regeneration (%/s)',
             description:
@@ -56,6 +62,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('BaseShieldHP', {
+            help: 'Shield HP in all activities. It does not change with the Health stat; PvE bonus shield adds to it when Health is enhanced.',
             label: 'Base shield (HP)',
             min: 0,
             description:
@@ -64,6 +71,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('PVEBonusShieldHP', {
+            help: 'Extra Shield HP in PvE on top of Base shield, for an enhanced Health stat (100–200). Stat 100 means no enhancement. Does not apply in PvP.',
             label: 'PvE bonus shield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
@@ -74,6 +82,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('BaseShieldRechargeDelay', {
+            help: 'Seconds after taking damage before Shields start recharging, while Health is 100 or lower. Enhanced Health uses Shield recharge delay instead.',
             label: 'Base shield recharge delay (s)',
             min: 0,
             description:
@@ -82,6 +91,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('ShieldRechargeDelay', {
+            help: 'Seconds after taking damage before Shields start recharging, for an enhanced Health stat (100–200). Stat 100 means no enhancement. At 100 or lower, Base shield recharge delay applies.',
             label: 'Shield recharge delay (s)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
@@ -92,6 +102,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('BaseShieldRechargeSpeed', {
+            help: 'Shield recharge rate, as a percentage of total Shield HP per second, while Health is 100 or lower. Enhanced Health uses Shield recharge speed instead.',
             min: 0,
             label: 'Base shield recharge speed (%/s)',
             description:
@@ -100,6 +111,7 @@ export const healthSpec: StatSpec = {
         }),
 
         curve('ShieldRechargeSpeed', {
+            help: 'Shield recharge rate, as a percentage of total Shield HP per second, for an enhanced Health stat (100–200). Stat 100 means no enhancement. At 100 or lower, Base shield recharge speed applies.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             label: 'Shield recharge speed (%/s)',
@@ -110,6 +122,7 @@ export const healthSpec: StatSpec = {
         }),
 
         numberField('PVEDamageResistance', {
+            help: 'Damage resistance on Health (not Shields) in PvE, in %. It does not change with the Health stat.',
             min: 0,
             label: 'PvE health damage resistance (%)',
             description:

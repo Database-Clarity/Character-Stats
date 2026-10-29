@@ -36,6 +36,7 @@ export function localeField(key: string, options: FieldOptions): FieldSpec {
 export function hashField(key = 'Hash', options: Partial<FieldOptions> = {}): FieldSpec {
     return field(key, 'hash', {
         label: 'Manifest hash',
+        help: 'Destiny manifest hash for this entry. Use Pick item to search the manifest instead of typing it.',
         description: 'D2 Manifest inventoryItem hash',
         ...options,
     });
@@ -44,6 +45,7 @@ export function hashField(key = 'Hash', options: Partial<FieldOptions> = {}): Fi
 export function nameField(options: Partial<FieldOptions> = {}): FieldSpec {
     return field('Name', 'string', {
         label: 'Name',
+        help: "Your name for this entry in the editor and source files. It doesn't have to match the manifest name; Use manifest name copies it when they differ.",
         description:
             'For organization/debugging purposes only. Does not necessarily ' +
             'match the inventoryItem entry name from the D2 Manifest.',
@@ -54,6 +56,7 @@ export function nameField(options: Partial<FieldOptions> = {}): FieldSpec {
 export function notesField(): FieldSpec {
     return field('Notes', 'string', {
         label: 'Notes',
+        help: 'Private notes for authors, such as sources or open questions. Saved in the source files but never exported to apps.',
         required: false,
         exported: false,
         multiline: true,
