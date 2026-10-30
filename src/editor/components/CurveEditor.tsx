@@ -11,7 +11,7 @@ import { Collapse, FieldHelp, FieldName, fieldHelpText } from './EditorPrimitive
 import CurveModeToggle from './CurveModeToggle';
 import CurvePlot from './CurvePlot';
 import SegmentList from './SegmentList';
-import { valuesToSegments } from './curveValuesConversion';
+import { convertCurve, type CurveMode } from './curveValuesConversion';
 import { numberStep } from './numberStep';
 import { NumberInput } from './NumberInput';
 
@@ -33,7 +33,8 @@ export function CurveEditor({
     const id = useId(),
         domain = spec.domain!;
     const [compare, setCompare] = useState(false),
-        [message, setMessage] = useState('');
+        [message, setMessage] = useState(''),
+        [previous, setPrevious] = useState<unknown>();
     function samples(input: unknown): number[] {
         try {
             return expandCurve(input as Curve, domain);
@@ -57,21 +58,15 @@ export function CurveEditor({
         });
     }
 
-    function mode(next: 'values' | 'segments') {
+    function mode(next: CurveMode) {
         try {
-            const values = expandCurve(value as Curve, domain);
-            if (next === 'values') {
-                onChange({ Values: values });
-            } else {
-                const result = valuesToSegments(values, domain);
-                if (!('curve' in result)) {
-                    setMessage(
-                        `Cannot convert to Segments without losing precision: ${result.reason}`,
-                    );
-                    return;
-                }
-                onChange(result.curve);
+            const result = convertCurve(value, next, domain, [previous, saved]);
+            if (!('curve' in result)) {
+                setMessage(`Cannot convert to Segments without losing precision: ${result.reason}`);
+                return;
             }
+            setPrevious(value);
+            onChange(result.curve);
             setMessage('');
         } catch (error) {
             setMessage(`Fix the curve before converting: ${(error as Error).message}`);

@@ -1,3 +1,4 @@
+import type { CurveMode } from './curveValuesConversion';
 import { NumberInput } from './NumberInput';
 
 export default function CurveModeToggle({
@@ -13,21 +14,23 @@ export default function CurveModeToggle({
     round: string;
     compare: boolean;
     fieldLabel: string;
-    onModeChange(mode: 'values' | 'segments'): void;
+    onModeChange(mode: CurveMode): void;
     onRoundChange(round: number | undefined): void;
     onCompareChange(compare: boolean): void;
 }) {
     return (
         <div className="curve-toolbar">
-            <div className="toolbar">
+            <div className="toolbar" role="group" aria-label={`${fieldLabel} stored format`}>
                 <button
                     aria-pressed={segmented}
+                    title="Store the curve as segments. Switching back and forth without edits restores the original."
                     onClick={() => !segmented && onModeChange('segments')}
                 >
                     Segments
                 </button>
                 <button
                     aria-pressed={!segmented}
+                    title="Store one value per stat. Switching back and forth without edits restores the original."
                     onClick={() => segmented && onModeChange('values')}
                 >
                     Values

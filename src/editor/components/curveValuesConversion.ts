@@ -49,3 +49,44 @@ export function valuesToSegments(
 
     return { curve };
 }
+
+export type CurveMode = 'values' | 'segments';
+
+function modeOf(curve: unknown): CurveMode | undefined {
+    if (typeof curve !== 'object' || curve === null) return undefined;
+    if (Array.isArray((curve as { Values?: unknown }).Values)) return 'values';
+    if (Array.isArray((curve as { Segments?: unknown }).Segments)) return 'segments';
+    return undefined;
+}
+
+function expandsTo(curve: unknown, values: readonly number[], domain: Domain): boolean {
+    try {
+        const expanded = expandCurve(curve as Curve, domain);
+        return (
+            expanded.length === values.length &&
+            expanded.every((value, index) => value === values[index])
+        );
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Converts a curve between stored formats. Switching is a format change, so a round trip must
+ * not leave a pending change: `previous` (the form before the last switch) or the saved curve is
+ * reused when it has the requested format and expands to exactly the same values.
+ */
+export function convertCurve(
+    value: unknown,
+    next: CurveMode,
+    domain: Domain,
+    candidates: readonly unknown[] = [],
+): { curve: Curve } | { reason: string } {
+    const values = expandCurve(value as Curve, domain);
+    const reusable = candidates.find(
+        (candidate) => modeOf(candidate) === next && expandsTo(candidate, values, domain),
+    );
+    if (reusable !== undefined) return { curve: reusable as Curve };
+    if (next === 'values') return { curve: { Values: values } };
+    return valuesToSegments(values, domain);
+}
