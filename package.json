@@ -17,6 +17,7 @@
         "validate": "tsx src/cli/validate.ts",
         "build:data": "tsx src/cli/build-data.ts",
         "schema": "tsx src/cli/schema.ts",
+        "format:data": "tsx src/cli/format-data.ts",
         "format": "prettier --write src/core src/cli src/editor tests config/*.ts config/tsconfig.core.json tsconfig.json package.json",
         "format:check": "prettier --check src/core src/cli src/editor tests config/*.ts config/tsconfig.core.json tsconfig.json package.json"
     },

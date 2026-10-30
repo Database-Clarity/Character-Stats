@@ -30,6 +30,8 @@ jobs:
         run: npm run typecheck
       - name: Check formatting
         run: npm run format:check
+      - name: Check data files use the editor save format
+        run: npm run format:data -- --check
       - name: Run tests
         run: npm test
       - name: Validate sources and export

@@ -344,11 +344,11 @@
         {
             "Hash": 790664813,
             "Name": "Bleak Watcher - Prismatic Aspect",
+            "Notes": "Replacement cooldown at stat 0 before the Warlock override. The sheet lists 159.6 s in its Warlock table, which already includes the Warlock 1.1x grenade regen; the Warlock override (cooldown x0.909) applies on top of this value, giving the same 159.6 s.",
             "Requirements": [
                 3040080535
             ],
-            "CooldownOverride": 175.6,
-            "Notes": "Replacement cooldown at stat 0 before the Warlock override. The sheet lists 159.6 s in its Warlock table, which already includes the Warlock 1.1x grenade regen; the Warlock override (cooldown x0.909) applies on top of this value, giving the same 159.6 s."
+            "CooldownOverride": 175.6
         },
         {
             "Hash": 2642597904,

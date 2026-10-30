@@ -25,6 +25,7 @@ npm test -- -t "name of the test"           # filter tests by name
 npm run format         # Prettier (4 spaces, single quotes, width 100, trailing commas)
 npm run validate       # sources + en.json placeholders + export checked against schema.json
 npm run schema         # regenerate schema.json and character-stats.d.ts from the registries
+npm run format:data    # rewrite sources/ and locale/en.json in the editor's save format (--check in CI)
 npm run dev -- --port <port> --strictPort   # editor at http://localhost:<port>/Character-Stats/editor/
 npm run build          # editor -> dist/
 ```

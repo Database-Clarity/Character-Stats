@@ -19,10 +19,10 @@
         "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
         "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} For Well of Radiance and Ward of Dawn, the enhanced benefit is increased duration (shown in their ability details). Whether this replaces or adds to the Super damage increase is unconfirmed. The SuperDamageIncrease value is {{SuperDamageIncrease}}{{Percent}}.",
         "SuperAbilities": {
-            "4260353953": {
+            "2274196887": {
                 "EnhancedDurationTooltip": "Enhanced Super stat increases {{AbilityName}}'s duration by {{SuperDurationIncrease}}{{Percent}}, from {{BaseDuration}}{{Time}} to {{SuperDuration}}{{Time}}. Whether this duration benefit replaces or adds to the Super Damage increase is unconfirmed."
             },
-            "2274196887": {
+            "4260353953": {
                 "EnhancedDurationTooltip": "Enhanced Super stat increases {{AbilityName}}'s duration by {{SuperDurationIncrease}}{{Percent}}, from {{BaseDuration}}{{Time}} to {{SuperDuration}}{{Time}}. Whether this duration benefit replaces or adds to the Super Damage increase is unconfirmed."
             }
         }

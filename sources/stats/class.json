@@ -121,13 +121,13 @@
         {
             "Hash": 3636300852,
             "Name": "Acrobat's Dodge",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2711519343,
             "Name": "Acrobat's Dodge - Prismatic",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -169,37 +169,37 @@
         {
             "Hash": 426473317,
             "Name": "Gambler's Dodge - Arc",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2711519340,
             "Name": "Gambler's Dodge - Prismatic",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3636300855,
             "Name": "Gambler's Dodge - Solar",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3933525367,
             "Name": "Gambler's Dodge - Stasis",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 1282157890,
             "Name": "Gambler's Dodge - Strand",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2816982785,
             "Name": "Gambler's Dodge - Void",
-            "BaseCooldown": 56.0,
+            "BaseCooldown": 56,
             "ChunkEnergyScalar": 0.8
         },
         {
@@ -241,37 +241,37 @@
         {
             "Hash": 426473316,
             "Name": "Marksman's Dodge - Arc",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2711519341,
             "Name": "Marksman's Dodge - Prismatic",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 3636300854,
             "Name": "Marksman's Dodge - Solar",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 3933525366,
             "Name": "Marksman's Dodge - Stasis",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 1282157891,
             "Name": "Marksman's Dodge - Strand",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
             "Hash": 2816982784,
             "Name": "Marksman's Dodge - Void",
-            "BaseCooldown": 42.0,
+            "BaseCooldown": 42,
             "ChunkEnergyScalar": 1
         },
         {
