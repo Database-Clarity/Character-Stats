@@ -12,12 +12,15 @@ import { AutoResizeTextarea } from './AutoResizeTextarea';
 
 export function LocaleTextField({
     id,
+    label,
     source,
     spec,
     statValue,
     context,
 }: {
     id: string;
+    /** Readable title for the textarea's accessible name; defaults to the locale ID. */
+    label?: string;
     source: StatSource;
     spec: StatSpec;
     statValue: number;
@@ -36,7 +39,7 @@ export function LocaleTextField({
                 <label className="text-source">
                     English source
                     <AutoResizeTextarea
-                        aria-label={id}
+                        aria-label={label ?? id}
                         rows={4}
                         value={text}
                         aria-invalid={issues.length > 0}

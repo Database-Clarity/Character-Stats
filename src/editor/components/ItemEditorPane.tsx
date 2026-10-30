@@ -74,7 +74,7 @@ export function ItemEditorPane({
                 <button className="list-back" type="button" onClick={onBack}>
                     ← List
                 </button>
-                <div>
+                <h3 className="editor-title" tabIndex={-1} data-field="">
                     {editorValue ? (
                         Number.isFinite(hash) ? (
                             <HashIdentity
@@ -88,7 +88,7 @@ export function ItemEditorPane({
                     ) : (
                         <strong>Item editor</strong>
                     )}
-                </div>
+                </h3>
                 <div className="toolbar">
                     {hasContext && (
                         <button

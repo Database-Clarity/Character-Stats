@@ -67,6 +67,13 @@ export function StatView({
         )
             return;
         const timer = setTimeout(() => {
+            if (!request.field && !request.itemKey) {
+                // Jumping to a whole stat or tab: land on its tab.
+                root.current
+                    ?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+                    ?.focus({ preventScroll: true });
+                return;
+            }
             // Validation paths can point below the deepest control, so use the closest ancestor.
             const field = Array.from(
                 root.current?.querySelectorAll<HTMLElement>('[data-field]') ?? [],
@@ -91,7 +98,8 @@ export function StatView({
             field.classList.add('change-highlight');
             const input =
                 field.querySelector<HTMLElement>('input,textarea,select') ??
-                field.querySelector<HTMLElement>('button:not(.revert-field)');
+                field.querySelector<HTMLElement>('button:not(.revert-field)') ??
+                (field.tabIndex === -1 ? field : null);
             input?.focus({ preventScroll: true });
         }, 80);
         return () => clearTimeout(timer);

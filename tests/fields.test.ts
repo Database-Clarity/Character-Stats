@@ -32,6 +32,19 @@ describe('reusable validators', () => {
         expect(validateNumber(2, { exclusiveMax: 2 })).not.toEqual([]);
         expect(validateNumber(-1, { min: 0 })).not.toEqual([]);
     });
+    it('uses short author-facing messages', () => {
+        expect(validateNumber(NaN)).toEqual(['Enter a number']);
+        expect(
+            validateField({ key: 'x', kind: 'string', required: true, description: '' }, ' ')[0]
+                ?.message,
+        ).toBe('Required');
+        expect(
+            validateField(
+                { key: 'x', kind: 'number', required: true, description: '' },
+                undefined,
+            )[0]?.message,
+        ).toBe('Required');
+    });
     it('checks required, string, hash and array constraints', () => {
         expect(
             validateField({ key: 'x', kind: 'string', required: true, description: '' }, ''),
@@ -95,7 +108,9 @@ describe('entity validation', () => {
     });
     it('enforces lengthOf and anyOf', () => {
         const override = { Hash: 2, Name: 'O', Requirements: [0, -123, 1] };
-        expect(validateEntity(overrideSpec, override)[0]?.message).toContain('at least one');
+        expect(validateEntity(overrideSpec, override)[0]?.message).toBe(
+            'Set Cooldown override, Cooldown scalar or Chunk energy scalar',
+        );
         expect(
             validateEntity(overrideSpec, { ...override, Scalar: [1] }).some((e) =>
                 e.message.includes('length'),

@@ -68,8 +68,12 @@ export function ManifestStatusBadge() {
     const text = manifestStateMessage(status);
     if (status.state === 'error')
         return (
-            <button className="manifest-status error" onClick={refresh} title={status.error}>
-                ↻ Manifest unavailable - retry
+            <button
+                className="manifest-status error"
+                onClick={refresh}
+                title={`${status.error} (click to retry)`}
+            >
+                Manifest: retry
             </button>
         );
     if (status.state === 'ready')
@@ -80,7 +84,10 @@ export function ManifestStatusBadge() {
                 title={`${text}. Click to refresh.`}
                 aria-label="Refresh manifest"
             >
-                ↻ Manifest
+                <span className="success" aria-hidden="true">
+                    ●
+                </span>{' '}
+                Manifest
             </button>
         );
     return (

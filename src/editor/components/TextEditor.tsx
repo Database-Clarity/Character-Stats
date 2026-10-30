@@ -12,7 +12,7 @@ import { LOCALE_FILE } from '../state/paths';
 import { localeEntryLabel, localeTextIds, updateLocaleText } from '../state/localeText';
 import { useManifest } from '../manifest';
 import { isPreviewAbility, previewCollections, tooltipAbilityContext } from './previewData';
-import { Collapse, LongPage, Modified, StatControl } from './EditorPrimitives';
+import { Collapse, FieldName, LongPage, Modified, StatControl } from './EditorPrimitives';
 import { LocaleTextField } from './LocaleTextField';
 export function TextEditor({
     spec,
@@ -66,7 +66,7 @@ export function TextEditor({
                 {(spec.fields.some((field) => field.kind === 'curve') ||
                     source.Fields.CooldownScalars !== undefined) && (
                     <StatControl
-                        label="Preview stat value"
+                        label={`${spec.name} value`}
                         value={statValue}
                         onChange={setStatValue}
                     />
@@ -86,20 +86,15 @@ export function TextEditor({
                         </select>
                     </label>
                 )}
-                <span className="help">English · live core preview</span>
+                <span className="help">English · live preview</span>
             </div>
             <LongPage
                 label="Text"
-                items={ids.map((id) => {
-                    const label = labels.get(id) ?? id;
-                    return {
-                        id,
-                        label:
-                            label === id && id.startsWith(spec.name + '.')
-                                ? id.slice(spec.name.length + 1)
-                                : label,
-                    };
-                })}
+                items={ids.map((id) => ({
+                    id,
+                    label: labels.get(id) ?? id,
+                    title: id,
+                }))}
             >
                 {ids.map((id) => {
                     const text = resolveLocale(locale, id) ?? '',
@@ -109,13 +104,18 @@ export function TextEditor({
                         <div key={id} data-outline={id}>
                             <Modified
                                 field={id}
+                                label={label}
                                 value={text}
                                 saved={old}
                                 onRevert={() => change(id, old)}
                             >
-                                <Collapse storageKey={`text:${id}`} title={label}>
+                                <Collapse
+                                    storageKey={`text:${id}`}
+                                    title={<FieldName spec={{ key: id, label }} />}
+                                >
                                     <LocaleTextField
                                         id={id}
+                                        label={label}
                                         source={source}
                                         spec={spec}
                                         statValue={statValue}

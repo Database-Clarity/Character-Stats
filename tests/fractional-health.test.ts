@@ -187,7 +187,7 @@ describe('fractional HP values', () => {
                 movementClassSpec.fields.find((candidate) => candidate.key === 'BaseMobilityTier')!,
                 2.5,
             ).map((issue) => issue.message),
-        ).toContain('Please provide a safe integer');
+        ).toContain('Enter a whole number');
 
         const definitions = generateSchema().definitions as Record<
             string,

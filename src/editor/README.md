@@ -14,7 +14,10 @@ middleware or configuration changes are needed.
   Validation issues offer **Go to**: `issueTarget` in `state/editing.ts` maps core issue paths
   to a stat/tab/item/field target, and navigation falls back to the closest rendered
   ancestor `data-field` when the path points inside a control.
-  `RepositoryMenu` (account menu with Recovery and Sign out) and `ValidationPanel` (the issues
+  `issueLocationLabel` and `fieldLabel` in `state/locationLabels.ts` turn those paths into
+  readable registry labels (`Grenade › Abilities › Flux Grenade › Name`) for the issue list
+  and the Changes dock.
+  `RepositoryMenu` (the ☰ account menu at the right of the top bar, with Recovery and Sign out) and `ValidationPanel` (the issues
   list) are separate components. `App`'s keyboard/wheel listeners register once and read the latest
   state through a ref.
   Clicked editor selections are recorded in browser history; Back/Forward restores
@@ -43,10 +46,14 @@ middleware or configuration changes are needed.
 - `EntityList` owns the three-pane collection layout, pinned draft row, sorted
   source/deleted rows, and per-item actions. Hash edits keep the selected item and
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
-  portaled outside scrolling panes, so it cannot be clipped by list boundaries.
+  portaled outside scrolling panes, so it cannot be clipped by list boundaries; its row
+  triggers stay faintly visible until hover, focus or selection.
   On widths below 1280px, Context becomes an explicitly toggled side overlay. At 600px
   and below the list and the editor take turns in one column: selecting an item or group
-  shows its editor, and **← List** (or browser Back) returns to the list.
+  shows its editor, and **← List** (or browser Back) returns to the list. Draft **Discard**
+  confirms when the draft has entered values; item **Revert changes** confirms when more than
+  one field changed or the item is unsaved. Quick jump and phone selection focus the item
+  heading; **+** focuses the new draft's first field.
 - `RequirementEditor` handles reference arrays with subclass/parallel-column
   semantics; `ReferenceArrayInput` handles ordinary `intArray` + `itemRef` fields.
   Reference chips, grouped pickers, and enabled parallel columns use `lengthOf`, not field
@@ -54,6 +61,8 @@ middleware or configuration changes are needed.
   table atomically. `ChargeBasedScaling` and Movement arrays use `indexLabel` hints.
 - `CurveEditor` uses core expansion/validation; converting Values to Segments
   preserves every expanded value exactly and verifies equality before applying.
+  `convertCurve` reuses the previous or saved curve, with its rounding, when it expands to the
+  same values, so switching back without edits leaves no change.
   `CurvePlot` is a small SVG plot with x/y crosshair and saved overlay. Segment
   controls and raw-domain values are structured inputs. Enhanced-only curves use
   the 100-200 domain, so the editor can set the base/zero-enhancement value at
@@ -101,15 +110,17 @@ middleware or configuration changes are needed.
 - Local recovery uses IndexedDB with independent scopes for each GitHub owner/repository/branch
   and for Local (read-only dev); it never stores GitHub credentials. Each edit queues an
   asynchronous latest-state write, while the rolling history is debounced by 750 ms,
-  capped at 30 snapshots, and retained for 7 days. Startup offers restore or discard;
-  the Recovery toolbar and React error-boundary fallback show timestamped snapshots with
-  change counts and restore/export JSON/discard actions. Recovery data preserves the
+  capped at 30 snapshots, and retained for 7 days; pruning removes only snapshots beyond the
+  newest 30 or older than 7 days. Startup offers restore, discard, or **Continue without
+  restoring** (which keeps snapshots and appends autosaves); discard asks for confirmation
+  here and in the Recovery dialog. The Recovery dialog (☰ repository menu) and React
+  error-boundary fallback show timestamped snapshots with change counts and restore/export
+  JSON/discard actions. Recovery data preserves the
   snapshot's original base head and is cleared for both the original and resulting branch
-  scopes after a successful Save. If startup storage fails, the user can explicitly continue
-  without local recovery; an alert and notice warn that recovery will not persist for that
-  session. Other IndexedDB errors, including quota failures, are surfaced, and the existing
+  scopes after a successful Save. If startup storage fails, **Continue without restoring** disables
+  local recovery for the session; an alert and notice warn that recovery will not persist. Other IndexedDB errors, including quota failures, are surfaced, and the existing
   beforeunload warning remains. Signing out leaves local recovery intact and directs the user
-  to Recovery to discard it. An edit can still be lost if a crash occurs before its
+  to Recovery (☰ menu) to discard it. An edit can still be lost if a crash occurs before its
   asynchronous transaction completes; snapshots are recovery, not backup or undo/redo history.
 - `PublishDialog` dispatches `build-data.yml` on the saved branch and shows recent
   runs. It states that `master` builds data and deploys Pages, while other branches
@@ -135,6 +146,7 @@ middleware or configuration changes are needed.
 - `numberStep.ts` is the tested numeric-step helper: integer fields step by one,
   fields constrained to 0–1 by hundredths, and other values by their decimal
   precision (including scientific notation). Numeric arrays and curve values use it.
+  `NumberInput` stepper buttons are outside the Tab order; ArrowUp/ArrowDown step the input.
 - `manifest/prismatic.ts` detects prismatic ability plugs from manifest type names
   ending in `| Light Ability` / `| Darkness Ability`, never source name suffixes.
   Every manifest icon surface gets the same small corner marker.
@@ -148,8 +160,10 @@ middleware or configuration changes are needed.
 - First manifest load blocks editing with a modal showing the current loading step
   and indexing progress. Errors (including missing API-key configuration) offer an
   explicit **Continue without manifest** action. Later refreshes stay nonblocking.
-  Refresh and sign-out live in the repository/branch account area. Destructive
-  confirmations reuse `Modal`, not browser confirm/alert.
+  The top-bar manifest badge refreshes on click; Sign out and Recovery are in the ☰
+  repository menu at the right of the top bar. Destructive confirmations reuse `Modal`,
+  not browser confirm/alert: `Modal` returns focus to its opener when it is still on the
+  page, and `ConfirmDialog` opens with Cancel focused.
 - A stat without `CooldownScalars` still previews its fixed base cooldown through
   core and has no cooldown-stat slider. Other stat-dependent text previews retain
   their stat controls.
@@ -193,8 +207,8 @@ complete interaction walkthrough.
 Use a repository-scoped fine-grained PAT with Contents R/W, Pull requests R/W,
 Actions R/W and Metadata R. Session storage is the default; Remember me opts into
 local storage. Tokens are sent only to `api.github.com`. Disconnect clears both
-credential stores, but leaves local recovery snapshots intact; use **Recovery**
-to discard those snapshots. Browser storage is not encrypted: use a trusted device.
+credential stores, but leaves local recovery snapshots intact; use **Recovery** in the ☰
+repository menu to discard those snapshots. Browser storage is not encrypted: use a trusted device.
 
 Edits and unadded item drafts remain in memory while editing and are also recorded
 by local recovery; closing/reloading still warns for dirty files or unadded item

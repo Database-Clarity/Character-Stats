@@ -64,7 +64,7 @@ describe('audit editor regressions', () => {
         );
         expect(html).toContain('600 s');
         expect(html).toContain('Base cooldown');
-        expect(html).not.toContain('Context stat value');
+        expect(html).not.toContain('type="range"');
         expect(html).not.toContain('No cooldown context');
     });
     it('labels an unscaled ability value as its base cooldown', () => {
@@ -179,7 +179,7 @@ describe('audit editor regressions', () => {
         expect(html).toContain('Show details for Ward of Dawn (hash 8)');
         expect(html).toContain('600 → 152');
         expect(html).toContain('<summary>Applicable overrides</summary>');
-        expect(html).not.toContain('Context stat value');
+        expect(html).not.toContain('type="range"');
         expect(html).not.toContain('<summary>Affected abilities</summary>');
     });
     it('shows the empty context prompt without stale group results after deselection', () => {

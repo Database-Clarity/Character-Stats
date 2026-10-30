@@ -79,7 +79,7 @@ describe('entry-associated locale text', () => {
                 movementSpec.collections,
                 { Classes: [{ ClassHash: 671679327, Name: 'Hunter' }] },
             ),
-        ).toBe('Classes / Hunter (671679327) / Description');
+        ).toBe('Hunter · Description');
         expect(
             localeEntryLabel(
                 'Movement.Sources.12.Description',
@@ -87,9 +87,15 @@ describe('entry-associated locale text', () => {
                 movementSpec.collections,
                 { Sources: [{ Hash: 12, Name: 'Machine Gun' }] },
             ),
-        ).toBe('Sources / Machine Gun (12) / Description');
+        ).toBe('Machine Gun · Description');
         expect(
             localeEntryLabel('Movement.Overview', 'Movement', movementSpec.collections, {}),
-        ).toBe('Movement.Overview');
+        ).toBe('Overview');
+        expect(localeEntryLabel('Grenade.BaseStatTooltip', 'Grenade', {}, {})).toBe(
+            'Base stat tooltip',
+        );
+        expect(localeEntryLabel('ChargeBasedScaling', 'Grenade', {}, {})).toBe(
+            'Charge based scaling',
+        );
     });
 });

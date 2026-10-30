@@ -1,4 +1,4 @@
-import { Component, useEffect, useState, type ReactNode } from 'react';
+import { Component, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { DataSource } from '../data';
 import {
     deleteRecovery,
@@ -7,8 +7,10 @@ import {
     type RecoverySnapshot,
 } from '../state/recovery';
 import { useEditor } from '../state/store';
+import { ConfirmDialog } from './ConfirmDialog';
 import { Modal } from './Modal';
 import { plural } from './textFormat';
+import logo from '../assets/clarity-logo.svg';
 
 function detail(error: unknown) {
     return error instanceof Error ? error.message : String(error);
@@ -66,6 +68,34 @@ function SnapshotList({
     );
 }
 
+function DiscardRecovery({ count, discard }: { count: number; discard(): void }) {
+    const [confirming, setConfirming] = useState(false);
+    return (
+        <>
+            <button
+                className="danger"
+                disabled={!count}
+                title={count ? undefined : 'No recoverable snapshots are available'}
+                onClick={() => setConfirming(true)}
+            >
+                Discard stored recovery data
+            </button>
+            {confirming && (
+                <ConfirmDialog
+                    title="Discard recovery data"
+                    message={`Permanently delete ${plural(count, 'stored snapshot')} for this repository? This cannot be undone.`}
+                    confirmLabel="Discard"
+                    onClose={() => setConfirming(false)}
+                    onConfirm={() => {
+                        setConfirming(false);
+                        discard();
+                    }}
+                />
+            )}
+        </>
+    );
+}
+
 export function RecoveryDialog({ onClose }: { onClose(): void }) {
     const state = useEditor();
     return (
@@ -84,24 +114,33 @@ export function RecoveryDialog({ onClose }: { onClose(): void }) {
                     onClose();
                 }}
             />
-            <button className="danger" onClick={() => void state.recovery.discard()}>
-                Discard stored recovery data
-            </button>
+            <DiscardRecovery
+                count={state.recovery.snapshots.length}
+                discard={() => void state.recovery.discard()}
+            />
         </Modal>
     );
 }
 
 export function RecoveryGate({ children }: { children: ReactNode }) {
     const state = useEditor();
+    const offered = state.recovery.ready && state.recovery.offered;
+    const keep = useRef<HTMLButtonElement>(null);
+    useEffect(() => {
+        if (offered) keep.current?.focus();
+    }, [offered]);
     if (!state.recovery.ready)
         return (
             <main className="main">
                 <p>Checking local recovery…</p>
             </main>
         );
-    if (state.recovery.offered)
+    if (offered)
         return (
-            <main className="main">
+            <main className="login recovery-gate">
+                <div className="brand">
+                    <img src={logo} alt="Clarity" /> Clarity <span>data editor</span>
+                </div>
                 <h1>Recover unsaved work</h1>
                 <p>Stored local work was found for {state.source.label}.</p>
                 {state.recovery.error && (
@@ -117,14 +156,23 @@ export function RecoveryGate({ children }: { children: ReactNode }) {
                         state.recovery.restored(snapshot);
                     }}
                 />
-                <button className="danger" onClick={() => void state.recovery.discard()}>
-                    Discard stored recovery data and start fresh
-                </button>
-                {state.recovery.error && (
-                    <button onClick={state.recovery.continueWithoutRecovery}>
-                        Continue without local recovery
+                <div className="toolbar recovery-actions">
+                    <button
+                        ref={keep}
+                        className="primary"
+                        onClick={state.recovery.continueWithoutRecovery}
+                    >
+                        Continue without restoring
                     </button>
-                )}
+                    <DiscardRecovery
+                        count={state.recovery.snapshots.length}
+                        discard={() => void state.recovery.discard()}
+                    />
+                </div>
+                <p className="muted">
+                    Stored snapshots are kept and stay under Recovery in the repository menu. New
+                    autosaves are added to them.
+                </p>
             </main>
         );
     return children;

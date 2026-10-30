@@ -85,7 +85,13 @@ export function ManifestProvider(props: { children: ReactNode }): React.JSX.Elem
         <ManifestContext.Provider value={value}>
             {props.children}
             {!initialComplete && status.state !== 'ready' && (
-                <Modal title="Preparing manifest" onClose={() => {}} busy>
+                <Modal
+                    title={
+                        status.state === 'loading' ? 'Preparing manifest' : 'Manifest unavailable'
+                    }
+                    onClose={() => {}}
+                    busy
+                >
                     {status.state === 'loading' ? (
                         <>
                             <p role="status">{status.step}</p>

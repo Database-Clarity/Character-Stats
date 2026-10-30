@@ -118,7 +118,7 @@ describe('declarative nested field controls', () => {
         expect(html).toContain('<select');
         if (spec.kind === 'objectArray') {
             expect(html).toContain('Values stacks 1');
-            expect(html).toContain('Move Effects row 1 down');
+            expect(html).toContain('Move effect 1 down');
             expect(html).toContain('data-field="Effects.0.Values"');
         }
     });

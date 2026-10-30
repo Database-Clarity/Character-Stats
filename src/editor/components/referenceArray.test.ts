@@ -28,7 +28,7 @@ describe('plain manifest reference arrays', () => {
             );
             expect(html).toContain('reference-chip');
             expect(html).toContain('Add reference');
-            expect(html).toContain(`Remove ${key} reference 1`);
+            expect(html).toContain(`Remove hash 123 from ${key}`);
             expect(html).toContain('Unset (0)');
             expect(html).not.toContain('wildcard');
             expect(html).not.toContain('Subclass:');

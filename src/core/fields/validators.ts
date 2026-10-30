@@ -13,11 +13,11 @@ export function validateNumber(
     integer = false,
 ): string[] {
     if (typeof value !== 'number' || !Number.isFinite(value)) {
-        return ['Please provide a finite number'];
+        return ['Enter a number'];
     }
     const errors: string[] = [];
     if (integer && !Number.isSafeInteger(value)) {
-        errors.push('Please provide a safe integer');
+        errors.push('Enter a whole number');
     }
     if (constraints.min !== undefined && value < constraints.min) {
         errors.push('Must be >= ' + constraints.min);
@@ -53,7 +53,7 @@ export function validateField(
     });
 
     if (value === undefined) {
-        return spec.required ? [issue('Required field is unspecified')] : [];
+        return spec.required ? [issue('Required')] : [];
     }
     if (spec.kind === 'enum') {
         return typeof value === 'string' && spec.values?.some((entry) => entry.value === value)
@@ -72,11 +72,9 @@ export function validateField(
     }
     if (spec.kind === 'string' || spec.kind === 'localeRef') {
         if (typeof value !== 'string') {
-            return [issue('Please provide a string')];
+            return [issue('Enter text')];
         }
-        return spec.required && value.trim().length === 0
-            ? [issue('Please provide a non-empty string')]
-            : [];
+        return spec.required && value.trim().length === 0 ? [issue('Required')] : [];
     }
     if (spec.kind === 'curve') {
         if (!spec.domain) {
@@ -99,7 +97,7 @@ export function validateField(
                 issue(
                     spec.kind === 'objectArray'
                         ? 'Expected entity array'
-                        : 'Please provide an array of numbers',
+                        : 'Expected an array of numbers',
                 ),
             ];
         }
@@ -150,6 +148,16 @@ export function validateField(
     return errors;
 }
 
+/** Readable `A, B or C` list of the `anyOf` groups, using field labels without unit suffixes. */
+function anyOfPhrase(spec: EntitySpec): string {
+    const name = (key: string) =>
+        (spec.fields.find((f) => f.key === key)?.label ?? key).replace(/\s*\([^)]*\)$/, '');
+    const groups = (spec.anyOf ?? []).map((g) => g.map(name).join(' and '));
+    return groups.length > 1
+        ? groups.slice(0, -1).join(', ') + ' or ' + groups[groups.length - 1]
+        : (groups[0] ?? '');
+}
+
 export function validateEntity(
     spec: EntitySpec,
     value: unknown,
@@ -169,9 +177,7 @@ export function validateEntity(
     if (spec.anyOf && !spec.anyOf.some((group) => group.every((key) => value[key] !== undefined))) {
         errors.push({
             path,
-            message:
-                'Please specify at least one of ' +
-                spec.anyOf.map((g) => g.join(' and ')).join(', '),
+            message: 'Set ' + anyOfPhrase(spec),
             severity: 'error',
         });
     }

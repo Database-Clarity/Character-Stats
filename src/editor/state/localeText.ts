@@ -1,5 +1,6 @@
 import { isRecord, type EntitySpec, type LocaleData } from '../../core';
 import { identityKey } from './editing';
+import { sentenceCase } from '../components/textFormat';
 
 export function updateLocaleText(locale: LocaleData, id: string, text: string): LocaleData {
     const keys = id.split('.'),
@@ -48,21 +49,27 @@ export function entryLocaleTextIds(
     return localeTextIds(locale, `${stat}.${collection}.${identity}`);
 }
 
+/** Readable title for a locale ID; the raw ID stays available as the dimmed key. */
 export function localeEntryLabel(
     id: string,
     stat: string,
     collections: Readonly<Record<string, EntitySpec>>,
     source: Record<string, unknown>,
 ): string {
+    const plain = () =>
+        (id.startsWith(stat + '.') ? id.slice(stat.length + 1) : id)
+            .split('.')
+            .map(sentenceCase)
+            .join(' · ');
     const [idStat, collection, identity, ...field] = id.split('.');
     if (idStat !== stat || !collection || !identity || !field.length || !/^\d+$/.test(identity))
-        return id;
+        return plain();
     const entitySpec = collections[collection];
-    if (!entitySpec) return id;
+    if (!entitySpec) return plain();
     const key = identityKey(entitySpec);
 
     const entries = source[collection];
-    if (!Array.isArray(entries)) return id;
+    if (!Array.isArray(entries)) return plain();
     const entry = entries.find(
         (candidate) =>
             isRecord(candidate) &&
@@ -70,6 +77,6 @@ export function localeEntryLabel(
             typeof candidate.Name === 'string' &&
             candidate.Name.trim().length > 0,
     );
-    if (!isRecord(entry) || typeof entry.Name !== 'string') return id;
-    return `${collection} / ${entry.Name} (${identity}) / ${field.join('.')}`;
+    if (!isRecord(entry) || typeof entry.Name !== 'string') return plain();
+    return `${entry.Name} · ${field.map(sentenceCase).join(' · ')}`;
 }

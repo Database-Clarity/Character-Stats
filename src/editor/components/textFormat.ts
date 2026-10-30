@@ -9,3 +9,23 @@ export function collectionLabel(key: string): string {
         return `${lower} ${upper.toLowerCase()}`;
     });
 }
+
+/**
+ * Sentence-case split of an identifier, e.g. `BaseStatTooltip` -> `Base stat tooltip`,
+ * `ADSSpeed` -> `ADS speed`. All-caps acronyms keep their case.
+ */
+export function sentenceCase(key: string): string {
+    const words = key
+        .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+        .split(/[\s_]+/)
+        .filter(Boolean)
+        .map((word) => (/^[A-Z\d]{2,}$/.test(word) ? word : word.toLowerCase()));
+    const text = words.join(' ');
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/** Naive singular of a plural field label, e.g. `Effects` -> `Effect`, `Entries` -> `Entry`. */
+export function singular(label: string): string {
+    return /ies$/i.test(label) ? label.replace(/ies$/i, 'y') : label.replace(/(?<!s)s$/i, '');
+}

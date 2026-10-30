@@ -6,7 +6,7 @@ Open the editor at [database-clarity.github.io/Character-Stats/editor](https://d
 
 On **Connect to your repository**, enter the **Fine-grained GitHub personal access token**; **Branch** is a dropdown listing the repository's branches after a token is entered (default `master` when available). The repository is fixed to `Database-Clarity/Character-Stats`. The token needs Contents read/write, Pull requests read/write, Actions read/write, and Metadata read permissions. Select **Remember me on this device (localStorage)** only on a trusted device; otherwise the token stays in session storage. Select **Connect to GitHub** to load the source JSON and English locale for that branch.
 
-For development only, **Use local dev data** opens the checked-out repository's JSON without a token. It is labeled **Local (read-only dev)**: edits exist only in memory, and Save and Publish are disabled. This option is not included in production builds.
+For development only, **Use local dev data** opens the checked-out repository's JSON without a token. It is shown as **Local dev** in the ☰ repository menu: edits exist only in memory, and Save and Publish are disabled. This option is not included in production builds.
 
 ## Navigate and edit
 
@@ -19,13 +19,19 @@ Movement uses the same overlay for its speed preview; open it with **Speed previ
 On phones (600px and below) a collection shows either its list or the selected item;
 use **← List** or browser Back to return to the list.
 
-Expand the validation bar to list every error and warning; **Go to** opens the stat, tab and
-item that holds the value and focuses the closest field.
+Expand the validation bar to list every error and warning. Each issue names its location
+with readable labels, for example *Grenade › Abilities › Flux Grenade › Name*; hover it for the
+raw source path. **Go to** opens the stat, tab and item that holds the value and focuses the
+closest field.
 
 Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item names, or hashes.
 Press **/** outside an input to focus the current collection filter (or open Jump).
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes
-menus and dialogs. Every input has a label and keyboard focus ring. Field labels are readable names; the source key appears beside each one in dimmed monospace text. Fields are required unless tagged *optional*. Select or tap a field's **ⓘ** button for guidance on what to enter; Escape or a click elsewhere closes it.
+menus and dialogs. Dialogs return focus to their opener when it is still on the page;
+confirmation dialogs open with **Cancel** focused. Quick jump lands focus on the item heading
+(or the selected tab for a stat or tab jump), selecting an item on a phone focuses its heading,
+and **+** focuses the new draft's first field. Number stepper buttons are not Tab stops; use
+ArrowUp and ArrowDown in the input. Every input has a label and keyboard focus ring. Field labels are readable names; the source key appears beside each one in dimmed monospace text. Fields are required unless tagged *optional*. Select or tap a field's **ⓘ** button for guidance on what to enter; Escape or a click elsewhere closes it.
 Hold **Ctrl+Alt** and scroll anywhere in the editor to navigate the character stats:
 wheel up selects the previous section and wheel down selects the next, stopping at
 either end. The whole stats sidebar highlights while the exact modifiers are held;
@@ -39,11 +45,13 @@ Changing selections this way preserves unsaved edits and drafts.
 
 ### Manifest names and icons
 
-The refresh indicator in the repository/branch account area reports loading, ready,
-disabled, or error status. The initial load blocks editing with a modal showing
+The manifest badge in the top bar reports loading, ready, disabled, or error status. When
+ready it shows a green dot and **Manifest**; click it to refresh (hover for the loaded
+version). On error it reads **Manifest: retry**; hover for the full error. The initial load
+blocks editing with a modal showing
 the current step and indexing progress; it closes when the manifest is ready.
-If loading fails (including **No API key** configuration), the modal explains the
-error and offers **Continue without manifest**. Later refreshes do not block editing.
+If loading fails (including **No API key** configuration), the **Manifest unavailable** modal
+explains the error and offers **Continue without manifest**. Later refreshes do not block editing.
 Names, icons, item types, stat icons, and class icons
 come from Bungie's manifest. Source names remain editable: if one differs from its
 manifest name, the item header offers **Use manifest name**. Hash inputs show their
@@ -53,8 +61,9 @@ source names and hashes remain usable; numeric manual entry is always available.
 definitions without icon URLs use accurate CC0 Destiny class glyphs (source and
 licence recorded in the editor README). Prismatic ability icons have a small
 multicolour corner marker, detected from manifest ability types, not source names.
-Movement uses the provided Mobility glyph. **Sign out** is beside the repository
-and branch; unsaved edits or drafts require an in-app confirmation before leaving.
+Movement uses the provided Mobility glyph. **Sign out** and **Recovery** are in the ☰
+repository menu at the right of the top bar; unsaved edits or drafts require an in-app
+confirmation before leaving.
 
 ### Fields and curves
 
@@ -76,7 +85,10 @@ Bounds, values, and rounding use numeric inputs; Linear points use individual x/
 inputs. Add, reorder, collapse, and remove segments with their inline controls.
 **Values** edits each integer-domain value numerically. Converting Values to
 Segments preserves every evaluated value exactly; the conversion is checked
-against the expanded array before it is applied. **View JSON** is read-only
+against the expanded array before it is applied. The **Segments** and **Values** buttons change
+the stored format; switching back without edits restores the original curve, including its
+rounding, because the previous or saved curve is reused when it expands to the same values.
+**View JSON** is read-only
 debugging output, not a required editing surface. Core validation checks coverage,
 expressions, and numeric constraints. Tick labels retain their natural proportions
 at every plot width; the x/y value label follows the pointer, independently of the
@@ -86,9 +98,10 @@ precision remains unrestricted. Hold **Shift** and wheel over a numeric input to
 step its hovered value by the configured step, respecting bounds and preserving
 the value's typed precision. The ordinary wheel remains scrolling without **Shift**.
 
-Enum fields use compact selects; hover the selected value or an option for its
-description. Object fields expand into inline spec-driven groups. Object arrays
-use compact rows with **Add row**, **Up**, **Down**, and **Remove** controls.
+Enum fields use compact selects with sentence-case option names (for example
+*While held*); hover an option for its stored value and description. Object fields
+expand into inline spec-driven groups. Object arrays use compact rows with **Add row**
+and ↑ / ↓ / × controls.
 Nested fields have their own validation, modified marker, and revert button.
 Changes **Go to** expands the containing groups and focuses the nested field.
 Adding/removing rows is a parent-array change; reordering rows is meaningful.
@@ -99,14 +112,16 @@ An **Unpublished** badge means the field is kept in sources but not exported.
 Wide screens show **item list | editor | context**. Filter lists by source name,
 manifest name, or hash. Select an item to edit it. Editing its **Hash** keeps the
 item selected and focused; selection follows the item through identity changes.
-Right-click a row or use its three-dot menu (revealed on hover/focus); the editor
+Right-click a row or use its three-dot menu (faintly visible, fully opaque on hover, focus or selection); the editor
 header has the same menu. **Duplicate** opens an isolated draft; **Delete** marks
 saved items as deleted with a strikethrough and a **Restore item** action.
-**Revert changes** restores one item (or removes an added item). No global
+**Revert changes** restores one item (or removes an added item); it asks first when more than
+one field changed or the item is unsaved. No global
 Duplicate/Delete toolbar is used.
 
 Ability entries can be grouped by identical **BaseCooldown** values within each
-collection; entries from different collections are not grouped together.
+collection; entries from different collections are not grouped together. **Edit group** is a
+compact button right-aligned under each group header when the group has more than one active entry.
 After all editable fields, **Members** shows a responsive grid of compact
 icon/name/hash cards. Hover or focus a card for its custom tooltip: identity and
 manifest details plus every schema-backed current entry value, including values
@@ -123,8 +138,8 @@ The list-header **+** creates a draft pinned above the sorted list. It is marked
 **DRAFT** and is **not a pending change**. Duplicates also start with empty identity
 fields while retaining the copied numeric values and other properties. Drafts survive navigation within the
 workspace. **Add to list** is disabled until core entity validation succeeds and
-the identity hash is unique. Adding sorts and selects the item; **Discard** drops
-the draft. There is one draft per collection; finish/discard it before adding from
+the identity hash is unique. Adding sorts and selects the item; **Discard** asks first when the draft has entered values,
+then drops the draft. There is one draft per collection; finish/discard it before adding from
 the manifest. Closing the page warns for drafts as well as unsaved edits.
 
 The **Add from manifest** (diamond-plus icon) button opens a searchable
@@ -142,7 +157,7 @@ properties still use the spec defaults and validation.
 Override requirements are named/icon references. **0** means **All abilities
 (wildcard)**; negative hashes display **Subclass: name**. **Add requirement** searches
 three groups: abilities in this stat, subclass filters, and the wildcard. A manual
-hash input works even when the manifest is unavailable. Row Up / Down / Remove
+hash input works even when the manifest is unavailable. Row ↑ / ↓ / ×
 controls reorder/remove references.
 
 Every field whose spec declares `lengthOf` for that reference array is a numeric
@@ -160,7 +175,8 @@ Manual hashes remain available without a manifest.
 
 ### Cooldown context
 
-The stat slider and adjacent numeric input remain pinned above the scrolling
+The stat slider (labelled with the stat, for example *Grenade value*) and adjacent numeric
+input remain pinned above the scrolling
 context content. An ability selection shows only that ability's base cooldown
 and one before-to-after / delta row for each applicable override. An override
 selection still shows the abilities it affects, each with its icon (hover or click for
@@ -212,8 +228,9 @@ instead of a stale result. Active-source controls scroll independently below it.
 
 ### English text
 
-**Text** edits English locale strings only. The stat slider, numeric input, and
-ability selector remain pinned. Each collapsible locale row has its textarea and
+**Text** edits English locale strings only. The stat slider (*Grenade value*), numeric
+input, and ability selector remain pinned. Section titles and the outline use readable
+names (*Base stat tooltip*) with the locale ID beside them in dimmed monospace text. Each collapsible locale row has its textarea and
 live preview side by side at desktop widths. The preview uses the selected ability's
 base data only and does not apply overrides. Placeholder validation and rendering
 use core; unknown/unavailable placeholders remain visible in the preview. Text
@@ -225,7 +242,8 @@ their current presentation. Textareas expand automatically to fit their content.
 ## Review and save
 
 Select **Changes (N)** to open the review dock, grouped by stat > tab > item >
-field. Each row shows a compact structured diff; arrays and curves identify changed
+field. Each row shows the field's label with its key in dimmed monospace text, and a
+compact structured diff; arrays and curves identify changed
 indices/segments with old &rarr; new values. Expand a change for the full old and new
 values in a keyboard-accessible disclosure. **Go to** navigates, expands the target
 section, scrolls to it, and briefly highlights it. Top-bar previous / next buttons
@@ -262,14 +280,16 @@ credentials. GitHub snapshots are scoped by owner, repository, and branch;
 **Local (read-only dev)** has its own scope and does not share snapshots with a
 GitHub branch. Each edit queues an asynchronous write of the latest working
 state; the rolling snapshot history is debounced by 750 ms, keeps up to 30
-snapshots, and retains them for up to 7 days. This is local recovery, not an
+snapshots, and retains them for up to 7 days; pruning removes only snapshots beyond the newest
+30 or older than 7 days. This is local recovery, not an
 undo/redo history.
 
-When stored work is found at startup, choose a timestamped snapshot to **Restore**
-or **Discard** the stored recovery data and start fresh. The normal **Recovery**
-toolbar opens the same snapshot list; each entry shows its change count and
-offers **Restore snapshot** or **Export JSON**, and the dialog can discard stored
-data. If the editor hits a React error boundary, its recovery screen likewise
+When stored work is found at startup, a centered card lists the timestamped snapshots, each
+with **Restore snapshot** or **Export JSON**. **Continue without restoring** (the default)
+keeps the stored snapshots, which stay under **Recovery** in the ☰ repository menu, and new
+autosaves are added alongside them. **Discard stored recovery data** asks for confirmation;
+it is disabled when no snapshots exist. The **Recovery** dialog from the ☰ menu offers the
+same list and discard action, and each entry shows its change count. If the editor hits a React error boundary, its recovery screen likewise
 offers snapshots to restore or export, or lets you discard recovery data and
 reload the editor. Corrupt or incompatible recovery data is reported explicitly
 and can be discarded.
@@ -279,11 +299,11 @@ the normal branch-head reconciliation; if tracked source files have changed,
 **Reload** keeps the restored edits for a rebase attempt, or you can cancel.
 After a successful Save, recovery data for both the original scope and the
 resulting branch scope is cleared. Signing out does not erase local recovery;
-use **Recovery** to discard stored snapshots when you want them removed.
+use **Recovery** in the ☰ repository menu to discard stored snapshots when you want them removed.
 
-If startup cannot read IndexedDB, you can choose **Continue without local
-recovery**; an alert and notice explain that recovery will not persist for that
-session. Other storage or quota failures are also surfaced as recovery errors.
+If startup cannot read IndexedDB, the card shows the error; **Continue without restoring**
+turns local recovery off for the session, and an alert and notice explain that recovery will
+not persist. Other storage or quota failures are also surfaced as recovery errors.
 The existing leave/reload warning for unsaved edits and drafts remains in place.
 Writes are asynchronous, so an edit can be lost if the browser or process crashes
 before its IndexedDB transaction completes; recovery is not a backup guarantee.

@@ -153,9 +153,14 @@ export function useRecovery(
     }
 
     function continueWithoutRecovery() {
-        blocked.current = true;
+        // Unreadable storage stays blocked; otherwise stored snapshots are kept and appended to.
+        blocked.current = !!error;
         setOffered(false);
-        setNotice('Local recovery is disabled for this session. Export your work before leaving.');
+        setNotice(
+            error
+                ? 'Local recovery is disabled for this session. Export your work before leaving.'
+                : 'Stored recovery snapshots were kept; new autosaves are added to them.',
+        );
     }
 
     return {

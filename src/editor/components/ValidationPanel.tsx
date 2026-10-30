@@ -1,5 +1,6 @@
 import { useEditor } from '../state/store';
 import { issueTarget, type ChangeTarget } from '../state/editing';
+import { issueLocationLabel } from '../state/locationLabels';
 import { plural } from './textFormat';
 
 export function ValidationPanel({ onGo }: { onGo(target: ChangeTarget): void }) {
@@ -20,16 +21,21 @@ export function ValidationPanel({ onGo }: { onGo(target: ChangeTarget): void }) 
                     <p className="success">All sources and English placeholders are valid.</p>
                 ) : (
                     issues.map((issue, i) => {
-                        const target = issueTarget(issue.path, sources);
+                        const target = issueTarget(issue.path, sources),
+                            location = issueLocationLabel(issue.path, sources);
                         return (
                             <div className="validation-issue" key={i}>
-                                <p className={issue.severity === 'error' ? 'error' : 'warning'}>
-                                    <code>{issue.path}</code>: {issue.message}
+                                <p
+                                    className={issue.severity === 'error' ? 'error' : 'warning'}
+                                    title={issue.path}
+                                >
+                                    <strong>{location}</strong>: {issue.message}
                                 </p>
                                 {target && (
                                     <button
                                         type="button"
-                                        aria-label={`Go to ${issue.path}`}
+                                        aria-label={`Go to ${location}`}
+                                        title={issue.path}
                                         onClick={() => onGo(target)}
                                     >
                                         Go to

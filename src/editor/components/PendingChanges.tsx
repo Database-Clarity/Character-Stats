@@ -2,7 +2,8 @@ import { useEditor } from '../state/store';
 import { useState } from 'react';
 import { ConfirmDialog } from './ConfirmDialog';
 import type { EditorChange } from '../state/editing';
-import { Collapse } from './EditorPrimitives';
+import { Collapse, FieldName } from './EditorPrimitives';
+import { fieldLabel, statRoot } from '../state/locationLabels';
 import { Modal } from './Modal';
 import { formatChangeValue, structuredDiff, type StructuredChange } from './structuredDiff';
 import { collectionLabel, plural } from './textFormat';
@@ -45,6 +46,7 @@ function ChangeRows({
     changes: EditorChange[];
     onGo(change: EditorChange): void;
 }) {
+    const { sources } = useEditor();
     return (
         <>
             {changes.map((change) => (
@@ -53,7 +55,18 @@ function ChangeRows({
                         {change.kind === 'modified' ? '●' : change.kind === 'added' ? '+' : '−'}
                     </span>
                     <div>
-                        <strong>{change.field || change.kind + ' item'}</strong>
+                        {change.field ? (
+                            <strong>
+                                <FieldName
+                                    spec={{
+                                        key: change.field,
+                                        label: fieldLabel(change, statRoot(sources, change.stat)),
+                                    }}
+                                />
+                            </strong>
+                        ) : (
+                            <strong>{change.kind + ' item'}</strong>
+                        )}
                         {(() => {
                             const diff = structuredDiff(change.before, change.after);
                             return diff ? (

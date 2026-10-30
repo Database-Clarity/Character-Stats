@@ -138,6 +138,8 @@ export function RepositoryMenu({
                             type="button"
                             onClick={() => {
                                 setOpen(false);
+                                // The menu item unmounts; give the dialog a live opener to return focus to.
+                                triggerRef.current?.focus();
                                 onRecovery();
                             }}
                         >
@@ -151,6 +153,8 @@ export function RepositoryMenu({
                             title="Sign out of this repository"
                             onClick={() => {
                                 setOpen(false);
+                                // The menu item unmounts; give the dialog a live opener to return focus to.
+                                triggerRef.current?.focus();
                                 onSignOut();
                             }}
                         >

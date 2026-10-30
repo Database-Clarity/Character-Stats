@@ -21,6 +21,7 @@ import { useManifest } from '../manifest';
 import { ManifestPicker, collectionFilter } from './ManifestUI';
 import { type ItemAction } from './ItemMenu';
 import { previewCollections } from './previewData';
+import { ConfirmDialog } from './ConfirmDialog';
 import { ContextPanel } from './ContextPanel';
 import { EntityRows } from './EntityRows';
 import { ItemEditorPane } from './ItemEditorPane';
@@ -32,6 +33,27 @@ import {
     type WheelNavigationState,
 } from './navigationShortcuts';
 import type { NavigationMode } from './navigationHistory';
+import { plural } from './textFormat';
+
+interface PendingConfirm {
+    title: string;
+    message: string;
+    confirmLabel: string;
+    run(): void;
+}
+
+/** Focus follows navigation: the editor heading, or its first field for a new draft. */
+interface PendingFocus {
+    key: string | null;
+    target: 'heading' | 'field';
+    at: number;
+}
+
+function changedFieldCount(old: Record<string, unknown>, item: Record<string, unknown>) {
+    return [...new Set([...Object.keys(old), ...Object.keys(item)])].filter(
+        (key) => !equal(old[key], item[key]),
+    ).length;
+}
 
 export function EntityList({
     spec,
@@ -75,8 +97,10 @@ export function EntityList({
     }));
     const [search, setSearch] = useState(''),
         [picker, setPicker] = useState(false),
-        [contextOpen, setContextOpen] = useState(false);
+        [contextOpen, setContextOpen] = useState(false),
+        [confirm, setConfirm] = useState<PendingConfirm | null>(null);
     const editingGroup = selectedGroupMembers ?? null;
+    const pendingFocus = useRef<PendingFocus | null>(null);
     const layout = useRef<HTMLDivElement>(null),
         wheelNavigation = useRef<WheelNavigationState>({
             accumulated: 0,
@@ -126,6 +150,21 @@ export function EntityList({
         setFormSession((session) => selectEntityFormSession(session, selected));
     }, [selected]);
     useEffect(() => {
+        const pending = pendingFocus.current;
+        if (!pending || pending.key !== selected || Date.now() - pending.at > 2000) return;
+        const root = layout.current?.querySelector<HTMLElement>('.item-editor');
+        const target =
+            pending.target === 'field'
+                ? root?.querySelector<HTMLElement>(
+                      '.editor-body input, .editor-body textarea, .editor-body select',
+                  )
+                : root?.querySelector<HTMLElement>('.editor-title');
+        // Hidden panes (the phone layout shows one at a time) can't take focus yet.
+        if (!target || target.getClientRects().length === 0) return;
+        pendingFocus.current = null;
+        target.focus({ preventScroll: true });
+    });
+    useEffect(() => {
         const element = layout.current;
         if (!element) return;
         const onWheel = (event: WheelEvent) => navigateCollectionOnWheel(event);
@@ -145,7 +184,13 @@ export function EntityList({
         setFormSession((session) => selectEntityFormSession(session, key));
         onSelect(key);
     }
+    function focusAfter(key: string | null, target: PendingFocus['target'] = 'heading') {
+        pendingFocus.current = { key, target, at: Date.now() };
+    }
     function navigateItem(key: string | null, mode: NavigationMode) {
+        // Phones swap the list for the editor, which unmounts the clicked row.
+        if (mode === 'click' && key !== null && window.matchMedia('(max-width: 600px)').matches)
+            focusAfter(key);
         setFormSession((session) => selectEntityFormSession(session, key));
         onNavigate(key, mode);
     }
@@ -201,6 +246,7 @@ export function EntityList({
             return;
         }
         setDraft(createItemDraft(spec, items, copy));
+        focusAfter('draft', 'field');
         navigateItem('draft', 'click');
         setSearch('');
     }
@@ -223,14 +269,28 @@ export function EntityList({
                       label: 'Revert changes',
                       disabled: !!old && equal(old, item),
                       onSelect: () => {
-                          onChange(
-                              old
-                                  ? items.map((i) =>
-                                        String(i[idKey]) === id ? structuredClone(old) : i,
-                                    )
-                                  : items.filter((i) => String(i[idKey]) !== id),
-                          );
-                          if (!old) selectItem(null);
+                          const revert = () => {
+                              onChange(
+                                  old
+                                      ? items.map((i) =>
+                                            String(i[idKey]) === id ? structuredClone(old) : i,
+                                        )
+                                      : items.filter((i) => String(i[idKey]) !== id),
+                              );
+                              if (!old) selectItem(null);
+                              focusAfter(old ? id : null);
+                          };
+                          const count = old ? changedFieldCount(old, item) : 0;
+                          if (old && count <= 1) revert();
+                          else
+                              setConfirm({
+                                  title: 'Revert changes',
+                                  message: old
+                                      ? `Revert ${plural(count, 'changed field')} on ${String(item.Name) || id} to the saved values?`
+                                      : `Remove ${String(item.Name) || id}? It has not been saved yet.`,
+                                  confirmLabel: 'Revert',
+                                  run: revert,
+                              });
                       },
                   },
                   {
@@ -340,8 +400,19 @@ export function EntityList({
                     onBack={() => navigateItem(null, 'click')}
                     onAddDraft={addDraftToList}
                     onDiscardDraft={() => {
-                        setDraft();
-                        selectItem(null);
+                        const discard = () => {
+                            setDraft();
+                            focusAfter(null);
+                            selectItem(null);
+                        };
+                        if (draft && !equal(draft, createItemDraft(spec, items))) {
+                            setConfirm({
+                                title: 'Discard draft',
+                                message: 'Discard this draft and the values entered so far?',
+                                confirmLabel: 'Discard',
+                                run: discard,
+                            });
+                        } else discard();
                     }}
                     onRestoreDeleted={() => {
                         if (editorValue) onChange([...items, structuredClone(editorValue)]);
@@ -373,6 +444,18 @@ export function EntityList({
                         />
                     )}
                 </div>
+            )}
+            {confirm && (
+                <ConfirmDialog
+                    title={confirm.title}
+                    message={confirm.message}
+                    confirmLabel={confirm.confirmLabel}
+                    onClose={() => setConfirm(null)}
+                    onConfirm={() => {
+                        setConfirm(null);
+                        confirm.run();
+                    }}
+                />
             )}
             {picker && (
                 <ManifestPicker

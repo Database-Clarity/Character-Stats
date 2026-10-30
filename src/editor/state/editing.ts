@@ -1,4 +1,5 @@
 import {
+    entityRegistry,
     isRecord,
     statRegistry,
     movementSpec,
@@ -23,6 +24,13 @@ export interface BaseCooldownGroup {
     cooldown: number;
     rows: EntityRow[];
 }
+
+/** Group heading name from the registry label, e.g. `Base cooldown (s)` -> `Base cooldown`. */
+export const baseCooldownLabel = (
+    Object.values(entityRegistry)
+        .flatMap((spec) => spec.fields)
+        .find((field) => field.key === 'BaseCooldown')?.label ?? 'Base cooldown'
+).replace(/\s*\([^)]*\)$/, '');
 
 export function groupRowsByBaseCooldown(rows: readonly EntityRow[]) {
     const grouped = new Map<number, EntityRow[]>(),

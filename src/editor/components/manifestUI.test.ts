@@ -55,12 +55,21 @@ describe('manifest availability and picker states', () => {
     });
     it('reserves retry for errors and distinguishes loading from no matches', () => {
         manifest.status = { state: 'error', error: 'Network unavailable' };
-        expect(renderToStaticMarkup(createElement(ManifestStatusBadge))).toContain('retry');
+        const badge = renderToStaticMarkup(createElement(ManifestStatusBadge));
+        expect(badge).toContain('Manifest: retry');
+        expect(badge).toContain('title="Network unavailable (click to retry)"');
         expect(picker()).toContain('Network unavailable');
         expect(picker()).toContain('Create blank draft');
         manifest.status = { state: 'loading', step: 'Downloading items' };
         expect(picker()).toContain('Manifest loading: Downloading items');
         expect(picker()).not.toContain('No matching entries');
+    });
+    it('shows the ready badge as a status with an explicit refresh label', () => {
+        manifest.status = { state: 'ready', version: 'test' };
+        const badge = renderToStaticMarkup(createElement(ManifestStatusBadge));
+        expect(badge).toContain('aria-label="Refresh manifest"');
+        expect(badge).toContain('Manifest');
+        expect(badge).not.toContain('↻');
     });
     it('uses one search box with suggested and other groups, without a search-all checkbox', () => {
         manifest.status = { state: 'ready', version: 'test' };

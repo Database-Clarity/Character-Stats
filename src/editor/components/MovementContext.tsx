@@ -26,7 +26,7 @@ export function MovementContext({ value }: { value: unknown }) {
         return (
             <aside className="context" aria-label="Movement preview">
                 <header className="pane-header">
-                    <strong>Speed preview</strong>
+                    <h2>Speed preview</h2>
                 </header>
                 <p className="error empty-state">
                     Fix Movement validation errors before previewing speed.
@@ -65,7 +65,7 @@ function MovementControls({ source }: { source: MovementSource }) {
     return (
         <aside className="context movement-context" aria-label="Movement preview">
             <header className="pane-header">
-                <strong>Speed preview</strong>
+                <h2>Speed preview</h2>
             </header>
             <section className="movement-settings" aria-label="Global movement settings">
                 <label className="inline">

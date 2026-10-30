@@ -48,6 +48,7 @@ export function Modified({
     onRevert,
     children,
     field,
+    label,
     modified,
     revertTitle,
 }: {
@@ -56,6 +57,8 @@ export function Modified({
     onRevert(): void;
     children: ReactNode;
     field: string;
+    /** Readable field name for the revert button; falls back to the raw `field` path. */
+    label?: string | undefined;
     modified?: boolean | undefined;
     revertTitle?: string | undefined;
 }) {
@@ -65,7 +68,7 @@ export function Modified({
             {changed && (
                 <button
                     className="revert-field"
-                    aria-label={`Revert ${field}`}
+                    aria-label={`Revert ${label ?? field}`}
                     title={revertTitle ?? `Saved: ${JSON.stringify(saved) ?? '(not set)'}`}
                     onClick={onRevert}
                 >
@@ -113,7 +116,7 @@ export function LongPage({
     children,
     label,
 }: {
-    items: { id: string; label: string }[];
+    items: { id: string; label: string; title?: string }[];
     children: ReactNode;
     label: string;
 }) {
@@ -156,7 +159,7 @@ export function LongPage({
                     {items.map((item) => (
                         <button
                             key={item.id}
-                            title={item.label}
+                            title={item.title ?? item.label}
                             aria-current={active === item.id ? 'location' : undefined}
                             onClick={() => {
                                 const el = Array.from(

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { validateField, type FieldSpec } from '../../core';
-import type { ManifestTable } from '../manifest';
+import { useManifest, type ManifestTable } from '../manifest';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
 import { NumberInput } from './NumberInput';
 
@@ -15,6 +15,8 @@ export function ReferenceArrayInput({
     table?: ManifestTable | undefined;
     onChange(value: unknown): void;
 }) {
+    const { lookup } = useManifest();
+    const label = spec.label ?? spec.key;
     const [picker, setPicker] = useState(false);
     const [manual, setManual] = useState('');
     const [duplicateError, setDuplicateError] = useState<string>();
@@ -32,7 +34,7 @@ export function ReferenceArrayInput({
         manual.trim() !== '' && candidateIssues.every((issue) => issue.severity !== 'error');
     function add(hash: number) {
         if (spec.uniqueItems && refs.includes(hash)) {
-            setDuplicateError(`Duplicate ${spec.key} reference: ${hash}`);
+            setDuplicateError(`Duplicate ${label} reference: ${hash}`);
             setPicker(false);
             return;
         }
@@ -49,7 +51,7 @@ export function ReferenceArrayInput({
                         type="checkbox"
                         checked={value !== undefined}
                         onChange={(event) => onChange(event.target.checked ? [] : undefined)}
-                        aria-label={`Enable ${spec.label ?? spec.key}`}
+                        aria-label={`Enable ${label}`}
                     />
                     Enabled
                 </label>
@@ -66,7 +68,11 @@ export function ReferenceArrayInput({
                                 />
                                 <button
                                     className="icon-button danger"
-                                    aria-label={`Remove ${spec.key} reference ${index}`}
+                                    aria-label={`Remove ${
+                                        (typeof hash === 'number'
+                                            ? lookup(hash, table)?.name
+                                            : undefined) ?? `hash ${String(hash)}`
+                                    } from ${label}`}
                                     onClick={() => onChange(refs.filter((_, i) => i !== index))}
                                 >
                                     ×
@@ -105,7 +111,7 @@ export function ReferenceArrayInput({
             )}
             {picker && (
                 <ManifestPicker
-                    title={`Add ${spec.label ?? spec.key}`}
+                    title={`Add ${label}`}
                     table={table ?? 'item'}
                     onClose={() => setPicker(false)}
                     onPick={(entry) => add(entry.hash)}

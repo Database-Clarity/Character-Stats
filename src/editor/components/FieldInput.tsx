@@ -9,6 +9,7 @@ import { numberStep } from './numberStep';
 import { ReferenceArrayInput } from './ReferenceArrayInput';
 import { NumberInput } from './NumberInput';
 import { AutoResizeTextarea } from './AutoResizeTextarea';
+import { sentenceCase, singular } from './textFormat';
 
 export function NumberArrayInput({
     spec,
@@ -79,7 +80,7 @@ export function NumberArrayInput({
                                 </label>
                                 <button
                                     className="icon-button danger"
-                                    aria-label={`Remove ${spec.key} index ${i}`}
+                                    aria-label={`Remove ${spec.label ?? spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
                                     onClick={() =>
                                         onChange(array.filter((_, index) => i !== index))
                                     }
@@ -129,6 +130,9 @@ export function FieldInput({
     const [picker, setPicker] = useState(false);
     const issues = validateField(spec, value, siblings);
     const label = spec.label ?? spec.key;
+    const errorId = (index: number) => `${id}-error-${index}`;
+    const describedBy = [`${id}-help`, ...issues.map((_, index) => errorId(index))].join(' ');
+    const rowName = singular(label);
     const table =
         siblings.RefType === 'itemCategory'
             ? 'itemCategory'
@@ -140,6 +144,7 @@ export function FieldInput({
     return (
         <Modified
             field={fieldPath}
+            label={label}
             value={value}
             saved={saved}
             modified={modified}
@@ -197,11 +202,12 @@ export function FieldInput({
                                 >
                                     <div className="section-bar">
                                         <strong>
-                                            {nested.name} {index + 1}
+                                            {rowName} {index + 1}
                                         </strong>
                                         <div className="toolbar">
                                             <button
-                                                aria-label={`Move ${spec.key} row ${index + 1} up`}
+                                                className="icon-button"
+                                                aria-label={`Move ${rowName.toLowerCase()} ${index + 1} up`}
                                                 disabled={index === 0}
                                                 onClick={() => {
                                                     const next = [...rows];
@@ -213,10 +219,11 @@ export function FieldInput({
                                                     onChange(next);
                                                 }}
                                             >
-                                                Up
+                                                ↑
                                             </button>
                                             <button
-                                                aria-label={`Move ${spec.key} row ${index + 1} down`}
+                                                className="icon-button"
+                                                aria-label={`Move ${rowName.toLowerCase()} ${index + 1} down`}
                                                 disabled={index === rows.length - 1}
                                                 onClick={() => {
                                                     const next = [...rows];
@@ -228,16 +235,16 @@ export function FieldInput({
                                                     onChange(next);
                                                 }}
                                             >
-                                                Down
+                                                ↓
                                             </button>
                                             <button
-                                                className="danger"
-                                                aria-label={`Remove ${spec.key} row ${index + 1}`}
+                                                className="icon-button danger"
+                                                aria-label={`Remove ${rowName.toLowerCase()} ${index + 1}`}
                                                 onClick={() =>
                                                     onChange(rows.filter((_, i) => i !== index))
                                                 }
                                             >
-                                                Remove
+                                                ×
                                             </button>
                                         </div>
                                     </div>
@@ -336,6 +343,7 @@ export function FieldInput({
                                 id={id}
                                 value={String(value ?? '')}
                                 aria-invalid={issues.some((i) => i.severity === 'error')}
+                                aria-describedby={describedBy}
                                 title={
                                     spec.values?.find((entry) => entry.value === value)?.description
                                 }
@@ -343,17 +351,19 @@ export function FieldInput({
                             >
                                 {(!spec.required ||
                                     !spec.values?.some((entry) => entry.value === value)) && (
-                                    <option value={String(value ?? '')}>
-                                        {value === undefined ? 'Not set' : String(value)}
+                                    <option value={String(value ?? '')} title={String(value ?? '')}>
+                                        {value === undefined
+                                            ? 'Not set'
+                                            : sentenceCase(String(value))}
                                     </option>
                                 )}
                                 {spec.values?.map((entry) => (
                                     <option
                                         key={entry.value}
                                         value={entry.value}
-                                        title={entry.description}
+                                        title={`${entry.value}: ${entry.description}`}
                                     >
-                                        {entry.value}
+                                        {sentenceCase(entry.value)}
                                     </option>
                                 ))}
                             </select>
@@ -386,7 +396,7 @@ export function FieldInput({
                                     aria-invalid={issues.length > 0}
                                     rows={2}
                                     value={String(value ?? '')}
-                                    aria-describedby={`${id}-help`}
+                                    aria-describedby={describedBy}
                                     onChange={(e) =>
                                         onChange(
                                             !spec.required && !e.target.value
@@ -400,6 +410,7 @@ export function FieldInput({
                                     id={id}
                                     aria-required={!!spec.required}
                                     aria-invalid={issues.length > 0}
+                                    aria-describedby={describedBy}
                                     value={String(value ?? '')}
                                     onChange={(e) =>
                                         onChange(
@@ -424,7 +435,7 @@ export function FieldInput({
                                             ? value
                                             : ''
                                     }
-                                    aria-describedby={`${id}-help`}
+                                    aria-describedby={describedBy}
                                     onChangeValue={(raw) =>
                                         onChange(raw === '' ? undefined : Number(raw))
                                     }
@@ -445,7 +456,7 @@ export function FieldInput({
                             {fieldHelpText(spec)}
                         </span>
                         {issues.map((issue, i) => (
-                            <p key={i} className={issue.severity}>
+                            <p key={i} id={errorId(i)} className={issue.severity}>
                                 {issue.message}
                             </p>
                         ))}

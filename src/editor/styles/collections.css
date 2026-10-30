@@ -34,8 +34,15 @@
 .pane-header > .muted {
     font-size: 11px;
 }
-.pane-header strong {
+.pane-header strong,
+.pane-header h2 {
+    margin: 0;
     font-size: 12px;
+    font-weight: 700;
+}
+.editor-title {
+    font: inherit;
+    min-width: 0;
 }
 .list-controls {
     flex-shrink: 0;
@@ -76,11 +83,19 @@
 .cooldown-group > details > summary .muted {
     margin-left: auto;
 }
+/* A compact action under the summary rather than a full-width bar. */
 .cooldown-group-edit {
-    width: calc(100% - 16px);
-    margin: 0 8px 6px;
-    min-height: 30px;
+    display: block;
+    margin: 0 8px 6px auto;
+    min-height: 28px;
+    padding: 0 10px;
     font-size: 11px;
+    background: transparent;
+    border-color: transparent;
+    color: var(--accent);
+}
+.cooldown-group-edit:hover:not(:disabled) {
+    border-color: var(--border);
 }
 .cooldown-group-edit[aria-pressed='true'] {
     border-color: var(--accent);
@@ -243,10 +258,11 @@
     margin-right: 4px;
 }
 .item-row > .item-menu > .menu-trigger {
-    opacity: 0;
+    opacity: 0.45;
 }
 .item-row:hover > .item-menu > .menu-trigger,
 .item-row:focus-within > .item-menu > .menu-trigger,
+.item-row.selected > .item-menu > .menu-trigger,
 .item-row .menu-trigger[aria-expanded='true'] {
     opacity: 1;
 }

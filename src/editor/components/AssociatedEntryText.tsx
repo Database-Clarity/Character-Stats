@@ -11,8 +11,9 @@ import { LOCALE_FILE } from '../state/paths';
 import { entryLocaleTextIds, updateLocaleText } from '../state/localeText';
 import { useManifest } from '../manifest';
 import { isPreviewAbility, tooltipAbilityContext } from './previewData';
-import { Collapse, Modified, StatControl } from './EditorPrimitives';
+import { Collapse, FieldName, Modified, StatControl } from './EditorPrimitives';
 import { LocaleTextField } from './LocaleTextField';
+import { sentenceCase } from './textFormat';
 
 export function AssociatedEntryText({
     stat,
@@ -47,7 +48,7 @@ export function AssociatedEntryText({
                 <strong>Associated text</strong>
             </div>
             {ability?.BaseDuration !== undefined && (
-                <StatControl label="Preview stat value" value={statValue} onChange={setStatValue} />
+                <StatControl label={`${stat} value`} value={statValue} onChange={setStatValue} />
             )}
             {ids.map((id) => {
                 const text = resolveLocale(locale, id) ?? '',
@@ -57,6 +58,7 @@ export function AssociatedEntryText({
                     <Modified
                         key={id}
                         field={id}
+                        label={sentenceCase(field)}
                         value={text}
                         saved={old}
                         onRevert={() =>
@@ -67,9 +69,13 @@ export function AssociatedEntryText({
                             })
                         }
                     >
-                        <Collapse storageKey={`text:${id}`} title={field}>
+                        <Collapse
+                            storageKey={`text:${id}`}
+                            title={<FieldName spec={{ key: field, label: sentenceCase(field) }} />}
+                        >
                             <LocaleTextField
                                 id={id}
+                                label={sentenceCase(field)}
                                 source={source}
                                 spec={statSpec}
                                 statValue={statValue}

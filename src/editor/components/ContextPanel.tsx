@@ -183,17 +183,17 @@ export function ContextPanel({
     return (
         <aside className="context">
             <div className="pane-header">
-                <strong>Cooldown context</strong>
+                <h2>Cooldown context</h2>
                 <span className="muted">seconds</span>
             </div>
             {scaled && (
                 <div className="pinned-controls">
                     <StatControl
-                        label="Context stat value"
+                        label={`${source.Name} value`}
                         value={statValue}
                         onChange={setStatValue}
                     />
-                    <p className="help">Core calculation · cooldown stat clamps at 100.</p>
+                    <p className="help">Stat above 100 counts as 100.</p>
                 </div>
             )}
             <div
@@ -238,7 +238,7 @@ export function ContextPanel({
                                                     <th>
                                                         Before <span className="mono">→</span> after
                                                     </th>
-                                                    <th>Δ s</th>
+                                                    <th>Δ (s)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -313,7 +313,7 @@ export function ContextPanel({
                                                 <th>
                                                     Before <span className="mono">→</span> after
                                                 </th>
-                                                <th>Δ s</th>
+                                                <th>Δ (s)</th>
                                             </tr>
                                         </thead>
                                         <tbody>

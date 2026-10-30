@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { equal, groupRowsByBaseCooldown, type EntityRow } from '../state/editing';
+import {
+    baseCooldownLabel,
+    equal,
+    groupRowsByBaseCooldown,
+    type EntityRow,
+} from '../state/editing';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
@@ -99,7 +104,7 @@ export function EntityRows({
         <section className="entity-list" aria-label={collectionLabel(collection)}>
             <div className="list-controls">
                 <div className="pane-header">
-                    <strong>{collectionLabel(collection)}</strong>
+                    <h2>{collectionLabel(collection)}</h2>
                     <span className="muted mono">{rows.filter((row) => !row.deleted).length}</span>
                     <div className="toolbar">
                         <button
@@ -158,7 +163,7 @@ export function EntityRows({
                                     <li className="cooldown-group" key={cooldown}>
                                         <details open>
                                             <summary>
-                                                <strong>Base cooldown</strong>
+                                                <strong>{baseCooldownLabel}</strong>
                                                 <span className="mono">{cooldown} s</span>
                                                 <span className="muted">
                                                     {plural(groupRows.length, 'entry', 'entries')}
@@ -184,7 +189,7 @@ export function EntityRows({
                                 <li className="cooldown-group">
                                     <details open>
                                         <summary>
-                                            <strong>Invalid BaseCooldown</strong>
+                                            <strong>No {baseCooldownLabel.toLowerCase()}</strong>
                                         </summary>
                                         <ul>
                                             {grouped.ungrouped.filter(matchesSearch).map(renderRow)}
