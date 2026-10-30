@@ -48,9 +48,6 @@ UI findings came from three independent Opus reviewers (desktop, tablet/phone, k
 - Core validation messages now use editor labels ("Set Cooldown override, Cooldown scalar or
   Chunk energy scalar"); `npm run validate` users see the JSON path next to them but not the
   keys inside the message. Append keys if that turns out to confuse JSON editing.
-- `src/core/calc.ts` imports `sources/movement.json` as the default for `movementSpeed`, so core
-  depends on repository data and the editor bundles a second copy. Making the source argument
-  required would remove the coupling (only tests rely on the default).
 - Save/Publish have not run against the real GitHub API yet. Before merging: a smoke test on a
   throwaway branch (save, PR save, branch-moved merge) with the owner's token. Publish can only be
   tested live after the merge, because `workflow_dispatch` needs `build-data.yml` on the default
