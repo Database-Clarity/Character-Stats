@@ -259,7 +259,7 @@ export function RequirementEditor({
                     <label>
                         Search abilities or subclasses
                         <input
-                            autoFocus
+                            data-autofocus
                             type="search"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}

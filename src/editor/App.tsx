@@ -331,6 +331,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     className="quick-jump-button"
                     onClick={() => setDialog('jump')}
                     title="Quick jump (Ctrl+K)"
+                    aria-keyshortcuts="Control+K"
                 >
                     Jump… <kbd>Ctrl K</kbd>
                 </button>
@@ -344,7 +345,8 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                             }
                             onClick={() => setDialog('pending')}
                         >
-                            ◉ Changes <span className="count-badge">{state.changes.length}</span>
+                            <span aria-hidden="true">◉</span> Changes{' '}
+                            <span className="count-badge">{state.changes.length}</span>
                         </button>
                         <button
                             className="icon-button"
@@ -420,9 +422,9 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                             }}
                         >
                             {item.name === 'Movement' ? (
-                                <img src={mobility} width={20} height={20} alt="Mobility" />
+                                <img src={mobility} width={20} height={20} alt="" />
                             ) : (
-                                <ManifestIcon hash={item.hash} size={20} />
+                                <ManifestIcon hash={item.hash} size={20} decorative />
                             )}
                             <span>{item.name}</span>
                             {count > 0 && <span className="count-badge">{count}</span>}

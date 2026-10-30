@@ -15,9 +15,17 @@ export function Modal({
     const ref = useRef<HTMLDialogElement>(null);
     useEffect(() => {
         const dialog = ref.current!;
+        const opener = document.activeElement as HTMLElement | null;
         dialog.showModal();
-        dialog.querySelector<HTMLElement>('input:not([type=checkbox]),textarea,select')?.focus();
-        return () => dialog.close();
+        // showModal() focuses the first focusable (the close button), so override it.
+        (
+            dialog.querySelector<HTMLElement>('[data-autofocus]') ??
+            dialog.querySelector<HTMLElement>('input:not([type=checkbox]),textarea,select')
+        )?.focus();
+        return () => {
+            dialog.close();
+            if (opener?.isConnected) opener.focus();
+        };
     }, []);
     return (
         <dialog

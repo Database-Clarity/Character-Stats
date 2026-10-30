@@ -17,7 +17,7 @@ export function ConfirmDialog({
         <Modal title={title} onClose={onClose}>
             <p>{message}</p>
             <div className="toolbar">
-                <button autoFocus onClick={onClose}>
+                <button data-autofocus onClick={onClose}>
                     Cancel
                 </button>
                 <button className="danger" onClick={onConfirm}>

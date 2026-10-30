@@ -9,6 +9,8 @@ export interface ManifestIconProps {
     className?: string;
     table?: ManifestTable;
     nativeTitle?: boolean;
+    /** Hide from assistive tech when the name is shown next to the icon. */
+    decorative?: boolean;
 }
 
 export function ManifestIcon({
@@ -17,6 +19,7 @@ export function ManifestIcon({
     className,
     table,
     nativeTitle = true,
+    decorative = false,
 }: ManifestIconProps): React.JSX.Element {
     const { lookup, status } = useManifest();
     const entry = status.state === 'ready' ? lookup(hash, table) : undefined;
@@ -35,8 +38,12 @@ export function ManifestIcon({
         !entry?.icon || failed ? (
             <span
                 className={className}
-                role="img"
-                aria-label={entry?.name ?? `Unknown manifest item ${hash}`}
+                {...(decorative
+                    ? { 'aria-hidden': true }
+                    : {
+                          role: 'img',
+                          'aria-label': entry?.name ?? `Unknown manifest item ${hash}`,
+                      })}
                 style={{
                     ...style,
                     display: 'inline-block',
@@ -48,7 +55,7 @@ export function ManifestIcon({
             <img
                 className={className}
                 src={entry.icon}
-                alt={entry.name}
+                alt={decorative ? '' : entry.name}
                 width={size}
                 height={size}
                 loading="lazy"

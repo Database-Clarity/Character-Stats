@@ -542,7 +542,7 @@
     min-width: 0;
 }
 .field-key {
-    color: #7d8590;
+    color: #8b94a1;
     font-family: 'Cascadia Code', Consolas, ui-monospace, monospace;
     font-size: 10px;
     font-weight: 400;
@@ -551,7 +551,7 @@
     max-width: 100%;
 }
 .field-optional {
-    color: #7d8590;
+    color: #8b94a1;
     font-size: 10px;
     font-weight: 400;
     font-style: italic;

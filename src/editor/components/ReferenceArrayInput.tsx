@@ -49,6 +49,7 @@ export function ReferenceArrayInput({
                         type="checkbox"
                         checked={value !== undefined}
                         onChange={(event) => onChange(event.target.checked ? [] : undefined)}
+                        aria-label={`Enable ${spec.label ?? spec.key}`}
                     />
                     Enabled
                 </label>

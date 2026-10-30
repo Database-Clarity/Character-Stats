@@ -168,7 +168,7 @@ export function ManifestPicker({
             <label className="picker-search">
                 Search manifest
                 <input
-                    autoFocus
+                    data-autofocus
                     type="search"
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}

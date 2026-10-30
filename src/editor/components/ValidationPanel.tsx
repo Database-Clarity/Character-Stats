@@ -14,7 +14,6 @@ export function ValidationPanel({ onGo }: { onGo(target: ChangeTarget): void }) 
                 </span>{' '}
                 {errors.length ? plural(errors.length, 'error') : 'Sources valid'}
                 <span className="muted"> · {plural(warnings.length, 'warning')}</span>
-                <span className="validation-hint">Shared core validation</span>
             </summary>
             <div className="validation-issues">
                 {!issues.length ? (

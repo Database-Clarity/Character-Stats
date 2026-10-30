@@ -175,6 +175,7 @@ export function NumberInput({
             <div className="stepped-number-controls" aria-label={`${label} step controls`}>
                 <button
                     type="button"
+                    tabIndex={-1}
                     aria-label={`Increase ${label} by ${step}`}
                     title={`Increase by ${step}`}
                     disabled={!canStep(1)}
@@ -187,6 +188,7 @@ export function NumberInput({
                 </button>
                 <button
                     type="button"
+                    tabIndex={-1}
                     aria-label={`Decrease ${label} by ${step}`}
                     title={`Decrease by ${step}`}
                     disabled={!canStep(-1)}

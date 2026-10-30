@@ -56,7 +56,7 @@ export function QuickJump({
             <label>
                 Find a stat, tab, item or hash
                 <input
-                    autoFocus
+                    data-autofocus
                     type="search"
                     value={query}
                     placeholder="Type to navigate…"

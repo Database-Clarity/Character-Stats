@@ -40,6 +40,7 @@ export function NumberArrayInput({
                                     : undefined,
                             )
                         }
+                        aria-label={`Enable ${spec.label ?? spec.key}`}
                     />
                     Enabled
                 </label>
@@ -169,6 +170,7 @@ export function FieldInput({
                                 onChange={(e) =>
                                     onChange(e.target.checked ? fieldDefault(spec) : undefined)
                                 }
+                                aria-label={`Enable ${label}`}
                             />
                             Enabled
                         </label>
