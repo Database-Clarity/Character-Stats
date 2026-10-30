@@ -68,13 +68,22 @@ function SnapshotList({
     );
 }
 
-function DiscardRecovery({ count, discard }: { count: number; discard(): void }) {
+function DiscardRecovery({
+    count,
+    unreadable = false,
+    discard,
+}: {
+    count: number;
+    /** Stored data exists but could not be read; it must still be discardable. */
+    unreadable?: boolean;
+    discard(): void;
+}) {
     const [confirming, setConfirming] = useState(false);
     return (
         <>
             <button
                 className="danger"
-                disabled={!count}
+                disabled={!count && !unreadable}
                 title={count ? undefined : 'No recoverable snapshots are available'}
                 onClick={() => setConfirming(true)}
             >
@@ -83,7 +92,11 @@ function DiscardRecovery({ count, discard }: { count: number; discard(): void })
             {confirming && (
                 <ConfirmDialog
                     title="Discard recovery data"
-                    message={`Permanently delete ${plural(count, 'stored snapshot')} for this repository? This cannot be undone.`}
+                    message={
+                        count
+                            ? `Permanently delete ${plural(count, 'stored snapshot')} for this repository? This cannot be undone.`
+                            : 'Permanently delete the unreadable recovery data for this repository? This cannot be undone.'
+                    }
                     confirmLabel="Discard"
                     onClose={() => setConfirming(false)}
                     onConfirm={() => {
@@ -116,6 +129,7 @@ export function RecoveryDialog({ onClose }: { onClose(): void }) {
             />
             <DiscardRecovery
                 count={state.recovery.snapshots.length}
+                unreadable={!!state.recovery.error}
                 discard={() => void state.recovery.discard()}
             />
         </Modal>
@@ -142,7 +156,11 @@ export function RecoveryGate({ children }: { children: ReactNode }) {
                     <img src={logo} alt="Clarity" /> Clarity <span>data editor</span>
                 </div>
                 <h1>Recover unsaved work</h1>
-                <p>Stored local work was found for {state.source.label}.</p>
+                <p>
+                    {state.recovery.error
+                        ? `Stored local work for ${state.source.label} could not be read.`
+                        : `Stored local work was found for ${state.source.label}.`}
+                </p>
                 {state.recovery.error && (
                     <p className="error" role="alert">
                         {state.recovery.error}
@@ -166,12 +184,14 @@ export function RecoveryGate({ children }: { children: ReactNode }) {
                     </button>
                     <DiscardRecovery
                         count={state.recovery.snapshots.length}
+                        unreadable={!!state.recovery.error}
                         discard={() => void state.recovery.discard()}
                     />
                 </div>
                 <p className="muted">
-                    Stored snapshots are kept and stay under Recovery in the repository menu. New
-                    autosaves are added to them.
+                    {state.recovery.error
+                        ? 'Continuing turns local recovery off for this session.'
+                        : 'Continuing keeps these snapshots under Recovery in the repository menu until you restore or discard them, or they are 7 days old.'}
                 </p>
             </main>
         );

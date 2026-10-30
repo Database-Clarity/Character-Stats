@@ -112,12 +112,14 @@ middleware or configuration changes are needed.
   asynchronous latest-state write, while the rolling history is debounced by 750 ms,
   capped at 30 snapshots, and retained for 7 days; pruning removes only snapshots beyond the
   newest 30 or older than 7 days. Startup offers restore, discard, or **Continue without
-  restoring** (which keeps snapshots and appends autosaves); discard asks for confirmation
-  here and in the Recovery dialog. The Recovery dialog (☰ repository menu) and React
+  restoring**, which marks the stored snapshot IDs as kept (`kept` in `useRecovery`): they are
+  exempt from the 30-snapshot cap (`appendSnapshot`) and survive the post-save cleanup
+  (`keptAfterSave`), expiring only by age; discard asks for confirmation here and in the
+  Recovery dialog and stays enabled for unreadable data. The Recovery dialog (☰ repository menu) and React
   error-boundary fallback show timestamped snapshots with change counts and restore/export
   JSON/discard actions. Recovery data preserves the
-  snapshot's original base head and is cleared for both the original and resulting branch
-  scopes after a successful Save. If startup storage fails, **Continue without restoring** disables
+  snapshot's original base head; a successful Save clears the session's autosaves for both the
+  original and resulting branch scopes. If startup storage fails, **Continue without restoring** disables
   local recovery for the session; an alert and notice warn that recovery will not persist. Other IndexedDB errors, including quota failures, are surfaced, and the existing
   beforeunload warning remains. Signing out leaves local recovery intact and directs the user
   to Recovery (☰ menu) to discard it. An edit can still be lost if a crash occurs before its

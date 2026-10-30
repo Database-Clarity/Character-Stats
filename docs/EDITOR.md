@@ -286,9 +286,11 @@ undo/redo history.
 
 When stored work is found at startup, a centered card lists the timestamped snapshots, each
 with **Restore snapshot** or **Export JSON**. **Continue without restoring** (the default)
-keeps the stored snapshots, which stay under **Recovery** in the ☰ repository menu, and new
-autosaves are added alongside them. **Discard stored recovery data** asks for confirmation;
-it is disabled when no snapshots exist. The **Recovery** dialog from the ☰ menu offers the
+keeps those snapshots under **Recovery** in the ☰ repository menu: new autosaves are added
+alongside them without pushing them out of the 30-snapshot limit, and a later Save clears only
+the new session's autosaves. They expire after 7 days unless you restore or discard them.
+**Discard stored recovery data** asks for confirmation; it is disabled only when there is
+nothing stored (unreadable data can always be discarded). The **Recovery** dialog from the ☰ menu offers the
 same list and discard action, and each entry shows its change count. If the editor hits a React error boundary, its recovery screen likewise
 offers snapshots to restore or export, or lets you discard recovery data and
 reload the editor. Corrupt or incompatible recovery data is reported explicitly
@@ -297,8 +299,8 @@ and can be discarded.
 Restoring preserves the snapshot's original branch head. Save still performs
 the normal branch-head reconciliation; if tracked source files have changed,
 **Reload** keeps the restored edits for a rebase attempt, or you can cancel.
-After a successful Save, recovery data for both the original scope and the
-resulting branch scope is cleared. Signing out does not erase local recovery;
+After a successful Save, this session's recovery data for both the original scope and the
+resulting branch scope is cleared (snapshots you continued past at startup are kept). Signing out does not erase local recovery;
 use **Recovery** in the ☰ repository menu to discard stored snapshots when you want them removed.
 
 If startup cannot read IndexedDB, the card shows the error; **Continue without restoring**

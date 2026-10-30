@@ -9,6 +9,7 @@ import {
     readRecovery,
     recoveryKey,
     deleteRecovery,
+    keptAfterSave,
     writeRecovery,
     type RecoverySnapshot,
 } from './recovery';
@@ -231,6 +232,38 @@ describe('recovery snapshots', () => {
         expect(result.snapshots).toHaveLength(MAX_SNAPSHOTS);
         expect(result.snapshots[0]!.id).toBe('fresh-2');
         expect(result.snapshots.at(-1)!.id).toBe(`fresh-${MAX_SNAPSHOTS + 1}`);
+    });
+
+    it('never evicts kept snapshots for new autosaves, but still expires them by age', () => {
+        const now = MAX_AGE_MS + 1000;
+        const old = snapshot('old', now - 10);
+        const kept = new Set(['old']);
+        let record = { version: 1 as const, snapshots: [old] };
+        for (let index = 0; index < MAX_SNAPSHOTS + 5; index++) {
+            record = appendSnapshot(
+                record,
+                { ...snapshot(`new-${index}`, now + index), head: `head-${index}` },
+                now + index,
+                kept,
+            );
+        }
+        expect(record.snapshots[0]!.id).toBe('old');
+        expect(record.snapshots).toHaveLength(MAX_SNAPSHOTS + 1);
+        expect(
+            appendSnapshot(record, snapshot('later', 0), now + MAX_AGE_MS, kept).snapshots,
+        ).not.toContainEqual(old);
+    });
+
+    it('keeps only continued-past snapshots after a save', () => {
+        const record = {
+            version: 1 as const,
+            snapshots: [snapshot('old', 100), { ...snapshot('new', 200), head: 'head-2' }],
+        };
+        expect(keptAfterSave(record, new Set(['old']), 300)).toEqual({
+            version: 1,
+            snapshots: [record.snapshots[0]],
+        });
+        expect(keptAfterSave(record, new Set(), 300)).toBeNull();
     });
 
     it('scopes keys by repository, branch, and local development source without credentials', () => {

@@ -3,6 +3,7 @@ import type { EditorState } from './store';
 import {
     appendSnapshot,
     deleteRecovery,
+    keptAfterSave,
     readRecovery,
     recoveryKey,
     writeRecovery,
@@ -32,6 +33,8 @@ export function useRecovery(
     const previousKey = useRef(key);
     const blocked = useRef(true);
     const debounce = useRef<number | undefined>(undefined);
+    // Snapshot IDs from an earlier session that the author continued past without restoring.
+    const kept = useRef<ReadonlySet<string>>(new Set());
 
     function enqueue(operation: () => Promise<void>) {
         queue.current = queue.current.then(operation).catch((failure: unknown) => {
@@ -77,11 +80,14 @@ export function useRecovery(
         const savedKey = previousKey.current;
         previousKey.current = key;
         blocked.current = false;
-        history.current = { version: 1, snapshots: [] };
+        // Saving clears this session's autosaves but keeps snapshots continued past earlier.
+        const remaining = keptAfterSave(history.current, kept.current);
+        history.current = remaining ?? { version: 1, snapshots: [] };
         setRecord(history.current);
         setOffered(false);
         void enqueue(async () => {
-            await deleteRecovery(savedKey);
+            if (remaining) await writeRecovery(savedKey, remaining);
+            else await deleteRecovery(savedKey);
             if (savedKey !== key) await deleteRecovery(key);
         });
     }, [state.saveRevision, key]);
@@ -104,7 +110,7 @@ export function useRecovery(
                 Object.values(state.drafts).filter((draft) => draft.error).length,
         };
         // Write each edit promptly; only the rolling history is debounced.
-        const latest = appendSnapshot(history.current, snapshot);
+        const latest = appendSnapshot(history.current, snapshot, Date.now(), kept.current);
         void enqueue(() => writeRecovery(key, latest));
         const timer = window.setTimeout(() => {
             history.current = latest;
@@ -133,6 +139,7 @@ export function useRecovery(
             const remaining = await readRecovery(key);
             if (remaining) throw new Error('Stored recovery data could not be discarded.');
             history.current = { version: 1, snapshots: [] };
+            kept.current = new Set();
             setRecord(history.current);
             setError('');
             setOffered(false);
@@ -155,6 +162,8 @@ export function useRecovery(
     function continueWithoutRecovery() {
         // Unreadable storage stays blocked; otherwise stored snapshots are kept and appended to.
         blocked.current = !!error;
+        if (!error)
+            kept.current = new Set(history.current.snapshots.map((snapshot) => snapshot.id));
         setOffered(false);
         setNotice(
             error

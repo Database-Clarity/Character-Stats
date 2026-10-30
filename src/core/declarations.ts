@@ -32,7 +32,7 @@ const key = (name: string): string => (/^[A-Za-z_$][\w$]*$/.test(name) ? name : 
 /** Converts the schema features that generateSchema uses into a TypeScript type expression. */
 function tsType(schema: Schema, indent: string): string {
     if (typeof schema.$ref === 'string') return rename(schema.$ref.replace('#/definitions/', ''));
-    if (Array.isArray(schema.enum)) return schema.enum.map((v) => `'${String(v)}'`).join(' | ');
+    if (Array.isArray(schema.enum)) return schema.enum.map((v) => JSON.stringify(v)).join(' | ');
     switch (schema.type) {
         case 'string':
             return 'string';

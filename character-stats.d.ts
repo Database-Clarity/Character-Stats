@@ -195,7 +195,7 @@ export interface MovementRules {
 
 export interface MovementEffect {
     /** Movement effect to apply. */
-    Type: 'MobilityTiers' | 'ForwardMultiplier' | 'SprintMultiplier' | 'GroundedMultiplier' | 'GroundedNonSprintMultiplier' | 'OverweightMultiplier' | 'ADSMultiplier';
+    Type: "MobilityTiers" | "ForwardMultiplier" | "SprintMultiplier" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier";
     /**
      * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
      * tiers use 0; unknown multipliers use 1.
@@ -217,18 +217,18 @@ export interface MovementSource {
      */
     Name: string;
     /** Manifest definition table used by Hash. */
-    RefType: 'item' | 'itemCategory';
+    RefType: "item" | "itemCategory";
     /**
      * Other inventory-item or plug hashes that activate this same source. Hash remains the primary
      * identity; apply the source only once.
      */
     AlsoMatches?: number[];
     /** When this source applies; callers select active sources. */
-    Activation: 'Always' | 'WhileHeld' | 'Conditional';
+    Activation: "Always" | "WhileHeld" | "Conditional";
     /** Effects from this source, with at most one entry for each effect type. */
     Effects: Array<{
         /** Movement effect to apply. */
-        Type: 'MobilityTiers' | 'ForwardMultiplier' | 'SprintMultiplier' | 'GroundedMultiplier' | 'GroundedNonSprintMultiplier' | 'OverweightMultiplier' | 'ADSMultiplier';
+        Type: "MobilityTiers" | "ForwardMultiplier" | "SprintMultiplier" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier";
         /**
          * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
          * tiers use 0; unknown multipliers use 1.

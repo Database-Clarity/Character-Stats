@@ -217,25 +217,53 @@ function sameStateContent(a: RecoverySnapshot, b: RecoverySnapshot): boolean {
     );
 }
 
+/**
+ * Adds an autosave. Snapshots in `kept` (an earlier session's work the author chose not to restore
+ * yet) still expire by age but do not count toward MAX_SNAPSHOTS, so new autosaves can't evict them.
+ */
 export function appendSnapshot(
     record: RecoveryRecord,
     snapshot: RecoverySnapshot,
     now = Date.now(),
+    kept: ReadonlySet<string> = new Set(),
 ): RecoveryRecord {
-    const recentSnapshots = pruneSnapshots(record.snapshots, now);
+    const recentSnapshots = pruneSnapshots(record.snapshots, now, kept);
     if (recentSnapshots.some((candidate) => sameStateContent(candidate, snapshot))) {
         return { version: 1, snapshots: recentSnapshots };
     }
     return {
         version: 1,
-        snapshots: pruneSnapshots([...recentSnapshots, snapshot], now),
+        snapshots: pruneSnapshots([...recentSnapshots, snapshot], now, kept),
     };
 }
 
-function pruneSnapshots(snapshots: RecoverySnapshot[], now: number): RecoverySnapshot[] {
-    return snapshots
-        .filter((candidate) => candidate.timestamp >= now - MAX_AGE_MS)
-        .slice(-MAX_SNAPSHOTS);
+/** The record left after a save: only the kept snapshots of an earlier session, if any remain. */
+export function keptAfterSave(
+    record: RecoveryRecord,
+    kept: ReadonlySet<string>,
+    now = Date.now(),
+): RecoveryRecord | null {
+    const snapshots = pruneSnapshots(
+        record.snapshots.filter((snapshot) => kept.has(snapshot.id)),
+        now,
+        kept,
+    );
+    return snapshots.length ? { version: 1, snapshots } : null;
+}
+
+function pruneSnapshots(
+    snapshots: RecoverySnapshot[],
+    now: number,
+    kept: ReadonlySet<string> = new Set(),
+): RecoverySnapshot[] {
+    const recent = snapshots.filter((candidate) => candidate.timestamp >= now - MAX_AGE_MS);
+    const allowed = new Set(
+        recent
+            .filter((candidate) => !kept.has(candidate.id))
+            .slice(-MAX_SNAPSHOTS)
+            .map((candidate) => candidate.id),
+    );
+    return recent.filter((candidate) => kept.has(candidate.id) || allowed.has(candidate.id));
 }
 
 export function recoveryKey(source: DataSource): string {
