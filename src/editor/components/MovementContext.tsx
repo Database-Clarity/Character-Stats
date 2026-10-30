@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { validateSources, type MovementSource, type MovementSpeedInput } from '../../core';
 import { HashIdentity } from './ManifestUI';
 import { formatMovementSpeed } from './previewData';
+import { sentenceCase } from './textFormat';
 import {
     calculateMovementStats,
     formatMovementDelta,
@@ -104,7 +105,7 @@ function MovementControls({ source }: { source: MovementSource }) {
             >
                 <div className="movement-summary-heading">
                     <strong>Movement stats</strong>
-                    <span id="movement-summary-baseline">Δ vs global-only baseline</span>
+                    <span id="movement-summary-baseline">Δ vs no sources</span>
                 </div>
                 <ul className="movement-stats">
                     {stats.map((stat) => {
@@ -132,8 +133,10 @@ function MovementControls({ source }: { source: MovementSource }) {
                                     </strong>
                                 </span>
                                 <span className="movement-stat-cap" title={stat.cappedBy}>
-                                    {stat.unit === 'm/s' && stat.value !== undefined
-                                        ? `Cap: ${stat.cappedBy?.replace('SpeedCap', '') ?? 'none'}`
+                                    {stat.unit === 'm/s' &&
+                                    stat.value !== undefined &&
+                                    stat.cappedBy
+                                        ? `Capped: ${stat.cappedBy.replace('SpeedCap', '')}`
                                         : ''}
                                 </span>
                                 {delta && (
@@ -192,7 +195,7 @@ function MovementControls({ source }: { source: MovementSource }) {
                                         compact
                                     />
                                 </label>
-                                <small className="muted">{entry.Activation}</small>
+                                <small className="muted">{sentenceCase(entry.Activation)}</small>
                                 {state && (
                                     <div className="movement-source-controls">
                                         <div className="movement-stack-control">

@@ -116,7 +116,7 @@ describe('movement preview calculations', () => {
             direction: 'neutral',
             arrow: '—',
             text: '0.00 tiers',
-            accessibleLabel: 'No change from the global-only baseline',
+            accessibleLabel: 'Same as with no sources',
         });
         expect(formatMovementDelta(0.0000004, 'm/s').direction).toBe('neutral');
         expect(formatMovementDelta(0.000001, 'm/s').text).toBe('+0.000001 m/s');

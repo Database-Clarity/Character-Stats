@@ -261,7 +261,7 @@ export function formatMovementDelta(
             direction: 'neutral',
             arrow: '—',
             text: `0.00 ${unit === 'tier' ? 'tiers' : 'm/s'}`,
-            accessibleLabel: 'No change from the global-only baseline',
+            accessibleLabel: 'Same as with no sources',
         };
     }
     const direction = rounded > 0 ? 'increase' : 'decrease';
@@ -270,6 +270,6 @@ export function formatMovementDelta(
         direction,
         arrow: direction === 'increase' ? '↑' : '↓',
         text: `${rounded > 0 ? '+' : '-'}${amount} ${pluralizedUnit}`,
-        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${pluralizedUnit} from the global-only baseline`,
+        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${pluralizedUnit} compared with no sources`,
     };
 }

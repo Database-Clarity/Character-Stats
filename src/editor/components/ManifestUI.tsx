@@ -11,12 +11,15 @@ export function HashIdentity({
     compact = false,
     requirement = false,
     table,
+    note,
 }: {
     hash: number;
     name?: string | undefined;
     compact?: boolean;
     requirement?: boolean;
     table?: ManifestTable | undefined;
+    /** Muted suffix after the name, e.g. the class of a repeated subclass name. */
+    note?: string;
 }) {
     const { lookup } = useManifest();
     const resolvedHash = requirement ? Math.abs(hash) : hash;
@@ -48,6 +51,7 @@ export function HashIdentity({
             <span className="identity-text">
                 <span title={resolved ?? 'Unknown hash'}>
                     {resolved ?? 'Unknown hash'}
+                    {note && <span className="muted"> · {note}</span>}
                     {!entry && hash !== 0 && !name && (
                         <span className="warning"> · unknown hash</span>
                     )}

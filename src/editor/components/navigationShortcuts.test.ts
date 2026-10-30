@@ -5,6 +5,7 @@ import {
     nextCollectionSelection,
     normalizeWheelDeltaY,
     resetWheelNavigation,
+    rovingIndex,
     type WheelNavigationState,
 } from './navigationShortcuts';
 
@@ -68,5 +69,40 @@ describe('editor navigation shortcuts', () => {
         expect(nextCollectionSelection(stats, 'Super', 1)).toBe('Class');
         expect(nextCollectionSelection(stats, 'Health', -1)).toBeUndefined();
         expect(nextCollectionSelection(stats, 'Movement', 1)).toBeUndefined();
+    });
+
+    describe('rovingIndex', () => {
+        it.each([
+            { count: 5, current: 1, key: 'ArrowDown', horizontal: false, expected: 2 },
+            { count: 5, current: 1, key: 'ArrowUp', horizontal: false, expected: 0 },
+            { count: 5, current: 3, key: 'Home', horizontal: false, expected: 0 },
+            { count: 5, current: 1, key: 'End', horizontal: false, expected: 4 },
+            { count: 5, current: 1, key: 'ArrowRight', horizontal: true, expected: 2 },
+            { count: 5, current: 1, key: 'ArrowLeft', horizontal: true, expected: 0 },
+            { count: 3, current: -1, key: 'ArrowDown', horizontal: false, expected: 0 },
+            { count: 3, current: -1, key: 'ArrowUp', horizontal: false, expected: 2 },
+        ])(
+            'moves $key from $current in $count items to $expected',
+            ({ count, current, key, horizontal, expected }) => {
+                expect(rovingIndex(count, current, key, horizontal)).toBe(expected);
+            },
+        );
+
+        it('clamps at both ends without wrapping', () => {
+            expect(rovingIndex(5, 4, 'ArrowDown')).toBeUndefined();
+            expect(rovingIndex(5, 0, 'ArrowUp')).toBeUndefined();
+            expect(rovingIndex(5, 0, 'Home')).toBeUndefined();
+            expect(rovingIndex(5, 4, 'End')).toBeUndefined();
+        });
+
+        it('ignores left and right arrows unless the list is horizontal', () => {
+            expect(rovingIndex(5, 1, 'ArrowRight')).toBeUndefined();
+            expect(rovingIndex(5, 1, 'ArrowLeft')).toBeUndefined();
+        });
+
+        it('ignores unrelated keys and empty lists', () => {
+            expect(rovingIndex(5, 1, 'a')).toBeUndefined();
+            expect(rovingIndex(0, -1, 'ArrowDown')).toBeUndefined();
+        });
     });
 });

@@ -165,11 +165,6 @@ export function FieldInput({
             revertTitle={revertTitle}
             onRevert={onRevert ?? (() => onChange(structuredClone(saved)))}
         >
-            {spec.published === false && (
-                <span className="badge unpublished" title="Kept in sources but not exported.">
-                    Unpublished
-                </span>
-            )}
             {(spec.kind === 'object' || spec.kind === 'objectArray') && nested ? (
                 <Collapse
                     storageKey={`${file}:${path}`}

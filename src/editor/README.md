@@ -9,7 +9,7 @@ middleware or configuration changes are needed.
 ## Structure and flow
 
 - `App` mounts the manifest provider and one `EditorProvider`. The compact shell
-  provides stat navigation, validation, quick jump (Ctrl/Command+K), semantic change counts,
+  provides stat navigation (one roving Tab stop), validation, quick jump (Ctrl/Command+K), semantic change counts,
   previous/next change (Alt+Up/Down), Save, Publish, and account disconnect.
   Validation issues offer **Go to**: `issueTarget` in `state/editing.ts` maps core issue paths
   to a stat/tab/item/field target, and navigation falls back to the closest rendered
@@ -42,12 +42,12 @@ middleware or configuration changes are needed.
   arrays use reorderable/removable spec-driven rows. Nested field paths flow into
   modified markers, validation and Go-to targets. Structural array changes revert
   at the parent; same-length row edits are tracked by slot and field. Unpublished
-  fields retain their controls and show a source-only badge.
+  fields retain their controls and show an inline unpublished tag rendered by `FieldName` from `spec.published === false`.
 - `EntityList` owns the three-pane collection layout, pinned draft row, sorted
   source/deleted rows, and per-item actions. Hash edits keep the selected item and
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
   portaled outside scrolling panes, so it cannot be clipped by list boundaries; its row
-  triggers stay faintly visible until hover, focus or selection.
+  triggers stay faintly visible until hover, focus or selection. Item rows, and in grouped lists the group headers and Edit group buttons, are one roving Tab stop via `rovingIndex` (`components/navigationShortcuts.ts`); the row menu opens with Shift+F10, the Menu key or Right Arrow and is off the Tab order. The list and the stat sidebar carry a visually hidden "Use arrow keys to move" hint through `aria-describedby`.
   On widths of 701-1279px, Context opens beside the editor and the list steps aside while an
   item is selected (with no selection the empty editor steps aside instead); below that it is an
   overlay `min(400px, 100%)` wide. At 600px
@@ -60,7 +60,7 @@ middleware or configuration changes are needed.
   semantics; `ReferenceArrayInput` handles ordinary `intArray` + `itemRef` fields.
   Reference chips, grouped pickers, and enabled parallel columns use `lengthOf`, not field
   name switches. Reverting Requirements restores the whole requirement/parallel-array
-  table atomically. `ChargeBasedScaling` and Movement arrays use `indexLabel` hints.
+  table atomically. `ChargeBasedScaling` and Movement arrays use `indexLabel` hints. On coarse pointers the Add requirement `Modal` passes `focusInput={false}`, so the search box is not autofocused. `duplicateNameNotes` (`manifestHelpers.ts`) gives every repeated subclass name a muted note (`HashIdentity` `note`): the class when all entries sharing the name have distinct ones, otherwise the hash.
 - `CurveEditor` uses core expansion/validation; converting Values to Segments
   preserves every expanded value exactly and verifies equality before applying.
   `convertCurve` reuses the previous or saved curve, with its rounding, when it expands to the
@@ -71,7 +71,7 @@ middleware or configuration changes are needed.
   stat 100 while retaining the existing 101-200 values. Optional **View JSON** is read-only.
 - `TextEditor` uses core locale rendering/placeholder validation and previews
   the base ability without applying overrides. Its preview controls are outside the
-  scrolling content; the context slider follows the same structure. `ContextPanel`
+  scrolling content (at 600px and below they scroll with the fields); the context slider follows the same structure. `ContextPanel`
   asks core for each single-override result and filters on `appliedOverrides`;
   subclass filters remain explicitly unresolved.
 - `EditorPrimitives` provides persisted collapsibles, changed-field framing,
@@ -88,8 +88,8 @@ middleware or configuration changes are needed.
   Fields tabs. `MovementContext`
   validates working data before calling core `movementSpeed` and keeps Mobility,
   Sprint, Walk, Strafe, Crouch and ADS results visible together. Class and activity
-  are global settings; every row shows its signed delta against the same settings
-  with no active optional sources. Caps and calculation errors remain visible.
+  are global settings; every row shows its signed delta (under a **Δ vs no sources** heading) against the same settings
+  with no active optional sources. `Capped:` labels appear only on rows a cap limits, and source rows show readable activation labels; caps and calculation errors remain visible.
   Active sources retain their stack, boosted and per-held-weapon ADS controls;
   selecting a WhileHeld source replaces the previous one, and unchecking it clears
   that selection without removing Always or Conditional sources. The summary and
@@ -155,7 +155,7 @@ middleware or configuration changes are needed.
   carrying a change `id`: Alt+Up/Down, Changes dock **Go to**), not validation or Quick jump.
   `groupRowsByBaseCooldown` accepts a cooldown snapshot so `EntityRows` keeps rows in their group
   while a text field in the editor has focus (`nextCooldownSnapshot`); any other value change, such as
-  a revert or restore, regroups immediately. `ManifestPicker` takes
+  a revert or restore, regroups immediately. Member cards call `memberClickAction(event, tapOpens)` in `MemberDetailIcon`, where `tapOpens` (the click's `pointerType` is `touch`) makes one tap open the member. Hover and focus previews are `role="tooltip"`; pinned details switch to a non-modal `role="dialog"` whose Open button takes focus on keyboard activation (Esc or Tab returns focus to the card). `ManifestPicker` takes
   `existing` hashes (listed last, disabled); `pickedEntry` fills an empty Name on a hash pick.
 - `numberStep.ts` is the tested numeric-step helper: integer fields step by one,
   fields constrained to 0–1 by hundredths, and other values by their decimal
@@ -169,8 +169,8 @@ middleware or configuration changes are needed.
   Plain reference arrays have no wildcard or negative-subclass semantics; requirement
   tables retain those spec-declared semantics and their atomic parallel columns.
 - The outline grows to fit its labels up to `min(30vw, 480px)` and wraps beyond that.
-  It can collapse; below 1100px it automatically becomes a closed floating
-  disclosure. Labels wrap at word boundaries rather than truncating.
+  It can collapse; below 1100px it becomes a closed floating
+  disclosure, and up to 1365px it also starts closed with six or fewer entries (`outlineDefaultOpen` in `components/outlineDefault.ts`); a manual open or close survives crossing 1365px and page changes (a module-level map keyed by the `LongPage` label, read through `initialOutlineOpen`) but not 1100px. Labels wrap at word boundaries rather than truncating. The scroll observer watches the nearest scrolling ancestor (`scrollingAncestor` in `EditorPrimitives.tsx`), because at 600px and below the Text tab scrolls `.text-editor` instead of `.long-content`.
 - First manifest load blocks editing with a modal showing the current loading step
   and indexing progress. Errors (including missing API-key configuration) offer an
   explicit **Continue without manifest** action. Later refreshes stay nonblocking.
@@ -222,7 +222,7 @@ complete interaction walkthrough.
 ## Authentication and limitations
 
 Use a repository-scoped fine-grained PAT with Contents R/W, Pull requests R/W,
-Actions R/W and Metadata R. Session storage is the default; Remember me opts into
+Actions R/W and Metadata R. Session storage is the default; Remember on this device opts into
 local storage. Tokens are sent only to `api.github.com`. Disconnect clears both
 credential stores, but leaves local recovery snapshots intact; use **Recovery** in the ☰
 repository menu to discard those snapshots. Browser storage is not encrypted: use a trusted device.

@@ -227,12 +227,12 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                             checked={settings.remember}
                             onChange={(e) => change('remember', e.target.checked)}
                         />
-                        Remember me on this device (localStorage)
+                        Remember on this device
                     </label>
                     <p className="help">
                         Tokens stay in this browser's sessionStorage by default and are sent only to
-                        api.github.com. Remember me keeps the token in localStorage. Use a trusted
-                        device and a repository-scoped token.
+                        api.github.com. Remember on this device keeps the token in localStorage. Use
+                        a trusted device and a repository-scoped token.
                     </p>
                     <button className="primary" disabled={!token || !validBranch}>
                         {busy ? 'Loading data…' : 'Connect to GitHub'}

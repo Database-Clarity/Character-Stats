@@ -198,9 +198,19 @@
 .group-member-tooltip[hidden] {
     display: none;
 }
-.group-member-tooltip > strong {
-    display: block;
+.group-member-tooltip-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
     margin-bottom: 7px;
+}
+.group-member-open {
+    flex: none;
+    min-height: 20px;
+    line-height: 16px;
+    padding: 0 8px;
+    font-size: 11px;
 }
 .group-member-tooltip dl {
     display: grid;

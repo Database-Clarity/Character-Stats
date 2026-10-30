@@ -10,18 +10,30 @@ export function ItemMenu({
     actions,
     label,
     openSignal = 0,
+    onSignalHandled,
+    tabStop = true,
+    focusOnClose,
 }: {
     actions: ItemAction[];
     label: string;
     openSignal?: number;
+    /** Called once a non-zero `openSignal` has opened the menu, so the owner can clear it. */
+    onSignalHandled?: () => void;
+    /** False takes the trigger out of the Tab order (a roving list opens it from the keyboard). */
+    tabStop?: boolean;
+    /** Where focus goes when the menu closes; defaults to the trigger. */
+    focusOnClose?: () => HTMLElement | null | undefined;
 }) {
     const [open, setOpen] = useState(false);
     const root = useRef<HTMLDivElement>(null);
     const popup = useRef<HTMLDivElement>(null);
     const [position, setPosition] = useState({ top: 0, left: 0 });
     const trigger = useRef<HTMLButtonElement>(null);
+    const refocus = () => (focusOnClose?.() ?? trigger.current)?.focus();
     useEffect(() => {
-        if (openSignal) setOpen(true);
+        if (!openSignal) return;
+        setOpen(true);
+        onSignalHandled?.();
     }, [openSignal]);
     useEffect(() => {
         if (!open) return;
@@ -51,9 +63,9 @@ export function ItemMenu({
             className="item-menu"
             ref={root}
             onKeyDown={(e) => {
-                if (e.key === 'Escape') {
+                if (e.key === 'Escape' || (e.key === 'ArrowLeft' && open && focusOnClose)) {
                     setOpen(false);
-                    trigger.current?.focus();
+                    refocus();
                     e.stopPropagation();
                 }
                 if (e.key === 'Tab') setOpen(false);
@@ -84,6 +96,7 @@ export function ItemMenu({
                 ref={trigger}
                 className="icon-button menu-trigger"
                 aria-label={label}
+                tabIndex={tabStop ? undefined : -1}
                 aria-haspopup="menu"
                 aria-expanded={open}
                 onClick={() => setOpen(!open)}
@@ -108,7 +121,7 @@ export function ItemMenu({
                                 onClick={() => {
                                     setOpen(false);
                                     action.onSelect();
-                                    trigger.current?.focus();
+                                    refocus();
                                 }}
                             >
                                 {action.label}

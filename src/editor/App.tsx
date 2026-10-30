@@ -29,6 +29,7 @@ import {
     nextCollectionSelection,
     normalizeWheelDeltaY,
     resetWheelNavigation,
+    rovingIndex,
     type WheelNavigationState,
 } from './components/navigationShortcuts';
 import {
@@ -86,6 +87,8 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
     const [disconnecting, setDisconnecting] = useState(false);
     const [statNavigationActive, setStatNavigationActive] = useState(false);
     const compactShell = useMediaQuery(compactShellQuery);
+    // Roving tabindex for the stat list: the current stat (or the last focused one) is the Tab stop.
+    const [statTab, setStatTab] = useState<string | null>(null);
     const workspaceRef = useRef<HTMLDivElement>(null);
     const navigationHistoryRef = useRef<NavigationHistoryController | null>(null);
     const normalizeNavigationRef = useRef<
@@ -100,6 +103,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
     }
     const navigationHistory = navigationHistoryRef.current;
     const section = navigationSelection.stat;
+    useEffect(() => setStatTab(null), [section]);
     const isComposing = useRef(false);
     const statWheelNavigation = useRef<WheelNavigationState>({
         accumulated: 0,
@@ -441,9 +445,33 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             <nav
                 className="sidebar"
                 aria-label="Stats"
+                aria-describedby="sidebar-keys-hint"
                 data-navigation-active={statNavigationActive ? 'true' : undefined}
+                onKeyDown={(event) => {
+                    const names = mainNavigationItems.map((item) => item.name);
+                    const current = names.indexOf(
+                        event.target instanceof HTMLElement
+                            ? (event.target.dataset.statName ?? '')
+                            : '',
+                    );
+                    if (current < 0 || event.ctrlKey || event.altKey || event.metaKey) return;
+                    const keys = ['ArrowUp', 'ArrowDown', 'Home', 'End'];
+                    if (compactShell) keys.push('ArrowLeft', 'ArrowRight');
+                    if (event.shiftKey || !keys.includes(event.key)) return;
+                    event.preventDefault();
+                    const next = rovingIndex(names.length, current, event.key, compactShell);
+                    const name = next === undefined ? undefined : names[next];
+                    if (name === undefined) return;
+                    setStatTab(name);
+                    event.currentTarget
+                        .querySelector<HTMLElement>(`[data-stat-name="${CSS.escape(name)}"]`)
+                        ?.focus();
+                }}
             >
                 <h2>CHARACTER STATS</h2>
+                <span id="sidebar-keys-hint" className="sr-only">
+                    Use arrow keys to move
+                </span>
                 {mainNavigationItems.map((item) => {
                     const count = state.changes.filter((c) =>
                         changeAffectsStat(c, item.name),
@@ -454,6 +482,8 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                             data-stat-navigation
                             data-stat-name={item.name}
                             aria-current={section === item.name ? 'page' : undefined}
+                            tabIndex={item.name === (statTab ?? section) ? 0 : -1}
+                            onFocus={() => setStatTab(item.name)}
                             onClick={() => {
                                 selectStat(item.name);
                             }}

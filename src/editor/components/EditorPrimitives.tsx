@@ -1,6 +1,12 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { equal } from '../state/editing';
 import { NumberInput } from './NumberInput';
+import {
+    OUTLINE_FLOATING_MAX,
+    OUTLINE_SHORT_MAX,
+    initialOutlineOpen,
+    outlineDefaultOpen,
+} from './outlineDefault';
 
 export function Collapse({
     storageKey,
@@ -111,6 +117,18 @@ export function StatControl({
         </div>
     );
 }
+/** Explicit outline open/closed choices by page label, kept for the session. */
+const outlineChoices = new Map<string, boolean>();
+
+/** The nearest element (itself included) that scrolls vertically; null means the viewport. */
+function scrollingAncestor(element: HTMLElement | null): HTMLElement | null {
+    for (let node = element; node; node = node.parentElement) {
+        const overflow = getComputedStyle(node).overflowY;
+        if (overflow === 'auto' || overflow === 'scroll') return node;
+    }
+    return null;
+}
+
 export function LongPage({
     items,
     children,
@@ -122,15 +140,39 @@ export function LongPage({
 }) {
     const root = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(items[0]?.id);
-    const [outlineOpen, setOutlineOpen] = useState(
-        () => !window.matchMedia('(max-width: 1100px)').matches,
+    const [outlineOpen, setOutlineOpen] = useState(() =>
+        initialOutlineOpen(window.innerWidth, items.length, outlineChoices.get(label)),
     );
+    // Whether the layout scrolls `.long-content` or an ancestor (phones); bumps to re-observe.
+    const [layout, setLayout] = useState(0);
+    // An explicit toggle survives the short-outline breakpoint and page changes (above the
+    // floating breakpoint); the floating outline always resets.
+    const chose = useRef(outlineChoices.has(label)),
+        entries = useRef(items.length);
+    entries.current = items.length;
     useEffect(() => {
-        const media = window.matchMedia('(max-width: 1100px)');
-        const change = () => setOutlineOpen(!media.matches);
-        media.addEventListener('change', change);
-        return () => media.removeEventListener('change', change);
-    }, []);
+        const reset = () => setOutlineOpen(outlineDefaultOpen(window.innerWidth, entries.current));
+        const floating = window.matchMedia(`(max-width: ${OUTLINE_FLOATING_MAX}px)`),
+            short = window.matchMedia(`(max-width: ${OUTLINE_SHORT_MAX}px)`),
+            phone = window.matchMedia('(max-width: 600px)');
+        const onFloating = () => {
+            chose.current = false;
+            outlineChoices.delete(label);
+            reset();
+        };
+        const onPhone = () => setLayout((n) => n + 1);
+        const onShort = () => {
+            if (!chose.current) reset();
+        };
+        floating.addEventListener('change', onFloating);
+        short.addEventListener('change', onShort);
+        phone.addEventListener('change', onPhone);
+        return () => {
+            floating.removeEventListener('change', onFloating);
+            short.removeEventListener('change', onShort);
+            phone.removeEventListener('change', onPhone);
+        };
+    }, [label]);
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -139,11 +181,11 @@ export function LongPage({
                     .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
                 if (entry) setActive((entry.target as HTMLElement).dataset.outline);
             },
-            { root: root.current, rootMargin: '0px 0px -65% 0px', threshold: 0 },
+            { root: scrollingAncestor(root.current), rootMargin: '0px 0px -65% 0px', threshold: 0 },
         );
         root.current?.querySelectorAll('[data-outline]').forEach((el) => observer.observe(el));
         return () => observer.disconnect();
-    }, [items.map((i) => i.id).join('|')]);
+    }, [items.map((i) => i.id).join('|'), layout]);
     function toggle(open: boolean) {
         root.current?.querySelectorAll('details').forEach((d) => (d.open = open));
     }
@@ -154,7 +196,16 @@ export function LongPage({
                 open={outlineOpen}
                 onToggle={(event) => setOutlineOpen(event.currentTarget.open)}
             >
-                <summary className="outline-heading">On this page</summary>
+                <summary
+                    className="outline-heading"
+                    onClick={() => {
+                        chose.current = true;
+                        if (window.innerWidth > OUTLINE_FLOATING_MAX)
+                            outlineChoices.set(label, !outlineOpen);
+                    }}
+                >
+                    On this page
+                </summary>
                 <nav className="outline" aria-label={`${label} outline`}>
                     {items.map((item) => (
                         <button
@@ -197,13 +248,26 @@ export function FieldName({
     spec,
     markOptional = false,
 }: {
-    spec: { key: string; label?: string | undefined; required?: boolean | undefined };
+    spec: {
+        key: string;
+        label?: string | undefined;
+        required?: boolean | undefined;
+        published?: boolean | undefined;
+    };
     markOptional?: boolean;
 }) {
     return (
         <span className="field-name">
             <span>{spec.label ?? spec.key}</span>
             {markOptional && !spec.required && <span className="field-optional">optional</span>}
+            {spec.published === false && (
+                <span
+                    className="field-optional field-unpublished"
+                    title="Kept in sources but not exported."
+                >
+                    unpublished
+                </span>
+            )}
             {spec.label !== undefined && spec.label !== spec.key && (
                 <span className="field-key" aria-hidden="true">
                     {spec.key}

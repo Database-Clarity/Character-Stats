@@ -120,7 +120,7 @@ export function StatView({
             <header className="page-heading">
                 <h1>{spec.name}</h1>
                 <code className="muted">{file}</code>
-                {!movement && <span className="mono muted">{spec.hash}</span>}
+                {!movement && <span className="mono muted">Hash {spec.hash}</span>}
             </header>
             <div
                 className="tabs"

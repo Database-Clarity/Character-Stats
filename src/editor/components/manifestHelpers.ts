@@ -53,7 +53,32 @@ export function pickedEntry(
 
 export interface PickerGroup {
     title: string;
-    items: { hash: number; name: string }[];
+    items: { hash: number; name: string; note?: string }[];
+}
+
+const CLASS_NAMES = ['Titan', 'Hunter', 'Warlock'];
+
+/**
+ * Notes (hash -> text) for entries whose name is shared, so identical rows tell apart. Every
+ * member of a shared name gets one: the class when all members have a distinct one, else the hash.
+ */
+export function duplicateNameNotes(
+    entries: readonly { hash: number; name: string; classType?: number | undefined }[],
+): Map<number, string> {
+    const byName = new Map<string, typeof entries>();
+    for (const entry of entries) byName.set(entry.name, [...(byName.get(entry.name) ?? []), entry]);
+    const notes = new Map<number, string>();
+    for (const members of byName.values()) {
+        if (members.length < 2) continue;
+        const classes = members.map(({ classType }) =>
+            classType === undefined ? undefined : CLASS_NAMES[classType],
+        );
+        const byClass = classes.every((label) => label) && new Set(classes).size === members.length;
+        members.forEach(({ hash }, index) =>
+            notes.set(hash, byClass ? classes[index]! : `${hash}`),
+        );
+    }
+    return notes;
 }
 
 /** Filters picker groups by name or hash, dropping groups left empty while a query is typed. */

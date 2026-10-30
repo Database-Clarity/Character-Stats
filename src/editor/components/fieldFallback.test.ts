@@ -17,11 +17,11 @@ describe('declarative nested field controls', () => {
     it('previews validated working data and blocks invalid movement instead of showing a fallback', () => {
         const html = renderToStaticMarkup(createElement(MovementContext, { value: movementData }));
         expect(html).toContain('7.00 m/s');
-        expect(html).toContain('Cap: ');
+        expect(html).not.toContain('Cap: ');
         expect(html).toContain('Preview class');
         for (const key of ['mobility', 'sprint', 'walk', 'strafe', 'crouch', 'ads'])
             expect(html).toContain(`data-stat-key="${key}"`);
-        expect(html).toContain('global-only baseline');
+        expect(html).toContain('no sources');
         expect(html).not.toContain('aria-label="Direction"');
         expect(html).not.toContain('aria-label="Posture"');
         const invalid = { ...movementData, Rules: { ...movementData.Rules, StrafeMultiplier: -1 } };
@@ -37,8 +37,16 @@ describe('declarative nested field controls', () => {
         const html = renderToStaticMarkup(createElement(MovementContext, { value: capped }));
         expect(html).toContain('7.00 m/s');
         expect(html).toContain('title="ForwardSpeedCap"');
-        expect(html).toContain('Cap: Forward');
-        expect(html).toContain('Cap: none');
+        expect(html).toContain('Capped: Forward');
+        expect(html).not.toContain('Cap: none');
+        expect(html).not.toContain('Capped: none');
+    });
+    it('shows readable activation labels for movement sources', () => {
+        const html = renderToStaticMarkup(createElement(MovementContext, { value: movementData }));
+        expect(html).toContain('While held');
+        expect(html).toContain('Conditional');
+        expect(html).toContain('Always');
+        expect(html).not.toContain('>WhileHeld<');
     });
     it('formats editor speed previews to two decimal places without rounding the core result', () => {
         const source = structuredClone(movementData) as unknown as MovementSource;
@@ -86,7 +94,7 @@ describe('declarative nested field controls', () => {
             }),
         );
         expect(html).toContain('JumpHeight');
-        expect(html).toContain('Unpublished');
+        expect(html).toContain('unpublished');
         expect(html).toContain('Kept in sources but not exported.');
         expect(html).toContain('type="number"');
         expect(html).toContain('data-field="Rules.WalkSpeed"');

@@ -5,12 +5,15 @@ export function Modal({
     children,
     busy = false,
     className = '',
+    focusInput = true,
 }: {
     title: string;
     onClose(): void;
     children: ReactNode;
     busy?: boolean;
     className?: string;
+    /** Focus the first text input when nothing is marked `data-autofocus` (off on touch). */
+    focusInput?: boolean;
 }) {
     const ref = useRef<HTMLDialogElement>(null);
     useEffect(() => {
@@ -20,7 +23,9 @@ export function Modal({
         // showModal() focuses the first focusable (the close button), so override it.
         (
             dialog.querySelector<HTMLElement>('[data-autofocus]') ??
-            dialog.querySelector<HTMLElement>('input:not([type=checkbox]),textarea,select')
+            (focusInput
+                ? dialog.querySelector<HTMLElement>('input:not([type=checkbox]),textarea,select')
+                : null)
         )?.focus();
         return () => {
             dialog.close();

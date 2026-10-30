@@ -18,12 +18,12 @@ export interface MemberDetailValue {
     field?: FieldSpec;
 }
 
-export function memberClickAction(event: {
-    detail: number;
-    ctrlKey: boolean;
-    shiftKey: boolean;
-}): 'navigate' | 'defer' | 'tooltip' {
-    if (event.shiftKey) return 'navigate';
+/** `tapOpens` (a `(hover: none)` device): one tap opens the member, there being no hover tooltip. */
+export function memberClickAction(
+    event: { detail: number; ctrlKey: boolean; shiftKey: boolean },
+    tapOpens = false,
+): 'navigate' | 'defer' | 'tooltip' {
+    if (event.shiftKey || tapOpens) return 'navigate';
     return event.detail > 1 ? 'defer' : 'tooltip';
 }
 
@@ -128,6 +128,7 @@ export function MemberDetailIcon({
     const tooltip = useRef<HTMLDivElement>(null);
     const openTimer = useRef<number | undefined>(undefined);
     const leaveTimer = useRef<number | undefined>(undefined);
+    const focusDialog = useRef(false);
     const [dismissed, setDismissed] = useState(false);
     const [position, setPosition] = useState<CSSProperties>({ top: 0, left: 0 });
     const tooltipId = `member-details-${useId().replaceAll(':', '')}`;
@@ -177,6 +178,14 @@ export function MemberDetailIcon({
             document.removeEventListener('pointerdown', dismissOutside);
         };
     }, [open, pinned]);
+
+    useEffect(() => {
+        if (!pinned || !focusDialog.current) return;
+        focusDialog.current = false;
+        tooltip.current
+            ?.querySelector<HTMLElement>('.group-member-open')
+            ?.focus({ preventScroll: true });
+    }, [pinned]);
 
     useEffect(
         () => () => {
@@ -246,14 +255,40 @@ export function MemberDetailIcon({
                       ref={tooltip}
                       id={tooltipId}
                       className="group-member-tooltip"
-                      role="tooltip"
+                      // Hover and focus preview is a passive tooltip; pinned, it is a non-modal dialog
+                      // whose Open button is reachable by keyboard.
+                      role={pinned && onOpen ? 'dialog' : 'tooltip'}
+                      aria-label={pinned && onOpen ? displayName : undefined}
                       hidden={!open}
                       aria-hidden={!open}
                       style={position}
                       onPointerEnter={cancelLeaveTimer}
                       onPointerLeave={delayHoverClose}
+                      onKeyDown={(event) => {
+                          if (!pinned || (event.key !== 'Escape' && event.key !== 'Tab')) return;
+                          if (event.key === 'Escape') event.stopPropagation();
+                          // Focus returns to the trigger; Tab then continues from there.
+                          trigger.current?.focus({ preventScroll: true });
+                          dismissTooltip();
+                      }}
                   >
-                      <strong>{displayName}</strong>
+                      <div className="group-member-tooltip-head">
+                          <strong>{displayName}</strong>
+                          {onOpen && (
+                              <button
+                                  type="button"
+                                  className="group-member-open"
+                                  {...(pinned ? {} : { tabIndex: -1, 'aria-hidden': true })}
+                                  onMouseDown={(event) => event.preventDefault()}
+                                  onClick={() => {
+                                      dismissTooltip();
+                                      onOpen(member);
+                                  }}
+                              >
+                                  Open
+                              </button>
+                          )}
+                      </div>
                       <dl>
                           {details.map((detail, index) => {
                               const formatted = formatMemberDetailValue(detail.value, detail.field);
@@ -300,7 +335,11 @@ export function MemberDetailIcon({
                     }
                 }}
                 onClick={(event) => {
-                    const action = memberClickAction(event);
+                    // Touch has no hover preview, so one tap opens; a mouse on a hybrid device does not.
+                    const action = memberClickAction(
+                        event,
+                        (event.nativeEvent as { pointerType?: string }).pointerType === 'touch',
+                    );
                     if (onOpen && action === 'navigate') {
                         event.preventDefault();
                         event.stopPropagation();
@@ -319,6 +358,8 @@ export function MemberDetailIcon({
                     cancelOpenTimer();
                     cancelLeaveTimer();
                     setDismissed(wasPinned);
+                    // Keyboard activation (no pointer) moves focus into the pinned dialog.
+                    focusDialog.current = !wasPinned && event.detail === 0;
                     setActiveMemberTooltip(wasPinned ? null : { id: tooltipId, mode: 'pinned' });
                 }}
                 onDoubleClick={(event) => {

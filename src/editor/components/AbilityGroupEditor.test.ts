@@ -6,12 +6,15 @@ import { AbilityGroupEditor } from './AbilityGroupEditor';
 import { formatMemberDetailValue, memberClickAction, memberDetailValues } from './MemberDetailIcon';
 
 describe('cooldown group member details', () => {
-    it('keeps ordinary and Ctrl clicks on tooltips and defers double-click navigation', () => {
+    it('keeps ordinary and Ctrl clicks on tooltips, defers double-click, and lets a tap navigate on hover-less devices', () => {
         const click = { detail: 1, ctrlKey: false, shiftKey: false };
         expect(memberClickAction(click)).toBe('tooltip');
         expect(memberClickAction({ ...click, detail: 2 })).toBe('defer');
         expect(memberClickAction({ ...click, ctrlKey: true })).toBe('tooltip');
         expect(memberClickAction({ ...click, shiftKey: true })).toBe('navigate');
+        expect(memberClickAction(click, true)).toBe('navigate');
+        expect(memberClickAction({ ...click, detail: 2 }, true)).toBe('navigate');
+        expect(memberClickAction(click, false)).toBe('tooltip');
     });
 
     it('lists each ability and resolves manifest names with source-name fallback', () => {

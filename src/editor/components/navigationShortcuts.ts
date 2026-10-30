@@ -65,3 +65,34 @@ export function nextCollectionSelection(
         currentIndex < 0 ? (direction > 0 ? 0 : visibleKeys.length - 1) : currentIndex + direction;
     return visibleKeys[nextIndex];
 }
+
+/**
+ * Next index of a roving-tabindex list for a navigation key, or undefined when the key is not
+ * one (or is a no-op at an end). `horizontal` also accepts ←/→, for strips laid out in a row.
+ */
+export function rovingIndex(
+    count: number,
+    current: number,
+    key: string,
+    horizontal = false,
+): number | undefined {
+    if (count < 1) return undefined;
+    const step =
+        key === 'ArrowDown' || (horizontal && key === 'ArrowRight')
+            ? 1
+            : key === 'ArrowUp' || (horizontal && key === 'ArrowLeft')
+              ? -1
+              : 0;
+    const next =
+        key === 'Home'
+            ? 0
+            : key === 'End'
+              ? count - 1
+              : step
+                ? Math.min(
+                      count - 1,
+                      Math.max(0, current < 0 ? (step > 0 ? 0 : count - 1) : current + step),
+                  )
+                : undefined;
+    return next === undefined || next === current ? undefined : next;
+}

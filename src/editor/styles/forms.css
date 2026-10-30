@@ -243,11 +243,8 @@
 .nested-row .array-element .stepped-number-input {
     width: 76px;
 }
-.unpublished {
-    display: inline-block;
-    margin: 4px 8px;
+.field-unpublished {
     color: var(--warning);
-    border-color: var(--warning);
     cursor: help;
 }
 .field-value > select,

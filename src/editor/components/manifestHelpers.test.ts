@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { abilitySpec, overrideSpec, type EntitySpec } from '../../core';
-import { filterPickerGroups, pickedEntry } from './manifestHelpers';
+import { duplicateNameNotes, filterPickerGroups, pickedEntry } from './manifestHelpers';
 
 describe('pickedEntry', () => {
     const entry = { hash: 123, name: 'Marksman' };
@@ -63,5 +63,54 @@ describe('filterPickerGroups', () => {
             { title: 'A', items: [{ hash: 22, name: 'Bolt' }] },
         ]);
         expect(filterPickerGroups(groups, 'nothing')).toEqual([]);
+    });
+});
+
+describe('duplicateNameNotes', () => {
+    it('labels each repeated name with its class when every class is distinct', () => {
+        const notes = duplicateNameNotes([
+            { hash: 1, name: 'Unfocused Arc Energy', classType: 0 },
+            { hash: 2, name: 'Unfocused Arc Energy', classType: 1 },
+            { hash: 3, name: 'Unfocused Arc Energy', classType: 2 },
+        ]);
+        expect(Object.fromEntries(notes)).toEqual({ 1: 'Titan', 2: 'Hunter', 3: 'Warlock' });
+    });
+
+    it('falls back to the hash on every member when no class is usable', () => {
+        const notes = duplicateNameNotes([
+            { hash: 1, name: 'Unfocused Arc Energy', classType: 3 },
+            { hash: 2, name: 'Unfocused Arc Energy' },
+            { hash: 3, name: 'Unfocused Arc Energy', classType: 3 },
+        ]);
+        expect(Object.fromEntries(notes)).toEqual({ 1: '1', 2: '2', 3: '3' });
+    });
+
+    it('falls back to the hash when one member has no usable class', () => {
+        const notes = duplicateNameNotes([
+            { hash: 5, name: 'Striker', classType: 0 },
+            { hash: 6, name: 'Striker', classType: 3 },
+        ]);
+        expect(Object.fromEntries(notes)).toEqual({ 5: '5', 6: '6' });
+    });
+
+    it('falls back to the hash when two members share a class', () => {
+        const notes = duplicateNameNotes([
+            { hash: 5, name: 'Striker', classType: 0 },
+            { hash: 6, name: 'Striker', classType: 0 },
+        ]);
+        expect(Object.fromEntries(notes)).toEqual({ 5: '5', 6: '6' });
+    });
+
+    it('leaves unique names alone', () => {
+        const notes = duplicateNameNotes([
+            { hash: 4, name: 'Arcstrider', classType: 1 },
+            { hash: 5, name: 'Striker', classType: 0 },
+            { hash: 6, name: 'Striker', classType: 3 },
+        ]);
+        expect(Object.fromEntries(notes)).toEqual({ 5: '5', 6: '6' });
+    });
+
+    it('returns no notes for an empty list', () => {
+        expect(Object.fromEntries(duplicateNameNotes([]))).toEqual({});
     });
 });

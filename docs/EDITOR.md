@@ -4,7 +4,7 @@ Open the editor at [database-clarity.github.io/Character-Stats/editor](https://d
 
 ## Connect
 
-On **Connect to your repository**, enter the **Fine-grained GitHub personal access token**; **Branch** is a dropdown listing the repository's branches after a token is entered (default `master` when available). The repository is fixed to `Database-Clarity/Character-Stats`. The token needs Contents read/write, Pull requests read/write, Actions read/write, and Metadata read permissions. Select **Remember me on this device (localStorage)** only on a trusted device; otherwise the token stays in session storage. Select **Connect to GitHub** to load the source JSON and English locale for that branch.
+On **Connect to your repository**, enter the **Fine-grained GitHub personal access token**; **Branch** is a dropdown listing the repository's branches after a token is entered (default `master` when available). The repository is fixed to `Database-Clarity/Character-Stats`. The token needs Contents read/write, Pull requests read/write, Actions read/write, and Metadata read permissions. Select **Remember on this device** only on a trusted device (its help text notes that the token is kept in localStorage); otherwise the token stays in session storage. Select **Connect to GitHub** to load the source JSON and English locale for that branch.
 
 For development only, **Use local dev data** opens the checked-out repository's JSON without a token. It is shown as **Local dev** in the ☰ repository menu: edits exist only in memory, and Save and Publish are disabled. This option is not included in production builds.
 
@@ -12,7 +12,7 @@ For development only, **Use local dev data** opens the checked-out repository's 
 
 The editor is a compact full-height workbench. The left sidebar lists **Health**,
 **Melee**, **Grenade**, **Super**, **Class**, **Weapons**, and **Movement**, with stat
-icons and change counts. Tabs and list rows also indicate changes. Each pane scrolls
+icons and change counts. It is one Tab stop; Up, Down, Home and End move between stats (Left and Right too in the phone strip). Tabs and list rows also indicate changes. Each pane scrolls
 independently; the page itself stays in place. Below 1280px, **Context** in the
 item header opens the cooldown panel beside the editor and hides the item list while an item is
 selected (with nothing selected the list stays). At 700px and below it opens as an overlay up to
@@ -37,7 +37,12 @@ Press **/** outside an input to focus the current collection filter (or open Jum
 Keyboard hints (shortcut list, **Ctrl K**, plot hover text) are hidden on touch screens,
 which also hide the number steppers and enlarge buttons and inputs to 32px.
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes
-menus and dialogs. Dialogs return focus to their opener when it is still on the page;
+menus and dialogs. The item list is one Tab stop: Up and Down move between rows and, in grouped lists, cooldown
+group headers and **Edit group** buttons; Home and End jump to the first and last; Enter or Space
+selects a row, toggles a group header or presses **Edit group**. A row's three-dot menu is not a Tab
+stop (it is still clickable); open it with **Shift+F10**, the Menu key or Right Arrow, and close
+it with Esc or Left Arrow, which returns focus to the row. Rows of collapsed groups are skipped by the arrow keys.
+Dialogs return focus to their opener when it is still on the page;
 confirmation dialogs open with **Cancel** focused. Quick jump lands focus on the item heading
 (or the selected tab for a stat or tab jump), selecting an item on a phone focuses its heading,
 and **+** focuses the new draft's first field. Number stepper buttons are not Tab stops; use
@@ -84,8 +89,11 @@ the information symbol for the field description. Modified fields have a cyan
 edge, dot, and **Revert** (curved arrow) button whose tooltip shows the saved value.
 
 Fields and Text have an **On this page** outline. Select a section to jump to it;
-the outline tracks scrolling and can be collapsed. Below 1100px it automatically
-collapses into a slim **On this page** bar above the fields whose entries drop down when
+the outline tracks scrolling and can be collapsed. Up to 1365px it starts
+collapsed as a slim **On this page** bar above the fields when it has six or fewer entries;
+below 1100px it always starts collapsed, and wider screens keep it open. Your own open or close
+choice survives crossing 1365px and moving between pages (it is remembered for the session, per
+page type), but crossing 1100px resets it. The bar's entries drop down when
 opened; collapsed, it is always that bar. Long names are ellipsized
 with their full text available on hover. Sections, segments, locale entries, and change
 groups collapse using their summary row. **Collapse all / Expand all** helps with
@@ -118,7 +126,7 @@ and ↑ / ↓ / × controls.
 Nested fields have their own validation, modified marker, and revert button.
 Changes **Go to** expands the containing groups and focuses the nested field.
 Adding/removing rows is a parent-array change; reordering rows is meaningful.
-An **Unpublished** badge means the field is kept in sources but not exported.
+An inline **unpublished** tag beside the field name means the field is kept in sources but not exported.
 
 ### Collections and drafts
 
@@ -140,7 +148,10 @@ icon/name/hash cards. Hover or focus a card for its custom tooltip: identity and
 manifest details plus every schema-backed current entry value, including values
 that differ within the group and optional values. A normal click also shows the
 tooltip; **Shift-click** or **double-click** a member card or context icon to open
-that member's individual editor in the current page. **Ctrl-click** does not
+that member's individual editor in the current page. Clicking a member card, or pressing Enter or Space on it, pins its details as a small dialog whose
+**Open** button is reachable by keyboard (Esc closes it and returns focus to the card); the
+**Open** button also works with the mouse while hovering (32px on touch screens). A single touch
+tap opens the member directly. **Ctrl-click** does not
 trigger current-page navigation; browser modifier behavior is preserved.
 Overrides remain a separate editing surface. A group editor can
 batch-edit any field that has the same value across every group member. Group
@@ -171,10 +182,10 @@ properties still use the spec defaults and validation.
 ### Requirements and numeric arrays
 
 Override requirements are named/icon references. **0** means **All abilities
-(wildcard)**; negative hashes display **Subclass: name**. **Add requirement** searches
+(wildcard)**; negative hashes display **Subclass: name** (a repeated name gets a muted suffix on every row that shares it: the class when each has a distinct one, otherwise the hash). **Add requirement** searches
 three groups: abilities in this stat, subclass filters, and the wildcard. A manual
 hash input works even when the manifest is unavailable. The dialog stays open so you can add
-several references (added rows are marked and disabled); close it with **Done** or Esc. ArrowDown
+several references (added rows are marked and disabled); close it with **Done** or Esc. On touch screens the search box is not focused when the dialog opens, so the on-screen keyboard stays closed until you tap it. ArrowDown
 in the search box moves into the results, and empty groups are hidden while searching. Row ↑ / ↓ / ×
 controls reorder/remove references.
 
@@ -219,7 +230,7 @@ silently applied. Large tables scroll below their sticky header.
 ### Movement
 
 Movement has **Rules**, **Classes**, **Sources**, and **Text** tabs. Rules edits
-the shared curves, multipliers, and caps. JumpHeight remains **Unpublished** until
+the shared curves, multipliers, and caps. JumpHeight remains tagged **unpublished** until
 measured data is available. Classes and Sources use the normal list, isolated
 draft, editor, and context layout. Source **RefType** chooses items or item
 categories for hash resolution and the field picker. **AlsoMatches** appears
@@ -232,7 +243,7 @@ lengths and effect-type uniqueness.
 The speed preview uses the current validated Movement data and core
 `movementSpeed`. Pick a class, PvE/PvP, direction, posture, Sprint, and ADS.
 Sprint selects forward/standing and turns ADS off; choosing ADS turns Sprint off.
-Activate sources explicitly, set stack counts, and use **Boosted** to assert all
+Activate sources explicitly (rows are labelled Always, While held or Conditional), set stack counts, and use **Boosted** to assert all
 of that source's prerequisite equipment is present. Conditions and loadout
 compatibility are not inferred: select only applicable sources, not both
 Lightweight Frame and MIDA Synergy for the same weapon.
@@ -240,15 +251,17 @@ Lightweight Frame and MIDA Synergy for the same weapon.
 For ADS effects, **Held ADS** marks active sources belonging to the one held
 weapon being inspected, not all three loadout weapons. No selection uses the
 global ADS multiplier. Conflicting selected ADS overrides show an error instead
-of silently choosing one. The pinned controls/results show effective tier, speed
-to two decimal places, and the cap that actually limited speed (or **none**).
+of silently choosing one. The pinned controls/results show effective tier and speed
+to two decimal places. The **Δ vs no sources** heading gives each speed's signed change against the
+same class and activity with no active optional sources. A stat row shows **Capped: Forward** (or
+Strafe or Crouch) only when a cap actually limits that speed.
 Invalid source data blocks the preview until fixed; calculator errors are shown
 instead of a stale result. Active-source controls scroll independently below it.
 
 ### English text
 
 **Text** edits English locale strings only. The stat slider (*Grenade value*), numeric
-input, and ability selector remain pinned. Section titles and the outline use readable
+input, and ability selector remain pinned, except at 600px and below, where they scroll with the fields. Section titles and the outline use readable
 names (*Base stat tooltip*) with the locale ID beside them in dimmed monospace text. Each collapsible locale row has its textarea and
 live preview side by side at desktop widths. The preview uses the selected ability's
 base data only and does not apply overrides. Placeholder validation and rendering
@@ -311,7 +324,7 @@ alongside them without pushing them out of the 30-snapshot limit, and a later Sa
 the new session's autosaves. They expire after 7 days unless you restore or discard them.
 **Discard stored recovery data** asks for confirmation; it is disabled only when there is
 nothing stored (unreadable data can always be discarded). The **Recovery** dialog from the ☰ menu offers the
-same list and discard action, and each entry shows its change count. If the editor hits a React error boundary, its recovery screen likewise
+same list and discard action, and each entry shows its change count and, for GitHub snapshots, `from` the first seven characters of the branch head. If the editor hits a React error boundary, its recovery screen likewise
 offers snapshots to restore or export, or lets you discard recovery data and
 reload the editor. Corrupt or incompatible recovery data is reported explicitly
 and can be discarded.

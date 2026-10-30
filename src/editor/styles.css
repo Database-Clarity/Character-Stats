@@ -535,6 +535,17 @@ span[role='img']::after {
         flex: none;
         font-size: 11px;
     }
+    /* Text tab: the preview controls scroll away with the fields instead of pinning a band. */
+    .text-editor {
+        display: block;
+        overflow-y: auto;
+    }
+    .text-editor > .long-page {
+        height: auto;
+    }
+    .text-editor .long-content {
+        overflow: visible;
+    }
 }
 
 /* Tablets and small laptops: while Context or Speed preview is open the panel takes the second
@@ -665,7 +676,8 @@ span[role='img']::after {
         min-width: 32px;
         height: 32px;
     }
-    .revert-field {
+    .revert-field,
+    .group-member-open {
         min-width: 32px;
         height: 32px;
     }

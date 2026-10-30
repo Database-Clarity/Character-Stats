@@ -3,7 +3,7 @@ import { validateField, type FieldSpec } from '../../core';
 import { useManifest } from '../manifest';
 import { editRequirement, equal, revertRequirementTable, toggleParallel } from '../state/editing';
 import { HashIdentity } from './ManifestUI';
-import { filterPickerGroups } from './manifestHelpers';
+import { duplicateNameNotes, filterPickerGroups } from './manifestHelpers';
 import { DraftValidationContext, issuesVisible } from './draftValidation';
 import { Modal } from './Modal';
 import { numberStep } from './numberStep';
@@ -32,6 +32,8 @@ export function RequirementEditor({
     const [query, setQuery] = useState('');
     const [manual, setManual] = useState('');
     const searchBox = useRef<HTMLInputElement>(null);
+    // Touch keeps the keyboard closed until the search is tapped.
+    const coarse = () => window.matchMedia('(pointer: coarse)').matches;
     const rawRequirements = value[field.key];
     const requirements: unknown[] = Array.isArray(rawRequirements) ? rawRequirements : [];
     const abilityNames = new Map(
@@ -43,6 +45,14 @@ export function RequirementEditor({
     );
     const parallel = fields.filter((f) => f.lengthOf === field.key);
     const tableChanged = [field, ...parallel].some((f) => !equal(value[f.key], saved[f.key]));
+    function subclassItems() {
+        const entries = subclasses(),
+            notes = duplicateNameNotes(entries);
+        return entries.map((e) => {
+            const note = notes.get(e.hash);
+            return { hash: -e.hash, name: e.name, ...(note ? { note } : {}) };
+        });
+    }
     const options = [
         { title: 'All abilities', items: [{ hash: 0, name: 'All abilities (wildcard)' }] },
         {
@@ -58,7 +68,7 @@ export function RequirementEditor({
             ? [
                   {
                       title: 'Subclass filters',
-                      items: subclasses().map((e) => ({ hash: -e.hash, name: e.name })),
+                      items: subclassItems(),
                   },
               ]
             : []),
@@ -292,12 +302,12 @@ export function RequirementEditor({
                     </p>
                 ))}
             {picker && (
-                <Modal title="Add requirement" onClose={closePicker}>
+                <Modal title="Add requirement" onClose={closePicker} focusInput={!coarse()}>
                     <label>
                         Search abilities or subclasses
                         <input
                             ref={searchBox}
-                            data-autofocus
+                            {...(coarse() ? {} : { 'data-autofocus': true })}
                             type="search"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
@@ -335,7 +345,7 @@ export function RequirementEditor({
                                         aria-pressed={added.has(item.hash)}
                                         onClick={() => {
                                             add(item.hash);
-                                            searchBox.current?.focus();
+                                            if (!coarse()) searchBox.current?.focus();
                                         }}
                                     >
                                         <HashIdentity
@@ -344,6 +354,7 @@ export function RequirementEditor({
                                                 !!field.refSubclassFilters || !!field.itemRef
                                             }
                                             name={item.name}
+                                            {...(item.note ? { note: item.note } : {})}
                                             compact
                                         />
                                         {added.has(item.hash) && (
