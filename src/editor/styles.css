@@ -478,7 +478,8 @@ span[role='img']::after {
     }
 }
 
-/* Phones: the list and the selected item's editor take turns in one column. */
+/* Phones: the list and the selected item's editor take turns in one column (layouts without a
+   list, such as Movement rules, always show the editor). */
 .list-back {
     display: none;
 }
@@ -488,7 +489,7 @@ span[role='img']::after {
         grid-template-columns: minmax(0, 1fr);
     }
     .entity-layout.detail-open > .entity-list,
-    .entity-layout:not(.detail-open) > .item-editor {
+    .entity-layout:has(> .entity-list):not(.detail-open) > .item-editor {
         display: none;
     }
     .list-back {
