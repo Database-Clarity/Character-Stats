@@ -1,5 +1,4 @@
 import {
-    entityRegistry,
     isRecord,
     statRegistry,
     movementSpec,
@@ -33,63 +32,73 @@ export interface EntityRow {
     old: Record<string, unknown> | undefined;
 }
 
-export interface BaseCooldownGroup {
-    cooldown: number;
+export interface ValueGroup {
+    value: number;
     rows: EntityRow[];
 }
 
-/** Group heading name from the registry label, e.g. `Base cooldown (s)` -> `Base cooldown`. */
-export const baseCooldownLabel = (
-    Object.values(entityRegistry)
-        .flatMap((spec) => spec.fields)
-        .find((field) => field.key === 'BaseCooldown')?.label ?? 'Base cooldown'
-).replace(/\s*\([^)]*\)$/, '');
+/** The field whose shared values group a collection's rows (`groupBy` in the registry). */
+export const groupByField = (spec: EntitySpec): FieldSpec | undefined =>
+    spec.fields.find((field) => field.groupBy);
 
-/** BaseCooldown per row id, captured so grouping can stay put while a value is being typed. */
-export function cooldownSnapshot(rows: readonly EntityRow[], idKey: string): Map<string, unknown> {
-    return new Map(rows.map((row) => [String(row.item[idKey]), row.item.BaseCooldown]));
+/** `Base cooldown (s)` -> `{ name: 'Base cooldown', unit: 's' }`. */
+export function labelParts(field: FieldSpec): { name: string; unit: string } {
+    const label = field.label ?? field.key;
+    const match = /^(.*?)\s*\(([^)]*)\)$/.exec(label);
+    return match ? { name: match[1]!, unit: match[2]! } : { name: label, unit: '' };
 }
 
-export interface CooldownSnapshot {
+/** The grouping field's value per row id, captured so groups stay put while a value is typed. */
+export function groupSnapshot(
+    rows: readonly EntityRow[],
+    idKey: string,
+    field: string,
+): Map<string, unknown> {
+    return new Map(rows.map((row) => [String(row.item[idKey]), row.item[field]]));
+}
+
+export interface GroupSnapshot {
     key: string;
-    cooldowns: Map<string, unknown>;
+    values: Map<string, unknown>;
 }
 
 /**
- * Rows keep their cooldown group only while a field is being typed in (same `key`); any other
- * moment returns `undefined`, so grouping follows the live values (reverts, restores, reloads).
+ * Rows keep their group only while a field is being typed in (same `key`); any other moment
+ * returns `undefined`, so grouping follows the live values (reverts, restores, reloads).
  */
-export function nextCooldownSnapshot(
-    previous: CooldownSnapshot | undefined,
+export function nextGroupSnapshot(
+    previous: GroupSnapshot | undefined,
     key: string,
     typing: boolean,
     rows: readonly EntityRow[],
     idKey: string,
-): CooldownSnapshot | undefined {
+    field: string,
+): GroupSnapshot | undefined {
     if (!typing) return undefined;
-    return previous?.key === key ? previous : { key, cooldowns: cooldownSnapshot(rows, idKey) };
+    return previous?.key === key ? previous : { key, values: groupSnapshot(rows, idKey, field) };
 }
 
-export function groupRowsByBaseCooldown(
+/** Rows grouped by equal finite numeric values (ascending); the rest are ungrouped. */
+export function groupRowsByValue(
     rows: readonly EntityRow[],
-    cooldownOf: (row: EntityRow) => unknown = (row) => row.item.BaseCooldown,
-) {
+    valueOf: (row: EntityRow) => unknown,
+): { groups: ValueGroup[]; ungrouped: EntityRow[] } {
     const grouped = new Map<number, EntityRow[]>(),
         ungrouped: EntityRow[] = [];
     for (const row of rows) {
-        const cooldown = cooldownOf(row);
-        if (typeof cooldown !== 'number' || !Number.isFinite(cooldown)) {
+        const value = valueOf(row);
+        if (typeof value !== 'number' || !Number.isFinite(value)) {
             ungrouped.push(row);
             continue;
         }
-        const group = grouped.get(cooldown);
+        const group = grouped.get(value);
         if (group) group.push(row);
-        else grouped.set(cooldown, [row]);
+        else grouped.set(value, [row]);
     }
     return {
         groups: [...grouped]
-            .map(([cooldown, groupedRows]) => ({ cooldown, rows: groupedRows }))
-            .sort((a, b) => a.cooldown - b.cooldown),
+            .map(([value, groupedRows]) => ({ value, rows: groupedRows }))
+            .sort((a, b) => a.value - b.value),
         ungrouped,
     };
 }

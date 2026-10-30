@@ -45,6 +45,8 @@ export interface FieldSpec extends NumericConstraints {
     itemRef?: 'ability' | 'item' | 'any';
     refSubclassFilters?: boolean;
     indexLabel?: string;
+    /** Editor-only: collection rows sharing this field's value are listed and edited as a group. */
+    groupBy?: boolean;
 }
 
 export type EntityRole = 'ability' | 'superAbility' | 'override' | 'movementClass';

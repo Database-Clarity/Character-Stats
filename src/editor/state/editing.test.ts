@@ -1,19 +1,29 @@
 import { describe, expect, it } from 'vitest';
-import { abilitySpec, overrideSpec, movementClassSpec, validateEntity } from '../../core';
+import {
+    abilitySpec,
+    entityRegistry,
+    isAbilityRole,
+    overrideSpec,
+    movementClassSpec,
+    validateEntity,
+    type FieldSpec,
+} from '../../core';
 import movementData from '../../../sources/movement.json';
 import {
     adjacentChange,
     changeAffectsStat,
     collectChanges,
-    cooldownSnapshot,
+    groupSnapshot,
     createItemDraft,
     editRequirement,
     followEntityIdentity,
-    groupRowsByBaseCooldown,
+    groupByField,
+    groupRowsByValue,
+    labelParts,
     hasDraftIdentity,
     indexEntityRows,
     issueTarget,
-    nextCooldownSnapshot,
+    nextGroupSnapshot,
     revertRequirementTable,
     sameValue,
     selectEntityFormSession,
@@ -29,15 +39,15 @@ describe('cooldown ability groups', () => {
             { item: { Hash: 1, BaseCooldown: 30 }, deleted: false, old: undefined },
             { item: { Hash: 2, BaseCooldown: 3 }, deleted: false, old: undefined },
         ];
-        const snapshot = cooldownSnapshot(rows, 'Hash');
+        const snapshot = groupSnapshot(rows, 'Hash', 'BaseCooldown');
         const edited = [rows[0]!, { ...rows[1]!, item: { Hash: 2, BaseCooldown: 3000 } }];
-        const stable = groupRowsByBaseCooldown(edited, (row) =>
-            snapshot.get(String(row.item.Hash)),
-        );
-        expect(stable.groups.map((group) => group.cooldown)).toEqual([3, 30]);
-        expect(groupRowsByBaseCooldown(edited).groups.map((group) => group.cooldown)).toEqual([
-            30, 3000,
-        ]);
+        const stable = groupRowsByValue(edited, (row) => snapshot.get(String(row.item.Hash)));
+        expect(stable.groups.map((group) => group.value)).toEqual([3, 30]);
+        expect(
+            groupRowsByValue(edited, (row) => row.item.BaseCooldown).groups.map(
+                (group) => group.value,
+            ),
+        ).toEqual([30, 3000]);
     });
 
     it('freezes cooldowns only while typing and refreshes on any other value change', () => {
@@ -46,16 +56,18 @@ describe('cooldown ability groups', () => {
             deleted: false,
             old: undefined,
         });
-        const frozen = nextCooldownSnapshot(undefined, 'a', true, [row(30)], 'Hash');
-        expect(frozen?.cooldowns.get('1')).toBe(30);
+        const frozen = nextGroupSnapshot(undefined, 'a', true, [row(30)], 'Hash', 'BaseCooldown');
+        expect(frozen?.values.get('1')).toBe(30);
         // Still typing in the same selection: the snapshot is reused even though the value moved.
-        expect(nextCooldownSnapshot(frozen, 'a', true, [row(3)], 'Hash')).toBe(frozen);
+        expect(nextGroupSnapshot(frozen, 'a', true, [row(3)], 'Hash', 'BaseCooldown')).toBe(frozen);
         // A different selection or editing group starts a new snapshot.
-        expect(nextCooldownSnapshot(frozen, 'b', true, [row(3)], 'Hash')?.cooldowns.get('1')).toBe(
-            3,
-        );
+        expect(
+            nextGroupSnapshot(frozen, 'b', true, [row(3)], 'Hash', 'BaseCooldown')?.values.get('1'),
+        ).toBe(3);
         // Not typing (blur, revert, restore): no snapshot, so live values group the rows.
-        expect(nextCooldownSnapshot(frozen, 'a', false, [row(30)], 'Hash')).toBeUndefined();
+        expect(
+            nextGroupSnapshot(frozen, 'a', false, [row(30)], 'Hash', 'BaseCooldown'),
+        ).toBeUndefined();
     });
 
     it('groups strictly by equal finite BaseCooldown values', () => {
@@ -65,9 +77,9 @@ describe('cooldown ability groups', () => {
             { item: { Hash: 3, BaseCooldown: 60, Scalar: 0.5 }, deleted: false, old: undefined },
             { item: { Hash: 4, BaseCooldown: Number.NaN }, deleted: false, old: undefined },
         ];
-        const { groups, ungrouped } = groupRowsByBaseCooldown(rows);
+        const { groups, ungrouped } = groupRowsByValue(rows, (row) => row.item.BaseCooldown);
         expect(
-            groups.map(({ cooldown, rows: group }) => [
+            groups.map(({ value: cooldown, rows: group }) => [
                 cooldown,
                 group.map(({ item }) => item.Hash),
             ]),
@@ -504,5 +516,21 @@ describe('issueTarget', () => {
         expect(issueTarget('$', sources)).toBeUndefined();
         expect(issueTarget('stats[5].Name', sources)).toBeUndefined();
         expect(issueTarget('sources/stats/melee.json:Abilities', sources)).toBeUndefined();
+    });
+});
+
+describe('registry grouping field', () => {
+    it('groups abilities and supers by the field flagged groupBy, not by name', () => {
+        for (const spec of Object.values(entityRegistry)) {
+            const field = groupByField(spec);
+            if (isAbilityRole(spec.role)) expect(field?.key, spec.name).toBe('BaseCooldown');
+            else expect(field, spec.name).toBeUndefined();
+        }
+    });
+
+    it('splits a unit suffix off the label', () => {
+        const field = { key: 'X', kind: 'number', label: 'Base cooldown (s)' } as FieldSpec;
+        expect(labelParts(field)).toEqual({ name: 'Base cooldown', unit: 's' });
+        expect(labelParts({ ...field, label: 'Name' })).toEqual({ name: 'Name', unit: '' });
     });
 });

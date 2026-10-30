@@ -1,12 +1,13 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type SyntheticEvent } from 'react';
 import {
-    baseCooldownLabel,
+    labelParts,
     equal,
-    groupRowsByBaseCooldown,
-    nextCooldownSnapshot,
-    type CooldownSnapshot,
+    groupRowsByValue,
+    nextGroupSnapshot,
+    type GroupSnapshot,
     type EntityRow,
 } from '../state/editing';
+import type { FieldSpec } from '../../core';
 import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
@@ -33,7 +34,7 @@ export function EntityRows({
     onAdd,
     onAddFromManifest,
     getManifestTable,
-    groupByCooldown = false,
+    groupBy,
     editingGroup,
     typing = false,
 }: {
@@ -53,9 +54,10 @@ export function EntityRows({
     onEditGroup?(memberIds: string[]): void;
     onAdd(): void;
     onAddFromManifest(): void;
-    groupByCooldown?: boolean;
+    /** Registry field (`groupBy`) whose shared values group the rows. */
+    groupBy?: FieldSpec | undefined;
     editingGroup?: string[] | null;
-    /** A text field in the editor has focus: rows keep their cooldown group until it ends. */
+    /** A text field in the editor has focus: rows keep their group until it ends. */
     typing?: boolean;
 }) {
     const [menu, setMenu] = useState<{ id: string; signal: number }>({ id: '', signal: 0 });
@@ -64,23 +66,26 @@ export function EntityRows({
     // Roving tabindex: one Tab stop in the list, arrows/Home/End move it, collapsed groups drop out.
     const [tabKey, setTabKey] = useState<string | null>(null);
     const [closed, setClosed] = useState<ReadonlySet<string>>(new Set());
-    // Rows keep their group while a BaseCooldown is typed; any other value change regroups.
-    const snapshot = useRef<CooldownSnapshot | undefined>(undefined);
-    snapshot.current = nextCooldownSnapshot(
+    // Rows keep their group while the grouping value is typed; any other value change regroups.
+    const snapshot = useRef<GroupSnapshot | undefined>(undefined);
+    snapshot.current = nextGroupSnapshot(
         snapshot.current,
         `${selected}|${editingGroup?.join(',') ?? ''}`,
         typing,
         rows,
         idKey,
+        groupBy?.key ?? '',
     );
-    const grouped = groupByCooldown
-        ? groupRowsByBaseCooldown(rows, (row) => {
+    const grouped = groupBy
+        ? groupRowsByValue(rows, (row) => {
               const id = String(row.item[idKey]);
-              return snapshot.current?.cooldowns.has(id)
-                  ? snapshot.current.cooldowns.get(id)
-                  : row.item.BaseCooldown;
+              return snapshot.current?.values.has(id)
+                  ? snapshot.current.values.get(id)
+                  : row.item[groupBy.key];
           })
         : undefined;
+    const group = groupBy ? labelParts(groupBy) : { name: '', unit: '' };
+    const withUnit = (value: number) => (group.unit ? `${value} ${group.unit}` : String(value));
     const matchesSearch = ({ item }: EntityRow) =>
         `${item.Name} ${item[idKey]} ${getManifestName(Number(item[idKey]), item) ?? ''}`
             .toLowerCase()
@@ -100,7 +105,7 @@ export function EntityRows({
         ...(draft ? ['draft'] : []),
         ...(grouped
             ? [
-                  ...grouped.groups.flatMap(({ cooldown, rows: groupRows }) =>
+                  ...grouped.groups.flatMap(({ value: cooldown, rows: groupRows }) =>
                       groupKeys(String(cooldown), groupRows, canEditGroup(groupRows)),
                   ),
                   ...groupKeys('none', grouped.ungrouped, false),
@@ -268,7 +273,7 @@ export function EntityRows({
                 <ul>
                     {grouped ? (
                         <>
-                            {grouped.groups.map(({ cooldown, rows: groupRows }) => {
+                            {grouped.groups.map(({ value: cooldown, rows: groupRows }) => {
                                 const visible = groupRows.filter(matchesSearch);
                                 if (!visible.length) return null;
                                 const active = groupRows.filter((row) => !row.deleted),
@@ -283,8 +288,8 @@ export function EntityRows({
                                             onToggle={groupToggle(String(cooldown))}
                                         >
                                             <summary {...roving(groupKey(String(cooldown)))}>
-                                                <strong>{baseCooldownLabel}</strong>
-                                                <span className="mono">{cooldown} s</span>
+                                                <strong>{group.name}</strong>
+                                                <span className="mono">{withUnit(cooldown)}</span>
                                                 <span className="muted">
                                                     {plural(groupRows.length, 'entry', 'entries')}
                                                 </span>
@@ -294,8 +299,8 @@ export function EntityRows({
                                                     className="cooldown-group-edit"
                                                     {...roving(editKey(String(cooldown)))}
                                                     aria-pressed={isEditing}
-                                                    aria-label={`Edit shared fields for all ${active.length} entries with base cooldown ${cooldown} seconds`}
-                                                    title={`Edit shared fields for all ${active.length} entries in this cooldown group`}
+                                                    aria-label={`Edit shared fields for all ${active.length} entries with ${group.name.toLowerCase()} ${withUnit(cooldown)}`}
+                                                    title={`Edit shared fields for all ${active.length} entries in this group`}
                                                     onClick={() => onEditGroup(ids)}
                                                 >
                                                     Edit group ({active.length})
@@ -313,7 +318,7 @@ export function EntityRows({
                                         onToggle={groupToggle('none')}
                                     >
                                         <summary {...roving(groupKey('none'))}>
-                                            <strong>No {baseCooldownLabel.toLowerCase()}</strong>
+                                            <strong>No {group.name.toLowerCase()}</strong>
                                         </summary>
                                         <ul>
                                             {grouped.ungrouped.filter(matchesSearch).map(renderRow)}

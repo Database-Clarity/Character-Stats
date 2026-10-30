@@ -13,6 +13,7 @@ import {
     sameValue,
     equal,
     followEntityIdentity,
+    groupByField,
     hasDraftIdentity,
     identityKey,
     indexEntityRows,
@@ -363,7 +364,7 @@ export function EntityList({
                 selected={selected}
                 search={search}
                 typing={typing}
-                groupByCooldown={spec.role === 'ability' || spec.role === 'superAbility'}
+                groupBy={groupByField(spec)}
                 editingGroup={editingGroup}
                 getManifestName={(itemHash, item) => lookup(itemHash, manifestTable(item))?.name}
                 getManifestTable={manifestTable}

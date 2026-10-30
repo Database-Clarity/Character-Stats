@@ -222,7 +222,8 @@ CSS inverts their black fill for the dark UI. The owner-provided
 
 This movement editor step adds no core helpers or behavior. Earlier editor
 domain-core additions are optional presentation hints on `FieldSpec`:
-`itemRef`, `refSubclassFilters`, and `indexLabel`. Requirements, charge scaling,
+`itemRef`, `refSubclassFilters`, `indexLabel` and `groupBy` (the field whose shared values group
+collection rows, e.g. `BaseCooldown` for abilities and Supers; found with `groupByField`). Requirements, charge scaling,
 and Movement speed arrays opt into them in `core/entities/index.ts`. Existing
 validation/export APIs are unchanged. Schema generation deliberately selects its
 own keys, so hints do not leak into `schema.json` (verified byte-for-byte).

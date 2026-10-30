@@ -68,7 +68,7 @@ sources/*.json + locale/en.json -> src/core (registries) -> src/cli  -> versions
   `state/store.tsx` holds the working edits, `github/client.ts` is the only REST boundary,
   `manifest/` holds the Bungie manifest (web worker, IndexedDB cache) and `components/` the
   views. Pure logic is split into tested `*.ts` helpers next to the components.
-- Use registry metadata (`role`, `abilityKind`, `itemRef`, `lengthOf`, `indexLabel`) for
+- Use registry metadata (`role`, `abilityKind`, `itemRef`, `lengthOf`, `indexLabel`, `groupBy`) for
   meaning-dependent behavior. Never branch on collection or field names.
 
 ## Rules and gotchas

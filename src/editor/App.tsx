@@ -6,6 +6,7 @@ import { statFilePath } from './state/paths';
 import {
     adjacentChange,
     changeAffectsStat,
+    groupByField,
     identityKey,
     type ChangeTarget,
     type EditorChange,
@@ -159,14 +160,15 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
             currentItems.find((item) => String(item[idKey]) === id),
         );
         const firstGroupItem = groupItems?.[0];
+        const groupKey = groupByField(collectionSpec)?.key;
         const validGroup =
             group !== undefined &&
-            (collectionSpec.role === 'ability' || collectionSpec.role === 'superAbility') &&
+            groupKey !== undefined &&
             group.length > 1 &&
             groupItems !== undefined &&
             firstGroupItem !== undefined &&
             groupItems.every(
-                (item) => item !== undefined && item.BaseCooldown === firstGroupItem.BaseCooldown,
+                (item) => item !== undefined && item[groupKey] === firstGroupItem[groupKey],
             );
         return {
             stat,

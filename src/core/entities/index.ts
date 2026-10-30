@@ -100,6 +100,7 @@ export const abilitySpec: EntitySpec = {
         nameField(),
 
         numberField('BaseCooldown', {
+            groupBy: true,
             help: 'Cooldown in seconds at stat 0, before overrides and the stat curve. Abilities with the same base cooldown are grouped in the list so you can edit them together.',
             label: 'Base cooldown (s)',
             exclusiveMin: 0,
@@ -148,6 +149,7 @@ export const superAbilitySpec: EntitySpec = {
         nameField(),
 
         numberField('BaseCooldown', {
+            groupBy: true,
             help: 'Super cooldown in seconds. It does not change with the Super stat; overrides can still replace or scale it.',
             label: 'Base cooldown (s)',
             exclusiveMin: 0,

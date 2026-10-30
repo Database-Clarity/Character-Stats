@@ -1,5 +1,11 @@
 import type { EntitySpec } from '../../core';
-import { updateEntityGroupField, equal, sharedEntityFields } from '../state/editing';
+import {
+    updateEntityGroupField,
+    equal,
+    groupByField,
+    labelParts,
+    sharedEntityFields,
+} from '../state/editing';
 import { FieldInput } from './FieldInput';
 import { MemberDetailIcon } from './MemberDetailIcon';
 
@@ -38,16 +44,20 @@ export function AbilityGroupEditor({
 }) {
     const first = members[0]!;
     const fields = sharedEntityFields(spec, members, idKey);
+    const groupField = groupByField(spec);
+    const group = groupField ? labelParts(groupField) : { name: 'Shared value', unit: '' };
+    const value = groupField ? String(first[groupField.key]) : '';
     return (
-        <section className="item-editor" aria-label="Edit cooldown group">
+        <section className="item-editor" aria-label={`Edit ${group.name.toLowerCase()} group`}>
             <header className="pane-header editor-header">
                 <button className="list-back" type="button" onClick={onBack}>
                     ← List
                 </button>
                 <div className="cooldown-group-title">
-                    <strong>Cooldown group</strong>
+                    <strong>{group.name} group</strong>
                     <span className="muted">
-                        {members.length} entries · {String(first.BaseCooldown)} s base cooldown
+                        {members.length} entries · {value}
+                        {group.unit && ` ${group.unit}`}
                     </span>
                 </div>
                 <div className="toolbar">
