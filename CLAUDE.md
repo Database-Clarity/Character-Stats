@@ -24,7 +24,7 @@ npm test -- tests/movement.test.ts          # run a single test file
 npm test -- -t "name of the test"           # filter tests by name
 npm run format         # Prettier (4 spaces, single quotes, width 100, trailing commas)
 npm run validate       # sources + en.json placeholders + export checked against schema.json
-npm run schema         # regenerate schema.json from the registries
+npm run schema         # regenerate schema.json and character-stats.d.ts from the registries
 npm run dev -- --port <port> --strictPort   # editor at http://localhost:<port>/Character-Stats/editor/
 npm run build          # editor -> dist/
 ```
@@ -60,7 +60,7 @@ sources/*.json + locale/en.json -> src/core (registries) -> src/cli  -> versions
   - `calc.ts` has the cooldown, regen, super-duration and `movementSpeed` calculators.
     `locale.ts` handles `{{Field}}` placeholders and tooltip rendering.
   - The pipeline modules are `validate.ts`, `export.ts`, `schemaGen.ts` and `sources.ts`
-    (parsing, plus `serializeSource`: 4-space JSON with a trailing LF).
+    (parsing, plus `serializeSource`: 4-space JSON with a trailing LF). `declarations.ts` turns the schema into `character-stats.d.ts`.
 - **`src/cli/`** holds the Node entry points: `validate`, `schema` and `build-data`. `io.ts`
   loads sources and runs Ajv against `schema.json`.
 - **`src/editor/`** is a React 19 + Vite app with no UI library and plain CSS in `styles/`.
@@ -73,7 +73,7 @@ sources/*.json + locale/en.json -> src/core (registries) -> src/cli  -> versions
 ## Rules and gotchas
 
 - **Generated files: don't hand-edit them.**
-  - `schema.json` is produced by `npm run schema`.
+  - `schema.json` and `character-stats.d.ts` (partner TypeScript types) are produced by `npm run schema`.
   - `versions/`, `update.json` and the generated entries in `CHANGELOGS.md` are written by
     `npm run build:data`, which normally runs in the `build-data.yml` workflow (the editor's
     **Publish** button). To try it locally, pass `-- --out-dir <dir>` so the root files stay

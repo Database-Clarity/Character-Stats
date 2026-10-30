@@ -1,4 +1,5 @@
 import { writeFile } from 'node:fs/promises';
-import { serializeSchema } from '../core';
+import { generateDeclarations, serializeSchema } from '../core';
 await writeFile('schema.json', serializeSchema());
-console.log('Generated schema.json');
+await writeFile('character-stats.d.ts', generateDeclarations());
+console.log('Generated schema.json and character-stats.d.ts');

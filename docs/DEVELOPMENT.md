@@ -27,7 +27,7 @@ Use Node.js 24 and npm 11. Install dependencies with `npm install`.
 | `npm run format`                             | Format core, CLI, editor, tests, config files, and `package.json` with Prettier.                                                                                                              |
 | `npm run format:check`                       | Check those files for Prettier formatting without writing changes.                                                                                                                            |
 | `npm run validate`                           | Validate sources, English placeholders, and exported JSON against `schema.json`.                                                                                                              |
-| `npm run schema`                             | Generate `schema.json` from the core registry.                                                                                                                                                |
+| `npm run schema`                             | Generate `schema.json` and `character-stats.d.ts` from the core registry.                                                                                                                     |
 | `npm run build:data [--release-notes "text"] [--out-dir dir]` | Validate and build data, automatically choosing the next published version. |
 
 With npm, pass optional script arguments after `--`, for example
@@ -279,9 +279,11 @@ These are separate valid segment examples for a `0-100` field; each covers that 
 
 ## Validation, schema, and publishing
 
-`npm run validate` checks sources, locale placeholders, and exported JSON against the committed draft-06 schema. `npm run schema` regenerates that schema from the registries. Warnings do not block data builds; errors do.
+`npm run validate` checks sources, locale placeholders, and exported JSON against the committed draft-06 schema. `npm run schema` regenerates that schema from the registries, and the TypeScript declarations next to it. Warnings do not block data builds; errors do.
 
-The `ci.yml` workflow runs `typecheck`, `format:check`, `test` (which includes the check that the committed `schema.json` matches the registries), `validate` and the editor build on every pull request and on pushes to `master` and `v2.0-overhaul`, so editor saves that break validation show up as a failed check before anyone publishes.
+`character-stats.d.ts` (repository root, served on Pages beside `schema.json`) declares `CharacterStatInfo` (the main export, including `Movement` and the locale-ID string fields) and `UpdateInfo` (`update.json`), with each property's schema description as JSDoc. [`src/core/declarations.ts`](../src/core/declarations.ts) generates it from `generateSchema()` and supports only the schema features the registries produce (`$ref`, `object`, `array`, `string`, `number`/`integer`, `enum`); a new schema keyword throws instead of being silently dropped, so extend the generator in that case. Never hand-edit the file. `tests/declarations.test.ts` checks that the committed file equals the generated output and that exports of the fixture and real sources type-check against it (and a mistyped one does not). Partners copy the file into their project and `import type { CharacterStatInfo } from './character-stats'`; the README has a worked cooldown example that mirrors `calculateCooldown`.
+
+The `ci.yml` workflow runs `typecheck`, `format:check`, `test` (which includes the checks that the committed `schema.json` and `character-stats.d.ts` match the registries), `validate` and the editor build on every pull request and on pushes to `master` and `v2.0-overhaul`, so editor saves that break validation show up as a failed check before anyone publishes.
 
 Numeric limits encode structure and mathematical meaning, not guessed game-balance ranges. Keep finite numbers, integer hashes/HP/counts, uint32 manifest ranges, curve domains, parallel-array lengths, and nonnegative magnitudes. Cooldowns, recharge-rate multipliers and movement multipliers remain positive. Energy scalars can be zero and have no upper bound. Base Mobility tiers have no upper bound; the calculator clamps effective tiers to the configured curve cap. Mobility tier effects may be negative penalties.
 

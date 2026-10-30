@@ -8,6 +8,7 @@ export * from './sources';
 export * from './validate';
 export * from './export';
 export * from './schemaGen';
+export * from './declarations';
 export * from './locale';
 export * from './calc';
 
