@@ -40,16 +40,12 @@ UI findings came from three independent Opus reviewers (desktop, tablet/phone, k
 
 ## Open questions and deferred items
 
-- Grouping abilities by base cooldown (`groupRowsByBaseCooldown`, `baseCooldownLabel`) keys on
-  the `BaseCooldown` field name, against the "registry metadata, not names" rule. A field flag
-  such as `groupBy: true` would fix it; left as is because it predates this review.
 - Text-tab titles are now "Hunter · Description"; two entries with the same name (across
   collections) get identical titles. The locale ID stays visible as the dimmed key.
 - Core validation messages now use editor labels ("Set Cooldown override, Cooldown scalar or
   Chunk energy scalar"); `npm run validate` users see the JSON path next to them but not the
   keys inside the message. Append keys if that turns out to confuse JSON editing.
-- Save/Publish have not run against the real GitHub API yet. Before merging: a smoke test on a
-  throwaway branch (save, PR save, branch-moved merge) with the owner's token. Publish can only be
+- Save/Publish have not run against the real GitHub API; the owner will test them in production. Publish can only be
   tested live after the merge, because `workflow_dispatch` needs `build-data.yml` on the default
   branch (master has only the Crowdin workflows). Unverified until then: branch protection on
   master, org approval for fine-grained tokens, exact GitHub error texts, and the `github-pages`
