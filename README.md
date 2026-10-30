@@ -25,11 +25,13 @@ Please check out our website's [Partnerships page](https://www.d2clarity.com/par
 ## Recommended Access Paths
 
 - JSON schema for the database with documentation: <https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json>
-- TypeScript declarations (`CharacterStatInfo` and `UpdateInfo`, generated from the schema, with the property documentation as JSDoc): <https://github.com/Database-Clarity/Character-Stats/blob/master/character-stats.d.ts> (also served as `https://Database-Clarity.github.io/Character-Stats/character-stats.d.ts`). Copy it into your project and `import type { CharacterStatInfo } from './character-stats'`.
+- TypeScript declarations (`CharacterStatInfo` and `UpdateInfo`, generated from the schema, with the property documentation as JSDoc): <https://github.com/Database-Clarity/Character-Stats/blob/master/character-stats.d.ts> (also served as `https://character-stats.d2clarity.com/character-stats.d.ts`). Copy it into your project and `import type { CharacterStatInfo } from './character-stats'`.
 - Main Database contents:
-  - With Indentation (human-readable): `https://Database-Clarity.github.io/Character-Stats/versions/[major]/CharacterStatInfo.json` for v2 and later
-  - Without Indentation (smaller file size): `https://Database-Clarity.github.io/Character-Stats/versions/[major]/CharacterStatInfo-NI.json` for v2 and later
-- Versioning using the `update.json` file found here: `https://Database-Clarity.github.io/Character-Stats/update.json`
+  - With Indentation (human-readable): `https://character-stats.d2clarity.com/versions/[major]/CharacterStatInfo.json` for v2 and later
+  - Without Indentation (smaller file size): `https://character-stats.d2clarity.com/versions/[major]/CharacterStatInfo-NI.json` for v2 and later
+- Versioning using the `update.json` file found here: `https://character-stats.d2clarity.com/update.json`
+
+Old `database-clarity.github.io/Character-Stats` URLs keep working via redirect, but the new URLs avoid the extra hop.
 
 For v2 and later, use the major number from `schemaVersion` as the directory
 (for example, `2.0.0` uses `versions/2/`). Legacy v1 releases use `X.Y`
@@ -99,4 +101,4 @@ I want to thank Hugo for [their amazing spreadsheet](https://docs.google.com/spr
 
 ## Contributing / Development
 
-See the [development guide](docs/DEVELOPMENT.md) for setup, data/schema workflows, and publishing, and the [editor guide](docs/EDITOR.md) for using the web editor. The editor is available at <https://database-clarity.github.io/Character-Stats/editor/>.
+See the [development guide](docs/DEVELOPMENT.md) for setup, data/schema workflows, and publishing, and the [editor guide](docs/EDITOR.md) for using the web editor. The editor is available at <https://character-stats.d2clarity.com/editor/>.

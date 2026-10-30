@@ -1,6 +1,6 @@
 # Web editor guide
 
-Open the editor at [database-clarity.github.io/Character-Stats/editor](https://database-clarity.github.io/Character-Stats/editor/).
+Open the editor at [character-stats.d2clarity.com/editor](https://character-stats.d2clarity.com/editor/).
 
 ## Connect
 

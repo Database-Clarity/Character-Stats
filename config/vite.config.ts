@@ -4,6 +4,6 @@ export default defineConfig({
     plugins: [react()],
     root: 'src/editor',
     envDir: '../..',
-    base: '/Character-Stats/editor/',
+    base: '/editor/',
     build: { outDir: '../../dist', emptyOutDir: true },
 });
