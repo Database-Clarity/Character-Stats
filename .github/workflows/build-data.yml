@@ -60,8 +60,7 @@ jobs:
             echo "No generated data changes to commit."
             exit 0
           fi
-          git commit -m "Data build v${VERSION}" \
-            -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          git commit -m "Data build v${VERSION}"
           git push origin "HEAD:${PUSH_REF}"
 
   deploy-pages:

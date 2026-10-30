@@ -37,8 +37,6 @@ UI findings came from three independent Opus reviewers (desktop, tablet/phone, k
 
 ## Open questions and deferred items
 
-- `build-data.yml` commits generated data with `Co-authored-by: Copilot`. Probably a leftover
-  from whoever wrote the workflow; remove it if that attribution isn't intended.
 - Grouping abilities by base cooldown (`groupRowsByBaseCooldown`, `baseCooldownLabel`) keys on
   the `BaseCooldown` field name, against the "registry metadata, not names" rule. A field flag
   such as `groupBy: true` would fix it; left as is because it predates this review.
@@ -47,9 +45,6 @@ UI findings came from three independent Opus reviewers (desktop, tablet/phone, k
 - Core validation messages now use editor labels ("Set Cooldown override, Cooldown scalar or
   Chunk energy scalar"); `npm run validate` users see the JSON path next to them but not the
   keys inside the message. Append keys if that turns out to confuse JSON editing.
-- `pages.yml` copies the whole repository root to Pages with an exclude list, so new root files
-  (docs, CLAUDE.md, reviews) are published by default. An allow-list (`versions/`, `update.json`,
-  `schema.json`, `character-stats.d.ts`, `locale/`, `README` page, editor) would be safer.
 - `src/core/calc.ts` imports `sources/movement.json` as the default for `movementSpeed`, so core
   depends on repository data and the editor bundles a second copy. Making the source argument
   required would remove the coupling (only tests rely on the default).

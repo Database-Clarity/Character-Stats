@@ -291,6 +291,9 @@ In the editor, **Publish** dispatches `build-data.yml` on the selected branch. T
 workflow tests and validates, builds the versioned JSON and `update.json`, and
 commits generated data as `github-actions[bot]`. Builds on any branch can update
 that branch's generated data; only a dispatch on `master` also deploys Pages.
+`pages.yml` publishes an allow-list from `master`: `versions/`, `locale/`, `update.json`,
+`schema.json`, `character-stats.d.ts`, `CHANGELOGS.md`, `README.md` (also rendered as the
+landing page) and the editor under `editor/`. Add a path there when partners need a new file.
 Before tests and the build, the workflow fast-forwards to the latest branch head.
 If the branch advances after that and the generated-data push is rejected, the
 workflow fails safely rather than rebasing stale generated output. A maintainer
