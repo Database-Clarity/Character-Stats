@@ -41,8 +41,17 @@
     font-weight: 700;
 }
 .editor-title {
+    flex: 1;
     font: inherit;
     min-width: 0;
+}
+/* Long names ellipsize on one line; the buttons beside them never wrap or shrink. */
+.editor-header > .list-back,
+.editor-header > .toolbar {
+    flex: none;
+}
+.editor-header > .toolbar {
+    flex-wrap: nowrap;
 }
 .list-controls {
     flex-shrink: 0;
@@ -666,8 +675,27 @@ th {
         min-width: calc(3 * 32px + 2 * 4px);
     }
 }
+/* Names take the room they need and wrap to two lines (hash underneath) rather than truncating. */
 .context-table .hash-identity {
-    max-width: 130px;
+    max-width: 190px;
+}
+.context-table .hash-identity.compact {
+    align-items: flex-start;
+}
+.context-table .hash-identity.compact .identity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+.context-table .hash-identity.compact .identity-text > span {
+    display: -webkit-box;
+    flex: none;
+    max-width: 100%;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 .context .warning {
     font-size: 11px;
@@ -727,8 +755,16 @@ th {
     gap: 6px;
 }
 .requirement-row > .hash-identity {
-    max-width: 200px;
+    max-width: none;
     flex: 1;
+}
+.requirement-row > .hash-identity .identity-text > span {
+    display: -webkit-box;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 .chip-actions {
     display: flex;

@@ -24,11 +24,11 @@ export default function CurvePlot({
         .flatMap((p) => [p.current, ...(compare ? [p.saved] : [])])
         .filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
     const { min, max, ticks, decimals } = niceValueAxis(values);
-    const height = 240,
+    const height = 150,
         left = 52,
         right = width - 16,
-        plotTop = 16,
-        plotBottom = 200,
+        plotTop = 12,
+        plotBottom = 128,
         plotHeight = plotBottom - plotTop,
         plotWidth = Math.max(1, right - left);
     const x = (n: number) => left + ((n - domain[0]) / (domain[1] - domain[0])) * plotWidth,
@@ -134,7 +134,7 @@ export default function CurvePlot({
             <span className="plot-legend">
                 <span className="success">― Working copy</span>
                 {compare && <span className="info">┄ Saved</span>}
-                <span className="muted">Hover for x / y</span>
+                <span className="muted plot-hint">Hover for x / y</span>
             </span>
         </div>
     );

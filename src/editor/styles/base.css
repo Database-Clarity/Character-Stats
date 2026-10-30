@@ -25,7 +25,7 @@ select {
     font: inherit;
 }
 button {
-    border: 1px solid #4a515e;
+    border: 1px solid #6b7585;
     color: inherit;
     border-radius: 3px;
     background: #22252c;
@@ -36,7 +36,7 @@ button {
 }
 button:hover:not(:disabled) {
     background: #2c3038;
-    border-color: #646c7a;
+    border-color: #8892a3;
 }
 button:disabled {
     opacity: 0.42;
@@ -479,7 +479,7 @@ kbd {
     min-height: 28px;
 }
 .validation-issues {
-    max-height: 180px;
+    max-height: 96px;
     overflow: auto;
     padding: 0 12px;
 }

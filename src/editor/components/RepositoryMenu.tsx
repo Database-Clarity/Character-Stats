@@ -1,13 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
+export interface RepositoryMenuAction {
+    label: string;
+    disabled?: boolean;
+    run(): void;
+}
+
 export function RepositoryMenu({
     accountLabel,
     sourceLabel,
+    actions = [],
     onRecovery,
     onSignOut,
 }: {
     accountLabel: string;
     sourceLabel: string;
+    /** Extra toolbar actions that do not fit the toolbar on narrow screens. */
+    actions?: readonly RepositoryMenuAction[];
     onRecovery(): void;
     onSignOut(): void;
 }) {
@@ -132,6 +141,23 @@ export function RepositoryMenu({
                         </strong>
                     </div>
                     <div className="more-menu-actions" role="group" aria-label="Actions">
+                        {actions.map((action) => (
+                            <button
+                                key={action.label}
+                                role="menuitem"
+                                tabIndex={-1}
+                                type="button"
+                                disabled={action.disabled ?? false}
+                                onClick={() => {
+                                    setOpen(false);
+                                    // The menu item unmounts; give the dialog a live opener to return focus to.
+                                    triggerRef.current?.focus();
+                                    action.run();
+                                }}
+                            >
+                                {action.label}
+                            </button>
+                        ))}
                         <button
                             role="menuitem"
                             tabIndex={-1}

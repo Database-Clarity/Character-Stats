@@ -19,6 +19,8 @@ describe('field outline layout', () => {
         expect(editorStyles).toMatch(
             /@media \(max-width: 1100px\)\s*\{[\s\S]*?\.long-page\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/,
         );
-        expect(editorStyles).toContain('max-width: min(90vw, 360px)');
+        expect(editorStyles).toMatch(
+            /\.outline-shell\[open\]\s*>\s*\.outline\s*\{[^}]*position:\s*absolute[^}]*max-height:\s*min\(60vh, 420px\)/,
+        );
     });
 });

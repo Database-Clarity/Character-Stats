@@ -41,6 +41,20 @@ import {
 import { RepositoryMenu } from './components/RepositoryMenu';
 import { ValidationPanel } from './components/ValidationPanel';
 
+/** Narrow or short viewports use the compact shell; keep in sync with the CSS media query. */
+const compactShellQuery = '(max-width: 800px), (max-height: 500px)';
+function useMediaQuery(query: string) {
+    const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+    useEffect(() => {
+        const media = window.matchMedia(query);
+        const update = () => setMatches(media.matches);
+        update();
+        media.addEventListener('change', update);
+        return () => media.removeEventListener('change', update);
+    }, [query]);
+    return matches;
+}
+
 const mainNavigationItems = [...statRegistry, movementViewSpec];
 const initialNavigationSelection: EditorNavigationSelection = {
     stat: statRegistry[0]!.name,
@@ -71,6 +85,7 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         [currentChange, setCurrentChange] = useState<string>();
     const [disconnecting, setDisconnecting] = useState(false);
     const [statNavigationActive, setStatNavigationActive] = useState(false);
+    const compactShell = useMediaQuery(compactShellQuery);
     const workspaceRef = useRef<HTMLDivElement>(null);
     const navigationHistoryRef = useRef<NavigationHistoryController | null>(null);
     const normalizeNavigationRef = useRef<
@@ -388,6 +403,28 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                     <RepositoryMenu
                         accountLabel={accountLabel}
                         sourceLabel={state.source.label}
+                        actions={
+                            compactShell
+                                ? [
+                                      { label: 'Jump…', run: () => setDialog('jump') },
+                                      {
+                                          label: 'Publish',
+                                          disabled: state.source.readOnly,
+                                          run: () => setDialog('publish'),
+                                      },
+                                      {
+                                          label: 'Previous change',
+                                          disabled: !state.changes.length,
+                                          run: () => next(-1),
+                                      },
+                                      {
+                                          label: 'Next change',
+                                          disabled: !state.changes.length,
+                                          run: () => next(1),
+                                      },
+                                  ]
+                                : []
+                        }
                         onRecovery={() => setDialog('recovery')}
                         onSignOut={() => {
                             if (

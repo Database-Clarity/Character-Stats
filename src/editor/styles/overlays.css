@@ -103,6 +103,27 @@ dialog::backdrop {
     border-bottom-color: #2a2e35;
     padding: 6px 8px;
 }
+.picker-results > button:has(.badge),
+.picker-results section > button:has(.badge) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+.picker-results button:disabled {
+    color: var(--muted);
+    cursor: default;
+}
+.picker-results button:disabled .badge {
+    flex: none;
+    margin-left: auto;
+}
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
 .picker-results h3,
 .picker-results h4 {
     color: var(--muted);

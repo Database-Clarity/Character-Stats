@@ -1,8 +1,46 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { validateField, type FieldSpec } from '../../core';
 import { useManifest, type ManifestTable } from '../manifest';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
 import { NumberInput } from './NumberInput';
+
+const collapseAbove = 6;
+
+/** "Lightweight Frame ×21, Other, Third + 2 more": identical names are counted, not repeated. */
+function summarize(refs: unknown[], nameOf: (hash: number) => string | undefined): string {
+    const counts = new Map<string, number>();
+    for (const hash of refs) {
+        const name =
+            (typeof hash === 'number' ? nameOf(hash) : undefined) ?? `hash ${String(hash)}`;
+        counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    const parts = [...counts].map(([name, count]) => (count > 1 ? `${name} ×${count}` : name));
+    return (
+        `${refs.length}: ` +
+        parts.slice(0, 3).join(', ') +
+        (parts.length > 3 ? ` + ${parts.length - 3} more` : '')
+    );
+}
+
+function ChipList({
+    summary,
+    open,
+    children,
+}: {
+    summary: string | undefined;
+    /** Opens the collapsed list when an entry needs attention or was just added. */
+    open: boolean;
+    children: ReactNode;
+}) {
+    return summary === undefined ? (
+        <div className="reference-chips">{children}</div>
+    ) : (
+        <details className="reference-details" open={open || undefined}>
+            <summary title={summary}>{summary}</summary>
+            <div className="reference-chips">{children}</div>
+        </details>
+    );
+}
 
 export function ReferenceArrayInput({
     spec,
@@ -20,7 +58,15 @@ export function ReferenceArrayInput({
     const [picker, setPicker] = useState(false);
     const [manual, setManual] = useState('');
     const [duplicateError, setDuplicateError] = useState<string>();
+    const [added, setAdded] = useState(false);
     const refs: unknown[] = Array.isArray(value) ? value : [];
+    // Long lists (for example 24 identically named frames) collapse to a one-line summary.
+    const collapsible = refs.length > collapseAbove;
+    const unknown = refs.filter((hash) => typeof hash !== 'number' || !lookup(hash, table)).length;
+    const summary = collapsible
+        ? summarize(refs, (hash) => lookup(hash, table)?.name) +
+          (unknown ? ` · ${unknown} unknown` : '')
+        : '';
     const full = spec.maxItems !== undefined && refs.length >= spec.maxItems;
     const candidateIssues =
         manual.trim() === ''
@@ -39,6 +85,7 @@ export function ReferenceArrayInput({
             return;
         }
         onChange([...refs, hash]);
+        setAdded(true);
         setDuplicateError(undefined);
         setPicker(false);
         setManual('');
@@ -58,7 +105,10 @@ export function ReferenceArrayInput({
             )}
             {(spec.required || value !== undefined) && (
                 <>
-                    <div className="reference-chips">
+                    <ChipList
+                        summary={collapsible ? summary : undefined}
+                        open={added || unknown > 0}
+                    >
                         {refs.map((hash, index) => (
                             <div className="reference-chip" key={index}>
                                 <HashIdentity
@@ -79,7 +129,7 @@ export function ReferenceArrayInput({
                                 </button>
                             </div>
                         ))}
-                    </div>
+                    </ChipList>
                     <button disabled={full} onClick={() => setPicker(true)}>
                         + Add reference
                     </button>

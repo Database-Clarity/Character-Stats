@@ -211,14 +211,10 @@
         right: 0;
         top: 0;
         bottom: 0;
-        width: max-content;
-        min-width: 380px;
+        width: min(400px, 100%);
         max-width: 100%;
         z-index: 20;
         border-left: 1px solid #687280;
-    }
-    .movement-preview-layout.context-open > .context-slot {
-        min-width: min(380px, 100%);
     }
     .context-close {
         display: block;
@@ -296,7 +292,10 @@
         padding: 8px;
     }
 }
-@media (max-width: 800px) {
+/* Narrow or short viewports (phones, portrait tablets, landscape phones) share one compact shell:
+   the stat list becomes a strip and the extra toolbar actions move into the menu. Keep the query
+   in sync with `compactShellQuery` in App.tsx. */
+@media (max-width: 800px), (max-height: 500px) {
     .workspace {
         grid-template-columns: 1fr;
         grid-template-rows: 44px 40px minmax(0, 1fr);
@@ -315,7 +314,9 @@
         display: none;
     }
     .toolbar-manifest .manifest-status {
+        display: inline-block;
         max-width: 110px;
+        white-space: nowrap;
     }
     .sidebar {
         flex-direction: row;
@@ -326,7 +327,6 @@
     }
     .sidebar h2,
     .sidebar-footer,
-    .sidebar .count-badge,
     .sidebar button > :first-child {
         display: none;
     }
@@ -383,6 +383,12 @@
     .field {
         grid-template-columns: minmax(0, 1fr);
         gap: 4px;
+        padding-right: 4px;
+    }
+    /* Single column: the revert button sits in the label row, so reserve its space there on every
+       field and nothing moves when a field becomes modified. */
+    .field > .field-label {
+        padding-right: 36px;
     }
     .nested-row .field {
         grid-template-columns: minmax(0, 1fr);
@@ -393,6 +399,12 @@
     }
 }
 
+@media (max-width: 400px) {
+    .sidebar > button {
+        padding-right: 6px;
+        padding-left: 6px;
+    }
+}
 @media (max-width: 360px) {
     .brand strong {
         display: none;
@@ -410,32 +422,58 @@
     }
 }
 
+/* "On this page" is a one-line bar above the scrolling fields (never floating over them) whenever
+   it is collapsed or the pane is narrow; opened on a narrow pane its entries drop down over the
+   fields. Wide panes keep it as a side column while it is open. */
+.long-page:has(> .outline-shell:not([open])) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+.outline-shell:not([open]) {
+    position: relative;
+    width: auto;
+    max-width: none;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+}
+.outline-shell:not([open]) > summary {
+    padding: 3px 12px;
+    font-size: 10px;
+    text-align: right;
+}
 @media (max-width: 1100px) {
     .long-page {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
     }
     .outline-shell,
     .outline-shell:not([open]) {
-        position: absolute;
-        top: 4px;
-        right: 12px;
+        position: relative;
         z-index: 15;
-        width: 220px;
-        min-width: 0;
-        max-width: min(90vw, 360px);
-        max-height: min(65vh, 600px);
-        border: 1px solid var(--border);
-        border-radius: 3px;
-    }
-    .outline-shell:not([open]) {
         width: auto;
+        min-width: 0;
+        max-width: none;
+        max-height: none;
+        overflow: visible;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
     }
     .outline-shell > summary {
-        padding: 4px 8px;
-        background: #20242a;
+        padding: 3px 12px;
+        font-size: 10px;
+        text-align: right;
     }
-    .long-content {
-        padding-top: 38px;
+    .outline-shell[open] > .outline {
+        position: absolute;
+        top: 100%;
+        right: 12px;
+        z-index: 16;
+        width: min(260px, calc(100% - 24px));
+        max-height: min(60vh, 420px);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        box-shadow: 0 8px 24px #0008;
     }
 }
 
@@ -472,7 +510,7 @@ span[role='img']::after {
         grid-template-columns: 224px minmax(0, 1fr);
     }
 }
-@media (max-width: 800px) {
+@media (max-width: 800px), (max-height: 500px) {
     .entity-layout.without-context {
         grid-template-columns: 180px minmax(0, 1fr);
     }
@@ -496,5 +534,158 @@ span[role='img']::after {
         display: inline-block;
         flex: none;
         font-size: 11px;
+    }
+}
+
+/* Tablets and small laptops: while Context or Speed preview is open the panel takes the second
+   column. With an item selected the list steps aside so the field being edited never hides under
+   the panel; with nothing selected the list stays and the empty editor steps aside. Narrower
+   screens (phones) show the panel as an overlay. */
+@media (min-width: 701px) and (max-width: 1279px) {
+    .entity-layout.context-open {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    }
+    .entity-layout.context-open.detail-open > .entity-list,
+    .entity-layout.context-open:not(.detail-open) > .item-editor {
+        display: none;
+    }
+    .entity-layout.context-open > .context-slot {
+        position: static;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+    }
+}
+
+/* Phones and landscape phones: the page-heading row repeats what the stat strip and the tabs
+   already say, so it stays for screen readers only; the validation summary is one slim line. */
+@media (max-width: 600px), (max-height: 500px) {
+    .page-heading {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        min-height: 0;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+    .validation > summary {
+        min-height: 24px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+@media (max-width: 600px) {
+    .context-open .context-slot {
+        overflow: auto;
+    }
+    .movement-context {
+        height: auto;
+        min-height: 100%;
+    }
+    .movement-source-selection,
+    .movement-source-list {
+        flex: none;
+        overflow: visible;
+    }
+    .requirement-row .identity-hash,
+    .context-table .identity-hash {
+        display: none;
+    }
+    .table-scroll {
+        --scroll-bg: #181b20;
+        background:
+            linear-gradient(to right, var(--scroll-bg) 30%, transparent) 0 0 / 24px 100% no-repeat
+                local,
+            linear-gradient(to left, var(--scroll-bg) 30%, transparent) 100% 0 / 24px 100% no-repeat
+                local,
+            linear-gradient(to right, #8892a380, transparent) 0 0 / 10px 100% no-repeat scroll,
+            linear-gradient(to left, #8892a380, transparent) 100% 0 / 10px 100% no-repeat scroll;
+    }
+    .context .table-scroll {
+        --scroll-bg: #15171b;
+    }
+    .requirement-row > .hash-identity {
+        flex: 1 1 100%;
+    }
+    .editor-header {
+        min-height: 48px;
+    }
+    .editor-header .identity-hash {
+        display: none;
+    }
+}
+@media (max-width: 480px) {
+    .collapse > summary .field-key {
+        display: none;
+    }
+}
+@media (max-height: 500px) {
+    .workspace {
+        grid-template-rows: 40px 36px minmax(0, 1fr);
+    }
+    .sidebar > button {
+        min-height: 32px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+    .tabs button {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+    .editor-header {
+        min-height: 40px;
+    }
+}
+
+/* Touch: keyboard-only hints go away. */
+@media (hover: none) {
+    .sidebar-footer .help,
+    .quick-jump-button kbd,
+    .plot-hint {
+        display: none;
+    }
+}
+
+/* Touch: roomy hit areas without changing the look. Fine pointers keep the compact desktop sizes. */
+@media (pointer: coarse) {
+    :is(
+        button,
+        select,
+        summary,
+        input:not([type='checkbox']):not([type='radio']):not([type='range'])
+    ) {
+        min-height: 32px;
+    }
+    .icon-button,
+    .chip-actions button {
+        width: auto;
+        min-width: 32px;
+        height: 32px;
+    }
+    .revert-field {
+        min-width: 32px;
+        height: 32px;
+    }
+    .stepped-number-controls {
+        display: none;
+    }
+    .stepped-number-input > input[type='number'] {
+        padding-right: 6px;
+    }
+    input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        min-height: 18px;
+    }
+    .field-help {
+        box-sizing: content-box;
+        margin: -8px;
+        padding: 8px;
+    }
+    .movement-source > label.check {
+        min-height: 36px;
     }
 }
