@@ -468,6 +468,20 @@ kbd {
     flex-direction: column;
     outline: none;
 }
+.recovery-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 2px 8px 2px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+}
+.recovery-notice > span {
+    flex: 1;
+    min-width: 0;
+}
 .validation {
     font-size: 11px;
     border-bottom: 1px solid var(--border);

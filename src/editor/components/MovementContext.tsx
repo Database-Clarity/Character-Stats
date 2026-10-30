@@ -163,8 +163,8 @@ function MovementControls({ source }: { source: MovementSource }) {
                     <strong>Active sources</strong>
                 </header>
                 <p className="help">
-                    Select only sources whose conditions are met. Another WhileHeld choice replaces
-                    the current one; uncheck it to clear it. Other sources stay selected.
+                    Select only sources whose conditions are met. Another "While held" choice
+                    replaces the current one; uncheck it to clear it. Other sources stay selected.
                 </p>
                 <div className="scroll-pane movement-source-list">
                     {source.Sources.map((entry) => {

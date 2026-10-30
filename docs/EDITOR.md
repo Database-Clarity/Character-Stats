@@ -391,8 +391,8 @@ Viewport captures from the redesign walkthrough are in [editor-screenshots](edit
 
 Movement captures: [Rules, 1440px](editor-screenshots/16-wide-movement-rules.png),
 [Sources, 1440px](editor-screenshots/17-wide-movement-sources.png),
-[Sources, 1000px](editor-screenshots/18-narrow-movement-sources.png), and
-[Context overlay, 1000px](editor-screenshots/19-narrow-movement-context.png).
+[Sources, 1024px](editor-screenshots/18-narrow-movement-sources.png), and
+[Context overlay, 1024px](editor-screenshots/19-narrow-movement-context.png).
 
-Captures use 1440x900 and 1000x900 CSS viewports. The integrated browser may
+Captures use 1440x900 and 1024x768 CSS viewports. The integrated browser may
 scale raster output to its display surface; the original captures are retained.

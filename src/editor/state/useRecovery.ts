@@ -178,6 +178,7 @@ export function useRecovery(
         snapshots: record.snapshots,
         error,
         notice,
+        dismissNotice: () => setNotice(''),
         discard,
         restored,
         continueWithoutRecovery,

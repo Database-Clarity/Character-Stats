@@ -516,7 +516,19 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
                         {state.recovery.error}
                     </p>
                 )}
-                {state.recovery.notice && <p role="status">{state.recovery.notice}</p>}
+                {state.recovery.notice && (
+                    <p role="status" className="recovery-notice">
+                        <span>{state.recovery.notice}</span>
+                        <button
+                            type="button"
+                            className="icon-button"
+                            aria-label="Dismiss notice"
+                            onClick={state.recovery.dismissNotice}
+                        >
+                            ×
+                        </button>
+                    </p>
+                )}
                 <ValidationPanel onGo={go} />
                 {file ? (
                     <StatView
