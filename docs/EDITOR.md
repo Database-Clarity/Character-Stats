@@ -291,16 +291,48 @@ Select **Save** to open **Save changes**. Validation errors block saving; warnin
 do not. Enter a **Commit message** and choose **Save method**:
 
 - **Direct commit to current branch** commits the changed files to the branch selected at connection.
-- **New branch + pull request** asks for a **New branch name**, **Pull request title**, and optional **Pull request body**, then opens a PR against the selected branch.
+- **New branch + pull request** asks for a **New branch name**, **Pull request title**, and optional **Pull request body**, then opens a PR. The dialog shows **Pull request into `<base>`**, the branch the editor is connected to. The branch name is prefilled as `editor/update-YYYYMMDD-HHMM` (made unique against existing branches) and checked against git's ref-name rules (no spaces, `..`, `~^:?*[\`, leading `-` or `/`, trailing `/`, `.` or `.lock`). A name that already exists is reported as such and nothing is overwritten.
 
 The editor writes all changed files in **one commit**. Before saving, it checks
 whether the branch head moved. If `sources/**` and `locale/en.json` are unchanged
-between the loaded and current heads, it fast-forwards its stored head and continues.
-If tracked source files changed, **Branch changed** offers **Reload** (which keeps
-pending edits as a rebase attempt) or **Cancel**. After a successful save, the editor
-follows the saved branch. If the commit succeeds but PR creation fails, the changes
-remain saved on the new branch and the dialog explains that a PR must be opened
-manually.
+between the loaded and current heads, it fast-forwards its stored head and continues
+(only the `sources/` tree and `locale/en.json` are compared, never the whole repository). A
+branch update rejected as "not a fast forward" is treated the same way: the editor re-checks
+and retries up to three times. If tracked source files changed, **Branch changed** offers
+**Reload and keep pending edits** or **Cancel**.
+
+**Reload and keep pending edits** merges instead of replacing. For each file you edited, the
+editor does a three-way merge at the JSON-path level: the base is the file as you loaded it,
+*ours* is your edit and *theirs* is the freshly loaded branch version. Collections of
+entities (abilities, sources, classes and so on) merge per entity, keyed by their identity
+field (usually `Hash`), so someone else's change to another ability, or to another field of
+the same ability, is kept next to yours. Added entities from both sides are combined. Entity
+order is not merged: Save writes entities in the canonical (Name) order, so a reordering on
+either side has no lasting effect. Scalars, curves and other arrays merge as whole values.
+Changes that do not overlap apply automatically; a one-line notice lists the merged files.
+If the same value was changed differently on both sides, or one side deleted an entity the
+other edited, the Save dialog lists each conflict with its readable location (for example
+*Grenade › Abilities › Firebolt Grenade › Base cooldown (s)*) and both values. Choose **Keep
+mine** or **Take theirs** for each, then **Apply choices**. Nothing is preselected and Save
+stays blocked until every conflict is resolved. Until then your value stays in the working
+copy, so nothing is lost if you close the dialog. Unresolved conflicts are stored in local
+recovery snapshots, so after a reload or crash, restoring a snapshot brings the conflicts back
+and Save stays blocked. If you edit a conflicting value after the reload, that conflict counts
+as resolved with your newer edit: **Take theirs** never overwrites it.
+
+After a successful save, the editor follows the saved branch. If the commit succeeds but PR
+creation fails, the changes remain saved on the new branch and the dialog explains that a PR
+must be opened manually. If a network failure hides the result of a save that actually landed,
+the next **Save** notices it instead of asking you to reload. For a direct commit, it sees that
+the branch already contains your files and reports success. For a new branch + pull request,
+it sees that the branch you were about to create already holds exactly your files, reuses it
+and opens the PR.
+
+GitHub errors are translated: an invalid or expired token (401), a token without Contents,
+Pull requests or Actions permission or without organization approval (403), rate limits (403 or
+429, with the time to retry from GitHub's headers), a missing repository or branch (404) and
+network failures ("nothing was saved" when the failure came before the branch update). The
+status code is always kept in the message.
 
 **Save** writes source edits (`sources/`, `locale/en.json`) to the branch or opens
 a PR. On `master`, this redeploys the site and sends English text to Crowdin,
@@ -331,7 +363,8 @@ and can be discarded.
 
 Restoring preserves the snapshot's original branch head. Save still performs
 the normal branch-head reconciliation; if tracked source files have changed,
-**Reload** keeps the restored edits for a rebase attempt, or you can cancel.
+**Reload and keep pending edits** merges the restored edits with the new branch version as
+described above (conflicts are resolved in the Save dialog), or you can cancel.
 After a successful Save, this session's recovery data for both the original scope and the
 resulting branch scope is cleared (snapshots you continued past at startup are kept). Signing out does not erase local recovery;
 use **Recovery** in the ☰ repository menu to discard stored snapshots when you want them removed.
@@ -346,8 +379,9 @@ before its IndexedDB transaction completes; recovery is not a backup guarantee.
 ## Publish
 
 Choose **Publish** only after the source changes are committed to the selected
-branch. The **Publish data** dialog shows the branch and warns if there are unsaved
-edits; unsaved edits must be saved before dispatch. Schema versions are selected
+branch. The **Publish data** dialog shows the branch and blocks **Dispatch build workflow**
+while there are unsaved edits or unadded item drafts: save or discard them first, because the
+build only uses what is committed to GitHub. Schema versions are selected
 automatically from the code-defined major/minor baseline and changes to the
 published consumer data; there is no manual schema-version input. Raising the
 major/minor baseline publishes `X.Y.0` even when JSON is unchanged, to alert
@@ -357,8 +391,14 @@ baseline is also a no-op. Select
 **Dispatch build workflow**. After dispatch, use **Refresh runs** or **Open Actions
 workflow runs** to find the run; it may take a few seconds to appear.
 
-The dialog states the outcome explicitly: on `master`, **Build data and deploy
-Pages**; on any other branch, **Build data on `<branch>` &mdash; does not deploy Pages**.
+The dialog states the outcome explicitly: on `master` (the normal case), **Build data and
+deploy Pages**. On any other branch it is an **Experimental data build on `<branch>`**: the
+workflow commits generated data and a version bump to that branch and does not deploy Pages,
+and merging the branch into master later can conflict with master's own builds. Dispatch stays
+disabled until you tick **Commit an experimental data build and version bump to `<branch>`**.
+Recent runs are listed with their start time; each run is titled
+`Build data (<branch>) by <actor>`. Dispatch by file name requires `build-data.yml` to exist on
+the repository's default branch, so a 404 here means the workflow has not been merged yet.
 Publishing is unavailable when connected with **Local (read-only dev)** data.
 **Publish** regenerates the data apps download (`versions/<major>/` and
 `update.json`) from the source edits already committed to that branch. On `master`,
@@ -380,11 +420,11 @@ Run `npm run dev -- --port 5199 --strictPort`. Vite reads `.env.local` at the
 repository root; set `VITE_BUNGIE_API_KEY` there for live manifest access (never
 commit it). Manifest data is cached locally by its module; source edits and drafts
 are held in memory and also recorded by local recovery as described above; this
-does not commit source files. There is no merge UI, undo/redo stack, or
+does not commit source files. There is no undo/redo stack or
 non-English editing. Subclass applicability is not inferred. If a concurrent
-branch update changes tracked source files, use the offered **Reload** path to
-keep pending edits for a rebase attempt, or cancel and resolve the change
-separately. Save/Publish remain disabled for local dev data; browser verification
+branch update changes tracked source files, use the offered **Reload and keep
+pending edits** path to merge it per path and resolve any conflicts in the Save
+dialog, or cancel and resolve the change separately. Save/Publish remain disabled for local dev data; browser verification
 does not make GitHub writes or dispatch workflows.
 
 Viewport captures from the redesign walkthrough are in [editor-screenshots](editor-screenshots/).

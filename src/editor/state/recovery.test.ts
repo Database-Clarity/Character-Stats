@@ -3,6 +3,8 @@ import { GitHubClient } from '../github/client';
 import { GitHubDataSource, LocalDevDataSource } from '../data';
 import {
     appendSnapshot,
+    decodeConflicts,
+    encodeConflicts,
     MAX_AGE_MS,
     MAX_SNAPSHOTS,
     parseRecovery,
@@ -143,6 +145,57 @@ function createIndexedDBMock() {
 }
 
 afterEach(() => vi.unstubAllGlobals());
+
+describe('recovery snapshots with merge conflicts', () => {
+    const conflict = {
+        id: 'sources/movement.json#/Rules/WalkSpeed',
+        file: 'sources/movement.json',
+        path: ['Rules', { id: '7', key: 'Hash' }],
+        base: 4,
+        ours: 5,
+        theirs: undefined,
+    };
+    const withMerge = (): RecoverySnapshot => ({
+        ...snapshot(),
+        conflicts: encodeConflicts([conflict]),
+        mergedFiles: ['sources/movement.json'],
+    });
+
+    it('accepts snapshots written before conflicts were stored', () => {
+        const record = { version: 1, snapshots: [snapshot()] };
+        expect(parseRecovery(record)).toEqual(record);
+        expect(decodeConflicts(snapshot().conflicts)).toEqual([]);
+    });
+    it('round-trips conflicts through JSON, with absent values staying absent', () => {
+        const stored = JSON.parse(JSON.stringify({ version: 1, snapshots: [withMerge()] }));
+        const parsed = parseRecovery(stored);
+        expect(parsed.snapshots[0]!.mergedFiles).toEqual(['sources/movement.json']);
+        const [restored] = decodeConflicts(parsed.snapshots[0]!.conflicts);
+        expect(restored).toEqual(conflict);
+        expect(restored!.theirs).toBeUndefined();
+        expect(encodeConflicts([conflict])[0]).not.toHaveProperty('theirs');
+    });
+    it('rejects malformed conflicts and merged files', () => {
+        const parse = (extra: object) =>
+            parseRecovery({ version: 1, snapshots: [{ ...withMerge(), ...extra }] });
+        const stored = withMerge().conflicts![0]!;
+        expect(() => parse({ conflicts: {} })).toThrow('conflicts must be an array');
+        expect(() => parse({ conflicts: [{ ...stored, file: 'sources/other.json' }] })).toThrow(
+            'file must be one of the snapshot files',
+        );
+        expect(() => parse({ conflicts: [{ ...stored, path: [1] }] })).toThrow('path must be');
+        expect(() => parse({ conflicts: [stored, stored] })).toThrow('unique');
+        expect(() => parse({ conflicts: [{ ...stored, base: () => 1 }] })).toThrow('JSON values');
+        expect(() => parse({ mergedFiles: [1] })).toThrow('mergedFiles must be an array');
+    });
+    it('keeps a snapshot that differs only in its conflicts', () => {
+        const plain = snapshot('a', 1);
+        const conflicted = { ...withMerge(), id: 'b', timestamp: 2 };
+        const record = appendSnapshot({ version: 1, snapshots: [plain] }, conflicted, 3);
+        expect(record.snapshots.map((candidate) => candidate.id)).toEqual(['a', 'b']);
+        expect(appendSnapshot(record, { ...conflicted, id: 'c' }, 3).snapshots).toHaveLength(2);
+    });
+});
 
 describe('recovery snapshots', () => {
     it('parses valid records and rejects incompatible or malformed data', () => {

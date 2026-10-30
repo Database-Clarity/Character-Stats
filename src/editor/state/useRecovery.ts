@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { EditorState } from './store';
 import {
     appendSnapshot,
+    encodeConflicts,
     deleteRecovery,
     keptAfterSave,
     readRecovery,
@@ -108,6 +109,9 @@ export function useRecovery(
                 changeCount +
                 Object.keys(state.itemDrafts).length +
                 Object.values(state.drafts).filter((draft) => draft.error).length,
+            // Unresolved conflicts must survive a reload, or Save would overwrite the remote value.
+            ...(state.conflicts.length ? { conflicts: encodeConflicts(state.conflicts) } : {}),
+            ...(state.mergedFiles.length ? { mergedFiles: state.mergedFiles } : {}),
         };
         // Write each edit promptly; only the rolling history is debounced.
         const latest = appendSnapshot(history.current, snapshot, Date.now(), kept.current);
@@ -124,6 +128,8 @@ export function useRecovery(
         state.itemDrafts,
         state.head,
         state.originals,
+        state.conflicts,
+        state.mergedFiles,
         ready,
         offered,
         key,

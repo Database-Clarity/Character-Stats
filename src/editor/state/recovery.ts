@@ -1,6 +1,17 @@
 import { isRecord } from '../../core';
 import { GitHubDataSource, LocalDevDataSource, type DataSource } from '../data';
+import type { MergeConflict, PathSegment } from './merge';
 import { LOCALE_FILE, MOVEMENT_FILE } from './paths';
+
+/** A merge conflict as stored: JSON only, so absent (undefined) values are omitted. */
+export interface StoredConflict {
+    id: string;
+    file: string;
+    path: PathSegment[];
+    base?: unknown;
+    ours?: unknown;
+    theirs?: unknown;
+}
 
 export interface RecoverySnapshot {
     id: string;
@@ -11,6 +22,35 @@ export interface RecoverySnapshot {
     drafts: Record<string, { text: string; error: string }>;
     itemDrafts: Record<string, Record<string, unknown>>;
     changeCount: number;
+    /** Unresolved merge conflicts from a rebase; absent in older snapshots and when there are none. */
+    conflicts?: StoredConflict[];
+    /** Dirty files whose remote version also changed in the last rebase. */
+    mergedFiles?: string[];
+}
+
+/** Conflicts in storable form: keys holding undefined are left out. */
+export function encodeConflicts(conflicts: readonly MergeConflict[]): StoredConflict[] {
+    return conflicts.map((conflict) => {
+        const stored: StoredConflict = {
+            id: conflict.id,
+            file: conflict.file,
+            path: conflict.path,
+        };
+        for (const key of ['base', 'ours', 'theirs'] as const)
+            if (conflict[key] !== undefined) stored[key] = conflict[key];
+        return stored;
+    });
+}
+
+export function decodeConflicts(stored: readonly StoredConflict[] = []): MergeConflict[] {
+    return stored.map((conflict) => ({
+        id: conflict.id,
+        file: conflict.file,
+        path: conflict.path,
+        base: conflict.base,
+        ours: conflict.ours,
+        theirs: conflict.theirs,
+    }));
 }
 
 export interface RecoveryRecord {
@@ -155,7 +195,42 @@ function validateSnapshot(value: unknown, index: number): RecoverySnapshot {
         if (!isRecord(draft)) invalidRecovery(`${label}.itemDrafts["${key}"] must be an object`);
     }
 
+    validateMerge(snapshot, label, originals);
     return value as RecoverySnapshot;
+}
+
+function isPathSegment(value: unknown): value is PathSegment {
+    return (
+        typeof value === 'string' ||
+        (isRecord(value) && typeof value.id === 'string' && typeof value.key === 'string')
+    );
+}
+
+/** Checks the optional merge state; snapshots from before it existed simply lack both fields. */
+function validateMerge(
+    snapshot: Record<string, unknown>,
+    label: string,
+    originals: Record<string, unknown>,
+): void {
+    const { conflicts, mergedFiles } = snapshot;
+    if (mergedFiles !== undefined) {
+        if (!Array.isArray(mergedFiles) || mergedFiles.some((file) => typeof file !== 'string'))
+            invalidRecovery(`${label}.mergedFiles must be an array of strings`);
+    }
+    if (conflicts === undefined) return;
+    if (!Array.isArray(conflicts)) invalidRecovery(`${label}.conflicts must be an array`);
+    const ids = new Set<string>();
+    conflicts.forEach((entry: unknown, index) => {
+        const where = `${label}.conflicts[${index}]`;
+        const conflict = requireRecord(entry, where);
+        if (typeof conflict.id !== 'string' || conflict.id === '' || ids.has(conflict.id))
+            invalidRecovery(`${where}.id must be a unique non-empty string`);
+        ids.add(conflict.id);
+        if (typeof conflict.file !== 'string' || !Object.hasOwn(originals, conflict.file))
+            invalidRecovery(`${where}.file must be one of the snapshot files`);
+        if (!Array.isArray(conflict.path) || !conflict.path.every(isPathSegment))
+            invalidRecovery(`${where}.path must be an array of keys or entity references`);
+    });
 }
 
 export function parseRecovery(value: unknown): RecoveryRecord {
@@ -213,7 +288,9 @@ function sameStateContent(a: RecoverySnapshot, b: RecoverySnapshot): boolean {
         sameContent(a.originals, b.originals) &&
         sameContent(a.values, b.values) &&
         sameContent(a.drafts, b.drafts) &&
-        sameContent(a.itemDrafts, b.itemDrafts)
+        sameContent(a.itemDrafts, b.itemDrafts) &&
+        sameContent(a.conflicts ?? [], b.conflicts ?? []) &&
+        sameContent(a.mergedFiles ?? [], b.mergedFiles ?? [])
     );
 }
 

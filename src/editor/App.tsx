@@ -244,6 +244,9 @@ function Workspace({ onDisconnect }: { onDisconnect(): void }) {
         };
         const listener = (event: KeyboardEvent) => {
             updateStatNavigationHighlight(event);
+            // Save, Publish and Recovery may be mid-request; global shortcuts must not unmount them.
+            const modalOpen = ['save', 'publish', 'recovery'].includes(latest.current.dialog ?? '');
+            if (modalOpen) return;
             if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
                 event.preventDefault();
                 setDialog('jump');

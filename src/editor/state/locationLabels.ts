@@ -2,6 +2,8 @@ import { isRecord, movementSpec, statRegistry, type EntitySpec, type FieldSpec }
 import { collectionLabel, sentenceCase } from '../components/textFormat';
 import { identityKey, issueTarget, type ChangeTarget } from './editing';
 import { localeEntryLabel } from './localeText';
+import type { MergeConflict } from './merge';
+import { LOCALE_FILE, MOVEMENT_FILE } from './paths';
 
 const SEPARATOR = ' › ';
 
@@ -55,7 +57,10 @@ export function statRoot(sources: Sources, stat: string): Record<string, unknown
  */
 export function issueLocationLabel(path: string, sources: Sources): string {
     const target = issueTarget(path, sources);
-    if (!target) return path;
+    return target ? targetLocationLabel(target, sources) : path;
+}
+
+function targetLocationLabel(target: ChangeTarget, sources: Sources): string {
     const root = statRoot(sources, target.stat);
     const parts = [target.stat];
     if (target.tab === 'Text') parts.push('Text');
@@ -73,4 +78,61 @@ export function issueLocationLabel(path: string, sources: Sources): string {
     const field = fieldLabel(target, root);
     if (field) parts.push(field);
     return parts.join(SEPARATOR);
+}
+
+/** Readable location of a merge conflict, e.g. `Grenade › Abilities › Flux Grenade › Base cooldown (s)`. */
+export function conflictLabel(
+    conflict: MergeConflict,
+    sources: Sources,
+    fileValue: unknown,
+): string {
+    const [first, second, ...rest] = conflict.path;
+    if (conflict.file === LOCALE_FILE) {
+        const target = issueTarget(`locale.${conflict.path.map(String).join('.')}`, sources);
+        return target ? targetLocationLabel(target, sources) : conflict.file;
+    }
+    const stat =
+        conflict.file === MOVEMENT_FILE
+            ? movementSpec.name
+            : isRecord(fileValue) && typeof fileValue.Name === 'string'
+              ? fileValue.Name
+              : undefined;
+    if (!stat) return conflict.file;
+    const collection = typeof first === 'string' ? collectionsOf(stat)[first] : undefined;
+    const named = (conflict.ours ?? conflict.theirs ?? conflict.base) as unknown;
+    const target: ChangeTarget =
+        collection && typeof first === 'string'
+            ? {
+                  stat,
+                  tab: first,
+                  ...(typeof second === 'object' ? { itemKey: second.id } : {}),
+                  field: rest.map(String).join('.'),
+              }
+            : {
+                  stat,
+                  tab: 'Fields',
+                  // Stat sources nest their fields under `Fields`; movement paths are used as is.
+                  field: (first === 'Fields' && conflict.file !== MOVEMENT_FILE
+                      ? conflict.path.slice(1)
+                      : conflict.path
+                  )
+                      .map(String)
+                      .join('.'),
+              };
+    const label = targetLocationLabel(target, sources);
+    const entityName = isRecord(named) && typeof named.Name === 'string' ? named.Name : '';
+    // A removed entity is no longer in the working copy, so fall back to its name from the conflict.
+    return typeof second === 'object' &&
+        rest.length === 0 &&
+        entityName &&
+        label.endsWith(second.id)
+        ? label.slice(0, -second.id.length) + entityName
+        : label;
+}
+
+/** Short single-line text for a conflict value; `undefined` means the entry was removed. */
+export function summarizeValue(value: unknown, max = 80): string {
+    if (value === undefined) return '(removed)';
+    const text = typeof value === 'string' ? JSON.stringify(value) : (JSON.stringify(value) ?? '');
+    return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }

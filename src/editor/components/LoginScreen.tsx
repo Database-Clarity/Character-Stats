@@ -91,13 +91,13 @@ export function LoginScreen({ onLoad }: { onLoad(source: DataSource, loaded: Loa
                         return current.branch === branch ? current : { ...current, branch };
                     });
                 })
-                .catch(() => {
+                .catch((reason: unknown) => {
                     if (!cancelled)
                         setBranchList({
                             token,
                             names: [],
                             loading: false,
-                            error: 'Could not load branches. Check the token and repository access.',
+                            error: `Could not load branches. ${reason instanceof Error ? reason.message : String(reason)}`,
                         });
                 });
         }, 500);

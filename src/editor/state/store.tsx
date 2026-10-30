@@ -12,9 +12,10 @@ import {
     type ValidationIssue,
 } from '../../core';
 import type { DataSource, LoadedData } from '../data';
-import { collectChanges } from './editing';
+import { collectChanges, sameValue } from './editing';
+import { mergeFile, resolveConflict, type MergeConflict, type Resolution } from './merge';
 import { LOCALE_FILE, MOVEMENT_FILE, isStatFile } from './paths';
-import type { RecoverySnapshot } from './recovery';
+import { decodeConflicts, type RecoverySnapshot } from './recovery';
 import { useRecovery } from './useRecovery';
 export interface Draft {
     text: string;
@@ -30,6 +31,10 @@ export interface EditorState {
     drafts: Record<string, Draft>;
     itemDrafts: Record<string, Record<string, unknown>>;
     saveRevision: number;
+    /** Overlapping remote edits from the last rebase; Save is blocked until each is resolved. */
+    conflicts: MergeConflict[];
+    /** Dirty files whose remote version also changed in the last rebase. */
+    mergedFiles: string[];
 }
 type Action =
     | { type: 'restore'; snapshot: RecoverySnapshot }
@@ -40,6 +45,7 @@ type Action =
     | { type: 'discard'; file?: string }
     | { type: 'fast-forward'; head: string }
     | { type: 'rebase'; files: Record<string, string>; head: string; preserve: string[] }
+    | { type: 'resolve-conflict'; id: string; choice: Resolution }
     | { type: 'saved'; files: Record<string, string>; head: string; source: DataSource };
 
 function isStatSource(value: unknown): value is StatSource {
@@ -238,6 +244,8 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
                 values: action.snapshot.values,
                 drafts: action.snapshot.drafts,
                 itemDrafts: action.snapshot.itemDrafts,
+                conflicts: decodeConflicts(action.snapshot.conflicts),
+                mergedFiles: action.snapshot.mergedFiles ?? [],
             };
         }
         case 'item-draft': {
@@ -260,10 +268,19 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
         case 'fast-forward':
             return { ...state, head: action.head };
         case 'rebase': {
+            // Three-way merge per dirty file: base = old original, ours = edits, theirs = remote.
             const originalValues = parseFiles(action.files);
-            const values = { ...originalValues };
+            const values: Record<string, unknown> = { ...originalValues };
+            const conflicts: MergeConflict[] = [];
+            const mergedFiles: string[] = [];
             for (const path of action.preserve) {
-                if (Object.hasOwn(state.values, path)) values[path] = state.values[path];
+                if (!Object.hasOwn(state.values, path)) continue;
+                const base = state.originalValues[path];
+                const merge = mergeFile(path, base, state.values[path], originalValues[path]);
+                if (merge.value === undefined) delete values[path];
+                else values[path] = merge.value;
+                conflicts.push(...merge.conflicts);
+                if (!sameValue(base, originalValues[path])) mergedFiles.push(path);
             }
             return {
                 ...state,
@@ -272,6 +289,21 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
                 originalValues,
                 originalSerialized: originalSerialization(originalValues),
                 values,
+                conflicts,
+                mergedFiles,
+            };
+        }
+        case 'resolve-conflict': {
+            const conflict = state.conflicts.find((candidate) => candidate.id === action.id);
+            if (!conflict) return state;
+            const values = { ...state.values };
+            const value = resolveConflict(values[conflict.file], conflict, action.choice);
+            if (value === undefined) delete values[conflict.file];
+            else values[conflict.file] = value;
+            return {
+                ...state,
+                values,
+                conflicts: state.conflicts.filter((candidate) => candidate.id !== action.id),
             };
         }
         case 'discard': {
@@ -280,6 +312,12 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
                 : state.originalValues;
             return {
                 ...state,
+                conflicts: action.file
+                    ? state.conflicts.filter((conflict) => conflict.file !== action.file)
+                    : [],
+                mergedFiles: action.file
+                    ? state.mergedFiles.filter((path) => path !== action.file)
+                    : [],
                 values: { ...state.values, ...restoredValues },
                 itemDrafts: Object.fromEntries(
                     Object.entries(state.itemDrafts).filter(
@@ -294,10 +332,8 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
             };
         }
         case 'saved': {
-            const originalValues = { ...state.originalValues };
-            for (const path of Object.keys(action.files)) {
-                if (Object.hasOwn(state.values, path)) originalValues[path] = state.values[path];
-            }
+            // Originals come from the committed text, not from edits made after the snapshot.
+            const originalValues = { ...state.originalValues, ...parseFiles(action.files) };
             return {
                 ...state,
                 source: action.source,
@@ -306,6 +342,8 @@ export function editorReducer(state: EditorState, action: Action): EditorState {
                 originalValues,
                 originalSerialized: { ...state.originalSerialized, ...action.files },
                 drafts: {},
+                conflicts: state.conflicts.filter((conflict) => !(conflict.file in action.files)),
+                mergedFiles: [],
                 saveRevision: state.saveRevision + 1,
             };
         }
@@ -330,6 +368,8 @@ export function createEditorState({
         drafts: {},
         itemDrafts: {},
         saveRevision: 0,
+        conflicts: [],
+        mergedFiles: [],
     };
 }
 

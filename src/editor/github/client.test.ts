@@ -1,5 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { GitHubClient } from './client';
+import {
+    BranchExistsError,
+    GitHubClient,
+    GitHubError,
+    NetworkError,
+    StaleHeadError,
+    describeFailure,
+} from './client';
 const repo = { owner: 'example', name: 'stats', branch: 'feature/data' };
 const client = new GitHubClient('test-token', repo);
 function mockResponses(responses: unknown[]) {
@@ -11,6 +18,69 @@ function mockResponses(responses: unknown[]) {
     });
 }
 afterEach(() => vi.restoreAllMocks());
+interface Snapshot {
+    sources: string;
+    localeDir: string;
+    localeBlob: string;
+    truncated?: boolean;
+}
+/** Routes by URL because the two commits are read concurrently. `heads` answers branch reads. */
+function mockTracked(heads: string[], old: Snapshot, next: Snapshot) {
+    const side = (name: string, snap: Snapshot) => ({
+        [`git/commits/${name}-head`]: { tree: { sha: `${name}-tree` } },
+        [`git/trees/${name}-tree`]: {
+            truncated: snap.truncated === true,
+            tree: [
+                { path: 'sources', type: 'tree', sha: snap.sources },
+                { path: 'locale', type: 'tree', sha: snap.localeDir },
+                { path: 'README.md', type: 'blob', sha: `readme-${name}` },
+            ],
+        },
+        [`git/trees/${snap.localeDir}`]: {
+            truncated: false,
+            tree: [
+                { path: 'en.json', type: 'blob', sha: snap.localeBlob },
+                { path: 'fr.json', type: 'blob', sha: `fr-${snap.localeDir}` },
+            ],
+        },
+    });
+    const routes: Record<string, unknown> = { ...side('old', old), ...side('new', next) };
+    return vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
+        const url = String(input);
+        if (url.includes('/git/ref/heads/'))
+            return new Response(JSON.stringify({ object: { sha: heads.shift() } }));
+        const route = Object.keys(routes).find((key) => url.endsWith(`/${key}`));
+        return route
+            ? new Response(JSON.stringify(routes[route]))
+            : new Response('{"message":"Not Found"}', { status: 404 });
+    });
+}
+const snap = (sources = 'src', localeDir = 'loc', localeBlob = 'en'): Snapshot => ({
+    sources,
+    localeDir,
+    localeBlob,
+});
+type Reply = { status: number; body?: unknown; headers?: Record<string, string> } | Error;
+function mockReplies(replies: Reply[]) {
+    return vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {
+        const reply = replies.shift();
+        if (!reply) throw new Error('unexpected fetch');
+        if (reply instanceof Error) throw reply;
+        return new Response(reply.body === undefined ? null : JSON.stringify(reply.body), {
+            status: reply.status,
+            ...(reply.headers ? { headers: reply.headers } : {}),
+        });
+    });
+}
+const ref = (sha: string): Reply => ({ status: 200, body: { object: { sha } } });
+/** Replies for a commit that reaches the ref update step. */
+const commitReplies = (): Reply[] => [
+    ref('head'),
+    { status: 200, body: { tree: { sha: 'tree' } } },
+    { status: 201, body: { sha: 'blob' } },
+    { status: 201, body: { sha: 'tree2' } },
+    { status: 201, body: { sha: 'commit' } },
+];
 describe('GitHub editor REST client', () => {
     it('decodes UTF-8 file contents and encodes branch names', async () => {
         const text = 'English → 日本語';
@@ -99,92 +169,50 @@ describe('GitHub editor REST client', () => {
     it('refuses to save if the loaded branch head is stale', async () => {
         const fetch = mockResponses([{ object: { sha: 'someone-else' } }]);
         await expect(client.commitFiles({ a: 'a' }, 'Change', 'head')).rejects.toThrow(
-            'branch changed',
+            StaleHeadError,
         );
         expect(fetch).toHaveBeenCalledTimes(1);
     });
     it('fast-forwards across commits that only change untracked files', async () => {
-        mockResponses([
-            { object: { sha: 'new-head' } },
-            { tree: { sha: 'old-tree' } },
-            { tree: { sha: 'new-tree' } },
-            {
-                truncated: false,
-                tree: [
-                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-blob' },
-                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
-                    { path: 'README.md', type: 'blob', sha: 'old-readme' },
-                ],
-            },
-            {
-                truncated: false,
-                tree: [
-                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-blob' },
-                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
-                    { path: 'README.md', type: 'blob', sha: 'new-readme' },
-                ],
-            },
-            { object: { sha: 'new-head' } },
-        ]);
+        const fetch = mockTracked(
+            ['new-head', 'new-head'],
+            snap('src', 'loc-old', 'en'),
+            snap('src', 'loc-new', 'en'),
+        );
         expect(await client.checkTrackedFiles('old-head')).toEqual({
             head: 'new-head',
             changed: false,
         });
+        // Never a recursive whole-repo tree.
+        expect(fetch.mock.calls.some(([url]) => String(url).includes('recursive'))).toBe(false);
     });
-    it('requires reload when a tracked source or locale file changed', async () => {
-        mockResponses([
-            { object: { sha: 'new-head' } },
-            { tree: { sha: 'old-tree' } },
-            { tree: { sha: 'new-tree' } },
-            {
-                truncated: false,
-                tree: [
-                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-before' },
-                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
-                ],
-            },
-            {
-                truncated: false,
-                tree: [
-                    { path: 'sources/stats/a.json', type: 'blob', sha: 'source-after' },
-                    { path: 'locale/en.json', type: 'blob', sha: 'locale-blob' },
-                ],
-            },
-            { object: { sha: 'new-head' } },
-        ]);
+    it('requires reload when the sources tree changed', async () => {
+        mockTracked(['new-head', 'new-head'], snap('src-before'), snap('src-after'));
         expect(await client.checkTrackedFiles('old-head')).toEqual({
             head: 'new-head',
             changed: true,
         });
     });
     it('treats a changed English locale file as a tracked conflict', async () => {
-        mockResponses([
-            { object: { sha: 'new-head' } },
-            { tree: { sha: 'old-tree' } },
-            { tree: { sha: 'new-tree' } },
-            {
-                truncated: false,
-                tree: [{ path: 'locale/en.json', type: 'blob', sha: 'old-locale' }],
-            },
-            {
-                truncated: false,
-                tree: [{ path: 'locale/en.json', type: 'blob', sha: 'new-locale' }],
-            },
-            { object: { sha: 'new-head' } },
-        ]);
+        mockTracked(
+            ['new-head', 'new-head'],
+            snap('src', 'loc-old', 'old-locale'),
+            snap('src', 'loc-new', 'new-locale'),
+        );
         expect(await client.checkTrackedFiles('old-head')).toEqual({
             head: 'new-head',
             changed: true,
         });
     });
+    it('reports a head that moved again during the comparison as changed', async () => {
+        mockTracked(['new-head', 'newer-head'], snap(), snap());
+        expect(await client.checkTrackedFiles('old-head')).toEqual({
+            head: 'newer-head',
+            changed: true,
+        });
+    });
     it('refuses to compare a truncated Git tree rather than risk an overwrite', async () => {
-        mockResponses([
-            { object: { sha: 'new-head' } },
-            { tree: { sha: 'old-tree' } },
-            { tree: { sha: 'new-tree' } },
-            { truncated: true, tree: [] },
-            { truncated: false, tree: [] },
-        ]);
+        mockTracked(['new-head', 'new-head'], snap(), { ...snap(), truncated: true });
         await expect(client.checkTrackedFiles('old-head')).rejects.toThrow('truncated');
     });
     it('creates a new branch pointing at the single commit without changing the base branch', async () => {
@@ -227,6 +255,7 @@ describe('GitHub editor REST client', () => {
                         display_title: 'Build data',
                         status: 'completed',
                         conclusion: 'success',
+                        created_at: '2026-10-30T12:00:00Z',
                     },
                 ],
             },
@@ -244,6 +273,7 @@ describe('GitHub editor REST client', () => {
                 display_title: 'Build data',
                 status: 'completed',
                 conclusion: 'success',
+                created_at: '2026-10-30T12:00:00Z',
             },
         ]);
         expect(fetch.mock.calls[1]?.[0]).toContain('branch=feature%2Fdata');
@@ -261,5 +291,116 @@ describe('GitHub editor REST client', () => {
             new Response(JSON.stringify({ message: 'Permission denied' }), { status: 403 }),
         );
         await expect(client.branchHead()).rejects.toThrow('GitHub 403: Permission denied');
+    });
+    it('turns a rejected non-fast-forward ref update into a typed stale-head error', async () => {
+        mockReplies([
+            ...commitReplies(),
+            { status: 422, body: { message: 'Update is not a fast forward' } },
+        ]);
+        await expect(client.commitFiles({ a: 'a' }, 'Change', 'head')).rejects.toBeInstanceOf(
+            StaleHeadError,
+        );
+    });
+    it('leaves other 422 ref failures as GitHub errors', async () => {
+        mockReplies([
+            ...commitReplies(),
+            { status: 422, body: { message: 'Object does not exist' } },
+        ]);
+        const error = await client.commitFiles({ a: 'a' }, 'Change', 'head').catch((e) => e);
+        expect(error).toBeInstanceOf(GitHubError);
+        expect(error.status).toBe(422);
+    });
+    it('maps a duplicate new branch to a clear message', async () => {
+        mockReplies([
+            ...commitReplies(),
+            { status: 422, body: { message: 'Reference already exists' } },
+        ]);
+        const error = await client
+            .commitFiles({ a: 'a' }, 'Change', 'head', 'editor/x')
+            .catch((e) => e);
+        expect(error).toBeInstanceOf(BranchExistsError);
+        expect(error.message).toContain('"editor/x" already exists');
+    });
+    it('says nothing was saved for network failures before the ref update', async () => {
+        mockReplies([
+            ref('head'),
+            { status: 200, body: { tree: { sha: 'tree' } } },
+            new TypeError('Failed to fetch'),
+        ]);
+        const error = await client.commitFiles({ a: 'a' }, 'Change', 'head').catch((e) => e);
+        expect(error).toBeInstanceOf(NetworkError);
+        expect(error.message).toBe(
+            'Network error \u2014 check your connection; nothing was saved.',
+        );
+        expect(error.maybeSaved).toBe(false);
+    });
+    it('flags a network failure during the ref update as possibly saved', async () => {
+        mockReplies([...commitReplies(), new TypeError('Failed to fetch')]);
+        const error = await client.commitFiles({ a: 'a' }, 'Change', 'head').catch((e) => e);
+        expect(error).toBeInstanceOf(NetworkError);
+        expect(error.maybeSaved).toBe(true);
+    });
+    it('reports a network failure on reads as a network error', async () => {
+        mockReplies([new TypeError('Failed to fetch')]);
+        await expect(client.branchHead()).rejects.toThrow('Network error');
+    });
+    it('reads the rate limit reset header into a retry time', async () => {
+        const reset = Math.floor(new Date(2026, 9, 30, 14, 5).getTime() / 1000);
+        mockReplies([
+            {
+                status: 403,
+                body: { message: 'API rate limit exceeded' },
+                headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': String(reset) },
+            },
+        ]);
+        await expect(client.branchHead()).rejects.toThrow(
+            'GitHub 403: Rate limit reached. Try again at 14:05.',
+        );
+    });
+});
+
+describe('describeFailure', () => {
+    const now = new Date(2026, 9, 30, 12, 0, 0);
+    it('explains an invalid or expired token', () => {
+        expect(describeFailure({ status: 401, message: 'Bad credentials' })).toMatch(
+            /^GitHub 401: .*invalid or has expired/,
+        );
+    });
+    it('explains a fine-grained token without permission', () => {
+        const text = describeFailure({
+            status: 403,
+            message: 'Resource not accessible by personal access token',
+        });
+        expect(text).toMatch(/^GitHub 403: Resource not accessible by personal access token/);
+        expect(text).toMatch(/Contents.*Pull requests.*Actions/);
+    });
+    it('uses retry-after seconds for secondary rate limits', () => {
+        const secondary = { status: 403, message: 'secondary rate limit', retryAfter: '90' };
+        expect(describeFailure(secondary, now)).toBe(
+            'GitHub 403: Rate limit reached. Try again at 12:01.',
+        );
+        expect(
+            describeFailure({ status: 429, message: 'Too Many Requests', retryAfter: '3600' }, now),
+        ).toContain('Try again at 13:00.');
+    });
+    it('falls back to a generic wait when no reset time is known', () => {
+        expect(describeFailure({ status: 429, message: 'slow down' }, now)).toBe(
+            'GitHub 429: Rate limit reached. Try again in a few minutes.',
+        );
+    });
+    it('treats a plain 403 as a permission error, not a rate limit', () => {
+        expect(describeFailure({ status: 403, message: 'Permission denied' })).toBe(
+            'GitHub 403: Permission denied',
+        );
+    });
+    it('explains 404', () => {
+        expect(describeFailure({ status: 404, message: 'Not Found' })).toMatch(
+            /^GitHub 404: Not found.*no access/,
+        );
+    });
+    it('keeps unknown statuses verbatim', () => {
+        expect(describeFailure({ status: 422, message: 'Validation Failed' })).toBe(
+            'GitHub 422: Validation Failed',
+        );
     });
 });

@@ -207,3 +207,20 @@ progress {
         outline-color: transparent;
     }
 }
+.merge-conflicts label.conflict-choice {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-weight: 400;
+    margin: 2px 0;
+}
+.merge-conflicts input[type='radio'] {
+    width: auto;
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    flex: none;
+}
+.merge-conflicts code {
+    overflow-wrap: anywhere;
+}

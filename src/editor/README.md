@@ -105,10 +105,31 @@ middleware or configuration changes are needed.
   and confirmed file/all discard.
 - `SaveDialog` serializes with core `serializeSource`; English JSON retains insertion
   order, four spaces, and trailing LF. A save uses one commit and an unforced ref
-  update or a new branch + PR. If the branch head moves but `sources/**` and
-  `locale/en.json` are unchanged, the stored head fast-forwards; otherwise the user
-  can reload while keeping pending edits for a rebase attempt, or cancel. A PR failure
-  after commit is reported separately, and the editor switches to the saved branch.
+  update or a new branch + PR (the dialog shows the PR base, prefills a unique
+  `editor/update-YYYYMMDD-HHMM` name and validates names with `github/refNames.ts`).
+  `GitHubClient.checkTrackedFiles` compares only the `sources/` tree sha and the
+  `locale/en.json` blob (non-recursive trees, so no truncation), and a rejected non-fast-forward
+  ref update becomes a typed `StaleHeadError` that re-enters the retry loop (client errors are
+  typed: `GitHubError` with readable `describeFailure` text, `StaleHeadError`,
+  `BranchExistsError`, `NetworkError.maybeSaved`). If the branch head moves but `sources/**` and
+  `locale/en.json` are unchanged, the stored head fast-forwards; otherwise the user can
+  reload and merge, or cancel. The `rebase` action runs `state/merge.ts`: a pure three-way
+  JSON-path merge per dirty file (base = old `originalValues`, ours = `values`, theirs = the
+  reloaded file). Entity collections merge per entity using `identityKey` from the registry
+  (`identityResolver`); every other array and scalar merges as a whole value. Overlaps become
+  `state.conflicts` (our value stays in `values` until resolved); the Save dialog lists them
+  with `conflictLabel`, offers Keep mine / Take theirs (nothing preselected) and blocks Save
+  until the `resolve-conflict` action has cleared them. `resolveConflict` applies against the
+  current value: a path edited after the merge (`editedSinceMerge`) counts as resolved "mine".
+  Conflict IDs are JSON-pointer-escaped paths. Unresolved `conflicts` and `mergedFiles` are
+  stored in recovery snapshots (`encodeConflicts`/`decodeConflicts`, validated in
+  `parseRecovery`; older snapshots lack the fields), so a restored session stays blocked.
+  `saved` derives `originalValues` from
+  the committed text, so edits made after the snapshot stay dirty. If the remote already holds
+  our serialized files (a save whose response was lost), `alreadyOnRemote` lets the next Save
+  adopt it. In PR mode a `BranchExistsError` triggers the same check against the existing
+  branch (`existingBranchHead` in SaveDialog) and reuses it when it holds our files. A PR failure after commit is reported separately, and the editor switches to the
+  saved branch.
 - Local recovery uses IndexedDB with independent scopes for each GitHub owner/repository/branch
   and for Local (read-only dev); it never stores GitHub credentials. Each edit queues an
   asynchronous latest-state write, while the rolling history is debounced by 750 ms,
@@ -127,8 +148,10 @@ middleware or configuration changes are needed.
   to Recovery (☰ menu) to discard it. An edit can still be lost if a crash occurs before its
   asynchronous transaction completes; snapshots are recovery, not backup or undo/redo history.
 - `PublishDialog` dispatches `build-data.yml` on the saved branch and shows recent
-  runs. It states that `master` builds data and deploys Pages, while other branches
-  build data only. Version selection is automatic; there is no manual schema-version
+  runs with their start time (`run-name` makes each run distinguishable). `master` builds
+  data and deploys Pages; any other branch is an experimental build that commits generated
+  data and a version bump to it, so Dispatch needs an explicit confirmation checkbox. Dispatch
+  is also blocked by dirty files and unadded item drafts. Version selection is automatic; there is no manual schema-version
   input. Raising major/minor publishes `X.Y.0` even with identical consumer JSON as
   a feature alert; only identical pretty/minified outputs at the same major/minor
   are a no-op. Local dev mode cannot save or publish.
@@ -230,9 +253,9 @@ repository menu to discard those snapshots. Browser storage is not encrypted: us
 Edits and unadded item drafts remain in memory while editing and are also recorded
 by local recovery; closing/reloading still warns for dirty files or unadded item
 drafts. Recovery writes are asynchronous and do not guarantee that the last edit
-survives a crash before its IndexedDB transaction completes. There is no merge UI,
-undo/redo stack, or non-English editing. Concurrent source changes during editing
-offer reload with pending edits as a rebase attempt, or cancel. A workflow run may
+survives a crash before its IndexedDB transaction completes. There is no
+undo/redo stack or non-English editing. Concurrent source changes during editing
+offer reload with a per-path merge (conflicts are resolved in the Save dialog), or cancel. A workflow run may
 not be listed immediately after dispatch; use Refresh runs or the Actions link.
 Subclass-filter overrides remain unresolved as reported by core. Tooltip charge
 preview uses the first stored charge scaling entry; cooldown preview uses the
@@ -241,5 +264,5 @@ selected ability and current overrides.
 Validation: `npm run format`, `npm run typecheck`, `npm test`, `npm run build`,
 `npm run validate`. Run `npm run schema` and check `git diff -- schema.json` when
 changing spec hints. Pure regression tests live in `state/editing.test.ts`,
-`state/store.test.ts`, and `github/client.test.ts`; manifest tests are colocated
+`state/store.test.ts`, `state/merge.test.ts`, `state/conflictLabels.test.ts`, `github/client.test.ts` and `github/refNames.test.ts`; manifest tests are colocated
 with its module. Redesign captures live in `docs/editor-screenshots/`.
