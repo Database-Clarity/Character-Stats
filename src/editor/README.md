@@ -48,10 +48,12 @@ middleware or configuration changes are needed.
   focus stable across identity changes. `ItemMenu` is a keyboard-operable menu
   portaled outside scrolling panes, so it cannot be clipped by list boundaries; its row
   triggers stay faintly visible until hover, focus or selection.
-  On widths below 1280px, Context becomes an explicitly toggled side overlay. At 600px
+  On widths of 701-1279px, Context opens beside the editor and the list steps aside while an
+  item is selected (with no selection the empty editor steps aside instead); below that it is an
+  overlay `min(400px, 100%)` wide. At 600px
   and below the list and the editor take turns in one column: selecting an item or group
   shows its editor, and **← List** (or browser Back) returns to the list. Draft **Discard**
-  confirms when the draft has entered values; item **Revert changes** confirms when more than
+  confirms only when the draft differs from its initial value; item **Revert changes** confirms when more than
   one field changed or the item is unsaved. Quick jump and phone selection focus the item
   heading; **+** focuses the new draft's first field.
 - `RequirementEditor` handles reference arrays with subclass/parallel-column
@@ -92,7 +94,7 @@ middleware or configuration changes are needed.
   selecting a WhileHeld source replaces the previous one, and unchecking it clears
   that selection without removing Always or Conditional sources. The summary and
   source selector stay together in one panel; below 1280px that panel is a toggled
-  overlay opened with **Speed preview**, like Context on other stats.
+  panel opened with **Speed preview**, like Context on other stats.
   Invalid data and conflicting ADS choices show errors, not fallback speeds.
   Source RefType scopes lookups/icons/hash pickers to items or item categories;
   collection manifest drafts infer RefType from the picked definition table.
@@ -145,6 +147,16 @@ middleware or configuration changes are needed.
 - `textFormat.ts` holds count pluralization (`1 error`, `2 files`) and the display
   name for collection keys (`SuperAbilities` shows as **Super abilities**; Quick jump
   still matches the raw key).
+- `HashInput` is the digits-only text input for `hash` fields (no stepping, at most 10 digits); `NumberInput` sets
+  `inputMode` (decimal by default, numeric for integers). `draftValidation.ts` is a context that
+  hides a new draft's field errors until the field blurs or Add is attempted (`ItemEditorPane` owns
+  the state). `curveChanges.ts` marks segment/value inputs that differ from saved with
+  `data-changed`, which `StatView` prefers over the first input only for change navigation (a request
+  carrying a change `id`: Alt+Up/Down, Changes dock **Go to**), not validation or Quick jump.
+  `groupRowsByBaseCooldown` accepts a cooldown snapshot so `EntityRows` keeps rows in their group
+  while a text field in the editor has focus (`nextCooldownSnapshot`); any other value change, such as
+  a revert or restore, regroups immediately. `ManifestPicker` takes
+  `existing` hashes (listed last, disabled); `pickedEntry` fills an empty Name on a hash pick.
 - `numberStep.ts` is the tested numeric-step helper: integer fields step by one,
   fields constrained to 0–1 by hundredths, and other values by their decimal
   precision (including scientific notation). Numeric arrays and curve values use it.
@@ -195,6 +207,9 @@ own keys, so hints do not leak into `schema.json` (verified byte-for-byte).
 Plain CSS is split into base/shell, forms, collections, overlays, and a small
 responsive entry stylesheet. It uses neutral graphite surfaces, 13px base text, 4px spacing units,
 24-28px controls, hairline borders, 3px corners, and Clarity green/cyan accents.
+The compact phone shell is `(max-width: 800px), (max-height: 500px)` in `styles.css` and
+`compactShellQuery` in `App.tsx`; keep the two in sync. Touch sizing lives in one
+`@media (pointer: coarse)` block at the end of `styles.css`.
 There are no UI libraries, decorative shadows, or page-level card stacks. The
 logo in `assets/` is also the favicon. Focus rings, explicit labels, native
 collapsible summaries, dialogs, and keyboard menus are retained.

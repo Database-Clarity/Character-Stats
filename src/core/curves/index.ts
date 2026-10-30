@@ -30,17 +30,36 @@ function bounds(segment: CurveSegment): Domain {
         : [segment.From, segment.To];
 }
 
+/** One issue per run of consecutive uncovered or overlapping x values. */
 export function checkCoverage(segments: readonly CurveSegment[], domain: Domain): CurveIssue[] {
     const errors: CurveIssue[] = [];
+    let run: { kind: string; from: number; to: number } | undefined;
+    const flush = () => {
+        if (run) {
+            const range = run.from === run.to ? '' + run.from : run.from + '–' + run.to;
+            errors.push({
+                x: run.from,
+                message: run.kind + ' x ' + range,
+            });
+        }
+        run = undefined;
+    };
     for (let x = domain[0]; x <= domain[1]; x++) {
         const count = segments.filter((segment) => {
             const [from, to] = bounds(segment);
             return from <= x && x <= to;
         }).length;
-        if (count !== 1) {
-            errors.push({ x, message: (count === 0 ? 'Uncovered' : 'Overlapping') + ' x=' + x });
+        const kind = count === 1 ? undefined : count === 0 ? 'Uncovered' : 'Overlapping';
+        if (run && run.kind === kind) {
+            run.to = x;
+            continue;
+        }
+        flush();
+        if (kind) {
+            run = { kind, from: x, to: x };
         }
     }
+    flush();
     return errors;
 }
 

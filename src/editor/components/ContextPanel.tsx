@@ -292,7 +292,7 @@ export function ContextPanel({
                                     {selectedBase ? `${selectedBase.cooldown} s` : 'Invalid data'}
                                 </strong>
                                 <small>
-                                    {scaled && statValue < 100
+                                    {scaled
                                         ? `Cooldown at ${statValue} ${source.Name}`
                                         : 'Base cooldown'}
                                 </small>

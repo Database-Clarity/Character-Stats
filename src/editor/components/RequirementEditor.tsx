@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useRef, useState, type KeyboardEvent } from 'react';
 import { validateField, type FieldSpec } from '../../core';
 import { useManifest } from '../manifest';
 import { editRequirement, equal, revertRequirementTable, toggleParallel } from '../state/editing';
 import { HashIdentity } from './ManifestUI';
+import { filterPickerGroups } from './manifestHelpers';
+import { DraftValidationContext, issuesVisible } from './draftValidation';
 import { Modal } from './Modal';
 import { numberStep } from './numberStep';
 import { NumberInput } from './NumberInput';
@@ -25,9 +27,11 @@ export function RequirementEditor({
     fieldPrefix?: string;
 }) {
     const { subclasses, search } = useManifest();
+    const draftValidation = useContext(DraftValidationContext);
     const [picker, setPicker] = useState(false);
     const [query, setQuery] = useState('');
     const [manual, setManual] = useState('');
+    const searchBox = useRef<HTMLInputElement>(null);
     const rawRequirements = value[field.key];
     const requirements: unknown[] = Array.isArray(rawRequirements) ? rawRequirements : [];
     const abilityNames = new Map(
@@ -61,8 +65,33 @@ export function RequirementEditor({
     ];
     function add(hash: number) {
         onChange(editRequirement(value, fields, field.key, { type: 'add', hash }));
+    }
+    const added = new Set(requirements);
+    const manualHash = Number(manual);
+    const manualValid =
+        /^-?\d+$/.test(manual.trim()) &&
+        Math.abs(manualHash) <= 4294967295 &&
+        !added.has(manualHash);
+    function closePicker() {
         setPicker(false);
         setQuery('');
+        setManual('');
+    }
+    // Only errors the author may see yet; array-level ones mark the Add button, cell ones the cell.
+    const shown = [field, ...parallel]
+        .filter((f) => issuesVisible(draftValidation, `${fieldPrefix}${f.key}`))
+        .map((f) => ({ f, issues: validateField(f, value[f.key], value) }));
+    const tableInvalid = shown.some(({ issues }) =>
+        issues.some((issue) => !issue.path.endsWith(']')),
+    );
+    const cellInvalid = (key: string, index: number) =>
+        shown.some(({ issues }) => issues.some((issue) => issue.path === `${key}[${index}]`));
+    function moveToResults(event: KeyboardEvent<HTMLElement>) {
+        event.preventDefault();
+        event.currentTarget
+            .closest('dialog')
+            ?.querySelector<HTMLButtonElement>('.picker-results button:not(:disabled)')
+            ?.focus();
     }
     return (
         <div className="requirements-editor">
@@ -87,7 +116,9 @@ export function RequirementEditor({
                         {requirements.length}{' '}
                         {requirements.length === 1 ? 'reference' : 'references'}
                     </span>
-                    <button onClick={() => setPicker(true)}>+ Add requirement</button>
+                    <button aria-invalid={tableInvalid} onClick={() => setPicker(true)}>
+                        + Add requirement
+                    </button>
                 </div>
                 <p className="help">{field.help ?? field.description}</p>
                 <div className="table-scroll">
@@ -203,10 +234,16 @@ export function RequirementEditor({
                                         </div>
                                     </td>
                                     {parallel.map((f) => (
-                                        <td key={f.key}>
+                                        <td key={f.key} data-field={`${fieldPrefix}${f.key}`}>
                                             {Array.isArray(value[f.key]) ? (
                                                 <NumberInput
+                                                    inputMode={
+                                                        f.kind === 'intArray' || f.items?.integer
+                                                            ? 'numeric'
+                                                            : 'decimal'
+                                                    }
                                                     aria-label={`${f.key} requirement ${index}`}
+                                                    aria-invalid={cellInvalid(f.key, index)}
                                                     step={numberStep(
                                                         (value[f.key] as number[])[index],
                                                         f.items,
@@ -247,68 +284,108 @@ export function RequirementEditor({
                     </table>
                 </div>
             </div>
-            {[field, ...parallel]
-                .flatMap((f) => validateField(f, value[f.key], value))
+            {shown
+                .flatMap(({ issues }) => issues)
                 .map((issue, i) => (
                     <p className="error" key={i}>
                         {issue.message}
                     </p>
                 ))}
             {picker && (
-                <Modal title="Add requirement" onClose={() => setPicker(false)}>
+                <Modal title="Add requirement" onClose={closePicker}>
                     <label>
                         Search abilities or subclasses
                         <input
+                            ref={searchBox}
                             data-autofocus
                             type="search"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'ArrowDown') moveToResults(e);
+                            }}
                         />
                     </label>
-                    <div className="picker-results">
-                        {options.map((group) => (
+                    <div
+                        className="picker-results"
+                        onKeyDown={(e) => {
+                            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+                            e.preventDefault();
+                            const buttons = Array.from(
+                                e.currentTarget.querySelectorAll<HTMLButtonElement>(
+                                    'button:not(:disabled)',
+                                ),
+                            );
+                            const index = buttons.indexOf(
+                                document.activeElement as HTMLButtonElement,
+                            );
+                            buttons[
+                                (index + (e.key === 'ArrowDown' ? 1 : -1) + buttons.length) %
+                                    buttons.length
+                            ]?.focus();
+                        }}
+                    >
+                        {filterPickerGroups(options, query).map((group) => (
                             <section key={group.title}>
                                 <h3>{group.title}</h3>
-                                {group.items
-                                    .filter((item) =>
-                                        `${item.name} ${item.hash}`
-                                            .toLowerCase()
-                                            .includes(query.toLowerCase()),
-                                    )
-                                    .map((item) => (
-                                        <button key={item.hash} onClick={() => add(item.hash)}>
-                                            <HashIdentity
-                                                hash={item.hash}
-                                                requirement={
-                                                    !!field.refSubclassFilters || !!field.itemRef
-                                                }
-                                                name={item.name}
-                                                compact
-                                            />
-                                        </button>
-                                    ))}
+                                {group.items.map((item) => (
+                                    <button
+                                        key={item.hash}
+                                        disabled={added.has(item.hash)}
+                                        aria-pressed={added.has(item.hash)}
+                                        onClick={() => {
+                                            add(item.hash);
+                                            searchBox.current?.focus();
+                                        }}
+                                    >
+                                        <HashIdentity
+                                            hash={item.hash}
+                                            requirement={
+                                                !!field.refSubclassFilters || !!field.itemRef
+                                            }
+                                            name={item.name}
+                                            compact
+                                        />
+                                        {added.has(item.hash) && (
+                                            <span className="badge">✓ added</span>
+                                        )}
+                                    </button>
+                                ))}
                             </section>
                         ))}
                     </div>
                     <label className="inline">
                         Manual hash (negative for subclass)
-                        <NumberInput
+                        <input
                             aria-label="Manual hash (negative for subclass)"
-                            step={1}
+                            // No inputMode: numeric pads on iOS have no minus key for subclass hashes.
+                            autoComplete="off"
+                            spellCheck={false}
+                            maxLength={11}
                             value={manual}
-                            onChangeValue={setManual}
+                            onChange={(e) => setManual(e.target.value.replace(/[^\d-]/g, ''))}
+                            onKeyDown={(e) => {
+                                if (e.key !== 'Enter' || !manualValid) return;
+                                e.preventDefault();
+                                add(manualHash);
+                                setManual('');
+                            }}
                         />
                     </label>
-                    <button
-                        disabled={
-                            !manual.trim() ||
-                            !Number.isInteger(Number(manual)) ||
-                            Math.abs(Number(manual)) > 4294967295
-                        }
-                        onClick={() => add(Number(manual))}
-                    >
-                        Add hash
-                    </button>
+                    <div className="dialog-actions">
+                        <button
+                            disabled={!manualValid}
+                            onClick={() => {
+                                add(manualHash);
+                                setManual('');
+                            }}
+                        >
+                            Add hash
+                        </button>
+                        <button className="primary" onClick={closePicker}>
+                            Done
+                        </button>
+                    </div>
                 </Modal>
             )}
         </div>

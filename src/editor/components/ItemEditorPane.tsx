@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { type EntitySpec, type StatSource, type StatSpec } from '../../core';
 import { EntityForm } from './EntityForm';
 import { AssociatedEntryText } from './AssociatedEntryText';
@@ -5,6 +6,7 @@ import { HashIdentity } from './ManifestUI';
 import { ItemMenu, type ItemAction } from './ItemMenu';
 import type { ManifestTable } from '../manifest';
 import { plural } from './textFormat';
+import { DraftValidationContext } from './draftValidation';
 
 export function ItemEditorPane({
     spec,
@@ -68,6 +70,29 @@ export function ItemEditorPane({
     onUseManifestName(): void;
     onChange(value: Record<string, unknown>): void;
 }) {
+    const [touched, setTouched] = useState<ReadonlySet<string>>(new Set());
+    const [attempts, setAttempts] = useState(0);
+    const body = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!isDraft) {
+            setTouched(new Set());
+            setAttempts(0);
+        }
+    }, [isDraft]);
+    useEffect(() => {
+        if (attempts) body.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+    }, [attempts]);
+    const validation = useMemo(
+        () => (isDraft ? { attempted: attempts > 0, touched } : null),
+        [isDraft, attempts, touched],
+    );
+    function touch(event: { target: EventTarget }) {
+        const path =
+            event.target instanceof Element
+                ? event.target.closest<HTMLElement>('[data-field]')?.dataset.field
+                : undefined;
+        if (isDraft && path && !touched.has(path)) setTouched(new Set(touched).add(path));
+    }
     return (
         <section className="item-editor">
             <header className="pane-header editor-header">
@@ -109,8 +134,10 @@ export function ItemEditorPane({
                     <span className="badge">DRAFT</span>
                     <button
                         className="primary"
-                        disabled={errors > 0 || duplicate || !draftReady}
-                        onClick={onAddDraft}
+                        disabled={duplicate}
+                        onClick={() =>
+                            errors > 0 || !draftReady ? setAttempts(attempts + 1) : onAddDraft()
+                        }
                     >
                         Add to list
                     </button>
@@ -121,7 +148,7 @@ export function ItemEditorPane({
                     )}
                 </div>
             )}
-            <div className="scroll-pane editor-body">
+            <div className="scroll-pane editor-body" ref={body} onBlur={touch}>
                 {editorValue ? (
                     deleted ? (
                         <div className="empty-state" data-field="">
@@ -143,16 +170,18 @@ export function ItemEditorPane({
                                         </button>
                                     </div>
                                 )}
-                            <EntityForm
-                                key={formKey}
-                                spec={spec}
-                                value={editorValue}
-                                saved={saved}
-                                file={file}
-                                path={`${collection}:${selected}`}
-                                abilities={abilities}
-                                onChange={onChange}
-                            />
+                            <DraftValidationContext.Provider value={validation}>
+                                <EntityForm
+                                    key={formKey}
+                                    spec={spec}
+                                    value={editorValue}
+                                    saved={saved}
+                                    file={file}
+                                    path={`${collection}:${selected}`}
+                                    abilities={abilities}
+                                    onChange={onChange}
+                                />
+                            </DraftValidationContext.Provider>
                             {!isDraft && (
                                 <AssociatedEntryText
                                     stat={stat}

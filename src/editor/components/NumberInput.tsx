@@ -151,6 +151,7 @@ export function NumberInput({
                 ref={input}
                 {...props}
                 type="number"
+                inputMode={props.inputMode ?? 'decimal'}
                 step="any"
                 min={props.min ?? constraints?.min}
                 max={props.max ?? constraints?.max}

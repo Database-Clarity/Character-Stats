@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useEditor } from '../state/store';
 import { issueTarget, type ChangeTarget } from '../state/editing';
 import { issueLocationLabel } from '../state/locationLabels';
@@ -5,10 +6,11 @@ import { plural } from './textFormat';
 
 export function ValidationPanel({ onGo }: { onGo(target: ChangeTarget): void }) {
     const { issues, sources } = useEditor();
+    const details = useRef<HTMLDetailsElement>(null);
     const errors = issues.filter((i) => i.severity === 'error'),
         warnings = issues.filter((i) => i.severity === 'warning');
     return (
-        <details className={`validation ${errors.length ? 'has-errors' : ''}`}>
+        <details ref={details} className={`validation ${errors.length ? 'has-errors' : ''}`}>
             <summary aria-live="polite">
                 <span className={errors.length ? 'error' : 'success'}>
                     {errors.length ? '!' : '✓'}
@@ -36,7 +38,10 @@ export function ValidationPanel({ onGo }: { onGo(target: ChangeTarget): void }) 
                                         type="button"
                                         aria-label={`Go to ${location}`}
                                         title={issue.path}
-                                        onClick={() => onGo(target)}
+                                        onClick={() => {
+                                            details.current?.removeAttribute('open');
+                                            onGo(target);
+                                        }}
                                     >
                                         Go to
                                     </button>

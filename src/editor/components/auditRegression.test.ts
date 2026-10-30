@@ -67,7 +67,7 @@ describe('audit editor regressions', () => {
         expect(html).not.toContain('type="range"');
         expect(html).not.toContain('No cooldown context');
     });
-    it('labels an unscaled ability value as its base cooldown', () => {
+    it('captions a scaled ability cooldown with the stat value, even at the default 100', () => {
         const html = renderToStaticMarkup(
             createElement(ContextPanel, {
                 source,
@@ -75,8 +75,8 @@ describe('audit editor regressions', () => {
                 selected: ability,
             }),
         );
-        expect(html).toContain('Base cooldown');
-        expect(html).not.toContain('Base cooldown at');
+        expect(html).toContain('Cooldown at 100 Grenade');
+        expect(html).not.toContain('Base cooldown');
     });
     it('shows group members per applicable override without a duplicate aggregate table', () => {
         const second = { ...ability, Hash: 3, Name: 'Flashpoint' };

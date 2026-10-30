@@ -6,6 +6,7 @@ export default function SegmentList({
     path,
     fieldLabel,
     segments,
+    saved,
     domain,
     precision,
     itemConstraints,
@@ -15,6 +16,7 @@ export default function SegmentList({
     path: string;
     fieldLabel: string;
     segments: CurveSegment[];
+    saved: unknown[];
     domain: Domain;
     precision: number;
     itemConstraints: NumericConstraints;
@@ -38,6 +40,7 @@ export default function SegmentList({
                     path={path}
                     fieldLabel={fieldLabel}
                     segment={segment}
+                    saved={saved[index]}
                     index={index}
                     segmentCount={segments.length}
                     domain={domain}

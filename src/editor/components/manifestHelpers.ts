@@ -36,3 +36,36 @@ export function manifestStateMessage(status: ManifestStatus): string {
             return `Manifest ${status.version}`;
     }
 }
+
+/** Applies a manifest pick to a hash field, also filling an empty Name from the manifest. */
+export function pickedEntry(
+    spec: EntitySpec,
+    value: Record<string, unknown>,
+    key: string,
+    entry: Pick<ManifestEntry, 'hash' | 'name'>,
+): Record<string, unknown> {
+    const next = { ...value, [key]: entry.hash };
+    const name = value.Name;
+    if (spec.fields.some((f) => f.key === 'Name') && !(typeof name === 'string' && name.trim()))
+        next.Name = entry.name;
+    return next;
+}
+
+export interface PickerGroup {
+    title: string;
+    items: { hash: number; name: string }[];
+}
+
+/** Filters picker groups by name or hash, dropping groups left empty while a query is typed. */
+export function filterPickerGroups(groups: readonly PickerGroup[], query: string): PickerGroup[] {
+    const needle = query.trim().toLowerCase();
+    if (!needle) return [...groups];
+    return groups
+        .map((group) => ({
+            ...group,
+            items: group.items.filter((item) =>
+                `${item.name} ${item.hash}`.toLowerCase().includes(needle),
+            ),
+        }))
+        .filter((group) => group.items.length);
+}

@@ -107,15 +107,31 @@ describe('piecewise curves', () => {
                 [0, 3],
             ),
         ).toEqual([
-            { x: 1, message: 'Overlapping x=1' },
-            { x: 3, message: 'Uncovered x=3' },
+            { x: 1, message: 'Overlapping x 1' },
+            { x: 3, message: 'Uncovered x 3' },
         ]);
         expect(
             validateCurve(
                 { Domain: [0, 3], Segments: [{ Type: 'Constant', From: 0, To: 2, Value: 1 }] },
                 [0, 3],
             ),
-        ).toEqual([{ x: 3, message: 'Uncovered x=3' }]);
+        ).toEqual([{ x: 3, message: 'Uncovered x 3' }]);
+    });
+    it('merges consecutive gap and overlap values into ranges', () => {
+        expect(
+            checkCoverage(
+                [
+                    { Type: 'Constant', From: 0, To: 3, Value: 1 },
+                    { Type: 'Constant', From: 2, To: 3, Value: 1 },
+                    { Type: 'Constant', From: 8, To: 8, Value: 1 },
+                ],
+                [0, 10],
+            ),
+        ).toEqual([
+            { x: 2, message: 'Overlapping x 2–3' },
+            { x: 4, message: 'Uncovered x 4–7' },
+            { x: 9, message: 'Uncovered x 9–10' },
+        ]);
     });
     it.each([
         null,

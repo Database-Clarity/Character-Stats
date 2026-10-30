@@ -5,6 +5,7 @@ import {
     adjacentChange,
     changeAffectsStat,
     collectChanges,
+    cooldownSnapshot,
     createItemDraft,
     editRequirement,
     followEntityIdentity,
@@ -12,7 +13,9 @@ import {
     hasDraftIdentity,
     indexEntityRows,
     issueTarget,
+    nextCooldownSnapshot,
     revertRequirementTable,
+    sameValue,
     selectEntityFormSession,
     sharedEntityFields,
     toggleParallel,
@@ -21,6 +24,40 @@ import {
 } from './editing';
 
 describe('cooldown ability groups', () => {
+    it('keeps a row in its snapshot group while its BaseCooldown is edited', () => {
+        const rows = [
+            { item: { Hash: 1, BaseCooldown: 30 }, deleted: false, old: undefined },
+            { item: { Hash: 2, BaseCooldown: 3 }, deleted: false, old: undefined },
+        ];
+        const snapshot = cooldownSnapshot(rows, 'Hash');
+        const edited = [rows[0]!, { ...rows[1]!, item: { Hash: 2, BaseCooldown: 3000 } }];
+        const stable = groupRowsByBaseCooldown(edited, (row) =>
+            snapshot.get(String(row.item.Hash)),
+        );
+        expect(stable.groups.map((group) => group.cooldown)).toEqual([3, 30]);
+        expect(groupRowsByBaseCooldown(edited).groups.map((group) => group.cooldown)).toEqual([
+            30, 3000,
+        ]);
+    });
+
+    it('freezes cooldowns only while typing and refreshes on any other value change', () => {
+        const row = (cooldown: number) => ({
+            item: { Hash: 1, BaseCooldown: cooldown },
+            deleted: false,
+            old: undefined,
+        });
+        const frozen = nextCooldownSnapshot(undefined, 'a', true, [row(30)], 'Hash');
+        expect(frozen?.cooldowns.get('1')).toBe(30);
+        // Still typing in the same selection: the snapshot is reused even though the value moved.
+        expect(nextCooldownSnapshot(frozen, 'a', true, [row(3)], 'Hash')).toBe(frozen);
+        // A different selection or editing group starts a new snapshot.
+        expect(nextCooldownSnapshot(frozen, 'b', true, [row(3)], 'Hash')?.cooldowns.get('1')).toBe(
+            3,
+        );
+        // Not typing (blur, revert, restore): no snapshot, so live values group the rows.
+        expect(nextCooldownSnapshot(frozen, 'a', false, [row(30)], 'Hash')).toBeUndefined();
+    });
+
     it('groups strictly by equal finite BaseCooldown values', () => {
         const rows = [
             { item: { Hash: 1, BaseCooldown: 30, Scalar: 0.5 }, deleted: false, old: undefined },
@@ -295,6 +332,15 @@ describe('entity row indexing', () => {
     });
 });
 
+describe('order-insensitive comparison', () => {
+    it('ignores object key order but not values or array order', () => {
+        expect(sameValue({ a: 1, b: { c: [1, 2] } }, { b: { c: [1, 2] }, a: 1 })).toBe(true);
+        expect(sameValue({ a: [1, 2] }, { a: [2, 1] })).toBe(false);
+        expect(sameValue({ a: 1 }, { a: 1, b: undefined })).toBe(true);
+        expect(sameValue({ a: 1 }, { a: 2 })).toBe(false);
+    });
+});
+
 describe('item draft creation', () => {
     it('starts new drafts without a Hash or Name and requires both before adding', () => {
         const draft = createItemDraft(abilitySpec, []);
@@ -304,6 +350,10 @@ describe('item draft creation', () => {
         expect(hasDraftIdentity(abilitySpec, { ...draft, Hash: 123, Name: 'Intentional' })).toBe(
             true,
         );
+    });
+
+    it('starts required item-reference arrays empty instead of with a guessed hash', () => {
+        expect(createItemDraft(overrideSpec, []).Requirements).toEqual([]);
     });
 
     it('copies non-identity fields into isolated duplicates that still require identity', () => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
     isRecord,
     validateEntity,
@@ -10,6 +10,7 @@ import { useEditor } from '../state/store';
 import {
     type EntityFormSession,
     createItemDraft,
+    sameValue,
     equal,
     followEntityIdentity,
     hasDraftIdentity,
@@ -55,6 +56,18 @@ function changedFieldCount(old: Record<string, unknown>, item: Record<string, un
     ).length;
 }
 
+const TEXT_INPUTS = new Set(['text', 'number', 'search', 'tel', 'url', 'email', '']);
+
+/** A text-like field inside the item editor, where typing must not reshuffle the list. */
+function isTextEntry(target: EventTarget | null): boolean {
+    return (
+        target instanceof Element &&
+        !!target.closest('.editor-body') &&
+        (target instanceof HTMLTextAreaElement ||
+            (target instanceof HTMLInputElement && TEXT_INPUTS.has(target.type)))
+    );
+}
+
 export function EntityList({
     spec,
     items,
@@ -98,6 +111,7 @@ export function EntityList({
     const [search, setSearch] = useState(''),
         [picker, setPicker] = useState(false),
         [contextOpen, setContextOpen] = useState(false),
+        [typing, setTyping] = useState(false),
         [confirm, setConfirm] = useState<PendingConfirm | null>(null);
     const editingGroup = selectedGroupMembers ?? null;
     const pendingFocus = useRef<PendingFocus | null>(null);
@@ -121,6 +135,10 @@ export function EntityList({
     const idKey = identityKey(spec),
         draftKey = `${file}:${collection}`,
         draft = itemDrafts[draftKey];
+    const existingHashes = useMemo(
+        () => new Set(items.map((item) => Number(item[idKey])).filter(Number.isFinite)),
+        [items, idKey],
+    );
     const originalFile = originalValues[file];
     const oldFile = isRecord(originalFile) ? originalFile : {};
     const saved = (Array.isArray(oldFile[collection]) ? oldFile[collection] : []).filter(isRecord);
@@ -233,6 +251,12 @@ export function EntityList({
         setFormSession((session) => followEntityIdentity(session, key));
         onSelect(key);
     }
+    // Value a draft started with, so Discard only confirms after the author changed something.
+    const initialDrafts = useRef(new Map<string, Record<string, unknown>>());
+    function startDraft(value: Record<string, unknown>) {
+        initialDrafts.current.set(draftKey, structuredClone(value));
+        setDraft(value);
+    }
     function setDraft(value?: Record<string, unknown>) {
         dispatch(
             value
@@ -245,7 +269,7 @@ export function EntityList({
             navigateItem('draft', 'click');
             return;
         }
-        setDraft(createItemDraft(spec, items, copy));
+        startDraft(createItemDraft(spec, items, copy));
         focusAfter('draft', 'field');
         navigateItem('draft', 'click');
         setSearch('');
@@ -326,6 +350,8 @@ export function EntityList({
     return (
         <div
             ref={layout}
+            onFocus={(event) => setTyping(isTextEntry(event.target))}
+            onBlur={(event) => setTyping(isTextEntry(event.relatedTarget))}
             className={`entity-layout ${stat === 'Movement' ? 'movement-preview-layout ' : ''}${contextOpen ? 'context-open ' : ''}${selected !== null || editingGroup ? 'detail-open ' : ''}${hasContext ? '' : 'without-context'}`}
         >
             <EntityRows
@@ -336,6 +362,7 @@ export function EntityList({
                 draft={draft}
                 selected={selected}
                 search={search}
+                typing={typing}
                 groupByCooldown={spec.role === 'ability' || spec.role === 'superAbility'}
                 editingGroup={editingGroup}
                 getManifestName={(itemHash, item) => lookup(itemHash, manifestTable(item))?.name}
@@ -405,7 +432,13 @@ export function EntityList({
                             focusAfter(null);
                             selectItem(null);
                         };
-                        if (draft && !equal(draft, createItemDraft(spec, items))) {
+                        if (
+                            draft &&
+                            !sameValue(
+                                draft,
+                                initialDrafts.current.get(draftKey) ?? createItemDraft(spec, items),
+                            )
+                        ) {
                             setConfirm({
                                 title: 'Discard draft',
                                 message: 'Discard this draft and the values entered so far?',
@@ -462,6 +495,7 @@ export function EntityList({
                     title={`Add ${spec.name} from manifest`}
                     chooseTable={spec.fields.some((field) => field.key === 'RefType')}
                     filter={collectionFilter(stat, collection)}
+                    existing={existingHashes}
                     onClose={() => setPicker(false)}
                     onCreateBlank={() => {
                         setPicker(false);
@@ -479,7 +513,7 @@ export function EntityList({
                                   }
                                 : {}),
                         };
-                        setDraft(next);
+                        startDraft(next);
                         navigateItem('draft', 'click');
                         setSearch('');
                         setPicker(false);

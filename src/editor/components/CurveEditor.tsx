@@ -14,6 +14,7 @@ import SegmentList from './SegmentList';
 import { convertCurve, type CurveMode } from './curveValuesConversion';
 import { numberStep } from './numberStep';
 import { NumberInput } from './NumberInput';
+import { changedValueIndices } from './curveChanges';
 
 export function CurveEditor({
     spec,
@@ -49,6 +50,10 @@ export function CurveEditor({
     const segmented = isRecord(value) && Array.isArray(value.Segments);
     const segments = segmented ? (value.Segments as CurveSegment[]) : [];
     const issues = validateField(spec, value);
+    const changedValues = changedValueIndices(
+        saved,
+        isRecord(value) && Array.isArray(value.Values) ? value.Values : [],
+    );
 
     function setSegments(next: CurveSegment[]) {
         onChange({
@@ -122,6 +127,7 @@ export function CurveEditor({
                     path={path}
                     fieldLabel={spec.label ?? spec.key}
                     segments={segments}
+                    saved={isRecord(saved) && Array.isArray(saved.Segments) ? saved.Segments : []}
                     domain={domain}
                     precision={precision}
                     itemConstraints={spec.items ?? {}}
@@ -134,6 +140,7 @@ export function CurveEditor({
                             <label key={i}>
                                 {domain[0] + i}
                                 <NumberInput
+                                    data-changed={changedValues.has(i) || undefined}
                                     step={numberStep(n, { ...spec, precision })}
                                     aria-label={`${spec.label ?? spec.key} value ${domain[0] + i}`}
                                     constraints={spec.items}

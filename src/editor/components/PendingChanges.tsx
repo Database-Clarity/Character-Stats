@@ -71,7 +71,7 @@ function ChangeRows({
                             const diff = structuredDiff(change.before, change.after);
                             return diff ? (
                                 <div className="structured-diff mono">
-                                    {diff.formatChange && <p>Curve format: {diff.formatChange}</p>}
+                                    {diff.formatChange && <p>{diff.formatChange}</p>}
                                     {diff.changes.length ? (
                                         <>
                                             <DiffEntries changes={diff.changes.slice(0, 12)} />
@@ -86,7 +86,7 @@ function ChangeRows({
                                             )}
                                         </>
                                     ) : (
-                                        <p>No changed entries.</p>
+                                        !diff.formatChange && <p>No changed entries.</p>
                                     )}
                                     <details>
                                         <summary>Show full old and new values</summary>

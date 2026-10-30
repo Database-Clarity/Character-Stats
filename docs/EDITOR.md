@@ -13,19 +13,29 @@ For development only, **Use local dev data** opens the checked-out repository's 
 The editor is a compact full-height workbench. The left sidebar lists **Health**,
 **Melee**, **Grenade**, **Super**, **Class**, **Weapons**, and **Movement**, with stat
 icons and change counts. Tabs and list rows also indicate changes. Each pane scrolls
-independently; the page itself stays in place. At narrower widths, **Context** in the
-item header opens the cooldown panel over the right side; its close button closes it.
-Movement uses the same overlay for its speed preview; open it with **Speed preview**.
+independently; the page itself stays in place. Below 1280px, **Context** in the
+item header opens the cooldown panel beside the editor and hides the item list while an item is
+selected (with nothing selected the list stays). At 700px and below it opens as an overlay up to
+400px wide (full width on phones); its close button closes it.
+Movement uses the same panel for its speed preview; open it with **Speed preview**.
 On phones (600px and below) a collection shows either its list or the selected item;
-use **← List** or browser Back to return to the list.
+use **← List** or browser Back to return to the list. Phones and landscape phones swap the
+sidebar for a stat strip and drop the page title row. Their toolbar keeps Changes, Save and
+the manifest badge; **Jump...**, **Publish** and the previous and next change arrows live
+in the **☰** repository menu.
 
 Expand the validation bar to list every error and warning. Each issue names its location
 with readable labels, for example *Grenade › Abilities › Flux Grenade › Name*; hover it for the
-raw source path. **Go to** opens the stat, tab and item that holds the value and focuses the
-closest field.
+raw source path. **Go to** opens the stat, tab and item that holds the value, focuses the
+closest field and collapses the list. The list shows about three issues and scrolls. Curve
+coverage problems are merged into ranges (*Uncovered x 51-70*, *Overlapping x 69-70*), one issue
+per gap or overlap. Previous/next change (**Alt+Up / Alt+Down**) and **Go to** in the Changes dock on a curve focus the
+segment or value input that differs from the saved curve.
 
 Use **Jump...** or **Ctrl+K** (Command+K on macOS) to search stats, tabs, item names, or hashes.
 Press **/** outside an input to focus the current collection filter (or open Jump).
+Keyboard hints (shortcut list, **Ctrl K**, plot hover text) are hidden on touch screens,
+which also hide the number steppers and enlarge buttons and inputs to 32px.
 Use arrow keys in tab lists, quick-jump results, and item action menus; **Esc** closes
 menus and dialogs. Dialogs return focus to their opener when it is still on the page;
 confirmation dialogs open with **Cancel** focused. Quick jump lands focus on the item heading
@@ -55,7 +65,9 @@ explains the error and offers **Continue without manifest**. Later refreshes do 
 Names, icons, item types, stat icons, and class icons
 come from Bungie's manifest. Source names remain editable: if one differs from its
 manifest name, the item header offers **Use manifest name**. Hash inputs show their
-resolved identity or an **Unknown hash** warning. Hash identity chips show the
+resolved identity or an **Unknown hash** warning. Hash inputs are digits-only text boxes:
+they have no steppers and ignore arrow keys and the wheel, so an item is never retargeted by
+accident. **Pick item** also fills an empty **Name** from the manifest. Hash identity chips show the
 resolved name followed by the hash in muted monospace text. Without a manifest,
 source names and hashes remain usable; numeric manual entry is always available. Class
 definitions without icon URLs use accurate CC0 Destiny class glyphs (source and
@@ -73,7 +85,8 @@ edge, dot, and **Revert** (curved arrow) button whose tooltip shows the saved va
 
 Fields and Text have an **On this page** outline. Select a section to jump to it;
 the outline tracks scrolling and can be collapsed. Below 1100px it automatically
-collapses into a floating **On this page** toggle/popover. Long names are ellipsized
+collapses into a slim **On this page** bar above the fields whose entries drop down when
+opened; collapsed, it is always that bar. Long names are ellipsized
 with their full text available on hover. Sections, segments, locale entries, and change
 groups collapse using their summary row. **Collapse all / Expand all** helps with
 long pages. Collapse preferences are remembered in localStorage, independently of
@@ -92,7 +105,7 @@ rounding, because the previous or saved curve is reused when it expands to the s
 debugging output, not a required editing surface. Core validation checks coverage,
 expressions, and numeric constraints. Tick labels retain their natural proportions
 at every plot width; the x/y value label follows the pointer, independently of the
-nearest-value crosshair. Number controls step by one for integers and by 0.01 for
+nearest-value crosshair. Other number inputs open a numeric (integer) or decimal keyboard on phones. Number controls step by one for integers and by 0.01 for
 decimal values, including fields constrained to 0–1; manually entered decimal
 precision remains unrestricted. Hold **Shift** and wheel over a numeric input to
 step its hovered value by the configured step, respecting bounds and preserving
@@ -137,15 +150,18 @@ drafts, change review, and export workflows continue to apply.
 The list-header **+** creates a draft pinned above the sorted list. It is marked
 **DRAFT** and is **not a pending change**. Duplicates also start with empty identity
 fields while retaining the copied numeric values and other properties. Drafts survive navigation within the
-workspace. **Add to list** is disabled until core entity validation succeeds and
-the identity hash is unique. Adding sorts and selects the item; **Discard** asks first when the draft has entered values,
-then drops the draft. There is one draft per collection; finish/discard it before adding from
+workspace. A new draft shows no field errors until a field is left or **Add to list** is tried;
+the *n validation errors* count beside the button is always visible. **Add to list** with errors
+reveals them all and focuses the first. It is disabled while the identity hash is a duplicate.
+Adding sorts and selects the item; **Discard** asks first only when the draft differs from the
+value it started with, then drops the draft. Override drafts start with no Requirements. There is one draft per collection; finish/discard it before adding from
 the manifest. Closing the page warns for drafts as well as unsaved edits.
 
 The **Add from manifest** (diamond-plus icon) button opens a searchable
 icon/name/type picker. One search shows **Suggested** results that match the
 collection's semantic role first (for example, grenade abilities in Grenade),
-then **Other matches** from the rest of the manifest. Both groups are keyboard
+then **Other matches** from the rest of the manifest. Items already in the collection are not
+suggested: they are listed last under **Already added**, marked and disabled. Both groups are keyboard
 navigable; there is no separate search-all checkbox. Overrides have no restrictive
 role filter. The picker distinguishes loading, unavailable, and no matches; when
 the manifest is disabled or in error, choose **Create blank draft** to enter an
@@ -157,7 +173,9 @@ properties still use the spec defaults and validation.
 Override requirements are named/icon references. **0** means **All abilities
 (wildcard)**; negative hashes display **Subclass: name**. **Add requirement** searches
 three groups: abilities in this stat, subclass filters, and the wildcard. A manual
-hash input works even when the manifest is unavailable. Row ↑ / ↓ / ×
+hash input works even when the manifest is unavailable. The dialog stays open so you can add
+several references (added rows are marked and disabled); close it with **Done** or Esc. ArrowDown
+in the search box moves into the results, and empty groups are hidden while searching. Row ↑ / ↓ / ×
 controls reorder/remove references.
 
 Every field whose spec declares `lengthOf` for that reference array is a numeric
@@ -191,7 +209,8 @@ The curve stat is truncated and clamped to 0–100; final cooldowns are rounded
 to three decimals. Individual ability and override views retain their existing
 behavior and labels.
 
-Scaled results are labeled **Cooldown at &lt;value&gt; &lt;Stat name&gt;**.
+Scaled results are always labeled **Cooldown at &lt;value&gt; &lt;Stat name&gt;**, including at the
+default 100.
 Stats without cooldown scaling, including Super, show **Base cooldown** and
 their fixed cooldown without a cooldown-stat slider.
 Negative subclass filters are explicitly **unresolved: subclass filter**, never
@@ -243,8 +262,9 @@ their current presentation. Textareas expand automatically to fit their content.
 
 Select **Changes (N)** to open the review dock, grouped by stat > tab > item >
 field. Each row shows the field's label with its key in dimmed monospace text, and a
-compact structured diff; arrays and curves identify changed
-indices/segments with old &rarr; new values. Expand a change for the full old and new
+compact structured diff; arrays identify changed indices and curves changed segment properties
+(*Segment 1 · To 70 → 69*) with old &rarr; new values. Switching a curve between Segments and
+Values shows one line (*Converted Segments → Values (101 values)*). Expand a change for the full old and new
 values in a keyboard-accessible disclosure. **Go to** navigates, expands the target
 section, scrolls to it, and briefly highlights it. Top-bar previous / next buttons
 and **Alt+Up / Alt+Down** cycle through changes. Counts represent semantic changes,

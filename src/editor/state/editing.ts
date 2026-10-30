@@ -11,6 +11,19 @@ import {
 import { LOCALE_FILE, MOVEMENT_FILE } from './paths';
 
 export const equal = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+const canonical = (value: unknown): unknown =>
+    Array.isArray(value)
+        ? value.map(canonical)
+        : isRecord(value)
+          ? Object.fromEntries(
+                Object.keys(value)
+                    .sort()
+                    .map((key) => [key, canonical(value[key])]),
+            )
+          : value;
+/** Deep equality that ignores object key order. */
+export const sameValue = (a: unknown, b: unknown) =>
+    JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
 export const identityKey = (spec: EntitySpec) =>
     spec.uniqueKey ?? spec.fields.find((f) => f.kind === 'hash')?.key ?? 'Name';
 
@@ -32,11 +45,39 @@ export const baseCooldownLabel = (
         .find((field) => field.key === 'BaseCooldown')?.label ?? 'Base cooldown'
 ).replace(/\s*\([^)]*\)$/, '');
 
-export function groupRowsByBaseCooldown(rows: readonly EntityRow[]) {
+/** BaseCooldown per row id, captured so grouping can stay put while a value is being typed. */
+export function cooldownSnapshot(rows: readonly EntityRow[], idKey: string): Map<string, unknown> {
+    return new Map(rows.map((row) => [String(row.item[idKey]), row.item.BaseCooldown]));
+}
+
+export interface CooldownSnapshot {
+    key: string;
+    cooldowns: Map<string, unknown>;
+}
+
+/**
+ * Rows keep their cooldown group only while a field is being typed in (same `key`); any other
+ * moment returns `undefined`, so grouping follows the live values (reverts, restores, reloads).
+ */
+export function nextCooldownSnapshot(
+    previous: CooldownSnapshot | undefined,
+    key: string,
+    typing: boolean,
+    rows: readonly EntityRow[],
+    idKey: string,
+): CooldownSnapshot | undefined {
+    if (!typing) return undefined;
+    return previous?.key === key ? previous : { key, cooldowns: cooldownSnapshot(rows, idKey) };
+}
+
+export function groupRowsByBaseCooldown(
+    rows: readonly EntityRow[],
+    cooldownOf: (row: EntityRow) => unknown = (row) => row.item.BaseCooldown,
+) {
     const grouped = new Map<number, EntityRow[]>(),
         ungrouped: EntityRow[] = [];
     for (const row of rows) {
-        const cooldown = row.item.BaseCooldown;
+        const cooldown = cooldownOf(row);
         if (typeof cooldown !== 'number' || !Number.isFinite(cooldown)) {
             ungrouped.push(row);
             continue;
@@ -213,7 +254,9 @@ export function createItemDraft(
     const value = copy
         ? structuredClone(copy)
         : Object.fromEntries(
-              spec.fields.filter((f) => f.required).map((f) => [f.key, fieldDefault(f)]),
+              spec.fields
+                  .filter((f) => f.required)
+                  .map((f) => [f.key, f.itemRef && f.kind === 'intArray' ? [] : fieldDefault(f)]),
           );
     value[identityKey(spec)] = '';
     value.Name = '';

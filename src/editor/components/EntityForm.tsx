@@ -1,8 +1,11 @@
+import { useContext } from 'react';
 import { validateEntity, type EntitySpec } from '../../core';
 import { updateProperty } from '../state/store';
 import { FieldInput } from './FieldInput';
 import { Collapse, FieldName } from './EditorPrimitives';
 import { RequirementEditor } from './RequirementEditor';
+import { pickedEntry } from './manifestHelpers';
+import { DraftValidationContext, issuesVisible } from './draftValidation';
 
 export function EntityForm({
     spec,
@@ -33,7 +36,8 @@ export function EntityForm({
         (f) => !requirements.includes(f) && !requirements.some((r) => f.lengthOf === r.key),
     );
     const groups = [...new Set(normal.map((f) => f.group ?? 'Properties'))];
-    const issues = validateEntity(spec, value);
+    const draftValidation = useContext(DraftValidationContext);
+    const issues = issuesVisible(draftValidation, spec.name) ? validateEntity(spec, value) : [];
     return (
         <div className="entity-form">
             {groups.map((group) => (
@@ -52,6 +56,9 @@ export function EntityForm({
                                 fieldPath={`${fieldPrefix}${field.key}`}
                                 onChange={(next) =>
                                     onChange(updateProperty(value, field.key, next))
+                                }
+                                onPickEntry={(entry) =>
+                                    onChange(pickedEntry(spec, value, field.key, entry))
                                 }
                             />
                         ))}

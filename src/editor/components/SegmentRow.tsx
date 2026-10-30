@@ -2,12 +2,14 @@ import type { CurveSegment, Domain, NumericConstraints } from '../../core';
 import { Collapse } from './EditorPrimitives';
 import { numberStep } from './numberStep';
 import { NumberInput } from './NumberInput';
+import { changedSegmentKeys } from './curveChanges';
 
 export default function SegmentRow({
     file,
     path,
     fieldLabel,
     segment,
+    saved,
     index,
     segmentCount,
     domain,
@@ -22,6 +24,7 @@ export default function SegmentRow({
     path: string;
     fieldLabel: string;
     segment: CurveSegment;
+    saved: unknown;
     index: number;
     segmentCount: number;
     domain: Domain;
@@ -32,6 +35,7 @@ export default function SegmentRow({
     onMoveDown(): void;
     onRemove(): void;
 }) {
+    const changed = changedSegmentKeys(saved, segment);
     return (
         <Collapse
             storageKey={`${file}:${path}:segment:${index}`}
@@ -94,6 +98,8 @@ export default function SegmentRow({
                             <label key={key}>
                                 {key}
                                 <NumberInput
+                                    inputMode="numeric"
+                                    data-changed={changed.has(key) || undefined}
                                     aria-label={`${fieldLabel} segment ${index + 1} ${key} stat value`}
                                     value={Number.isFinite(segment[key]) ? segment[key] : ''}
                                     step={numberStep(segment[key], { precision }, true)}
@@ -111,6 +117,7 @@ export default function SegmentRow({
                             <label>
                                 Value
                                 <NumberInput
+                                    data-changed={changed.has('Value') || undefined}
                                     aria-label={`${fieldLabel} segment ${index + 1} Value`}
                                     step={numberStep(segment.Value, { precision })}
                                     constraints={itemConstraints}
@@ -127,6 +134,7 @@ export default function SegmentRow({
                             <label className="expression">
                                 Expression
                                 <input
+                                    data-changed={changed.has('Expression') || undefined}
                                     aria-label={`${fieldLabel} segment ${index + 1} Expression`}
                                     value={segment.Expression}
                                     onChange={(event) =>
@@ -175,6 +183,11 @@ export default function SegmentRow({
                                 <label key={axis}>
                                     {axis === 0 ? 'x' : 'y'}
                                     <NumberInput
+                                        data-changed={
+                                            changed.has(
+                                                `Points.${pointIndex}.${axis === 0 ? 'x' : 'y'}`,
+                                            ) || undefined
+                                        }
                                         aria-label={`${fieldLabel} segment ${index + 1} point ${pointIndex} ${axis === 0 ? 'stat value' : 'Value'}`}
                                         step={numberStep(point[axis], { precision }, axis === 0)}
                                         constraints={

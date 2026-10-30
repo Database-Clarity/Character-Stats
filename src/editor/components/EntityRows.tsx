@@ -3,6 +3,8 @@ import {
     baseCooldownLabel,
     equal,
     groupRowsByBaseCooldown,
+    nextCooldownSnapshot,
+    type CooldownSnapshot,
     type EntityRow,
 } from '../state/editing';
 import { HashIdentity } from './ManifestUI';
@@ -29,6 +31,7 @@ export function EntityRows({
     getManifestTable,
     groupByCooldown = false,
     editingGroup,
+    typing = false,
 }: {
     collection: string;
     entityName: string;
@@ -48,10 +51,28 @@ export function EntityRows({
     onAddFromManifest(): void;
     groupByCooldown?: boolean;
     editingGroup?: string[] | null;
+    /** A text field in the editor has focus: rows keep their cooldown group until it ends. */
+    typing?: boolean;
 }) {
     const [menu, setMenu] = useState<{ id: string; signal: number }>({ id: '', signal: 0 });
     const list = useRef<HTMLDivElement>(null);
-    const grouped = groupByCooldown ? groupRowsByBaseCooldown(rows) : undefined;
+    // Rows keep their group while a BaseCooldown is typed; any other value change regroups.
+    const snapshot = useRef<CooldownSnapshot | undefined>(undefined);
+    snapshot.current = nextCooldownSnapshot(
+        snapshot.current,
+        `${selected}|${editingGroup?.join(',') ?? ''}`,
+        typing,
+        rows,
+        idKey,
+    );
+    const grouped = groupByCooldown
+        ? groupRowsByBaseCooldown(rows, (row) => {
+              const id = String(row.item[idKey]);
+              return snapshot.current?.cooldowns.has(id)
+                  ? snapshot.current.cooldowns.get(id)
+                  : row.item.BaseCooldown;
+          })
+        : undefined;
     const matchesSearch = ({ item }: EntityRow) =>
         `${item.Name} ${item[idKey]} ${getManifestName(Number(item[idKey]), item) ?? ''}`
             .toLowerCase()
@@ -99,7 +120,7 @@ export function EntityRows({
         list.current
             ?.querySelector<HTMLElement>('[aria-pressed="true"]')
             ?.scrollIntoView({ block: 'nearest' });
-    }, [selected]);
+    }, [selected, typing]);
     return (
         <section className="entity-list" aria-label={collectionLabel(collection)}>
             <div className="list-controls">

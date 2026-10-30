@@ -18,6 +18,8 @@ import type { EditorNavigationSelection, NavigationMode } from './navigationHist
 import { collectionLabel } from './textFormat';
 export interface NavigationRequest extends ChangeTarget {
     sequence: number;
+    /** Set only when navigating to a pending change (Alt+Up/Down, Changes dock Go to). */
+    id?: string;
 }
 export function StatView({
     spec,
@@ -90,13 +92,21 @@ export function StatView({
                 if (ancestor instanceof HTMLDetailsElement) ancestor.open = true;
                 ancestor = ancestor.parentElement;
             }
+            // Change navigation lands on the curve input that differs from the saved value.
+            const changed =
+                request.id !== undefined
+                    ? field.querySelector<HTMLElement>('[data-changed]')
+                    : null;
+            for (let el = changed?.parentElement; el && el !== field; el = el.parentElement)
+                if (el instanceof HTMLDetailsElement) el.open = true;
             const section = field.querySelector('details');
             if (section) section.open = true;
-            field.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            (changed ?? field).scrollIntoView({ block: 'center', behavior: 'smooth' });
             field.classList.remove('change-highlight');
             void field.offsetWidth;
             field.classList.add('change-highlight');
             const input =
+                changed ??
                 field.querySelector<HTMLElement>('input,textarea,select') ??
                 field.querySelector<HTMLElement>('button:not(.revert-field)') ??
                 (field.tabIndex === -1 ? field : null);

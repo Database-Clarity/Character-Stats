@@ -1,6 +1,7 @@
 import { useId, useState } from 'react';
 import { isRecord, validateField, type FieldSpec } from '../../core';
 import { CurveEditor } from './CurveEditor';
+import type { ManifestEntry } from '../manifest';
 import { HashIdentity, ManifestPicker } from './ManifestUI';
 import { Modified, Collapse, FieldHelp, FieldName, fieldHelpText } from './EditorPrimitives';
 import { fieldDefault, numericDefault, updateNestedField } from '../state/editing';
@@ -8,6 +9,8 @@ import { EntityForm } from './EntityForm';
 import { numberStep } from './numberStep';
 import { ReferenceArrayInput } from './ReferenceArrayInput';
 import { NumberInput } from './NumberInput';
+import { HashInput } from './HashInput';
+import { useIssuesVisible } from './draftValidation';
 import { AutoResizeTextarea } from './AutoResizeTextarea';
 import { sentenceCase, singular } from './textFormat';
 
@@ -55,6 +58,13 @@ export function NumberArrayInput({
                                     {stackCounts ? 'Stacks' : (spec.indexLabel ?? 'Index')}:{' '}
                                     {stackCounts ? i + 1 : i}
                                     <NumberInput
+                                        inputMode={
+                                            integerValues ||
+                                            spec.kind === 'intArray' ||
+                                            spec.items?.integer
+                                                ? 'numeric'
+                                                : 'decimal'
+                                        }
                                         aria-label={`${spec.label ?? spec.key} ${stackCounts ? 'stacks' : (spec.indexLabel ?? 'index')} ${stackCounts ? i + 1 : i}`}
                                         step={numberStep(
                                             number,
@@ -113,6 +123,7 @@ export function FieldInput({
     revertTitle,
     onRevert,
     onChange,
+    onPickEntry,
 }: {
     spec: FieldSpec;
     value: unknown;
@@ -125,10 +136,13 @@ export function FieldInput({
     revertTitle?: string | undefined;
     onRevert?(): void;
     onChange(value: unknown): void;
+    /** Replaces the default pick behaviour (setting only this hash). */
+    onPickEntry?(entry: ManifestEntry): void;
 }) {
     const id = useId();
     const [picker, setPicker] = useState(false);
-    const issues = validateField(spec, value, siblings);
+    const showIssues = useIssuesVisible(fieldPath);
+    const issues = showIssues ? validateField(spec, value, siblings) : [];
     const label = spec.label ?? spec.key;
     const errorId = (index: number) => `${id}-error-${index}`;
     const describedBy = [`${id}-help`, ...issues.map((_, index) => errorId(index))].join(' ');
@@ -423,23 +437,42 @@ export function FieldInput({
                             )
                         ) : (
                             <>
-                                <NumberInput
-                                    id={id}
-                                    aria-label={label}
-                                    aria-required={!!spec.required}
-                                    aria-invalid={issues.length > 0}
-                                    step={numberStep(value, spec, spec.kind !== 'number')}
-                                    constraints={spec}
-                                    value={
-                                        typeof value === 'number' && Number.isFinite(value)
-                                            ? value
-                                            : ''
-                                    }
-                                    aria-describedby={describedBy}
-                                    onChangeValue={(raw) =>
-                                        onChange(raw === '' ? undefined : Number(raw))
-                                    }
-                                />
+                                {spec.kind === 'hash' ? (
+                                    <HashInput
+                                        id={id}
+                                        aria-label={label}
+                                        aria-required={!!spec.required}
+                                        aria-invalid={issues.length > 0}
+                                        value={
+                                            typeof value === 'number' && Number.isFinite(value)
+                                                ? value
+                                                : ''
+                                        }
+                                        aria-describedby={describedBy}
+                                        onChangeValue={(raw) =>
+                                            onChange(raw === '' ? undefined : Number(raw))
+                                        }
+                                    />
+                                ) : (
+                                    <NumberInput
+                                        id={id}
+                                        aria-label={label}
+                                        aria-required={!!spec.required}
+                                        aria-invalid={issues.length > 0}
+                                        inputMode={spec.kind === 'number' ? 'decimal' : 'numeric'}
+                                        step={numberStep(value, spec, spec.kind !== 'number')}
+                                        constraints={spec}
+                                        value={
+                                            typeof value === 'number' && Number.isFinite(value)
+                                                ? value
+                                                : ''
+                                        }
+                                        aria-describedby={describedBy}
+                                        onChangeValue={(raw) =>
+                                            onChange(raw === '' ? undefined : Number(raw))
+                                        }
+                                    />
+                                )}
                                 {spec.kind === 'hash' && typeof value === 'number' && (
                                     <div className="hash-resolution">
                                         <HashIdentity hash={value} table={table} />
@@ -469,7 +502,8 @@ export function FieldInput({
                     table={table}
                     onClose={() => setPicker(false)}
                     onPick={(entry) => {
-                        onChange(entry.hash);
+                        if (onPickEntry) onPickEntry(entry);
+                        else onChange(entry.hash);
                         setPicker(false);
                     }}
                 />

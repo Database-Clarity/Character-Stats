@@ -104,6 +104,7 @@ export function ManifestPicker({
     onCreateBlank,
     table,
     chooseTable = false,
+    existing,
 }: {
     title: string;
     filter?: (entry: ManifestEntry) => boolean;
@@ -112,6 +113,8 @@ export function ManifestPicker({
     onCreateBlank?(): void;
     table?: ManifestTable | undefined;
     chooseTable?: boolean;
+    /** Hashes already in the collection: listed last as disabled "added" rows. */
+    existing?: ReadonlySet<number>;
 }) {
     const { search, status } = useManifest();
     const [query, setQuery] = useState('');
@@ -124,34 +127,53 @@ export function ManifestPicker({
     }, [query]);
     const groups = useMemo(() => {
         if (status.state !== 'ready') return [];
-        const inTable = (entry: ManifestEntry) => !searchTable || entry.table === searchTable;
-        if (!filter)
-            return [
-                {
-                    title: 'Matches',
-                    entries: search(debouncedQuery, { filter: inTable, limit: 40 }),
-                },
-            ];
-        return [
-            {
-                title: 'Suggested',
-                entries: search(debouncedQuery, {
-                    filter: (entry) => inTable(entry) && filter(entry),
-                    limit: 40,
-                }),
-            },
-            {
-                title: 'Other matches',
-                entries: search(debouncedQuery, {
-                    filter: (entry) => inTable(entry) && !filter(entry),
-                    limit: 40,
-                }),
-            },
+        const added = (entry: ManifestEntry) => !!existing?.has(entry.hash);
+        const inTable = (entry: ManifestEntry) =>
+            (!searchTable || entry.table === searchTable) && !added(entry);
+        const list = [
+            filter
+                ? {
+                      title: 'Suggested',
+                      entries: search(debouncedQuery, {
+                          filter: (entry) => inTable(entry) && filter(entry),
+                          limit: 40,
+                      }),
+                  }
+                : {
+                      title: 'Matches',
+                      entries: search(debouncedQuery, { filter: inTable, limit: 40 }),
+                  },
+            ...(filter
+                ? [
+                      {
+                          title: 'Other matches',
+                          entries: search(debouncedQuery, {
+                              filter: (entry) => inTable(entry) && !filter(entry),
+                              limit: 40,
+                          }),
+                      },
+                  ]
+                : []),
+            ...(existing?.size
+                ? [
+                      {
+                          title: 'Already added',
+                          entries: search(debouncedQuery, {
+                              filter: (entry) =>
+                                  (!searchTable || entry.table === searchTable) && added(entry),
+                              limit: 40,
+                          }),
+                      },
+                  ]
+                : []),
         ];
-    }, [search, status.state, debouncedQuery, filter, searchTable]);
+        return debouncedQuery.trim() ? list.filter((group) => group.entries.length) : list;
+    }, [search, status.state, debouncedQuery, filter, searchTable, existing]);
     const count = groups.reduce((total, group) => total + group.entries.length, 0);
     function focusResult() {
-        document.querySelector<HTMLButtonElement>('dialog .picker-results button')?.focus();
+        document
+            .querySelector<HTMLButtonElement>('dialog .picker-results button:not(:disabled)')
+            ?.focus();
     }
     return (
         <Modal title={title} onClose={onClose}>
@@ -185,7 +207,9 @@ export function ManifestPicker({
                             focusResult();
                         }
                         if (event.key === 'Enter') {
-                            const first = groups.flatMap((group) => group.entries)[0];
+                            const first = groups
+                                .filter((group) => group.title !== 'Already added')
+                                .flatMap((group) => group.entries)[0];
                             if (first) onPick(first);
                         }
                     }}
@@ -203,7 +227,9 @@ export function ManifestPicker({
                 onKeyDown={(event) => {
                     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
                     const buttons = Array.from(
-                        event.currentTarget.querySelectorAll<HTMLButtonElement>('button'),
+                        event.currentTarget.querySelectorAll<HTMLButtonElement>(
+                            'button:not(:disabled)',
+                        ),
                     );
                     if (!buttons.length) return;
                     event.preventDefault();
@@ -219,18 +245,23 @@ export function ManifestPicker({
                 {groups.map((group) => (
                     <section key={group.title} aria-label={group.title}>
                         <h4>{group.title}</h4>
-                        {group.entries.map((entry) => (
-                            <button
-                                key={`${entry.table}:${entry.hash}`}
-                                onClick={() => onPick(entry)}
-                            >
-                                <HashIdentity
-                                    hash={entry.hash}
-                                    name={entry.name}
-                                    table={entry.table}
-                                />
-                            </button>
-                        ))}
+                        {group.entries.map((entry) => {
+                            const added = !!existing?.has(entry.hash);
+                            return (
+                                <button
+                                    key={`${entry.table}:${entry.hash}`}
+                                    disabled={added}
+                                    onClick={() => onPick(entry)}
+                                >
+                                    <HashIdentity
+                                        hash={entry.hash}
+                                        name={entry.name}
+                                        table={entry.table}
+                                    />
+                                    {added && <span className="badge">added</span>}
+                                </button>
+                            );
+                        })}
                         {!group.entries.length && (
                             <p className="muted">No matching entries in this group.</p>
                         )}
