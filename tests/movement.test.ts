@@ -2,12 +2,18 @@ import { describe, expect, it } from 'vitest';
 import movementData from '../sources/movement.json';
 import english from '../locale/en.json';
 import {
-    movementSpeed,
+    movementSpeed as calculateMovementSpeed,
     validateSources,
     type MovementSource,
     type MovementSpeedInput,
 } from '../src/core';
 import { fixture } from './fixtures';
+
+// Most cases use the repository's movement rules.
+const movementSpeed = (
+    input: MovementSpeedInput,
+    source = movementData as unknown as MovementSource,
+) => calculateMovementSpeed(input, source);
 
 const titan = 3655393761,
     hunter = 671679327,

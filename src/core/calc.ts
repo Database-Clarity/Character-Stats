@@ -1,6 +1,5 @@
 import type { Ability, SuperAbility, Override, MovementEffectType } from './entities';
 import type { StatSource, MovementSource } from './sources';
-import movementData from '../../sources/movement.json';
 import { evaluateCurve, roundValue, type Curve } from './curves';
 
 export interface CooldownResult {
@@ -142,10 +141,10 @@ export interface MovementSpeedResult {
     cappedBy?: 'ForwardSpeedCap' | 'StrafeSpeedCap' | 'CrouchSpeedCap';
 }
 
-/** Uses current repository rules by default; pass edited rules as the second argument for previews. */
+/** Speed for the given movement rules (the repository's or an edited copy for previews). */
 export function movementSpeed(
     input: MovementSpeedInput,
-    source: MovementSource = movementData as unknown as MovementSource,
+    source: MovementSource,
 ): MovementSpeedResult {
     const character = source.Classes.find((entry) => entry.ClassHash === input.classHash);
     if (!character) throw new Error('Unknown movement class ' + input.classHash);
