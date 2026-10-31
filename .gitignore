@@ -5,6 +5,3 @@ dist/
 # Local secrets
 .env.local
 *.local
-
-# Subagent inbox/status files
-.agents/

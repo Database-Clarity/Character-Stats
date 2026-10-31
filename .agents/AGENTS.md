@@ -1,10 +1,13 @@
-# CLAUDE.md
+# Agent guide
+
+Project instructions for coding agents, independent of the harness or model provider. Claude
+Code loads this file through `.claude/CLAUDE.md`; point other agents at `.agents/AGENTS.md`.
 
 Destiny 2 character-stat database (ability cooldowns, stat curves, movement speeds) that
 third-party apps like DIM and D2ArmorPicker download, plus a React web editor used to
-maintain it. The detailed guides are [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) (data model,
-how to add fields, entities and stats, versioning), [src/editor/README.md](src/editor/README.md)
-(editor architecture) and [docs/EDITOR.md](docs/EDITOR.md) (end-user editor guide). Read the
+maintain it. The detailed guides are [docs/DEVELOPMENT.md](../docs/DEVELOPMENT.md) (data model,
+how to add fields, entities and stats, versioning), [src/editor/README.md](../src/editor/README.md)
+(editor architecture) and [docs/EDITOR.md](../docs/EDITOR.md) (end-user editor guide). Read the
 relevant one before making non-trivial changes. This file only summarizes them.
 
 ## Branches
