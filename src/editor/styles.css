@@ -1,0 +1,703 @@
+@import './styles/base.css';
+@import './styles/forms.css';
+@import './styles/collections.css';
+@import './styles/overlays.css';
+
+.movement-rules-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+}
+.movement-rules-layout > .item-editor > .long-page {
+    flex: 1;
+    height: auto;
+}
+/* Only needed for the Speed preview toggle once the preview becomes an overlay. */
+.movement-rules-header {
+    display: none;
+}
+.movement-rules-header .context-toggle {
+    margin-left: auto;
+}
+@media (min-width: 1280px) {
+    .movement-preview-layout {
+        grid-template-columns: 248px minmax(0, 1fr) 25rem;
+    }
+}
+.movement-settings {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+    padding: 8px;
+    border-bottom: 1px solid var(--border);
+    background: #191c21;
+}
+.movement-settings .inline {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 6px;
+    margin: 0;
+    font-size: 11px;
+}
+.movement-settings .inline select {
+    max-width: 100%;
+}
+.movement-summary {
+    flex-shrink: 0;
+    padding: 6px 8px 8px;
+    border-bottom: 1px solid var(--border);
+    background: #191c21;
+}
+.movement-summary-heading,
+.movement-source-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+.movement-summary-heading > strong,
+.movement-source-heading > strong {
+    font-size: 11px;
+}
+.movement-summary-heading > span,
+.movement-source-heading > small {
+    color: var(--muted);
+    font-size: 10px;
+}
+.movement-stats {
+    display: grid;
+    gap: 2px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.movement-stat {
+    display: grid;
+    grid-template-columns: 46px minmax(64px, 1fr) 64px minmax(84px, 1.1fr);
+    align-items: center;
+    gap: 2px 4px;
+    min-width: 0;
+    padding: 3px 4px;
+    border-bottom: 1px solid #2a2e35;
+    font-variant-numeric: tabular-nums;
+}
+.movement-stat-label {
+    min-width: 0;
+    color: #c3c8d2;
+    font-size: 11px;
+}
+.movement-stat-value {
+    min-width: 0;
+}
+.movement-stat-value > strong {
+    font-size: 11px;
+    white-space: nowrap;
+}
+.movement-stat-cap {
+    font-size: 9px;
+    white-space: nowrap;
+}
+.movement-delta {
+    justify-self: end;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.movement-delta--increase {
+    color: var(--accent);
+}
+.movement-delta--decrease {
+    color: var(--error);
+}
+.movement-delta--neutral {
+    color: var(--muted);
+}
+.movement-stat-error {
+    grid-column: 2 / -1;
+    color: var(--error);
+    font-size: 10px;
+    overflow-wrap: anywhere;
+}
+.movement-source-selection {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    padding: 6px 8px 8px;
+}
+.movement-source-selection > .help {
+    flex-shrink: 0;
+    margin: 4px 0 6px;
+}
+.movement-source-list {
+    flex: 1;
+}
+.movement-source {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+}
+.movement-source > small {
+    display: block;
+    margin-left: 22px;
+    font-size: 10px;
+}
+.movement-source-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: center;
+    margin: 4px 0 0 22px;
+    font-size: 11px;
+}
+.movement-source-controls > label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+}
+.movement-stack-control {
+    display: flex;
+    flex: 1 1 100%;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+.movement-stack-control > span {
+    color: var(--muted);
+    font-size: 10px;
+}
+.movement-stack-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    max-width: 100%;
+}
+.movement-stack-options > button {
+    min-width: 24px;
+    min-height: 23px;
+    padding: 1px 5px;
+    font-size: 10px;
+    line-height: 16px;
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+@media (max-width: 1279px) {
+    .topbar {
+        gap: 8px;
+    }
+    .brand > span {
+        display: none;
+    }
+    .entity-layout {
+        grid-template-columns: 224px minmax(0, 1fr);
+    }
+    .movement-rules-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .context-slot {
+        display: none;
+    }
+    .context-toggle {
+        display: inline-block;
+        font-size: 11px;
+    }
+    .context-open .context-slot {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: min(400px, 100%);
+        max-width: 100%;
+        z-index: 20;
+        border-left: 1px solid #687280;
+    }
+    .context-close {
+        display: block;
+        position: absolute;
+        right: 8px;
+        top: 12px;
+        z-index: 21;
+        background: #20252d;
+    }
+    .context .pane-header {
+        padding-right: 44px;
+    }
+    .movement-rules-header {
+        display: flex;
+    }
+    .field {
+        gap: 12px;
+    }
+    .manifest-status {
+        max-width: 130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .text-controls {
+        gap: 16px;
+    }
+    .text-controls .help {
+        display: none;
+    }
+}
+@media (max-width: 480px) {
+    .movement-source-selection > .help {
+        font-size: 10px;
+        line-height: 13px;
+    }
+}
+@media (max-width: 1050px) {
+    .workspace {
+        grid-template-columns: 140px minmax(0, 1fr);
+    }
+    .sidebar > button {
+        padding-left: 8px;
+    }
+    .source-label {
+        font-size: 10px;
+    }
+    .quick-jump-button {
+        min-width: 0;
+        font-size: 11px;
+        gap: 8px;
+    }
+    .long-content {
+        padding: 8px 12px 24px;
+    }
+    .segment-row {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .segment-row > label {
+        min-width: 90px;
+    }
+    .text-controls .stat-control {
+        width: 260px;
+    }
+    .text-controls .inline {
+        grid-template-columns: auto minmax(100px, 1fr);
+    }
+    .text-entry {
+        gap: 12px;
+    }
+    .page-heading {
+        padding: 0 12px;
+    }
+    .pane-header {
+        padding: 8px;
+    }
+}
+/* Narrow or short viewports (phones, portrait tablets, landscape phones) share one compact shell:
+   the stat list becomes a strip and the extra toolbar actions move into the menu. Keep the query
+   in sync with `compactShellQuery` in App.tsx. */
+@media (max-width: 800px), (max-height: 500px) {
+    .workspace {
+        grid-template-columns: 1fr;
+        grid-template-rows: 44px 40px minmax(0, 1fr);
+    }
+    .topbar .source-label,
+    .manifest-status,
+    .quick-jump-button,
+    .brand > span,
+    .topbar .toolbar > button:not(.primary):not(.account-button) {
+        display: none;
+    }
+    .topbar .toolbar {
+        margin-left: auto;
+    }
+    .topbar .change-controls .icon-button {
+        display: none;
+    }
+    .toolbar-manifest .manifest-status {
+        display: inline-block;
+        max-width: 110px;
+        white-space: nowrap;
+    }
+    .sidebar {
+        flex-direction: row;
+        padding: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        overflow: auto;
+    }
+    .sidebar h2,
+    .sidebar-footer,
+    .sidebar button > :first-child {
+        display: none;
+    }
+    .sidebar > button {
+        width: auto;
+        padding: 4px 8px;
+        font-size: 11px;
+        border-left: 0;
+        border-bottom: 2px solid transparent;
+    }
+    .sidebar > button[aria-current] {
+        border-bottom-color: var(--accent);
+    }
+    .entity-layout {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+    .movement-rules-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .outline {
+        padding: 8px 4px;
+    }
+    .field {
+        gap: 8px;
+    }
+    .text-controls {
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
+    .text-controls .stat-control {
+        width: 100%;
+    }
+    .text-entry {
+        grid-template-columns: 1fr;
+    }
+    .hash-identity > :first-child {
+        width: 20px;
+        height: 20px;
+    }
+    .requirement-row {
+        flex-wrap: wrap;
+    }
+    .page-heading code {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .page-heading > span {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .field {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+        padding-right: 4px;
+    }
+    /* Single column: the revert button sits in the label row, so reserve its space there on every
+       field and nothing moves when a field becomes modified. */
+    .field > .field-label {
+        padding-right: 36px;
+    }
+    .nested-row .field {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
+    .field-label {
+        margin: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .sidebar > button {
+        padding-right: 6px;
+        padding-left: 6px;
+    }
+}
+@media (max-width: 360px) {
+    .brand strong {
+        display: none;
+    }
+    .topbar .toolbar {
+        gap: 2px;
+    }
+    .toolbar-manifest .manifest-status {
+        padding-right: 2px;
+        padding-left: 2px;
+        font-size: 10px;
+    }
+    .more-menu {
+        margin-left: 0;
+    }
+}
+
+/* "On this page" is a one-line bar above the scrolling fields (never floating over them) whenever
+   it is collapsed or the pane is narrow; opened on a narrow pane its entries drop down over the
+   fields. Wide panes keep it as a side column while it is open. */
+.long-page:has(> .outline-shell:not([open])) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+}
+.outline-shell:not([open]) {
+    position: relative;
+    width: auto;
+    max-width: none;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+}
+.outline-shell:not([open]) > summary {
+    padding: 3px 12px;
+    font-size: 10px;
+    text-align: right;
+}
+@media (max-width: 1100px) {
+    .long-page {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+    .outline-shell,
+    .outline-shell:not([open]) {
+        position: relative;
+        z-index: 15;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+        max-height: none;
+        overflow: visible;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .outline-shell > summary {
+        padding: 3px 12px;
+        font-size: 10px;
+        text-align: right;
+    }
+    .outline-shell[open] > .outline {
+        position: absolute;
+        top: 100%;
+        right: 12px;
+        z-index: 16;
+        width: min(260px, calc(100% - 24px));
+        max-height: min(60vh, 420px);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        box-shadow: 0 8px 24px #0008;
+    }
+}
+
+/* Menus are portaled out of independently scrolling panes. */
+.menu-popup {
+    z-index: 100;
+    right: auto;
+    bottom: auto;
+}
+span[role='img'] {
+    background-color: #303640 !important;
+    border-color: #505969 !important;
+    position: relative;
+}
+span[role='img']::after {
+    content: '\25c7';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #b2bac7;
+    font-size: 14px;
+}
+
+.requirements-editor .field-frame.is-modified > .section-bar {
+    padding-right: 40px;
+}
+.change-collapse-actions {
+    margin-bottom: 12px;
+}
+
+@media (max-width: 1279px) {
+    .entity-layout.without-context {
+        grid-template-columns: 224px minmax(0, 1fr);
+    }
+}
+@media (max-width: 800px), (max-height: 500px) {
+    .entity-layout.without-context {
+        grid-template-columns: 180px minmax(0, 1fr);
+    }
+}
+
+/* Phones: the list and the selected item's editor take turns in one column (layouts without a
+   list, such as Movement rules, always show the editor). */
+.list-back {
+    display: none;
+}
+@media (max-width: 600px) {
+    .entity-layout,
+    .entity-layout.without-context {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .entity-layout.detail-open > .entity-list,
+    .entity-layout:has(> .entity-list):not(.detail-open) > .item-editor {
+        display: none;
+    }
+    .list-back {
+        display: inline-block;
+        flex: none;
+        font-size: 11px;
+    }
+    /* Text tab: the preview controls scroll away with the fields instead of pinning a band. */
+    .text-editor {
+        display: block;
+        overflow-y: auto;
+    }
+    .text-editor > .long-page {
+        height: auto;
+    }
+    .text-editor .long-content {
+        overflow: visible;
+    }
+}
+
+/* Tablets and small laptops: while Context or Speed preview is open the panel takes the second
+   column. With an item selected the list steps aside so the field being edited never hides under
+   the panel; with nothing selected the list stays and the empty editor steps aside. Narrower
+   screens (phones) show the panel as an overlay. */
+@media (min-width: 701px) and (max-width: 1279px) {
+    .entity-layout.context-open {
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    }
+    .entity-layout.context-open.detail-open > .entity-list,
+    .entity-layout.context-open:not(.detail-open) > .item-editor {
+        display: none;
+    }
+    .entity-layout.context-open > .context-slot {
+        position: static;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+    }
+}
+
+/* Phones and landscape phones: the page-heading row repeats what the stat strip and the tabs
+   already say, so it stays for screen readers only; the validation summary is one slim line. */
+@media (max-width: 600px), (max-height: 500px) {
+    .page-heading {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        min-height: 0;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+    .validation > summary {
+        min-height: 24px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+@media (max-width: 600px) {
+    .context-open .context-slot {
+        overflow: auto;
+    }
+    .movement-context {
+        height: auto;
+        min-height: 100%;
+    }
+    .movement-source-selection,
+    .movement-source-list {
+        flex: none;
+        overflow: visible;
+    }
+    .requirement-row .identity-hash,
+    .context-table .identity-hash {
+        display: none;
+    }
+    .table-scroll {
+        --scroll-bg: #181b20;
+        background:
+            linear-gradient(to right, var(--scroll-bg) 30%, transparent) 0 0 / 24px 100% no-repeat
+                local,
+            linear-gradient(to left, var(--scroll-bg) 30%, transparent) 100% 0 / 24px 100% no-repeat
+                local,
+            linear-gradient(to right, #8892a380, transparent) 0 0 / 10px 100% no-repeat scroll,
+            linear-gradient(to left, #8892a380, transparent) 100% 0 / 10px 100% no-repeat scroll;
+    }
+    .context .table-scroll {
+        --scroll-bg: #15171b;
+    }
+    .requirement-row > .hash-identity {
+        flex: 1 1 100%;
+    }
+    .editor-header {
+        min-height: 48px;
+    }
+    .editor-header .identity-hash {
+        display: none;
+    }
+}
+@media (max-width: 480px) {
+    .collapse > summary .field-key {
+        display: none;
+    }
+}
+@media (max-height: 500px) {
+    .workspace {
+        grid-template-rows: 40px 36px minmax(0, 1fr);
+    }
+    .sidebar > button {
+        min-height: 32px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+    .tabs button {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+    .editor-header {
+        min-height: 40px;
+    }
+}
+
+/* Touch: keyboard-only hints go away. */
+@media (hover: none) {
+    .sidebar-footer .help,
+    .quick-jump-button kbd,
+    .plot-hint {
+        display: none;
+    }
+}
+
+/* Touch: roomy hit areas without changing the look. Fine pointers keep the compact desktop sizes. */
+@media (pointer: coarse) {
+    :is(
+        button,
+        select,
+        summary,
+        input:not([type='checkbox']):not([type='radio']):not([type='range'])
+    ) {
+        min-height: 32px;
+    }
+    .icon-button,
+    .chip-actions button {
+        width: auto;
+        min-width: 32px;
+        height: 32px;
+    }
+    .revert-field,
+    .group-member-open {
+        min-width: 32px;
+        height: 32px;
+    }
+    .stepped-number-controls {
+        display: none;
+    }
+    .stepped-number-input > input[type='number'] {
+        padding-right: 6px;
+    }
+    input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        min-height: 18px;
+    }
+    .field-help {
+        box-sizing: content-box;
+        margin: -8px;
+        padding: 8px;
+    }
+    .movement-source > label.check {
+        min-height: 36px;
+    }
+}

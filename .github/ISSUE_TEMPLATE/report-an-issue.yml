@@ -8,8 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this form! To save us both time, please note that cooldown inaccuracies in the ~1s range will be ignored as they are artifacts of the method used to calculate them.
-        HOWEVER, this error tolerance only applies to cooldown times outside of the Base Cooldown (T3, 4th number in array). If you notice inaccuracies with the Base Cooldowns, definitely do report them.
+        Thanks for taking the time to fill out this form! Cooldowns are derived from a base cooldown and stat-dependent scalar data. Small (~1s) differences may be artifacts of the calculation method, but please report clear inaccuracies in base cooldowns or scalar values with supporting evidence.
   - type: dropdown
     attributes:
       label: Type of Issue

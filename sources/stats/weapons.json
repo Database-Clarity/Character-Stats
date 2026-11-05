@@ -1,0 +1,160 @@
+{
+    "Hash": 2996146975,
+    "Name": "Weapons",
+    "Fields": {
+        "ReloadSpeed": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 3,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            10
+                        ]
+                    ]
+                }
+            ]
+        },
+        "Handling": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 3,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            10
+                        ]
+                    ]
+                }
+            ]
+        },
+        "NonBossDamageIncrease": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 2,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0.15
+                        ],
+                        [
+                            100,
+                            15
+                        ]
+                    ]
+                }
+            ]
+        },
+        "SpecialDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Round": 2,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            15
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PowerDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Round": 1,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            10
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PVPDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Round": 2,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            5
+                        ]
+                    ]
+                }
+            ]
+        },
+        "LargeAmmoBrickChance": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            100
+                        ]
+                    ]
+                }
+            ]
+        }
+    },
+    "Notes": "Unverified placeholder values; see docs/DEVELOPMENT.md for duration conversion."
+}

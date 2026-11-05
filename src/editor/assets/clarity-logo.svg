@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="Backdrop" transform="matrix(0.661639,-0.661639,0.661639,0.661639,-176.93,494.81)">
+        <path d="M905.216,191.653L905.216,839.301C905.216,880.009 872.166,913.06 831.457,913.06L183.81,913.06C143.101,913.06 110.051,880.009 110.051,839.301L110.051,191.653C110.051,150.945 143.101,117.894 183.81,117.894L831.457,117.894C872.166,117.894 905.216,150.945 905.216,191.653Z"/>
+    </g>
+    <g id="_-Ghost-Shell-" serif:id="&quot;Ghost Shell&quot;" transform="matrix(1.09254,0,0,1.09254,-46.2703,-46.2703)">
+        <path d="M87.817,480L480,87.817L480,234.84L234.84,480L87.817,480ZM520,87.817L912.183,480L765.16,480L520,234.84L520,87.817ZM912.183,520L520,912.183L520,765.16L765.16,520L912.183,520ZM480,912.183L87.817,520L234.84,520L480,765.16L480,912.183Z" style="fill:rgb(36,236,84);"/>
+    </g>
+    <g id="Inner-C" serif:id="Inner C" transform="matrix(0.959048,0,0,0.959048,20.4758,20.4758)">
+        <path d="M617.47,617.47L500,734.941L265.059,500L500,265.059L617.47,382.53L617.5,441.3L558.735,441.265L500,382.53L382.53,500L500,617.47L558.735,558.735L617.5,558.7L617.47,617.47Z" style="fill:rgb(28,220,252);"/>
+    </g>
+</svg>

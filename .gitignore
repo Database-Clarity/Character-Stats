@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.test-output*/
+
+# Local secrets
+.env.local
+*.local

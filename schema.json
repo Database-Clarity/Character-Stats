@@ -1,145 +1,716 @@
 {
     "$schema": "http://json-schema.org/draft-06/schema",
-    "$id": "https://github.com/StardustD2/Destiny-2-Character-Stats/blob/main/schema.json",
+    "$id": "https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json",
+    "$ref": "#/definitions/CharacterStats",
     "definitions": {
-        "CharacterStats": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "Mobility": {
-                    "$ref": "#/definitions/Mobility"
-                },
-                "Resilience": {
-                    "$ref": "#/definitions/Resilience"
-                },
-                "Recovery": {
-                    "$ref": "#/definitions/Recovery"
-                },
-                "Discipline": {
-                    "$ref": "#/definitions/Generic"
-                },
-                "Intellect": {
-                    "$ref": "#/definitions/Intellect"
-                },
-                "Strength": {
-                    "$ref": "#/definitions/Generic"
-                }
-            },
-            "required": [
-                "Discipline",
-                "Intellect",
-                "Mobility",
-                "Recovery",
-                "Resilience",
-                "Strength"
-            ],
-            "title": "CharacterStats"
-        },
-        "Description": {
+        "LocaleString": {
             "type": "string",
-            "description": "Contains a locale ID that you can use to grab the description for the item in your selected language. The ID is provided in a [key].[value] format where there can be an arbitrary number of keys (though it'll be 2-3 at most). Then you can use these keys and values to query the <./locale/[language code].json> files for the desired description. These descriptions are intended to be surfaced to users of apps using the data in this repository and provide crucial context to the values shown to them."
+            "description": "Contains a locale ID that you can use to grab the description for the item in your selected language. The ID is provided in a [key].[value] format where there can be an arbitrary number of keys (though it'll usually be 1). Then you can use these keys and values to query the <./locale/[language code].json> files for the desired description. These descriptions are intended to be surfaced to users of apps using the data in this repository and provide crucial context to the values shown to them."
+        },
+        "DynamicLocaleString": {
+            "type": "string",
+            "description": "The difference between this and LocaleString is that this one supports dynamically replaceable substrings, such as {{FlinchResistance}} or {{OrbOfPowerHealthRestore}} which will be filled-in from a property of each Character Stat with the same name. For example, {{FlinchResistance}} will be replaced with the value of the <FlinchResistance> property of the Character Stat. A numeric property can use an explicit formatter, such as {{EnergyGainScalar|ScalarPercent}}, to multiply a scalar by 100 and append a percent sign. This does not change the value of the exported property or the behavior of the existing {{Field}}{{Percent}} form, where Percent is a literal percent sign. AbilityName, ChargeCount, ChargeBasedScaling, BaseDuration and SuperDuration are contextual tokens supplied by the consumer per ability, not stat properties. {{ChargeBasedScaling|ChargeList}} lists the increase per stored charge joined by | (for example 0%|41.5%|125%) and {{ChargeCount|ChargeList}} lists the matching charge counts (0|1|2). BaseDuration is the source ability duration; SuperDuration is the calculated duration after applying SuperDurationIncrease where BaseDuration is defined."
+        },
+        "Overview": {
+            "$ref": "#/definitions/LocaleString",
+            "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+        },
+        "BaseStatTooltip": {
+            "$ref": "#/definitions/DynamicLocaleString",
+            "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+        },
+        "EnhancedStatTooltip": {
+            "$ref": "#/definitions/DynamicLocaleString",
+            "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+        },
+        "ChargeBasedScalingTooltip": {
+            "$ref": "#/definitions/DynamicLocaleString",
+            "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
         },
         "Ability": {
+            "title": "Ability",
             "type": "object",
             "additionalProperties": false,
             "properties": {
                 "Hash": {
                     "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
                     "description": "D2 Manifest inventoryItem hash"
                 },
                 "Name": {
                     "type": "string",
-                    "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                    "minLength": 1,
+                    "description": "For organization/debugging purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
                 },
-                "Cooldowns": {
-                    "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
-                    "minItems": 11,
-                    "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is strongly recommended to round them to an integer."
+                "BaseCooldown": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Base cooldown in seconds at a stat value of 0. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
                 },
                 "ChunkEnergyScalar": {
                     "type": "number",
-                    "description": "Abilities receive different amounts of 'chunk energy' from things like mods and other sources depending on their base cooldown. So let's say an armor mod gives you 10% grenade energy when popping your class ability — you'd multiply that 10% by the number listed here to arrive at the final amount you'll actually receive. An user-facing explanation of this property is available at the top level of the CharacterStat object under <ChunkEnergyScalarDescription>."
+                    "minimum": 0,
+                    "description": "Nonnegative scalar for chunk energy gains."
                 },
                 "ChargeBasedScaling": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "exclusiveMinimum": 0
                     },
                     "minItems": 1,
-                    "description": "Represents the behavior of certain abilities possessing additional scaling on their cooldown depending on the number of stored ability charges. The array's length represents the number of charges an ability has intrinsically. Numbers at every array index represent the Charge Rate scalar for the ability with [index] number of stored ability charges. As this is a Charge Rate scalar, cooldown times can be calculated by dividing the times in the <Cooldowns> member of <Ability> objects by the scalars in this array. Do note that this is not a required member of Ability objects and will only be present if an ability has multiple charges. (Therefore, if this property is absent, it is to be assumed that the ability only has a single charge by default) An user-facing explanation of this property is available at the top level of the CharacterStat object under <ChargeBasedScalingDescription>."
+                    "description": "Entry i is the charge-rate scalar while i charges are stored (starting at i = 0). Array length is the maximum number of charges. AbilityName, ChargeCount and ChargeBasedScaling tooltip tokens are supplied by the consumer per ability, not properties of the stat."
                 }
             },
             "required": [
                 "Hash",
                 "Name",
-                "Cooldowns",
+                "BaseCooldown",
                 "ChunkEnergyScalar"
-            ],
-            "title": "Ability"
+            ]
         },
-        "Override": {
+        "EnhancedDurationTooltip": {
+            "$ref": "#/definitions/DynamicLocaleString",
+            "description": "Locale ID for the enhanced-duration tooltip. Set only for Supers with a measured duration benefit."
+        },
+        "SuperAbility": {
+            "title": "SuperAbility",
             "type": "object",
             "additionalProperties": false,
             "properties": {
                 "Hash": {
                     "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
                     "description": "D2 Manifest inventoryItem hash"
                 },
                 "Name": {
                     "type": "string",
+                    "minLength": 1,
+                    "description": "For organization/debugging purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                },
+                "BaseCooldown": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Fixed Super cooldown in seconds, independent of the Super stat. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it."
+                },
+                "ActiveRegenScalar": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Nonnegative active Super regeneration scalar."
+                },
+                "BaseDuration": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Base active duration in seconds. Set only for Supers with a measured duration benefit from enhanced Super stat."
+                },
+                "EnhancedDurationTooltip": {
+                    "$ref": "#/definitions/EnhancedDurationTooltip",
+                    "description": "Locale ID for the enhanced-duration tooltip. Set only for Supers with a measured duration benefit."
+                }
+            },
+            "required": [
+                "Hash",
+                "Name",
+                "BaseCooldown",
+                "ActiveRegenScalar"
+            ]
+        },
+        "Override": {
+            "title": "Override",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Hash": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
+                    "description": "D2 Manifest inventoryItem hash"
+                },
+                "Name": {
+                    "type": "string",
+                    "minLength": 1,
                     "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
                 },
                 "Requirements": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "integer",
+                        "minimum": -4294967295,
+                        "maximum": 4294967295
                     },
                     "minItems": 1,
-                    "description": "The inventoryItem hash of each ability that is required to trigger the effects of this <Override>. Only overrides <Abilities> under the same Character Stat as the <Override>. Any one of these will trigger its effect defined in the other <Override> properties. Wildcards: if the requirements array only contains 1 item and it's a 0, any ability tied to this Character Stat will have its cooldown overwritten. Negative numbers in the array indicate filters, these will be the inventoryItem hashes of subclasses multiplied by -1. Any abilities tied to the given subclass will have their cooldowns overwritten."
+                    "description": "Any matching requirement selects this override for abilities in the same stat: 0 is a wildcard, positive values are ability manifest hashes, and negative values are negated subclass hashes requiring consumer-side resolution. Each matching index selects the corresponding parallel-array entry."
                 },
                 "CooldownOverride": {
-                    "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
-                    "minItems": 11,
-                    "maxItems": 11,
-                    "description": "Array index represents the Character Stat tier. Cooldowns are in seconds. Rounded to 2 decimal points. Overrides the cooldowns of the items listed in the <Requirements> array before the scalar is applied. Identical to the <Cooldowns> array of the <Ability> object."
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Replacement base cooldown in seconds for matching Requirements (at a stat value of 0 for non-Super abilities). Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
                 },
                 "Scalar": {
                     "type": "array",
                     "items": {
-                        "type": "number"
+                        "type": "number",
+                        "exclusiveMinimum": 0
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the <Requirements> array. Each item represents a multiplier to the cooldown time of the abilities (of a subclass) listed in the <Requirements> array at the same array index. Multiple scalars can stack with each other if their requirements are met (eg. Bastion Aspect and Citan's Ramparts Exotic Gauntlets). If <CooldownOverride> property is specified: <Scalar>s are factored in after <CooldownOverride>s."
+                    "description": "Multiplies the cooldown duration for matching Requirements. After BaseCooldown or CooldownOverride is selected, each active Scalar multiplies the result, then non-Super abilities also multiply it by CooldownScalars[min(stat value, 100)]. A Scalar of 0.8 makes the cooldown 20% shorter; 1.25 makes it 25% longer."
                 },
                 "ChunkEnergyOverride": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Chunk energy scalars for corresponding Requirements, applied in place of ChunkEnergyScalar."
+                }
+            },
+            "required": [
+                "Hash",
+                "Name",
+                "Requirements"
+            ],
+            "anyOf": [
+                {
+                    "required": [
+                        "CooldownOverride"
+                    ]
+                },
+                {
+                    "required": [
+                        "Scalar"
+                    ]
+                },
+                {
+                    "required": [
+                        "ChunkEnergyOverride"
+                    ]
+                }
+            ]
+        },
+        "MovementClass": {
+            "title": "MovementClass",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "ClassHash": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
+                    "description": "D2 Manifest class hash."
+                },
+                "Name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "For organization/debugging purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                },
+                "BaseMobilityTier": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified."
+                },
+                "BaseMobilityTierPVP": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Base hidden Mobility tier in PvP when it differs from PvE."
+                },
+                "BaseSprintSpeed": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Base sprint speed in m/s, independent of Mobility."
+                }
+            },
+            "required": [
+                "ClassHash",
+                "Name",
+                "BaseMobilityTier",
+                "BaseSprintSpeed"
+            ]
+        },
+        "MovementRules": {
+            "title": "MovementRules",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "WalkSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 14,
+                    "maxItems": 14,
+                    "description": "Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value."
+                },
+                "StrafeMultiplier": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Multiplier for left, right, and backward walking."
+                },
+                "CrouchMultiplier": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Multiplier for crouched walking."
+                },
+                "ADSMultiplier": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Default walking multiplier while aiming down sights; active source effects can replace it."
+                },
+                "ForwardSpeedCap": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Maximum forward movement speed, including sprint, in m/s."
+                },
+                "StrafeSpeedCap": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Maximum strafe speed in m/s, including while aiming down sights."
+                },
+                "CrouchSpeedCap": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Maximum crouched movement speed in m/s."
+                },
+                "MaxMobilityTier": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 13,
+                    "description": "Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain."
+                }
+            },
+            "required": [
+                "WalkSpeed",
+                "StrafeMultiplier",
+                "CrouchMultiplier",
+                "ADSMultiplier",
+                "ForwardSpeedCap",
+                "StrafeSpeedCap",
+                "CrouchSpeedCap",
+                "MaxMobilityTier"
+            ]
+        },
+        "MovementEffect": {
+            "title": "MovementEffect",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Type": {
+                    "type": "string",
+                    "enum": [
+                        "MobilityTiers",
+                        "ForwardMultiplier",
+                        "SprintMultiplier",
+                        "GroundedMultiplier",
+                        "GroundedNonSprintMultiplier",
+                        "OverweightMultiplier",
+                        "ADSMultiplier"
+                    ],
+                    "oneOf": [
+                        {
+                            "const": "MobilityTiers",
+                            "description": "Add hidden Mobility tiers before clamping to the tier cap."
+                        },
+                        {
+                            "const": "ForwardMultiplier",
+                            "description": "Multiply forward walking, standing or crouched, and sprint before the speed cap; never affects strafing."
+                        },
+                        {
+                            "const": "SprintMultiplier",
+                            "description": "Multiply sprint speed only."
+                        },
+                        {
+                            "const": "GroundedMultiplier",
+                            "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                        },
+                        {
+                            "const": "GroundedNonSprintMultiplier",
+                            "description": "Multiply grounded movement except sprint; does not affect jump height."
+                        },
+                        {
+                            "const": "OverweightMultiplier",
+                            "description": "Multiply grounded movement except sprint; does not affect jump height."
+                        },
+                        {
+                            "const": "ADSMultiplier",
+                            "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
+                        }
+                    ],
+                    "description": "Movement effect to apply."
+                },
+                "Values": {
                     "type": "array",
                     "items": {
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Length of the array is equal to the length of the <Requirements> array. Each item represents an override of the <ChunkEnergyScalar> property of the abilities (of a subclass) listed in the <Requirements> array at the same array index."
+                    "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
+                },
+                "BoostedValues": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    },
+                    "minItems": 1,
+                    "description": "Replacement values when every BoostRequiresAll hash is equipped; length must match Values."
                 }
             },
-            "anyOf": [
-                {"required": ["Hash", "Name", "Requirements", "CooldownOverride"]},
-                {"required": ["Hash", "Name", "Requirements", "Scalar"]},
-                {"required": ["Hash", "Name", "Requirements", "ChunkEnergyOverride"]}
-            ],
-            "title": "Override"
+            "required": [
+                "Type",
+                "Values"
+            ]
         },
-        "Generic": {
+        "MovementSource": {
+            "title": "MovementSource",
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
+                "Hash": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
+                    "description": "Manifest inventory item, plug, mod or perk hash, or item-category hash according to RefType; 0 warns that verification is needed."
+                },
+                "Name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "For organization/debugging purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                },
+                "RefType": {
+                    "type": "string",
+                    "enum": [
+                        "item",
+                        "itemCategory"
+                    ],
+                    "oneOf": [
+                        {
+                            "const": "item",
+                            "description": "DestinyInventoryItemDefinition hash (inventory item, plug, mod or perk)."
+                        },
+                        {
+                            "const": "itemCategory",
+                            "description": "DestinyItemCategoryDefinition hash."
+                        }
+                    ],
+                    "description": "Manifest definition table used by Hash."
+                },
+                "AlsoMatches": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4294967295
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "description": "Other inventory-item or plug hashes that activate this same source. Hash remains the primary identity; apply the source only once."
+                },
+                "Activation": {
+                    "type": "string",
+                    "enum": [
+                        "Always",
+                        "WhileHeld",
+                        "Conditional"
+                    ],
+                    "oneOf": [
+                        {
+                            "const": "Always",
+                            "description": "Active while equipped."
+                        },
+                        {
+                            "const": "WhileHeld",
+                            "description": "Active while the matching weapon is readied."
+                        },
+                        {
+                            "const": "Conditional",
+                            "description": "Active only while the localized Condition is satisfied."
+                        }
+                    ],
+                    "description": "When this source applies; callers select active sources."
+                },
+                "Effects": {
+                    "type": "array",
+                    "items": {
+                        "title": "MovementEffect",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "Type": {
+                                "type": "string",
+                                "enum": [
+                                    "MobilityTiers",
+                                    "ForwardMultiplier",
+                                    "SprintMultiplier",
+                                    "GroundedMultiplier",
+                                    "GroundedNonSprintMultiplier",
+                                    "OverweightMultiplier",
+                                    "ADSMultiplier"
+                                ],
+                                "oneOf": [
+                                    {
+                                        "const": "MobilityTiers",
+                                        "description": "Add hidden Mobility tiers before clamping to the tier cap."
+                                    },
+                                    {
+                                        "const": "ForwardMultiplier",
+                                        "description": "Multiply forward walking, standing or crouched, and sprint before the speed cap; never affects strafing."
+                                    },
+                                    {
+                                        "const": "SprintMultiplier",
+                                        "description": "Multiply sprint speed only."
+                                    },
+                                    {
+                                        "const": "GroundedMultiplier",
+                                        "description": "Multiply all grounded movement, including sprint; does not affect jump height."
+                                    },
+                                    {
+                                        "const": "GroundedNonSprintMultiplier",
+                                        "description": "Multiply grounded movement except sprint; does not affect jump height."
+                                    },
+                                    {
+                                        "const": "OverweightMultiplier",
+                                        "description": "Multiply grounded movement except sprint; does not affect jump height."
+                                    },
+                                    {
+                                        "const": "ADSMultiplier",
+                                        "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
+                                    }
+                                ],
+                                "description": "Movement effect to apply."
+                            },
+                            "Values": {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                },
+                                "minItems": 1,
+                                "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
+                            },
+                            "BoostedValues": {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                },
+                                "minItems": 1,
+                                "description": "Replacement values when every BoostRequiresAll hash is equipped; length must match Values."
+                            }
+                        },
+                        "required": [
+                            "Type",
+                            "Values"
+                        ]
+                    },
+                    "minItems": 1,
+                    "description": "Effects from this source, with at most one entry for each effect type."
+                },
+                "BoostRequiresAll": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 4294967295
+                    },
+                    "minItems": 1,
+                    "description": "All listed inventory-item hashes must be equipped before BoostedValues apply."
+                }
+            },
+            "required": [
+                "Hash",
+                "Name",
+                "RefType",
+                "Activation",
+                "Effects"
+            ]
+        },
+        "Health": {
+            "title": "Health Stat",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "FlinchResistance": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage ADS-only flinch resistance at each Health stat value. Stat values above 100 use the value at 100. Stat values 0-100: index = stat value."
+                },
+                "OrbOfPowerHealthRestore": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "How much HP picking up an Orb of Power restores at each Health stat value. Stat values above 100 use the value at 100. Stat values 0-100: index = stat value."
+                },
+                "PVPHealthHP": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "This number represents how much HP your Health has in most PVP activities."
+                },
+                "PVEHealthHP": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "This number represents how much HP your Health has in PVE activities."
+                },
+                "HealthRegenDelay": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "This number represents how many seconds after taking damage Health Regeneration starts."
+                },
+                "HealthRegenSpeed": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "This number represents how fast your Health regens is % of total Health per second. Total Health can be found in the <PVPHealthHP> and <PVEHealthHP> properties."
+                },
+                "BaseShieldHP": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "How much HP your Shields have in all activities (PVE and PVP), independent of the Health stat value."
+                },
+                "PVEBonusShieldHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Extra Shield HP in PVE activities at each enhanced Health stat value, added on top of <BaseShieldHP>. Below 101 there is no bonus. Does not apply in PVP. Stat values 100-200: index = stat value - 100."
+                },
+                "BaseShieldRechargeDelay": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "How many seconds after taking damage your Shields start recharging while the Health stat is not enhanced (100 or below)."
+                },
+                "ShieldRechargeDelay": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "How many seconds after taking damage your Shields start recharging at each enhanced Health stat value. Below 101, use <BaseShieldRechargeDelay>. Stat values 100-200: index = stat value - 100."
+                },
+                "BaseShieldRechargeSpeed": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "How fast your Shields recharge, in % of total Shield HP per second, while the Health stat is not enhanced (100 or below)."
+                },
+                "ShieldRechargeSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "How fast your Shields recharge, in % of total Shield HP per second, at each enhanced Health stat value. Below 101, use <BaseShieldRechargeSpeed>. Stat values 100-200: index = stat value - 100."
+                },
+                "PVEDamageResistance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "This number represents the percentage damage resistance applied to Health, not Shields, in PVE activities, independent of the Health stat value. The current value is 34.5."
+                }
+            },
+            "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "FlinchResistance",
+                "OrbOfPowerHealthRestore",
+                "PVPHealthHP",
+                "PVEHealthHP",
+                "HealthRegenDelay",
+                "HealthRegenSpeed",
+                "BaseShieldHP",
+                "PVEBonusShieldHP",
+                "BaseShieldRechargeDelay",
+                "ShieldRechargeDelay",
+                "BaseShieldRechargeSpeed",
+                "ShieldRechargeSpeed",
+                "PVEDamageResistance"
+            ]
+        },
+        "Melee": {
+            "title": "Melee Stat",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "ChargeBasedScalingTooltip": {
+                    "$ref": "#/definitions/ChargeBasedScalingTooltip",
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
+                },
+                "CooldownScalars": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown in seconds, replace it with applicable CooldownOverride (last matching replacement in collection order), multiply all matching Scalar entries, then multiply by CooldownScalars[min(stat value, 100)]. Requirements select with 0 as wildcard, positive ability hash, or negative subclass hash requiring consumer-side resolution. Stat values 0-100: index = stat value."
+                },
+                "EnergyGainScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how effective external sources of Melee Energy are. Stat values 0-100: index = stat value."
+                },
+                "PVEMeleeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Melee Ability damage in PvE at each enhanced Melee stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPMeleeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Melee Ability damage in PvP at each enhanced Melee stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
                 },
                 "Abilities": {
                     "type": "array",
@@ -152,66 +723,164 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
-                },
-                "ChunkEnergyScalarDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
-                },
-                "ChargeBasedScalingDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Charge-based Scaling is for abilities. This is only a one part of the whole as the actual <ChargeBasedScaling> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
                 }
             },
             "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "ChargeBasedScalingTooltip",
+                "CooldownScalars",
+                "EnergyGainScalar",
+                "PVEMeleeDamageIncrease",
+                "PVPMeleeDamageIncrease",
                 "Abilities",
-                "Overrides",
-                "Description",
-                "ChunkEnergyScalarDescription",
-                "ChargeBasedScalingDescription"
-            ],
-            "title": "Generic"
+                "Overrides"
+            ]
         },
-        "SuperAbility":{
-            "Hash": {
-                "type": "integer",
-                "description": "D2 Manifest inventoryItem hash"
-            },
-            "Name": {
-                "type": "string",
-                "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
-            },
-            "Cooldowns": {
-                "type": "array",
-                "items": {
-                    "type": "number"
-                },
-                "minItems": 11,
-                "maxItems": 11,
-                "description": "Array index represents the Intellect tier. Cooldowns are in seconds. Rounded to 2 decimal places. Note: Rounding to 2 decimal places is solely for improving math precision when combined with Override objects. When displaying these cooldown times, it is STRONGLY recommended to round them to an integer."
-            },
-            "SuperTier": {
-                "type": "integer",
-                "description": "This number represents the tier of the super ability and ranges from 1 to 5. Tier 1 recharges the slowest while Tier 5 recharges the fastest. Super tiers are a one-to-one translation of the base cooldowns of a super ability. This is mostly useless for all intents and purposes but does serve the purpose of influencing how much Super Energy you gain from active regen sources. It's an entirely optional value to surface for users but I thought it would be worth including alongside the ActiveRegenScalar property below — which is much more meaningful."
-            },
-            "ActiveRegenScalar": {
-                "type": "number",
-                "description": "This number represents the scalar for how much benefit you get from active super regeneration with your super ability. This ranges from 0.8 for a Tier 1 super to 1.2 for a Tier 5 super. Active Regen refers to any source of super energy that isn't just passively waiting for it to recharge. So aside from the normal passive regen and other effects that are 'additional base super regen', these influence everything. Be it collecting orbs of power, killing enemies (including assists), taking and dealing damage, armor mods, this covers everything else."
-            },
-            "required": [
-                "Hash",
-                "Name",
-                "Cooldowns",
-                "SuperTier",
-                "ActiveRegenScalar"
-            ],
-            "title": "SuperAbility"
-        },
-        "Intellect": {
+        "Grenade": {
+            "title": "Grenade Stat",
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "ChargeBasedScalingTooltip": {
+                    "$ref": "#/definitions/ChargeBasedScalingTooltip",
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
+                },
+                "CooldownScalars": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown in seconds, replace it with applicable CooldownOverride (last matching replacement in collection order), multiply all matching Scalar entries, then multiply by CooldownScalars[min(stat value, 100)]. Requirements select with 0 as wildcard, positive ability hash, or negative subclass hash requiring consumer-side resolution. Stat values 0-100: index = stat value."
+                },
+                "EnergyGainScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how effective external sources of Grenade Energy are. Stat values 0-100: index = stat value."
+                },
+                "PVEGrenadeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Grenade Ability damage in PvE at each enhanced Grenade stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPGrenadeDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Grenade Ability damage in PvP at each enhanced Grenade stat value. No ability-specific exceptions are currently known. Stat values 100-200: index = stat value - 100."
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                },
+                "Overrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Override"
+                    }
+                }
+            },
+            "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "ChargeBasedScalingTooltip",
+                "CooldownScalars",
+                "EnergyGainScalar",
+                "PVEGrenadeDamageIncrease",
+                "PVPGrenadeDamageIncrease",
+                "Abilities",
+                "Overrides"
+            ]
+        },
+        "Super": {
+            "title": "Super Stat",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "EnergyGainScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how effective external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) are. Stat values 0-100: index = stat value."
+                },
+                "ActiveRegenScalars": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values multiply the Super Ability's <ActiveRegenScalar> to determine active Super regeneration. Stat values 0-100: index = stat value."
+                },
+                "SuperDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your Super Ability deals when the Super stat is enhanced. Stat values 100-200: index = stat value - 100."
+                },
+                "SuperDurationIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage duration increase for SuperAbilities that define BaseDuration. Supers without BaseDuration do not receive a duration change through this field. Stat values 100-200: index = stat value - 100."
                 },
                 "SuperAbilities": {
                     "type": "array",
@@ -224,344 +893,392 @@
                     "items": {
                         "$ref": "#/definitions/Override"
                     }
-                },
-                "SuperTierDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Super Tiers are in case you wish to surface this info to users. This is only a one part of the whole as the actual <SuperTier> numbers are tied to the <SuperAbility> objects in the <SuperAbilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <SuperAbility>."
-                },
-                "ActiveRegenScalarDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Active Super Regen Scalar are. This is only a one part of the whole as the actual <ActiveRegenScalar> numbers are tied to the <SuperAbility> objects in the <SuperAbilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <SuperAbility>."
                 }
             },
             "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "EnergyGainScalar",
+                "ActiveRegenScalars",
+                "SuperDamageIncrease",
+                "SuperDurationIncrease",
                 "SuperAbilities",
-                "Overrides",
-                "Description",
-                "SuperTierDescription",
-                "ActiveRegenScalarDescription"
-            ],
-            "title": "Intellect"
+                "Overrides"
+            ]
         },
-        "Mobility": {
+        "Class": {
+            "title": "Class Stat",
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "ChargeBasedScalingTooltip": {
+                    "$ref": "#/definitions/ChargeBasedScalingTooltip",
+                    "description": "This is a description of the Charge-based Scaling behavior of certain abilities. It is used to explain how the passive recharge speed of an ability may be increased by the number of active charges stored up. AbilityName, ChargeCount and ChargeBasedScaling are contextual tokens supplied by the consumer per ability, not stat properties. This tooltip is intended to be displayed only if the <ChargeBasedScaling> property is present in the <Ability> object. You can see an example of how this should be formatted here: https://github.com/Database-Clarity/Character-Stats/blob/master/docs/CBSD_example.md"
+                },
+                "CooldownScalars": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown in seconds, replace it with applicable CooldownOverride (last matching replacement in collection order), multiply all matching Scalar entries, then multiply by CooldownScalars[min(stat value, 100)]. Requirements select with 0 as wildcard, positive ability hash, or negative subclass hash requiring consumer-side resolution. Stat values 0-100: index = stat value."
+                },
+                "EnergyGainScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how effective external sources of Class Ability Energy are. Stat values 0-100: index = stat value."
+                },
+                "PVEOvershieldHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much Overshield HP casting your Class Ability grants in PvE when the Class stat is enhanced. This is raw HP, not effective HP after damage resistance. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPOvershieldHP": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much raw Overshield HP casting your Class Ability grants in PvP when the Class stat is enhanced. PvP Overshields have 50% damage resistance; this value is not effective HP. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPOvershieldDamageResistance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "PvP Overshield damage resistance as a percentage. Do not apply this value to PvE; PvE Overshield damage resistance is unknown."
+                },
+                "PVEClassAbilityDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Class Ability damage in PvE at each enhanced Class stat value. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPClassAbilityDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Percentage increase to Class Ability damage in PvP at each enhanced Class stat value. Stat values 100-200: index = stat value - 100."
+                },
+                "Abilities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Ability"
+                    }
+                },
+                "Overrides": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Override"
+                    }
+                }
+            },
+            "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "ChargeBasedScalingTooltip",
+                "CooldownScalars",
+                "EnergyGainScalar",
+                "PVEOvershieldHP",
+                "PVPOvershieldHP",
+                "PVPOvershieldDamageResistance",
+                "PVEClassAbilityDamageIncrease",
+                "PVPClassAbilityDamageIncrease",
+                "Abilities",
+                "Overrides"
+            ]
+        },
+        "Weapons": {
+            "title": "Weapons Stat",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Overview": {
+                    "$ref": "#/definitions/Overview",
+                    "description": "Contains a high-level overview of the Character Stat and essentially serves as a replacement of Bungie's native stat description."
+                },
+                "BaseStatTooltip": {
+                    "$ref": "#/definitions/BaseStatTooltip",
+                    "description": "Contains a dynamic tooltip for the base version of the stat (0-100 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance)."
+                },
+                "EnhancedStatTooltip": {
+                    "$ref": "#/definitions/EnhancedStatTooltip",
+                    "description": "Contains a dynamic tooltip for the enhanced version of the stat (100-200 points). These properties can either be numbers or arrays of numbers, depending on the property. If it's an array, the index of the array will be used to determine which value to use based on the Character Stat value. For example, if the <FlinchResistance> property is an array, then {{FlinchResistance}} will be replaced with the value at the index corresponding to the stat value, clamped to the field domain (0-100 for FlinchResistance). Enhanced-only curves use 100-200 and store the base value at stat 100; their array index is the stat value minus 100."
+                },
+                "ReloadSpeed": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values are the percentage decrease in weapon Reload animation duration at each stat point. Convert a duration multiplier to a decrease with (1 - multiplier) × 100. Stat values 0-100: index = stat value."
+                },
+                "Handling": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values are the percentage decrease in weapon Handling animation duration at each stat point. Convert a duration multiplier to a decrease with (1 - multiplier) × 100. Stat values 0-100: index = stat value."
+                },
+                "NonBossDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your weapons deal against Minor, Elite, and Miniboss combatants. Stat values 0-100: index = stat value."
+                },
+                "SpecialDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage Special weapons deal against Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
+                },
+                "PowerDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage Power weapons deal against Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
+                },
+                "PVPDamageIncrease": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent how much increased damage your weapons deal against Players when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
+                },
+                "LargeAmmoBrickChance": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 101,
+                    "maxItems": 101,
+                    "description": "Values represent the chance of spawning Large Ammo Bricks through the Ammo Meter system when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100."
+                }
+            },
+            "required": [
+                "Overview",
+                "BaseStatTooltip",
+                "EnhancedStatTooltip",
+                "ReloadSpeed",
+                "Handling",
+                "NonBossDamageIncrease",
+                "SpecialDamageIncrease",
+                "PowerDamageIncrease",
+                "PVPDamageIncrease",
+                "LargeAmmoBrickChance"
+            ]
+        },
+        "Movement": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Rules": {
+                    "title": "MovementRules",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "WalkSpeed": {
+                            "type": "array",
+                            "items": {
+                                "type": "number",
+                                "minimum": 0
+                            },
+                            "minItems": 14,
+                            "maxItems": 14,
+                            "description": "Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value."
+                        },
+                        "StrafeMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplier for left, right, and backward walking."
+                        },
+                        "CrouchMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Multiplier for crouched walking."
+                        },
+                        "ADSMultiplier": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Default walking multiplier while aiming down sights; active source effects can replace it."
+                        },
+                        "ForwardSpeedCap": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Maximum forward movement speed, including sprint, in m/s."
+                        },
+                        "StrafeSpeedCap": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Maximum strafe speed in m/s, including while aiming down sights."
+                        },
+                        "CrouchSpeedCap": {
+                            "type": "number",
+                            "exclusiveMinimum": 0,
+                            "description": "Maximum crouched movement speed in m/s."
+                        },
+                        "MaxMobilityTier": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 13,
+                            "description": "Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain."
+                        }
+                    },
+                    "required": [
+                        "WalkSpeed",
+                        "StrafeMultiplier",
+                        "CrouchMultiplier",
+                        "ADSMultiplier",
+                        "ForwardSpeedCap",
+                        "StrafeSpeedCap",
+                        "CrouchSpeedCap",
+                        "MaxMobilityTier"
+                    ],
+                    "description": "Shared movement curves, state multipliers, and caps."
+                },
+                "Classes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MovementClass"
+                    }
+                },
+                "Sources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MovementSource"
+                    }
+                },
+                "Overview": {
+                    "type": "string",
+                    "description": "Locale ID for Movement.Overview"
                 },
                 "WalkSpeed": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Represents how fast you can walk (not sprint) forward in meters per second. Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
-                        }
-                    }
+                    "type": "string",
+                    "description": "Locale ID for Movement.WalkSpeed"
                 },
                 "StrafeSpeed": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Represents how fast you can walk side-to-side and backwards in meters per second (85% of Walking Speed). Array index represents the Mobility tier. Rounding beyond 2 decimal places is not recommended."
-                        }
-                    }
+                    "type": "string",
+                    "description": "Locale ID for Movement.StrafeSpeed"
                 },
                 "CrouchSpeed": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Represents how fast you can move while crouching in meters per second (55% of Walking Speed). Array index represents the Mobility tier. The speeds are represented in meters per second. Rounding beyond 2 decimal places is not recommended."
-                        }
-                    }
+                    "type": "string",
+                    "description": "Locale ID for Movement.CrouchSpeed"
                 },
-                "Abilities": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Ability"
-                    }
+                "SprintSpeed": {
+                    "type": "string",
+                    "description": "Locale ID for Movement.SprintSpeed"
                 },
-                "Overrides": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Override"
-                    }
-                },
-                "ChunkEnergyScalarDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
-                },
-                "ChargeBasedScalingDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Charge-based Scaling is for abilities. This is only a one part of the whole as the actual <ChargeBasedScaling> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
+                "ADSSpeed": {
+                    "type": "string",
+                    "description": "Locale ID for Movement.ADSSpeed"
                 }
             },
             "required": [
-                "Abilities",
-                "Overrides",
-                "CrouchSpeed",
-                "StrafeSpeed",
+                "Rules",
+                "Classes",
+                "Sources",
+                "Overview",
                 "WalkSpeed",
-                "Description",
-                "ChunkEnergyScalarDescription",
-                "ChargeBasedScalingDescription"
-            ],
-            "title": "Mobility"
+                "StrafeSpeed",
+                "CrouchSpeed",
+                "SprintSpeed",
+                "ADSSpeed"
+            ]
         },
-        "Recovery": {
+        "CharacterStats": {
+            "title": "CharacterStats",
+            "description": "Root keys are decimal-string stat manifest hashes plus the non-hash Movement key.",
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
+                "144602215": {
+                    "$ref": "#/definitions/Super"
                 },
-                "TotalRegenTime": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds it takes to heal from 0 to full HP. Rounding is not recommended."
-                        }
-                    }
+                "392767087": {
+                    "$ref": "#/definitions/Health"
                 },
-                "HealthRegenDelay": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Recovery tier. The numbers representhow many seconds after taking damage Health Regeneration starts. Rounding is not recommended. Good to know: <Health> is a fixed 70 HP portion of your Total HP alongside <Shields> which are a 115-130 HP portion of Total HP determined by Resilience."
-                        }
-                    }
+                "1735777505": {
+                    "$ref": "#/definitions/Grenade"
                 },
-                "HealthRegenSpeed": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Recovery tier. The numbers represent how fast your <Health> regens after the delay. The numbers are provided in % of total <Health> per second (total <Health> is a fixed 70HP). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can divide the numbers by 100, multiply by 70, and display it as HP/second."
-                        }
-                    }
+                "1943323491": {
+                    "$ref": "#/definitions/Class"
                 },
-                "ShieldRegenDelay": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Recovery tier. The numbers represent how many seconds after taking damage Shield Regeneration starts. Rounding is not recommended. Good to know: Shield health is a 115-130 HP portion of Total HP and is determined by Resilience."
-                        }
-                    }
+                "2996146975": {
+                    "$ref": "#/definitions/Weapons"
                 },
-                "ShieldRegenSpeed": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Recovery tier. The numbers represent how fast your shields regen after the delay. The numbers are provided in % of total shield health per second (shield health is a 115-130 HP portion of Total HP and is determined by Resilience). Rounding beyond 1-2 decimal places is not recommended. For all intents and purposes, you can take the TotalHP value at a specified Resilience tier and subtract 70 to get the shield health. After that, you can divide the ShieldRegenSpeed numbers by 100, multiply it by the selected shield health, and display it as HP/second. (Though it's probably better to leave it in % to avoid potentially causing confusion for users)"
-                        }
-                    }
+                "4244567218": {
+                    "$ref": "#/definitions/Melee"
                 },
-                "Abilities": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Ability"
-                    }
-                },
-                "Overrides": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Override"
-                    }
-                },
-                "ChunkEnergyScalarDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
-                },
-                "ChargeBasedScalingDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Charge-based Scaling is for abilities. This is only a one part of the whole as the actual <ChargeBasedScaling> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
+                "Movement": {
+                    "$ref": "#/definitions/Movement"
                 }
             },
             "required": [
-                "Abilities",
-                "Overrides",
-                "TotalRegenTime",
-                "HealthRegenDelay",
-                "HealthRegenTime",
-                "ShieldRegenDelay",
-                "ShieldRegenTime",
-                "Description",
-                "ChunkEnergyScalarDescription",
-                "ChargeBasedScalingDescription"
-            ],
-            "title": "Recovery"
-        },
-        "Resilience": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "Description": {
-                    "$ref": "#/definitions/Description"
-                },
-                "ShieldHP": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Resilience tier. The numbers represent how much HP your <Shields> have at each tier. <Shields> are the 115 to 130 HP 'right-side portion' of your Total HP alongside <Health>. The amount of <Health> you have depends on the activity: 100 HP in most Crucible playlists (excluding Momentum Control and Mayhem) and 70 HP everywhere else."
-                        }
-                    }
-                },
-                "PvEDamageResistance": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Resilience tier. The numbers represent the percentage damage resistance granted IN PVE at each tier."
-                        }
-                    }
-                },
-                "FlinchResistance": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "Description": {
-                            "$ref": "#/definitions/Description"
-                        },
-                        "Array": {
-                            "type": "array",
-                            "items": {
-                                "type": "number",
-                                "minItems": 11,
-                                "maxItems": 11
-                            },
-                            "description": "Array index represents the Resilience tier. The numbers represent the percentage flinch resistance granted at each tier."
-                        }
-                    }
-                },
-                "Abilities": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Ability"
-                    }
-                },
-                "Overrides": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Override"
-                    }
-                },
-                "ChunkEnergyScalarDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Chunk Energy Scalars are. This is only a one part of the whole as the actual <ChunkEnergyScalar> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
-                },
-                "ChargeBasedScalingDescription": {
-                    "$ref": "#/definitions/Description",
-                    "description": "Contains a description of what Charge-based Scaling is for abilities. This is only a one part of the whole as the actual <ChargeBasedScaling> numbers are tied to the <Ability> objects in the <Abilities> array. It's just that the description itself is stored at a higher level to show it's the same for each <Ability>."
-                }
-            },
-            "required": [
-                "Description",
-                "ShieldHP",
-                "PvEDamageResistance",
-                "FlinchResistance",
-                "Abilities",
-                "Overrides",
-                "ChunkEnergyScalarDescription",
-                "ChargeBasedScalingDescription"
-            ],
-            "title": "Resilience"
+                "144602215",
+                "392767087",
+                "1735777505",
+                "1943323491",
+                "2996146975",
+                "4244567218",
+                "Movement"
+            ]
         }
     }
 }

@@ -1,0 +1,606 @@
+.long-page {
+    display: grid;
+    grid-template-columns: fit-content(min(30vw, 480px)) minmax(0, 1fr);
+    height: 100%;
+    min-height: 0;
+    position: relative;
+}
+.outline-shell {
+    width: auto;
+    max-width: min(30vw, 480px);
+    min-width: 0;
+    min-height: 0;
+    background: #15171b;
+    border-right: 1px solid var(--border);
+    overflow: auto;
+}
+.outline-shell:not([open]) {
+    width: 112px;
+}
+.outline-shell > summary {
+    cursor: pointer;
+    padding: 12px 8px;
+    white-space: nowrap;
+}
+.outline {
+    background: #15171b;
+    padding: 0 8px 12px;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+.outline-heading {
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 0 8px 8px;
+}
+.outline > button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid var(--border);
+    border-radius: 0;
+    font-size: 11px;
+    padding: 4px 8px;
+    min-height: 26px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+.outline > button[aria-current] {
+    border-left-color: var(--accent);
+    color: var(--accent);
+    background: #20242a;
+}
+.outline-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 4px;
+    margin: 16px 8px 0;
+}
+.outline-actions button {
+    font-size: 11px;
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: var(--muted);
+}
+.long-content {
+    padding: 12px 16px 32px;
+}
+/* A single top-level field: its own label already names it, so no section heading. */
+.field-card {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 4px 12px;
+}
+.long-content > [data-outline] {
+    scroll-margin: 8px;
+    margin-bottom: 8px;
+}
+.collapse {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    min-width: 0;
+    margin: 0 0 8px;
+    background: #181b20;
+}
+.collapse > summary {
+    cursor: pointer;
+    min-height: 30px;
+    padding: 6px 10px;
+    background: #1e2127;
+    user-select: none;
+    line-height: 18px;
+    font-size: 12px;
+}
+.collapse > summary > span,
+.collapse > summary > strong {
+    margin-right: 12px;
+}
+.collapse > summary .count-badge {
+    margin-left: 8px;
+}
+.collapse-body {
+    padding: 8px 12px;
+}
+.collapse:not([open]) {
+    margin-bottom: 4px;
+}
+.field-frame {
+    position: relative;
+    min-width: 0;
+    border-left: 2px solid transparent;
+}
+.field-frame.is-modified {
+    border-left-color: var(--info);
+}
+.revert-field {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    z-index: 2;
+    border: 0;
+    padding: 0 4px;
+    min-height: 22px;
+    height: 22px;
+    background: #242931;
+    color: var(--info);
+    font-size: 13px;
+}
+.modified-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background: var(--info);
+    border-radius: 50%;
+    vertical-align: middle;
+}
+.is-modified > .collapse > summary {
+    padding-right: 44px;
+}
+/* The label column scales with the row (not the viewport), so narrow panes keep room for labels. */
+.field {
+    display: grid;
+    grid-template-columns: clamp(140px, 34%, 260px) minmax(0, 1fr);
+    gap: 16px;
+    /* The right padding always holds the revert button, so a field never moves when it changes. */
+    padding: 8px 40px 8px 4px;
+    align-items: start;
+    border-bottom: 1px solid #2a2e35;
+}
+.field-frame:last-child > .field {
+    border-bottom: 0;
+}
+.field-label {
+    margin: 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: #c3c8d2;
+    font-weight: 400;
+    overflow-wrap: break-word;
+}
+.field-help {
+    display: inline-flex;
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    cursor: help;
+}
+.field-value {
+    min-width: 0;
+}
+.stepped-number-input {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    min-width: 0;
+    max-width: 220px;
+}
+.stepped-number-input > input[type='number'] {
+    width: 100%;
+    min-width: 0;
+    padding-right: 26px;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+.stepped-number-input > input[type='number']::-webkit-inner-spin-button,
+.stepped-number-input > input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+.stepped-number-controls {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    width: 18px;
+}
+.stepped-number-controls > button {
+    min-height: 0;
+    height: 50%;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    font-size: 7px;
+    line-height: 8px;
+}
+.stepped-number-controls > button:hover:not(:disabled) {
+    background: #303640;
+}
+.field-value > .stepped-number-input {
+    max-width: 220px;
+}
+.hash-resolution {
+    margin-top: 8px;
+}
+.nested-object > .collapse-body {
+    padding: 8px;
+}
+.nested-row {
+    border-bottom: 1px solid var(--border);
+    padding: 4px 0 8px;
+    margin-bottom: 8px;
+}
+.nested-row > .section-bar {
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nested-row .field {
+    grid-template-columns: clamp(110px, 30%, 200px) minmax(0, 1fr);
+    gap: 12px;
+}
+.nested-row .array-element input,
+.nested-row .array-element .stepped-number-input {
+    width: 76px;
+}
+.field-unpublished {
+    color: var(--warning);
+    cursor: help;
+}
+.field-value > select,
+.field-value > input:not([type='number']):not([type='checkbox']):not([type='range']) {
+    max-width: min(100%, 420px);
+}
+.field-value .error {
+    margin: 4px 0;
+}
+.curve-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.curve-toolbar .check {
+    font-size: 11px;
+}
+.curve-description {
+    color: var(--muted);
+    max-height: 32px;
+    overflow: hidden;
+}
+.plot {
+    height: 166px;
+    min-width: 0;
+    margin: 4px 0;
+    position: relative;
+}
+.plot-tooltip {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    padding: 4px 8px;
+    background: #23262c;
+    border: 1px solid var(--border);
+    font:
+        11px Consolas,
+        monospace;
+    color: #f0f3f8;
+    z-index: 2;
+}
+.plot svg {
+    width: 100%;
+    height: 150px;
+    display: block;
+}
+.plot svg text {
+    fill: var(--muted);
+    font-size: 11px;
+    font-family: Consolas, monospace;
+}
+.plot svg .plot-value {
+    fill: #f0f3f8;
+}
+.plot-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 10px;
+    padding-left: 4px;
+}
+.plot-legend > :last-child {
+    margin-left: auto;
+}
+.rounding {
+    max-width: 300px;
+    margin: 8px 0 12px;
+    font-size: 12px;
+}
+.segment {
+    margin-bottom: 4px;
+    background: #14171b;
+}
+.segment > summary {
+    background: #1a1d22;
+    min-height: 26px;
+    padding: 3px 8px;
+    font-size: 11px;
+}
+.segment .collapse-body {
+    padding: 4px 8px 8px;
+}
+.segment-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 8px 12px;
+}
+.segment-row > label {
+    display: grid;
+    grid-template-columns: auto minmax(42px, 1fr);
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 0;
+    font-size: 11px;
+    flex: 1 1 120px;
+}
+.segment-row > label:first-child {
+    flex: 0 0 auto;
+    grid-template-columns: auto 108px;
+}
+.segment-row > .expression {
+    flex: 3 1 280px;
+}
+.segment-row select {
+    min-width: 96px;
+}
+.segment-actions {
+    flex-wrap: nowrap;
+}
+.segment-actions button {
+    background: transparent;
+}
+.points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 4px 12px;
+    max-height: 210px;
+    overflow: auto;
+    margin-top: 8px;
+}
+.point-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.point-row label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+.point-row input,
+.point-row .stepped-number-input {
+    width: 72px;
+    flex: 0 0 72px;
+}
+.raw-values {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 4px 12px;
+}
+.raw-values label {
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    margin: 2px 0;
+    font:
+        11px Consolas,
+        monospace;
+}
+.view-json {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+.view-json summary,
+.issues summary {
+    cursor: pointer;
+}
+.view-json pre {
+    max-height: 200px;
+    overflow: auto;
+    font-size: 11px;
+}
+.text-editor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+.text-controls {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 8px 16px;
+}
+.text-controls .stat-control {
+    width: 300px;
+    flex-shrink: 0;
+}
+.text-controls .inline {
+    grid-template-columns: auto minmax(100px, 220px);
+    font-size: 11px;
+    gap: 12px;
+    margin: 0;
+}
+.text-controls .help {
+    margin-left: auto;
+}
+.text-editor > .long-page {
+    flex: 1;
+    min-height: 0;
+}
+.text-entry {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+.text-source {
+    align-content: start;
+    align-items: start;
+    grid-template-rows: auto auto;
+    margin: 0;
+    font-size: 11px;
+    gap: 4px;
+}
+.text-source textarea {
+    min-height: 96px;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+}
+.preview-column {
+    min-width: 0;
+    align-self: start;
+}
+.preview-column h4 {
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+.tooltip-preview {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    line-height: 1.6;
+    padding: 8px 12px;
+    min-height: 96px;
+    background: #12151a;
+    border-left: 1px solid var(--accent);
+}
+.text-entry + .error {
+    margin-bottom: 0;
+}
+
+.hash-field-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.hash-field-value > input {
+    flex: 0 1 170px;
+    max-width: 170px;
+}
+.hash-field-value > .hash-resolution {
+    flex: 1;
+    min-width: 120px;
+    margin: 0;
+}
+.hash-field-value > .error {
+    flex-basis: 100%;
+}
+
+.curve-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.curve-toolbar .rounding {
+    grid-template-columns: auto 56px;
+    gap: 12px;
+    margin: 0;
+    font-size: 11px;
+    white-space: nowrap;
+}
+.reference-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+.reference-details {
+    margin-bottom: 8px;
+}
+.reference-details > summary {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.reference-details > .reference-chips {
+    margin: 6px 0 0;
+}
+.reference-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 4px;
+    background: #20242a;
+}
+.field-name {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 6px;
+    min-width: 0;
+}
+.field-key {
+    color: #8b94a1;
+    font-family: 'Cascadia Code', Consolas, ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 400;
+    overflow-wrap: break-word;
+    min-width: 0;
+    max-width: 100%;
+}
+.field-optional {
+    color: #8b94a1;
+    font-size: 10px;
+    font-weight: 400;
+    font-style: italic;
+}
+/* Help popovers anchor to the label row or disclosure heading so they never clip at the pane edge. */
+.field-label,
+.collapse > summary {
+    position: relative;
+}
+.field-label > label {
+    display: block;
+    min-width: 0;
+    margin: 0;
+    font-weight: inherit;
+}
+.field-help {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: 50%;
+}
+.field-help:hover:not(:disabled),
+.field-help[aria-expanded='true'] {
+    color: var(--info);
+    background: transparent;
+}
+.field-help-popover {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 30;
+    width: max-content;
+    max-width: min(360px, calc(100vw - 32px));
+    padding: 8px 10px;
+    border: 1px solid #505969;
+    border-radius: 3px;
+    background: #20242b;
+    color: #d5d9e0;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 17px;
+    white-space: normal;
+    text-align: left;
+    cursor: auto;
+}

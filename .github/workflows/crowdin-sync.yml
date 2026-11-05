@@ -2,7 +2,7 @@ name: Scheduled Crowdin Sync
 
 on:
     schedule:
-        - cron: '0 17 * * */6' # Sync at 17:00 every Saturday - https://crontab.guru/#0_17_*_*_*/6
+        - cron: '0 17 * * 6' # Sync at 17:00 UTC every Saturday - https://crontab.guru/#0_17_*_*_6
     workflow_dispatch: # For manually running the action
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
           - name: Checkout 
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
 
           - name: Crowdin Action
             uses: crowdin/github-action@v1

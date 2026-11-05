@@ -1,0 +1,128 @@
+{
+    "Hash": 392767087,
+    "Name": "Health",
+    "Fields": {
+        "FlinchResistance": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 1,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            10
+                        ]
+                    ]
+                }
+            ]
+        },
+        "OrbOfPowerHealthRestore": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 3,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            100,
+                            70
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PVPHealthHP": 100,
+        "PVEHealthHP": 70,
+        "HealthRegenDelay": 1.75,
+        "HealthRegenSpeed": 31.25,
+        "BaseShieldHP": 130,
+        "PVEBonusShieldHP": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            150,
+                            15
+                        ],
+                        [
+                            200,
+                            20
+                        ]
+                    ]
+                }
+            ]
+        },
+        "BaseShieldRechargeDelay": 4.9,
+        "ShieldRechargeDelay": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Round": 2,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            4.9
+                        ],
+                        [
+                            200,
+                            3.675
+                        ]
+                    ]
+                }
+            ]
+        },
+        "BaseShieldRechargeSpeed": 34.48,
+        "ShieldRechargeSpeed": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Round": 2,
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            34.48
+                        ],
+                        [
+                            200,
+                            50
+                        ]
+                    ]
+                }
+            ]
+        },
+        "PVEDamageResistance": 34.5
+    },
+    "Notes": "Placeholder field values — replace with tested data."
+}

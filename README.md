@@ -29,19 +29,68 @@ Please check out our website's [Partnerships page](https://www.d2clarity.com/par
 ## Recommended Access Paths
 
 - JSON schema for the database with documentation: <https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json>
+- TypeScript declarations (`CharacterStatInfo` and `UpdateInfo`, generated from the schema, with the property documentation as JSDoc): <https://github.com/Database-Clarity/Character-Stats/blob/master/character-stats.d.ts> (also served as `https://character-stats.d2clarity.com/character-stats.d.ts`). Copy it into your project and `import type { CharacterStatInfo } from './character-stats'`.
 - Main Database contents:
-  - With Indentation (human-readable): `https://Database-Clarity.github.io/Character-Stats/versions/[schemaVersion]/CharacterStatInfo.json`
-  - Without Indentation (smaller file size): `https://Database-Clarity.github.io/Character-Stats/versions/[schemaVersion]/CharacterStatInfo-NI.json`
-- Versioning using the `update.json` file found here: `https://Database-Clarity.github.io/Character-Stats/update.json`
+  - With Indentation (human-readable): `https://character-stats.d2clarity.com/versions/[major]/CharacterStatInfo.json` for v2 and later
+  - Without Indentation (smaller file size): `https://character-stats.d2clarity.com/versions/[major]/CharacterStatInfo-NI.json` for v2 and later
+- Versioning using the `update.json` file found here: `https://character-stats.d2clarity.com/update.json`
+
+Old `database-clarity.github.io/Character-Stats` URLs keep working via redirect, but the new URLs avoid the extra hop.
+
+For v2 and later, use the major number from `schemaVersion` as the directory
+(for example, `2.0.0` uses `versions/2/`). Legacy v1 releases use `X.Y`
+`schemaVersion` values and historically inconsistent directory names, so
+consumers must retain their exact v1 paths rather than deriving a directory.
+
+## Example: showing a cooldown
+
+Stat keys are decimal-string manifest hashes. An ability's cooldown at a stat value is its
+`BaseCooldown`, then the applicable overrides, then the stat's `CooldownScalars` curve (stat 0-100,
+index = stat value). Curves are already expanded to arrays.
+
+```ts
+import type { Class, Grenade, Melee } from './character-stats';
+
+function cooldown(
+    stat: Class | Grenade | Melee,
+    abilityHash: number,
+    activeOverrides: number[],
+    statValue: number,
+): number {
+    const ability = stat.Abilities.find((a) => a.Hash === abilityHash)!;
+    // Active overrides that apply to this ability, with the Requirements indices that matched.
+    const applied = stat.Overrides.filter((o) => activeOverrides.includes(o.Hash))
+        .map((o) => ({
+            o,
+            indices: o.Requirements.flatMap((r, i) => (r === 0 || r === abilityHash ? [i] : [])),
+        }))
+        .filter(({ indices }) => indices.length);
+    let seconds = ability.BaseCooldown;
+    for (const { o } of applied) seconds = o.CooldownOverride ?? seconds; // last replacement wins
+    for (const { o, indices } of applied) for (const i of indices) seconds *= o.Scalar?.[i] ?? 1;
+    const index = Math.max(0, Math.min(100, Math.trunc(statValue)));
+    return Number((seconds * stat.CooldownScalars[index]!).toFixed(3));
+}
+// cooldown(data['1735777505'], grenadeHash, [aspectHash], 70) // 1735777505 is the Grenade stat
+```
+
+- A `Requirements` entry of `0` matches every ability in the stat, a positive entry matches one ability, and a **negative** entry is a negated subclass hash that your app must resolve (apply the override only when that subclass is active). `Scalar` entries are per requirement index.
+- Super cooldowns do not use `CooldownScalars` (leave out the last factor); Super stat `SuperAbilities` replace `Abilities`.
+- Super duration: `BaseDuration * (1 + SuperDurationIncrease[clamp(stat, 100, 200) - 100] / 100)`, rounded to 2 decimals.
+- Movement speeds are described by `Movement.Rules`, `Classes` and `Sources`; the exact order of operations is in the movement section of the [development guide](docs/DEVELOPMENT.md#movement-data-and-calculations), and the reference implementation is `movementSpeed` in [`src/core/calc.ts`](src/core/calc.ts).
 
 ## Database Information
 
-Vital information about the database structure and what each property stored in it represents can be found in the `shema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
+Vital information about the database structure and what each property stored in it represents can be found in the `schema.json` file [here](https://github.com/Database-Clarity/Character-Stats/blob/master/schema.json).
 
 In addition to the main database files, the `update.json` contains the following two values:
 
-- `lastUpdate` - integer: timestamp of the last update made to the database
-- `schemaVersion` - string (matches `^\d+\.\d+$`): the current schema version used for this database
+- `lastUpdate` - integer: Unix epoch time in nanoseconds of the last update made to the database
+- `schemaVersion` - string: the current schema version used for this database; full `X.Y.Z` for v2 and later, or legacy `X.Y` for v1
+
+A higher published major/minor signals newly supported schema/API features and
+publishes as `X.Y.0` even if the consumer JSON is unchanged. A build is a no-op
+only at the same major/minor when both pretty and minified exports are unchanged.
 
 Example usage of the `update.json` file for handling breaking changes:
 
@@ -53,3 +102,7 @@ Example usage of the `update.json` file for handling breaking changes:
 ## Credits
 
 I want to thank Hugo for [their amazing spreadsheet](https://docs.google.com/spreadsheets/d/1LgOPdcdEmRvDxFq1ZgJkR9-U6KMsTvYTUSJgkqsLIqs/) which provided the fundamentals of this database and u/Crystic_Knight for their [breakdown of Mobility](https://www.reddit.com/r/DestinyTheGame/comments/ejw37c/breakdown_of_mobility_ultimate_edition/). Last, but most certainly not least, I want to thank RyTako for [his spreadsheet](https://docs.google.com/spreadsheets/d/1lEOY_Z0v5ZZVZJ1SVLJyleMBEG2a7KLq4aLIQA9zk0A/) and ongoing high quality testing to help out the entire science community.
+
+## Contributing / Development
+
+See the [development guide](docs/DEVELOPMENT.md) for setup, data/schema workflows, and publishing, and the [editor guide](docs/EDITOR.md) for using the web editor. The editor is available at <https://character-stats.d2clarity.com/editor/>.

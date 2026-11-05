@@ -1,0 +1,505 @@
+import { createContext, useContext, useMemo, useReducer, type ReactNode } from 'react';
+import {
+    isRecord,
+    movementSpec,
+    statRegistry,
+    serializeSource,
+    validatePlaceholders,
+    validateSources,
+    type LocaleData,
+    type StatSource,
+    type MovementSource,
+    type ValidationIssue,
+} from '../../core';
+import type { DataSource, LoadedData } from '../data';
+import { collectChanges, sameValue } from './editing';
+import { mergeFile, resolveConflict, type MergeConflict, type Resolution } from './merge';
+import { LOCALE_FILE, MOVEMENT_FILE, isStatFile } from './paths';
+import { decodeConflicts, type RecoverySnapshot } from './recovery';
+import { useRecovery } from './useRecovery';
+export interface Draft {
+    text: string;
+    error: string;
+}
+export interface EditorState {
+    source: DataSource;
+    head: string;
+    originals: Record<string, string>;
+    originalValues: Record<string, unknown>;
+    originalSerialized: Record<string, string>;
+    values: Record<string, unknown>;
+    drafts: Record<string, Draft>;
+    itemDrafts: Record<string, Record<string, unknown>>;
+    saveRevision: number;
+    /** Overlapping remote edits from the last rebase; Save is blocked until each is resolved. */
+    conflicts: MergeConflict[];
+    /** Dirty files whose remote version also changed in the last rebase. */
+    mergedFiles: string[];
+}
+type Action =
+    | { type: 'restore'; snapshot: RecoverySnapshot }
+    | { type: 'item-draft'; key: string; value?: Record<string, unknown> }
+    | { type: 'clear-drafts'; prefix: string }
+    | { type: 'set'; file: string; value: unknown }
+    | { type: 'draft'; key: string; draft: Draft }
+    | { type: 'discard'; file?: string }
+    | { type: 'fast-forward'; head: string }
+    | { type: 'rebase'; files: Record<string, string>; head: string; preserve: string[] }
+    | { type: 'resolve-conflict'; id: string; choice: Resolution }
+    | { type: 'saved'; files: Record<string, string>; head: string; source: DataSource };
+
+function isStatSource(value: unknown): value is StatSource {
+    if (!isRecord(value)) return false;
+    return !validateSources({ stats: [value], movement: {} }).some(
+        (issue) => issue.severity === 'error' && issue.path.startsWith('stats[0]'),
+    );
+}
+
+function isMovementSource(value: unknown): value is MovementSource {
+    if (!isRecord(value)) return false;
+    return !validateSources({ stats: [], movement: value }).some(
+        (issue) =>
+            issue.severity === 'error' &&
+            (issue.path === 'movement' || issue.path.startsWith('movement.')),
+    );
+}
+
+function jsonText(value: unknown): string {
+    const text = JSON.stringify(value, null, 4);
+    return text === undefined ? `${String(value)}\n` : `${text}\n`;
+}
+
+export function serializeFile(path: string, value: unknown): string {
+    if (path === LOCALE_FILE) return jsonText(value);
+    if (path === MOVEMENT_FILE && isMovementSource(value)) return serializeSource(value);
+    if (isStatFile(path) && isStatSource(value)) return serializeSource(value);
+    return jsonText(value);
+}
+
+function parseFiles(files: Record<string, string>): Record<string, unknown> {
+    return Object.fromEntries(
+        Object.entries(files).map(([path, text]) => {
+            let value: unknown;
+            try {
+                value = JSON.parse(text);
+            } catch (error) {
+                throw new Error(
+                    `${path}: ${error instanceof Error ? error.message : String(error)}`,
+                );
+            }
+            if (!isRecord(value)) {
+                throw new Error(
+                    path === LOCALE_FILE
+                        ? 'English locale must be an object'
+                        : `${path}: Expected source object`,
+                );
+            }
+            return [path, value];
+        }),
+    );
+}
+
+const serializedValueCache = new WeakMap<object, Map<string, string>>();
+function serializeCurrentFile(path: string, value: unknown): string {
+    if (typeof value !== 'object' || value === null) return serializeFile(path, value);
+    let byPath = serializedValueCache.get(value);
+    if (!byPath) {
+        byPath = new Map();
+        serializedValueCache.set(value, byPath);
+    }
+    let serialized = byPath.get(path);
+    if (serialized === undefined) {
+        serialized = serializeFile(path, value);
+        byPath.set(path, serialized);
+    }
+    return serialized;
+}
+
+const changeCache = new WeakMap<
+    object,
+    Map<string, { original: string | undefined; changes: ReturnType<typeof collectChanges> }>
+>();
+function changesForFile(
+    path: string,
+    value: unknown,
+    original: string | undefined,
+    originalValue: unknown,
+): ReturnType<typeof collectChanges> {
+    if (typeof value !== 'object' || value === null) {
+        return collectChanges(
+            original === undefined ? {} : { [path]: original },
+            {
+                [path]: value,
+            },
+            { [path]: originalValue },
+        );
+    }
+    let byFile = changeCache.get(value);
+    if (!byFile) {
+        byFile = new Map();
+        changeCache.set(value, byFile);
+    }
+    const cached = byFile.get(path);
+    if (cached && cached.original === original) return cached.changes;
+    const changes = collectChanges(
+        original === undefined ? {} : { [path]: original },
+        {
+            [path]: value,
+        },
+        { [path]: originalValue },
+    );
+    byFile.set(path, { original, changes });
+    return changes;
+}
+
+const statValidationCache = new WeakMap<object, WeakMap<object, ValidationIssue[]>>();
+const movementValidationCache = new WeakMap<object, WeakMap<object, ValidationIssue[]>>();
+const localeValidationCache = new WeakMap<object, ValidationIssue[]>();
+
+function statIssues(
+    value: unknown,
+    locale: LocaleData | undefined,
+    index: number,
+): ValidationIssue[] {
+    let local: ValidationIssue[];
+    if (typeof value === 'object' && value !== null && locale) {
+        let byLocale = statValidationCache.get(value);
+        if (!byLocale) {
+            byLocale = new WeakMap();
+            statValidationCache.set(value, byLocale);
+        }
+        const cached = byLocale.get(locale);
+        if (cached) local = cached;
+        else {
+            local = validateSources({ stats: [value], movement: {} }, locale).filter(
+                (issue) => issue.path.startsWith('stats[0]') || issue.path.startsWith('locale.'),
+            );
+            byLocale.set(locale, local);
+        }
+    } else {
+        local = validateSources({ stats: [value], movement: {} }, locale).filter(
+            (issue) => issue.path.startsWith('stats[0]') || issue.path.startsWith('locale.'),
+        );
+    }
+    return local.map((issue) =>
+        issue.path.startsWith('stats[0]')
+            ? { ...issue, path: issue.path.replace('stats[0]', `stats[${index}]`) }
+            : issue,
+    );
+}
+
+function movementIssues(value: unknown, locale: LocaleData | undefined): ValidationIssue[] {
+    // Pass the locale so locale checks that depend on movement data (Conditional source text) run.
+    const run = () =>
+        validateSources({ stats: [], movement: value }, locale).filter(
+            (issue) =>
+                issue.path === 'movement' ||
+                issue.path.startsWith('movement.') ||
+                issue.path.startsWith('locale.Movement.'),
+        );
+    if (typeof value !== 'object' || value === null || !locale) return run();
+    let byLocale = movementValidationCache.get(value);
+    if (!byLocale) {
+        byLocale = new WeakMap();
+        movementValidationCache.set(value, byLocale);
+    }
+    let issues = byLocale.get(locale);
+    if (!issues) {
+        issues = run();
+        byLocale.set(locale, issues);
+    }
+    return issues;
+}
+
+function localeIssues(locale: LocaleData): ValidationIssue[] {
+    const cached = localeValidationCache.get(locale);
+    if (cached) return cached;
+    const issues = [...statRegistry, movementSpec].flatMap((spec) =>
+        validateLocaleSection(
+            locale[spec.name],
+            spec.fields.map((field) => field.key),
+            `locale.${spec.name}`,
+        ),
+    );
+    localeValidationCache.set(locale, issues);
+    return issues;
+}
+
+function originalSerialization(values: Record<string, unknown>): Record<string, string> {
+    return Object.fromEntries(
+        Object.entries(values).map(([path, value]) => [path, serializeCurrentFile(path, value)]),
+    );
+}
+
+export function editorReducer(state: EditorState, action: Action): EditorState {
+    switch (action.type) {
+        case 'restore': {
+            const originalValues = parseFiles(action.snapshot.originals);
+            return {
+                ...state,
+                head: action.snapshot.head,
+                originals: action.snapshot.originals,
+                originalValues,
+                originalSerialized: originalSerialization(originalValues),
+                values: action.snapshot.values,
+                drafts: action.snapshot.drafts,
+                itemDrafts: action.snapshot.itemDrafts,
+                conflicts: decodeConflicts(action.snapshot.conflicts),
+                mergedFiles: action.snapshot.mergedFiles ?? [],
+            };
+        }
+        case 'item-draft': {
+            const itemDrafts = { ...state.itemDrafts };
+            if (action.value) itemDrafts[action.key] = action.value;
+            else delete itemDrafts[action.key];
+            return { ...state, itemDrafts };
+        }
+        case 'clear-drafts':
+            return {
+                ...state,
+                drafts: Object.fromEntries(
+                    Object.entries(state.drafts).filter(([key]) => !key.startsWith(action.prefix)),
+                ),
+            };
+        case 'set':
+            return { ...state, values: { ...state.values, [action.file]: action.value } };
+        case 'draft':
+            return { ...state, drafts: { ...state.drafts, [action.key]: action.draft } };
+        case 'fast-forward':
+            return { ...state, head: action.head };
+        case 'rebase': {
+            // Three-way merge per dirty file: base = old original, ours = edits, theirs = remote.
+            const originalValues = parseFiles(action.files);
+            const values: Record<string, unknown> = { ...originalValues };
+            const conflicts: MergeConflict[] = [];
+            const mergedFiles: string[] = [];
+            for (const path of action.preserve) {
+                if (!Object.hasOwn(state.values, path)) continue;
+                const base = state.originalValues[path];
+                const merge = mergeFile(path, base, state.values[path], originalValues[path]);
+                if (merge.value === undefined) delete values[path];
+                else values[path] = merge.value;
+                conflicts.push(...merge.conflicts);
+                if (!sameValue(base, originalValues[path])) mergedFiles.push(path);
+            }
+            return {
+                ...state,
+                head: action.head,
+                originals: action.files,
+                originalValues,
+                originalSerialized: originalSerialization(originalValues),
+                values,
+                conflicts,
+                mergedFiles,
+            };
+        }
+        case 'resolve-conflict': {
+            const conflict = state.conflicts.find((candidate) => candidate.id === action.id);
+            if (!conflict) return state;
+            const values = { ...state.values };
+            const value = resolveConflict(values[conflict.file], conflict, action.choice);
+            if (value === undefined) delete values[conflict.file];
+            else values[conflict.file] = value;
+            return {
+                ...state,
+                values,
+                conflicts: state.conflicts.filter((candidate) => candidate.id !== action.id),
+            };
+        }
+        case 'discard': {
+            const restoredValues = action.file
+                ? { [action.file]: state.originalValues[action.file]! }
+                : state.originalValues;
+            return {
+                ...state,
+                conflicts: action.file
+                    ? state.conflicts.filter((conflict) => conflict.file !== action.file)
+                    : [],
+                mergedFiles: action.file
+                    ? state.mergedFiles.filter((path) => path !== action.file)
+                    : [],
+                values: { ...state.values, ...restoredValues },
+                itemDrafts: Object.fromEntries(
+                    Object.entries(state.itemDrafts).filter(
+                        ([key]) => action.file && !key.startsWith(action.file + ':'),
+                    ),
+                ),
+                drafts: Object.fromEntries(
+                    Object.entries(state.drafts).filter(
+                        ([key]) => action.file && !key.startsWith(action.file + ':'),
+                    ),
+                ),
+            };
+        }
+        case 'saved': {
+            // Originals come from the committed text, not from edits made after the snapshot.
+            const originalValues = { ...state.originalValues, ...parseFiles(action.files) };
+            return {
+                ...state,
+                source: action.source,
+                head: action.head,
+                originals: { ...state.originals, ...action.files },
+                originalValues,
+                originalSerialized: { ...state.originalSerialized, ...action.files },
+                drafts: {},
+                conflicts: state.conflicts.filter((conflict) => !(conflict.file in action.files)),
+                mergedFiles: [],
+                saveRevision: state.saveRevision + 1,
+            };
+        }
+    }
+}
+
+export function createEditorState({
+    source,
+    loaded,
+}: {
+    source: DataSource;
+    loaded: LoadedData;
+}): EditorState {
+    const originalValues = parseFiles(loaded.files);
+    return {
+        source,
+        head: loaded.head,
+        originals: loaded.files,
+        originalValues,
+        originalSerialized: originalSerialization(originalValues),
+        values: originalValues,
+        drafts: {},
+        itemDrafts: {},
+        saveRevision: 0,
+        conflicts: [],
+        mergedFiles: [],
+    };
+}
+
+function validateLocaleSection(
+    value: unknown,
+    fieldKeys: readonly string[],
+    path: string,
+): ValidationIssue[] {
+    if (typeof value === 'string') return validatePlaceholders(value, fieldKeys, path);
+    return isRecord(value)
+        ? Object.entries(value).flatMap(([key, next]) =>
+              validateLocaleSection(next, fieldKeys, `${path}.${key}`),
+          )
+        : [];
+}
+
+export function deriveEditorState(state: EditorState) {
+    const stats = Object.entries(state.values)
+        .filter(([path]) => isStatFile(path))
+        .map(([, value]) => value);
+    const movement = state.values[MOVEMENT_FILE];
+    const localeValue = state.values[LOCALE_FILE];
+    const locale = isRecord(localeValue) ? localeValue : undefined;
+    const allIssues = stats.flatMap((value, index) => statIssues(value, locale, index));
+    allIssues.push(...movementIssues(movement, locale));
+    if (!locale) {
+        allIssues.push({
+            path: LOCALE_FILE,
+            message: 'English locale must be an object',
+            severity: 'error',
+        });
+    } else {
+        allIssues.push(...localeIssues(locale));
+    }
+    const seenStats = new Set<string>();
+    const presentStats = new Set<string>();
+    stats.forEach((value, index) => {
+        if (!isRecord(value)) return;
+        const spec = statRegistry.find((candidate) => candidate.name === value.Name);
+        if (!spec) return;
+        if (seenStats.has(spec.name)) {
+            allIssues.push({
+                path: `stats[${index}].Name`,
+                message: `Duplicate stat ${spec.name}`,
+                severity: 'error',
+            });
+        }
+        seenStats.add(spec.name);
+        presentStats.add(spec.name);
+    });
+    for (const spec of statRegistry) {
+        if (!presentStats.has(spec.name)) {
+            allIssues.push({
+                path: 'stats',
+                message: 'Missing stat ' + spec.name,
+                severity: 'error',
+            });
+        }
+    }
+    const serialized = Object.fromEntries(
+        Object.entries(state.values).map(([path, value]) => [
+            path,
+            serializeCurrentFile(path, value),
+        ]),
+    );
+    const dirty = Object.keys(state.values).filter((path) => {
+        return (
+            state.originalSerialized[path] !== serialized[path] ||
+            Object.entries(state.drafts).some(
+                ([key, draft]) => key.startsWith(path + ':') && draft.error,
+            )
+        );
+    });
+    const issues: ValidationIssue[] = [
+        ...new Map(allIssues.map((issue) => [`${issue.path}:${issue.message}`, issue])).values(),
+        ...Object.entries(state.drafts)
+            .filter(([, draft]) => draft.error)
+            .map(([path, draft]) => ({ path, message: draft.error, severity: 'error' as const })),
+    ];
+    return {
+        sources: { stats, movement },
+        locale: locale ?? {},
+        issues,
+        serialized,
+        dirty,
+        changes: Object.entries(state.values).flatMap(([path, value]) =>
+            changesForFile(path, value, state.originals[path], state.originalValues[path]),
+        ),
+    };
+}
+
+function useEditorState(source: DataSource, loaded: LoadedData, snapshot?: RecoverySnapshot) {
+    const [state, dispatch] = useReducer(editorReducer, { source, loaded }, (initial) => {
+        const state = createEditorState(initial);
+        return snapshot ? editorReducer(state, { type: 'restore', snapshot }) : state;
+    });
+    const derived = useMemo(
+        () => deriveEditorState(state),
+        [state.values, state.originals, state.originalSerialized, state.drafts],
+    );
+    const recovery = useRecovery(state, derived.changes.length, derived.dirty.length > 0, snapshot);
+    return { ...state, ...derived, dispatch, recovery };
+}
+const Context = createContext<ReturnType<typeof useEditorState> | null>(null);
+export function EditorProvider({
+    source,
+    loaded,
+    children,
+    snapshot,
+}: {
+    source: DataSource;
+    loaded: LoadedData;
+    children: ReactNode;
+    snapshot?: RecoverySnapshot | undefined;
+}) {
+    const value = useEditorState(source, loaded, snapshot);
+    return <Context.Provider value={value}>{children}</Context.Provider>;
+}
+export function useEditor() {
+    const state = useContext(Context);
+    if (!state) throw new Error('EditorProvider missing');
+    return state;
+}
+export function updateProperty(
+    value: Record<string, unknown>,
+    key: string,
+    next: unknown,
+): Record<string, unknown> {
+    const result = { ...value };
+    if (next === undefined) delete result[key];
+    else result[key] = next;
+    return result;
+}

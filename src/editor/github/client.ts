@@ -1,0 +1,425 @@
+import { LOCALE_FILE } from '../state/paths';
+export interface Repository {
+    owner: string;
+    name: string;
+    branch: string;
+}
+interface FileEntry {
+    type: string;
+    path: string;
+    content?: string;
+    encoding?: string;
+}
+export interface WorkflowRun {
+    id: number;
+    html_url: string;
+    display_title: string;
+    status: string;
+    conclusion: string | null;
+    created_at: string;
+}
+
+/** A GitHub REST failure; `detail` keeps the raw API message and `message` the readable one. */
+export class GitHubError extends Error {
+    constructor(
+        readonly status: number,
+        readonly detail: string,
+        message: string,
+    ) {
+        super(message);
+        this.name = 'GitHubError';
+    }
+}
+
+/** The branch moved since it was loaded (pre-check, or a rejected non-fast-forward update). */
+export class StaleHeadError extends Error {
+    constructor() {
+        super(
+            'The branch changed since loading. Reload before saving to avoid overwriting another edit.',
+        );
+        this.name = 'StaleHeadError';
+    }
+}
+
+export class BranchExistsError extends Error {
+    constructor(readonly branch: string) {
+        super(`The branch "${branch}" already exists. Choose a different name.`);
+        this.name = 'BranchExistsError';
+    }
+}
+
+/** `fetch` itself failed. `maybeSaved` is set when the branch update may have gone through. */
+export class NetworkError extends Error {
+    constructor(
+        message = 'Network error — check your connection and try again.',
+        readonly maybeSaved = false,
+    ) {
+        super(message);
+        this.name = 'NetworkError';
+    }
+}
+
+export interface FailureInfo {
+    status: number;
+    message: string;
+    retryAfter?: string | null;
+    rateRemaining?: string | null;
+    rateReset?: string | null;
+}
+
+const clock = (date: Date) =>
+    `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+/** Readable text for a GitHub failure; always keeps the status code. */
+export function describeFailure(info: FailureInfo, now = new Date()): string {
+    const { status, message } = info;
+    const prefix = `GitHub ${status}`;
+    const rateLimited =
+        status === 429 ||
+        (status === 403 &&
+            (info.rateRemaining === '0' || !!info.retryAfter || /rate limit/i.test(message)));
+    if (rateLimited) {
+        const seconds = Number(info.retryAfter);
+        const reset = Number(info.rateReset);
+        const retryAt =
+            info.retryAfter && Number.isFinite(seconds)
+                ? new Date(now.getTime() + seconds * 1000)
+                : info.rateReset && Number.isFinite(reset)
+                  ? new Date(reset * 1000)
+                  : undefined;
+        const when = retryAt ? `Try again at ${clock(retryAt)}.` : 'Try again in a few minutes.';
+        return `${prefix}: Rate limit reached. ${when}`;
+    }
+    if (status === 401)
+        return `${prefix}: The token is invalid or has expired. Create a new token and connect again.`;
+    if (status === 403 && /resource not accessible/i.test(message))
+        return `${prefix}: ${message}. The token needs Contents (read and write), Pull requests and Actions (read and write) access to this repository, and the organization may need to approve it.`;
+    if (status === 404)
+        return `${prefix}: Not found. The repository, branch or file does not exist, or the token has no access to it.`;
+    return `${prefix}: ${message}`;
+}
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function record(value: unknown, description: string): Record<string, unknown> {
+    if (!isObjectRecord(value)) throw new Error(`GitHub returned an invalid ${description}`);
+    return value;
+}
+
+function stringField(value: Record<string, unknown>, key: string, description: string): string {
+    const field = value[key];
+    if (typeof field !== 'string') throw new Error(`GitHub returned an invalid ${description}`);
+    return field;
+}
+
+/** Deliberately small REST client; the token never leaves api.github.com. */
+export class GitHubClient {
+    constructor(
+        private readonly token: string,
+        readonly repo: Repository,
+    ) {}
+    private async request(path: string, method = 'GET', body?: unknown): Promise<unknown> {
+        let response: Response;
+        try {
+            response = await fetch(
+                `https://api.github.com/repos/${encodeURIComponent(this.repo.owner)}/${encodeURIComponent(this.repo.name)}/${path}`,
+                {
+                    method,
+                    cache: 'no-store',
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                        Accept: 'application/vnd.github+json',
+                        'X-GitHub-Api-Version': '2022-11-28',
+                        ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+                    },
+                    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+                },
+            );
+        } catch (error) {
+            if (error instanceof TypeError) throw new NetworkError();
+            throw error;
+        }
+        if (!response.ok) {
+            const detail: unknown = await response.json().catch(() => undefined);
+            const message =
+                isObjectRecord(detail) && typeof detail.message === 'string'
+                    ? detail.message
+                    : response.statusText;
+            throw new GitHubError(
+                response.status,
+                message,
+                describeFailure({
+                    status: response.status,
+                    message,
+                    retryAfter: response.headers.get('retry-after'),
+                    rateRemaining: response.headers.get('x-ratelimit-remaining'),
+                    rateReset: response.headers.get('x-ratelimit-reset'),
+                }),
+            );
+        }
+        if (response.status === 204) return undefined;
+        const payload: unknown = await response.json();
+        return payload;
+    }
+    forBranch(branch: string) {
+        return new GitHubClient(this.token, { ...this.repo, branch });
+    }
+    private contentPath(path: string): string {
+        return path.split('/').map(encodeURIComponent).join('/');
+    }
+    async getFile(path: string): Promise<string> {
+        const file = record(
+            await this.request(
+                `contents/${this.contentPath(path)}?ref=${encodeURIComponent(this.repo.branch)}`,
+            ),
+            'file response',
+        );
+        if (typeof file.content !== 'string' || file.encoding !== 'base64')
+            throw new Error(`Cannot read ${path}: expected a small UTF-8 file`);
+        return new TextDecoder().decode(
+            Uint8Array.from(atob(file.content.replace(/\s/g, '')), (character) =>
+                character.charCodeAt(0),
+            ),
+        );
+    }
+    async listFiles(path: string): Promise<string[]> {
+        const response: unknown = await this.request(
+            `contents/${this.contentPath(path)}?ref=${encodeURIComponent(this.repo.branch)}`,
+        );
+        if (!Array.isArray(response))
+            throw new Error(`Cannot list ${path}: invalid GitHub response`);
+        const files = response.map((entry): FileEntry => {
+            const item = record(entry, 'directory entry');
+            if (typeof item.type !== 'string' || typeof item.path !== 'string') {
+                throw new Error(`Cannot list ${path}: invalid GitHub entry`);
+            }
+            return { type: item.type, path: item.path };
+        });
+        return (
+            await Promise.all(
+                files.map((file) =>
+                    file.type === 'dir'
+                        ? this.listFiles(file.path)
+                        : Promise.resolve(file.path.endsWith('.json') ? [file.path] : []),
+                ),
+            )
+        ).flat();
+    }
+    async listBranches(): Promise<string[]> {
+        const branches: string[] = [];
+        for (let page = 1; ; page++) {
+            const response: unknown = await this.request(`branches?per_page=100&page=${page}`);
+            if (!Array.isArray(response)) throw new Error('GitHub returned an invalid branch list');
+            for (const entry of response) {
+                const branch = record(entry, 'branch entry');
+                const name = stringField(branch, 'name', 'branch name');
+                if (!name) throw new Error('GitHub returned an invalid branch name');
+                branches.push(name);
+            }
+            if (response.length < 100) return branches;
+        }
+    }
+    private branchPath(branch: string) {
+        return branch.split('/').map(encodeURIComponent).join('/');
+    }
+    async branchHead(branch = this.repo.branch): Promise<string> {
+        const ref = record(
+            await this.request(`git/ref/heads/${this.branchPath(branch)}`),
+            'branch reference',
+        );
+        const object = record(ref.object, 'branch reference object');
+        return stringField(object, 'sha', 'branch head');
+    }
+    /** Entry name -> SHA for one directory level; never recursive, so it cannot be truncated. */
+    private async treeEntries(sha: string): Promise<Map<string, string>> {
+        const tree = record(
+            await this.request(`git/trees/${encodeURIComponent(sha)}`),
+            'tree response',
+        );
+        if (tree.truncated === true)
+            throw new Error('Cannot safely compare branch data: GitHub truncated a source tree.');
+        if (!Array.isArray(tree.tree)) throw new Error('GitHub returned an invalid source tree');
+        return new Map(
+            tree.tree.map((entry): [string, string] => {
+                const item = record(entry, 'tree entry');
+                return [
+                    stringField(item, 'path', 'tree path'),
+                    stringField(item, 'sha', 'tree entry SHA'),
+                ];
+            }),
+        );
+    }
+    /** Fingerprint of the tracked files at a commit: the sources/ tree and the English locale blob. */
+    private async trackedStateAt(head: string): Promise<string> {
+        const commit = record(
+            await this.request(`git/commits/${encodeURIComponent(head)}`),
+            'commit response',
+        );
+        const commitTree = record(commit.tree, 'commit tree');
+        const root = await this.treeEntries(stringField(commitTree, 'sha', 'commit tree SHA'));
+        const [localeDir = '', localeName = ''] = LOCALE_FILE.split('/');
+        const localeTree = root.get(localeDir);
+        const locale = localeTree
+            ? (await this.treeEntries(localeTree)).get(localeName)
+            : undefined;
+        return JSON.stringify([root.get('sources'), locale]);
+    }
+    async checkTrackedFiles(expectedHead: string): Promise<{ head: string; changed: boolean }> {
+        const head = await this.branchHead();
+        if (head === expectedHead) return { head, changed: false };
+        const [before, after] = await Promise.all([
+            this.trackedStateAt(expectedHead),
+            this.trackedStateAt(head),
+        ]);
+        const latestHead = await this.branchHead();
+        if (latestHead !== head) return { head: latestHead, changed: true };
+        return { head, changed: before !== after };
+    }
+    async createBranch(branch: string, sha: string): Promise<void> {
+        try {
+            await this.request('git/refs', 'POST', { ref: `refs/heads/${branch}`, sha });
+        } catch (error) {
+            if (
+                error instanceof GitHubError &&
+                error.status === 422 &&
+                /already exists/i.test(error.detail)
+            )
+                throw new BranchExistsError(branch);
+            throw error;
+        }
+    }
+    async commitFiles(
+        files: Record<string, string>,
+        message: string,
+        expectedHead: string,
+        newBranch?: string,
+    ): Promise<{ sha: string; branch: string }> {
+        let sha: string;
+        try {
+            sha = await this.writeCommit(files, message, expectedHead);
+        } catch (error) {
+            if (error instanceof NetworkError)
+                throw new NetworkError('Network error — check your connection; nothing was saved.');
+            throw error;
+        }
+        const branch = newBranch ?? this.repo.branch;
+        try {
+            if (newBranch) await this.createBranch(branch, sha);
+            else
+                await this.request(`git/refs/heads/${this.branchPath(branch)}`, 'PATCH', {
+                    sha,
+                    force: false,
+                });
+        } catch (error) {
+            if (error instanceof NetworkError)
+                throw new NetworkError(
+                    'Network error while updating the branch — the save may have reached GitHub. Check your connection and save again; an earlier success is detected.',
+                    true,
+                );
+            if (
+                !newBranch &&
+                error instanceof GitHubError &&
+                error.status === 422 &&
+                /fast.?forward/i.test(error.detail)
+            )
+                throw new StaleHeadError();
+            throw error;
+        }
+        return { sha, branch };
+    }
+    /** Writes blobs, tree and commit; they stay unreferenced until the ref moves. */
+    private async writeCommit(
+        files: Record<string, string>,
+        message: string,
+        expectedHead: string,
+    ): Promise<string> {
+        if ((await this.branchHead()) !== expectedHead) throw new StaleHeadError();
+        const parent = record(
+            await this.request(`git/commits/${encodeURIComponent(expectedHead)}`),
+            'commit response',
+        );
+        const parentTree = record(parent.tree, 'commit tree');
+        const baseTree = stringField(parentTree, 'sha', 'commit tree SHA');
+        const tree = await Promise.all(
+            Object.entries(files).map(async ([path, content]) => {
+                const blob = record(
+                    await this.request('git/blobs', 'POST', { content, encoding: 'utf-8' }),
+                    'blob response',
+                );
+                return {
+                    path,
+                    mode: '100644',
+                    type: 'blob',
+                    sha: stringField(blob, 'sha', 'blob SHA'),
+                };
+            }),
+        );
+        const createdTree = record(
+            await this.request('git/trees', 'POST', { base_tree: baseTree, tree }),
+            'created tree response',
+        );
+        const commit = record(
+            await this.request('git/commits', 'POST', {
+                message,
+                tree: stringField(createdTree, 'sha', 'created tree SHA'),
+                parents: [expectedHead],
+            }),
+            'created commit response',
+        );
+        return stringField(commit, 'sha', 'created commit SHA');
+    }
+    async createPR(branch: string, title: string, body: string): Promise<string> {
+        const response = record(
+            await this.request('pulls', 'POST', {
+                head: branch,
+                base: this.repo.branch,
+                title,
+                body,
+            }),
+            'pull request response',
+        );
+        return stringField(response, 'html_url', 'pull request URL');
+    }
+    async dispatchWorkflow(releaseNotes: string): Promise<void> {
+        await this.request('actions/workflows/build-data.yml/dispatches', 'POST', {
+            ref: this.repo.branch,
+            inputs: { release_notes: releaseNotes },
+        });
+    }
+    async listWorkflowRuns(): Promise<WorkflowRun[]> {
+        const response = record(
+            await this.request(
+                `actions/workflows/build-data.yml/runs?branch=${encodeURIComponent(this.repo.branch)}&event=workflow_dispatch&per_page=5`,
+            ),
+            'workflow runs response',
+        );
+        if (!Array.isArray(response.workflow_runs)) {
+            throw new Error('GitHub returned an invalid workflow runs list');
+        }
+        return response.workflow_runs.map((entry): WorkflowRun => {
+            const run = record(entry, 'workflow run');
+            if (
+                typeof run.id !== 'number' ||
+                typeof run.display_title !== 'string' ||
+                typeof run.html_url !== 'string' ||
+                typeof run.status !== 'string' ||
+                (typeof run.conclusion !== 'string' && run.conclusion !== null)
+            ) {
+                throw new Error('GitHub returned an invalid workflow run');
+            }
+            return {
+                id: run.id,
+                display_title: run.display_title,
+                html_url: run.html_url,
+                status: run.status,
+                conclusion: run.conclusion,
+                created_at: typeof run.created_at === 'string' ? run.created_at : '',
+            };
+        });
+    }
+    get actionsUrl() {
+        return `https://github.com/${encodeURIComponent(this.repo.owner)}/${encodeURIComponent(this.repo.name)}/actions/workflows/build-data.yml`;
+    }
+}

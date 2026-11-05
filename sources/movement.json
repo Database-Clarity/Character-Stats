@@ -1,0 +1,263 @@
+{
+    "Rules": {
+        "WalkSpeed": {
+            "Domain": [
+                0,
+                13
+            ],
+            "Segments": [
+                {
+                    "Type": "Expression",
+                    "From": 0,
+                    "To": 13,
+                    "Expression": "5 + 0.2*x"
+                }
+            ]
+        },
+        "JumpHeight": {
+            "Domain": [
+                0,
+                13
+            ],
+            "Segments": [
+                {
+                    "Type": "Constant",
+                    "From": 0,
+                    "To": 13,
+                    "Value": 0
+                }
+            ]
+        },
+        "StrafeMultiplier": 0.85,
+        "CrouchMultiplier": 0.55,
+        "ADSMultiplier": 0.75,
+        "ForwardSpeedCap": 9,
+        "StrafeSpeedCap": 6,
+        "CrouchSpeedCap": 4,
+        "MaxMobilityTier": 13
+    },
+    "Classes": [
+        {
+            "Name": "Hunter",
+            "ClassHash": 671679327,
+            "BaseMobilityTier": 10,
+            "BaseMobilityTierPVP": 7,
+            "BaseSprintSpeed": 8.5
+        },
+        {
+            "Name": "Titan",
+            "ClassHash": 3655393761,
+            "BaseMobilityTier": 3,
+            "BaseSprintSpeed": 8
+        },
+        {
+            "Name": "Warlock",
+            "ClassHash": 2271682572,
+            "BaseMobilityTier": 3,
+            "BaseSprintSpeed": 8
+        }
+    ],
+    "Sources": [
+        {
+            "Hash": 1133590731,
+            "Name": "Enhanced Athletics",
+            "RefType": "item",
+            "Activation": "Always",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        3,
+                        5,
+                        6
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1458010786,
+            "Name": "Lightweight Frame",
+            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137: all Lightweight Frame plugs and movement-granting grenade-launcher Micro-Missile Frame plugs verified.",
+            "RefType": "item",
+            "AlsoMatches": [
+                118439741,
+                132189785,
+                308595185,
+                395096174,
+                474269988,
+                539564471,
+                885620491,
+                956390015,
+                1665848857,
+                1671927875,
+                1713206376,
+                2012877834,
+                2105054824,
+                2108556049,
+                2753228730,
+                3048420653,
+                3272152575,
+                3377988521,
+                3472640090,
+                3725333007,
+                3728676938,
+                3758615625,
+                4008973208,
+                4080055066
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.0625
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2213377102,
+            "Name": "MIDA Synergy",
+            "Notes": "Value unknown — needs testing. Boosted forward multiplier with MIDA Multi-Tool is unknown; 1 is a neutral placeholder. Do not also apply Lightweight Frame for this weapon.",
+            "RefType": "item",
+            "AlsoMatches": [
+                2179934441,
+                1057935015
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.0625
+                    ],
+                    "BoostedValues": [
+                        1.1
+                    ]
+                }
+            ],
+            "BoostRequiresAll": [
+                1331482397
+            ]
+        },
+        {
+            "Hash": 1888623310,
+            "Name": "MIDA Synergy (Macro-Tool)",
+            "Notes": "Grants only the 10% forward movement bonus while MIDA Multi-Tool is equipped. Does not grant base Lightweight Mobility tiers or sprint bonuses.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1
+                    ],
+                    "BoostedValues": [
+                        1.1
+                    ]
+                }
+            ],
+            "BoostRequiresAll": [
+                1331482397
+            ]
+        },
+        {
+            "Hash": 12,
+            "Name": "Machine Gun",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "OverweightMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 13,
+            "Name": "Rocket Launcher",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "OverweightMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 14,
+            "Name": "Sidearm",
+            "RefType": "itemCategory",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 54,
+            "Name": "Sword guarding",
+            "RefType": "itemCategory",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "GroundedNonSprintMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 25692695,
+            "Name": "The Scientific Method (Tractor Cannon)",
+            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581). Grounded speed only; no jump-height change.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.125
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3072857252,
+            "Name": "Wraithwalk (Heartshadow Catalyst)",
+            "Notes": "Value unknown — needs testing. Wraithwalk is DestinySandboxPerkDefinition 3936394000, linked by this verified DestinyInventoryItemDefinition catalyst. Grounded speed only; no jump-height change.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "GroundedMultiplier",
+                    "Values": [
+                        1
+                    ]
+                }
+            ]
+        }
+    ]
+}

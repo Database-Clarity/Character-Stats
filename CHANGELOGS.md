@@ -1,5 +1,57 @@
 # Changelogs
 
+## v2.0.0 Breaking change - TBD
+
+### Edge of Fate stats
+
+This release replaces the whole database with the Edge of Fate stat system. Nothing from v1.9 carries over unchanged, so treat it as a new integration. The v1.9 files stay online at `versions/1.9/` and won't receive further updates.
+
+Stat values in this build are placeholders. Expect most of them to change once we have testing data.
+
+### New layout
+
+- The six old stats are gone. The top-level keys are now the manifest hashes of the new stats, as strings: Weapons `2996146975`, Health `392767087`, Class `1943323491`, Grenade `1735777505`, Super `144602215` and Melee `4244567218`.
+- The top-level `Movement` key holds shared movement rules, class base values and movement sources. See the Movement section below.
+- Per-stat arrays now have one entry per stat point. Arrays for 0 to 100 have 101 entries and the index is the stat value. Enhanced arrays cover 100 to 200 and have 101 entries, so index 0 is stat 100. Stat values above 100 use the last entry of a 0 to 100 array.
+- `schema.json` describes the new shape in full and is the reference for every property.
+- `update.json.schemaVersion` now contains the full semantic version `X.Y.Z`. All compatible v2 releases use `versions/2/`, not a directory named after the full version. Publishing changed consumer data automatically increments the patch and records a dated changelog entry. A code-defined major/minor increase publishes `X.Y.0`, even with identical data, to signal new schema/API support; unchanged data within the same major/minor does not create a release.
+
+### Abilities and cooldowns
+
+- Abilities moved to the stat that now controls them. Class holds the class abilities of all three classes (previously under Mobility, Resilience and Recovery). Grenade took over from Discipline, Melee from Strength, and Super from Intellect.
+- The precomputed `Cooldowns` arrays are gone. Each ability has a `BaseCooldown` in seconds. Class, Grenade and Melee have a `CooldownScalars` array. Their cooldown at a given stat value is `BaseCooldown * CooldownScalars[min(stat, 100)]`.
+- `CooldownOverride` on overrides is now a single number in seconds instead of an 11-tier array. It replaces `BaseCooldown` before any `Scalar` and the stat's `CooldownScalars` apply.
+- `Scalar`, `ChunkEnergyScalar`, `ChunkEnergyOverride` and `ChargeBasedScaling` work as before.
+- Super abilities lost `SuperTier`. Super cooldowns no longer scale with the Super stat. They use `BaseCooldown`, with applicable `CooldownOverride` and `Scalar` values. `ActiveRegenScalar` stays, and the Super stat's `ActiveRegenScalars` array scales it by stat value. `EnergyGainScalar` still controls external energy gains.
+- Numeric validation keeps structural and mathematical constraints, not guessed balance ranges. Energy scalars can be zero or greater than one. Active Super regeneration has no upper bound.
+
+### Movement
+
+Movement uses hidden Mobility tiers from 0 to 13, capped at tier 13. `Rules.WalkSpeed` gives forward walking speed in m/s from 5.0 to 7.6, increasing by 0.2 per tier. Strafe, crouch and ADS multipliers are 0.85, 0.55 and 0.75. Sidearms use 0.85 for ADS instead, through a Sidearm movement source. Forward speed, including sprint, caps at 9 m/s. Strafe caps at 6 m/s, including ADS. Crouch caps at 4 m/s.
+
+Sprint uses a base speed independent of Mobility. Titan and Warlock start at tier 3 with 8 m/s sprint. Hunter starts at tier 10 in PvE and tier 7 in PvP, with 8.5 m/s sprint.
+
+Sources point to an item or item category and use `Always`, `WhileHeld` or `Conditional` activation. Effects add Mobility tiers or apply forward, sprint, grounded or ADS multipliers. `ForwardMultiplier` affects forward walking while standing or crouched and sprinting, but never strafing; during sprint it stacks multiplicatively with applicable `SprintMultiplier` and `GroundedMultiplier` effects before the 9 m/s forward cap. `Values` lists each effect value by stack count. `BoostedValues` replaces those values when all `BoostRequiresAll` hashes are equipped. ADS effects replace the default multiplier for the selected held weapon. Values marked unknown are placeholders. `JumpHeight` is not published yet.
+
+`AlsoMatches` lists other item or plug hashes that activate the same source. `Hash` remains its primary identity. Lightweight Frame includes its weapon-type variants and grenade-launcher Micro-Missile frames. Enhanced MIDA Synergy includes its equivalent variants. Apply each source once, even when more than one matching hash is present.
+
+Legacy MIDA Synergy uses the same source as the modern SMG intrinsic. MIDA Macro-Tool has a separate conditional source. With MIDA Multi-Tool equipped, it grants a 1.1 forward multiplier to forward walking and sprinting, without Lightweight Mobility tiers or a separate sprint multiplier.
+
+### Descriptions and locale
+
+- Stat descriptions are now the locale IDs `Overview`, `BaseStatTooltip` and `EnhancedStatTooltip`, plus `ChargeBasedScalingTooltip` on stats with abilities. They replace `Description`, `ChunkEnergyScalarDescription` and the other `*Description` keys.
+- Tooltips contain `{{Placeholder}}` tokens. Replace each one with the value of the stat property that has the same name, read at the player's stat value.
+- `locale/en.json` uses the new keys. The other languages still contain the v1.9 text until translations catch up.
+- Health's PvE damage resistance (not Shield damage resistance) is now a fixed 34.5% in
+  `PVEDamageResistance`.
+- Health's shield values follow the same split. `BaseShieldHP` is the Shield HP in every activity, PvE and PvP. `PVEBonusShieldHP` is a 100 to 200 array of extra Shield HP that only applies in PvE. `BaseShieldRechargeDelay` and `BaseShieldRechargeSpeed` are plain numbers for stat values up to 100, and `ShieldRechargeDelay` and `ShieldRechargeSpeed` are 100 to 200 arrays for the enhanced range.
+- `PVPShieldHP` is gone because PvP shields always use `BaseShieldHP`.
+- Enhanced Class stat tooltips use separate PvE and PvP Class Ability damage and
+  raw Overshield HP placeholders. PvP Overshields have 50% damage resistance;
+  resistance is distinct from raw HP, and no PvE Overshield resistance is
+  specified. Each enhanced benefit scales linearly from 0 at stat 100 to its
+  measured maximum at stat 200.
+
 ## v1.9.10 - February 4, 2025
 
 - *Tempest Strike* `Override` has been removed
