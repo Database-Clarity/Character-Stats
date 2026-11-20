@@ -7,12 +7,52 @@
                 0,
                 100
             ],
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Constant",
+                    "Type": "Expression",
                     "From": 0,
+                    "To": 27,
+                    "Expression": "0.4 + 0.5*(-1.0485*(x/100)^3 + 2.58045*(x/100)^2)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 28,
+                    "To": 82,
+                    "Expression": "0.4 + 0.5*(-2.384775*(x/100)^3 + 3.590805*(x/100)^2 - 0.234323*(x/100) + 0.015878)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 83,
                     "To": 100,
-                    "Value": 1
+                    "Expression": "0.4 + 0.5*(-0.994798*(x/100)^3 + 0.439715*(x/100)^2 + 2.104965*(x/100) - 0.549882)"
+                }
+            ]
+        },
+        "PVPEnergyGainScalar": {
+            "Domain": [
+                0,
+                100
+            ],
+            "Round": 3,
+            "Segments": [
+                {
+                    "Type": "Expression",
+                    "From": 0,
+                    "To": 27,
+                    "Expression": "0.4 + 0.75*(-1.0485*(x/100)^3 + 2.58045*(x/100)^2)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 28,
+                    "To": 82,
+                    "Expression": "0.4 + 0.75*(-2.384775*(x/100)^3 + 3.590805*(x/100)^2 - 0.234323*(x/100) + 0.015878)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 83,
+                    "To": 100,
+                    "Expression": "0.4 + 0.75*(-0.994798*(x/100)^3 + 0.439715*(x/100)^2 + 2.104965*(x/100) - 0.549882)"
                 }
             ]
         },
@@ -51,6 +91,27 @@
                 }
             ]
         },
+        "PVPSuperDamageIncrease": {
+            "Domain": [
+                100,
+                200
+            ],
+            "Segments": [
+                {
+                    "Type": "Linear",
+                    "Points": [
+                        [
+                            100,
+                            0
+                        ],
+                        [
+                            200,
+                            15
+                        ]
+                    ]
+                }
+            ]
+        },
         "SuperDurationIncrease": {
             "Domain": [
                 100,
@@ -73,7 +134,7 @@
             ]
         }
     },
-    "Notes": "Placeholder field values — replace with tested data.",
+    "Notes": "EnergyGainScalar (0x7CEE3265 PvE 0.4 to 0.9 / PvP 0.4 to 1.15; event-grant assembly probable) and SuperDamageIncrease (45% PvE / 15% PvP) verified from live package data (d2damage). ActiveRegenScalars, per-super ActiveRegenScalar, SuperDurationIncrease, and BaseDuration still need in-game verification.",
     "Overrides": [],
     "SuperAbilities": [
         {
@@ -120,7 +181,7 @@
         },
         {
             "Hash": 119041299,
-            "Name": "Fists Of Havoc",
+            "Name": "Fists of Havoc",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 0.9
         },
@@ -174,13 +235,13 @@
         },
         {
             "Hash": 1885339915,
-            "Name": "Needle Storm",
+            "Name": "Needlestorm",
             "BaseCooldown": 500,
             "ActiveRegenScalar": 1
         },
         {
             "Hash": 1869939001,
-            "Name": "Needlestorm",
+            "Name": "Needlestorm - Prismatic",
             "BaseCooldown": 500,
             "ActiveRegenScalar": 1
         },
@@ -278,12 +339,14 @@
             "Hash": 3769507635,
             "Name": "Storm's Edge",
             "BaseCooldown": 625,
+            "Notes": "Needs in-game check: package decode (arc_blink_dagger) reads the 500s tier while Revenant Act II notes set 625s; ActiveRegenScalar 1 also mismatches 500/625 = 0.8.",
             "ActiveRegenScalar": 1
         },
         {
             "Hash": 2370269388,
             "Name": "Storm's Edge - Prismatic",
             "BaseCooldown": 625,
+            "Notes": "Needs in-game check: package decode (arc_blink_dagger) reads the 500s tier while Revenant Act II notes set 625s; ActiveRegenScalar 1 also mismatches 500/625 = 0.8.",
             "ActiveRegenScalar": 1
         },
         {

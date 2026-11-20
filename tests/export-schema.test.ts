@@ -70,6 +70,7 @@ describe('exports and generated schema', () => {
             'PVEGrenadeDamageIncrease',
             'PVPGrenadeDamageIncrease',
             'SuperDamageIncrease',
+            'PVPSuperDamageIncrease',
             'SuperDurationIncrease',
             'NonBossDamageIncrease',
             'SpecialDamageIncrease',
@@ -79,7 +80,12 @@ describe('exports and generated schema', () => {
         ]) {
             expect(fields.find((field) => field.key === key)?.label).toContain('%');
         }
-        for (const key of ['CooldownScalars', 'EnergyGainScalar', 'ActiveRegenScalars']) {
+        for (const key of [
+            'CooldownScalars',
+            'EnergyGainScalar',
+            'PVPEnergyGainScalar',
+            'ActiveRegenScalars',
+        ]) {
             expect(fields.find((field) => field.key === key)?.label?.toLowerCase()).toContain(
                 'scalar',
             );

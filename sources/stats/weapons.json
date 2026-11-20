@@ -58,7 +58,7 @@
                     "Points": [
                         [
                             0,
-                            0.15
+                            0
                         ],
                         [
                             100,
@@ -156,5 +156,5 @@
             ]
         }
     },
-    "Notes": "Unverified placeholder values; see docs/DEVELOPMENT.md for duration conversion."
+    "Notes": "Damage curves verified from live package data (d2damage): 0-100 applies to Minor/Elite combatants (excluding Miniboss/Enforcer/Boss); 100-200 SpecialDamageIncrease covers both Primary and Special weapons vs Minibosses and Bosses. ReloadSpeed/Handling driver scaling (0.9x at 100) and LargeAmmoBrickChance drop mapping remain probable pending in-game verification; see docs/DEVELOPMENT.md for duration conversion."
 }

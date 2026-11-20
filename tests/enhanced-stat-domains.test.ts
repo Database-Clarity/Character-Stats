@@ -48,6 +48,7 @@ describe('enhanced stat curve domains', () => {
                 'Health.ShieldRechargeSpeed',
                 'Melee.PVEMeleeDamageIncrease',
                 'Melee.PVPMeleeDamageIncrease',
+                'Super.PVPSuperDamageIncrease',
                 'Super.SuperDamageIncrease',
                 'Super.SuperDurationIncrease',
                 'Weapons.LargeAmmoBrickChance',
@@ -183,7 +184,7 @@ describe('enhanced stat curve domains', () => {
             const source = project.sources.stats.find((entry) => entry.Name === name) as
                 StatSource | undefined;
             if (!source) throw new Error(`Missing ${name} source`);
-            expect(source.Notes).toContain('Placeholder');
+            expect(source.Notes).toContain('d2damage');
 
             const exported = project.data[String(spec.hash)] as Record<string, unknown>;
             const exportedFields = Object.keys(maximums);
@@ -261,7 +262,7 @@ describe('enhanced stat curve domains', () => {
         const exported = project.data[String(healthSpec.hash)] as Record<string, number[]>;
 
         expect(
-            [100, 101, 150, 151, 200].map((statValue) => {
+            [100, 110, 150, 200].map((statValue) => {
                 const arrayValue = exported.PVEBonusShieldHP![statValue - 100]!;
                 const previewValue = renderTooltip(
                     '{{PVEBonusShieldHP}}',
@@ -272,7 +273,7 @@ describe('enhanced stat curve domains', () => {
                 expect(previewValue).toBe(String(arrayValue));
                 return arrayValue;
             }),
-        ).toEqual([0, 0.3, 15, 15.1, 20]);
+        ).toEqual([0, 3.993, 14.249, 20]);
 
         expect(
             [100, 101, 150, 200].map((statValue) => {
@@ -307,20 +308,20 @@ describe('enhanced stat curve domains', () => {
         if (!project.sources) throw new Error('Project did not validate');
         const health = project.sources.stats.find((entry) => entry.Name === 'Health');
         if (!health) throw new Error('Missing Health source');
-        const curve = health.Fields.PVEBonusShieldHP;
+        const curve = health.Fields.ShieldRechargeDelay;
         const html = renderToStaticMarkup(
             createElement(CurveEditor, {
-                spec: healthSpec.fields.find((field) => field.key === 'PVEBonusShieldHP')!,
+                spec: healthSpec.fields.find((field) => field.key === 'ShieldRechargeDelay')!,
                 value: curve,
                 saved: curve,
                 file: 'sources/stats/health.json',
-                path: 'Fields.PVEBonusShieldHP',
+                path: 'Fields.ShieldRechargeDelay',
                 onChange() {},
             }),
         );
 
         expect(html).toContain('100–200');
-        expect(html).toContain('PvE bonus shield (HP) segment 1 point 0 stat value');
+        expect(html).toContain('Shield recharge delay (s) segment 1 point 0 stat value');
         expect(html).toContain('min="100"');
         expect(html).toContain('max="200"');
     });

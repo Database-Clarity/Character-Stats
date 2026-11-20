@@ -56,23 +56,13 @@
                 100,
                 200
             ],
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Linear",
-                    "Points": [
-                        [
-                            100,
-                            0
-                        ],
-                        [
-                            150,
-                            15
-                        ],
-                        [
-                            200,
-                            20
-                        ]
-                    ]
+                    "Type": "Expression",
+                    "From": 100,
+                    "To": 200,
+                    "Expression": "20 * (0.644264 * ((x - 100) / 100)^3 - 1.816166 * ((x - 100) / 100)^2 + 2.171902 * ((x - 100) / 100))"
                 }
             ]
         },
@@ -124,5 +114,5 @@
         },
         "PVEDamageResistance": 34.5
     },
-    "Notes": "Placeholder field values — replace with tested data."
+    "Notes": "FlinchResistance, OrbOfPowerHealthRestore (over 1.5s), PVEHealthHP, HealthRegenDelay, BaseShieldHP, and the PVEBonusShieldHP cubic curve are verified from live package data (d2damage). BaseShieldRechargeDelay (decoded table is 5.3s vs 4.9s here), ShieldRechargeDelay/ShieldRechargeSpeed above 100 (decoded cubic rows x0.6/x0.5 with probable slot roles), HealthRegenSpeed, and PVEDamageResistance still need in-game verification."
 }

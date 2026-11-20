@@ -21,12 +21,27 @@ describe('Weapons stat fields', () => {
     it('labels damage increases by their target combatants and weapon type', () => {
         expect(weaponsSpec.fields.map((field) => [field.key, field.label])).toEqual(
             expect.arrayContaining([
-                ['NonBossDamageIncrease', 'Minor/Elite/Miniboss PvE damage increase (%)'],
-                ['SpecialDamageIncrease', 'Special weapon vs. Boss damage increase (%)'],
-                ['PowerDamageIncrease', 'Power weapon vs. Boss damage increase (%)'],
+                ['NonBossDamageIncrease', 'Minor/Elite PvE damage increase (%)'],
+                [
+                    'SpecialDamageIncrease',
+                    'Primary/Special weapon vs. Miniboss/Boss damage increase (%)',
+                ],
+                ['PowerDamageIncrease', 'Power weapon vs. Miniboss/Boss damage increase (%)'],
                 ['PVPDamageIncrease', 'PvP damage increase vs. Players (%)'],
             ]),
         );
+    });
+
+    it('starts NonBossDamageIncrease at 0% at stat 0 and reaches 15% at stat 100', () => {
+        const sources = fixture();
+        const fixtureWeapons = sources.stats.find((stat) => stat.Name === weaponsSpec.name)!;
+        Object.assign(fixtureWeapons.Fields, source.Fields);
+        const exportedStat = exportSources(sources)[String(weaponsSpec.hash)] as Record<
+            string,
+            number[]
+        >;
+        expect(exportedStat.NonBossDamageIncrease?.[0]).toBe(0);
+        expect(exportedStat.NonBossDamageIncrease?.[100]).toBe(15);
     });
 
     it('stores duration decreases, preserving the previous multiplier behavior', () => {
@@ -70,8 +85,10 @@ describe('Weapons stat fields', () => {
         expect(enhanced).toContain(
             'Reload and Handling animation durations are reduced by 10% and 10%',
         );
-        expect(base).toContain('increased damage against Minor, Elite, and Miniboss combatants');
-        expect(enhanced).toContain('Special and Power weapons deal 15% and 10%');
+        expect(base).toContain('increased damage against Minor and Elite combatants');
+        expect(enhanced).toContain(
+            'Primary and Special weapons deal 15% increased damage and Power weapons deal 10% increased damage against Minibosses and Bosses',
+        );
         expect(enhanced).toContain('increased damage against Players');
     });
 
@@ -85,9 +102,9 @@ describe('Weapons stat fields', () => {
         const fields = definitions.Weapons?.properties;
         expect(fields?.ReloadSpeed?.description).toContain('percentage decrease');
         expect(fields?.Handling?.description).toContain('percentage decrease');
-        expect(fields?.NonBossDamageIncrease?.description).toContain('Minor, Elite, and Miniboss');
-        expect(fields?.SpecialDamageIncrease?.description).toContain('against Bosses');
-        expect(fields?.PowerDamageIncrease?.description).toContain('against Bosses');
+        expect(fields?.NonBossDamageIncrease?.description).toContain('Minor and Elite combatants');
+        expect(fields?.SpecialDamageIncrease?.description).toContain('Minibosses and Bosses');
+        expect(fields?.PowerDamageIncrease?.description).toContain('Minibosses and Bosses');
         expect(fields?.PVPDamageIncrease?.description).toContain('against Players');
     });
 });

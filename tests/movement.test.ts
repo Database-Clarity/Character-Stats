@@ -38,27 +38,56 @@ describe('movement calculator', () => {
                 expect(movementSpeed(input({ sources: [{ hash: alias }] }))).toEqual(expected);
         }
         const lightweight = data().Sources.find((source) => source.Hash === 1458010786)!;
-        expect(lightweight.AlsoMatches).toHaveLength(24);
+        expect(lightweight.AlsoMatches).toHaveLength(27);
         expect(lightweight.AlsoMatches).toContain(3758615625);
+        expect(lightweight.AlsoMatches).toContain(540070330);
+        expect(lightweight.AlsoMatches).toContain(745725302);
+        expect(lightweight.AlsoMatches).toContain(1278053348);
         expect(lightweight.AlsoMatches).not.toContain(2928496916);
     });
-    it('applies the boosted Macro-Tool forward bonus only when MIDA Multi-Tool is equipped', () => {
+    it('applies MIDA Multi-Tool, boosted MIDA Synergy, Wraithwalk, and The Scientific Method', () => {
+        const multiTool = movementSpeed(input({ sources: [{ hash: 377257911 }] }));
+        expect(multiTool.tier).toBe(5);
+        expect(multiTool.speed).toBeCloseTo(6 * 1.1102, 12);
+
+        const boostedSmg = movementSpeed(input({ sources: [{ hash: 2213377102, boosted: true }] }));
+        expect(boostedSmg.tier).toBe(5);
+        expect(boostedSmg.speed).toBeCloseTo(6 * 1.1102, 12);
+
+        for (const hash of [25692695, 3072857252]) {
+            expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 1.5, 12);
+            expect(movementSpeed(input({ sources: [{ hash }], sprint: true }))).toEqual({
+                tier: 3,
+                speed: 9,
+                cappedBy: 'ForwardSpeedCap',
+            });
+            expect(
+                movementSpeed(input({ sources: [{ hash }], direction: 'Strafe' })).speed,
+            ).toBeCloseTo(5.6 * 0.85, 12);
+        }
+    });
+    it('applies the boosted Macro-Tool mobility and forward bonus only when MIDA Multi-Tool is equipped', () => {
         const source = data();
         expect(source.Sources.find((entry) => entry.Hash === 1888623310)).toMatchObject({
             Activation: 'WhileHeld',
-            Effects: [{ Type: 'ForwardMultiplier', Values: [1], BoostedValues: [1.1] }],
+            Effects: [
+                { Type: 'MobilityTiers', Values: [0], BoostedValues: [2] },
+                { Type: 'ForwardMultiplier', Values: [1], BoostedValues: [1.1102] },
+            ],
             BoostRequiresAll: [1331482397],
         });
         const sources = [{ hash: 1888623310 }];
         expect(movementSpeed(input({ sources })).speed).toBe(5.6);
         expect(movementSpeed(input({ sources, sprint: true })).speed).toBe(8);
-        expect(
-            movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }] })).speed,
-        ).toBeCloseTo(5.6 * 1.1, 12);
+        const boostedWalk = movementSpeed(
+            input({ sources: [{ hash: 1888623310, boosted: true }] }),
+        );
+        expect(boostedWalk.tier).toBe(5);
+        expect(boostedWalk.speed).toBeCloseTo(6 * 1.1102, 12);
         expect(
             movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }], sprint: true }))
                 .speed,
-        ).toBeCloseTo(8 * 1.1, 12);
+        ).toBeCloseTo(8 * 1.1102, 12);
         expect(movementSpeed(input({ sources, direction: 'Strafe' })).speed).toBeCloseTo(
             5.6 * 0.85,
             12,
@@ -67,7 +96,7 @@ describe('movement calculator', () => {
             movementSpeed(
                 input({ sources: [{ hash: 1888623310, boosted: true }], posture: 'Crouched' }),
             ).speed,
-        ).toBeCloseTo(5.6 * 1.1 * 0.55, 12);
+        ).toBeCloseTo(6 * 1.1102 * 0.55, 12);
     });
     it('rejects duplicate aliases of the same source and supports alias ADS selection', () => {
         expect(() =>
@@ -246,9 +275,9 @@ describe('movement calculator', () => {
     it('keeps sword guard multiplicative with other active sources without changing sprint applicability', () => {
         const source = data();
         const sources = [{ hash: 54 }, { hash: 1888623310, boosted: true }];
-        expect(movementSpeed(input({ sources }), source).speed).toBeCloseTo(5.6 * 0.85 * 1.1, 12);
+        expect(movementSpeed(input({ sources }), source).speed).toBeCloseTo(6 * 0.85 * 1.1102, 12);
         expect(movementSpeed(input({ sprint: true, sources }), source).speed).toBeCloseTo(
-            8 * 1.1,
+            8 * 1.1102,
             12,
         );
     });
