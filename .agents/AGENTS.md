@@ -12,7 +12,7 @@ relevant one before making non-trivial changes. This file only summarizes them.
 
 ## Branches
 
-- `master` still holds the old v1 codebase. Active v2 work happens on `v2.0-overhaul`.
+- Active v2 work happens on `master`.
 - `update.json` and `versions/1.*` are the published v1 data. v2 exports go to
   `versions/<major>/` (for example `versions/2/`) and are created by the data build.
 
