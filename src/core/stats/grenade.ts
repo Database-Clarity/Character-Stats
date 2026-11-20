@@ -13,6 +13,7 @@ export const grenadeSpec: StatSpec = {
             domain: [0, 100],
             items: { min: 0 },
             label: 'Cooldown scalar',
+            reciprocalLabel: 'Recharge rate (1/y)',
             description:
                 'Dimensionless cooldown multiplier at each stat value. Start with BaseCooldown ' +
                 'in seconds, replace it with applicable CooldownOverride (last matching replacement ' +

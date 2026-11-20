@@ -676,6 +676,10 @@ span[role='img']::after {
         min-width: 32px;
         height: 32px;
     }
+    .plot-mini-button {
+        min-width: 32px;
+        height: auto;
+    }
     .revert-field,
     .group-member-open {
         min-width: 32px;

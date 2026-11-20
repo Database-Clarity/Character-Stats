@@ -65,7 +65,15 @@ middleware or configuration changes are needed.
   preserves every expanded value exactly and verifies equality before applying.
   `convertCurve` reuses the previous or saved curve, with its rounding, when it expands to the
   same values, so switching back without edits leaves no change.
-  `CurvePlot` is a small SVG plot with x/y crosshair and saved overlay. Segment
+  `CurvePlot` is an SVG plot with x/y crosshair, saved overlay (with hover delta),
+  drag-to-zoom on the X-axis, toggleable inline **View** controls, and an **Enlarge**
+  modal (`curvePlotView.ts` holds the pure zoom/pan/squish/tick-adaptation helpers).
+  Users can adjust X-axis width (25–100% to squish aspect ratio without distorting labels),
+  plot height, X sub-range, Y-from-0 baseline, sample points, segment boundary markers, and
+  (on fields declaring the editor-only `reciprocalLabel` hint, such as `CooldownScalars`) a
+  `1/y` reciprocal view showing recharge rate. **Set as default** / **Clear default**
+  persists preferred inline and enlarged view settings separately in `localStorage`
+  (`clarity:plot-view:inline` / `clarity:plot-view:modal`) and syncs untouched plots. Segment
   controls and raw-domain values are structured inputs. Enhanced-only curves use
   the 100-200 domain, so the editor can set the base/zero-enhancement value at
   stat 100 while retaining the existing 101-200 values. Optional **View JSON** is read-only.
@@ -222,8 +230,9 @@ CSS inverts their black fill for the dark UI. The owner-provided
 
 This movement editor step adds no core helpers or behavior. Earlier editor
 domain-core additions are optional presentation hints on `FieldSpec`:
-`itemRef`, `refSubclassFilters`, `indexLabel` and `groupBy` (the field whose shared values group
-collection rows, e.g. `BaseCooldown` for abilities and Supers; found with `groupByField`). Requirements, charge scaling,
+`itemRef`, `refSubclassFilters`, `indexLabel`, `groupBy` (the field whose shared values group
+collection rows, e.g. `BaseCooldown` for abilities and Supers; found with `groupByField`), and
+`reciprocalLabel` (enables the plot's `1/y` reciprocal view on cooldown-scalar curves). Requirements, charge scaling,
 and Movement speed arrays opt into them in `core/entities/index.ts`. Existing
 validation/export APIs are unchanged. Schema generation deliberately selects its
 own keys, so hints do not leak into `schema.json` (verified byte-for-byte).

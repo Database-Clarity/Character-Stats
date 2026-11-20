@@ -100,8 +100,18 @@ groups collapse using their summary row. **Collapse all / Expand all** helps wit
 long pages. Collapse preferences are remembered in localStorage, independently of
 unsaved data; edits themselves are not persisted.
 
-Curves use a compact plot with an x/y hover crosshair and optional **Compare with
-saved** overlay. **Segments** edits Constant, Linear, and Expression segments.
+Curves use an interactive SVG plot with an x/y hover crosshair, optional **Compare with
+saved** overlay (including the signed delta on hover), and drag-to-zoom on the X-axis
+(drag horizontally across the graph to zoom into a sub-range, or double-click to reset).
+Select **View** under a plot to adjust it inline while editing, or **Enlarge** to open a
+wide inspection modal. Both offer **X width** (25–100%, squishing the X-axis without
+distorting tick labels), **Height**, **X range** start/end with zoom (`−`/`+`) and pan
+(`◀`/`▶`) controls, **Y from 0** to anchor the value axis at zero, **Points** to show
+individual integer samples, **Segments** to mark piecewise segment boundaries, **Set as
+default** (remembered in localStorage separately for inline and enlarged plots, with
+**Clear default** to restore built-ins), **Reset**, and — on cooldown scalar curves — a
+**1/y** (**Recharge rate (1/y)**) toggle to inspect the reciprocal recharge rate directly.
+**Segments** edits Constant, Linear, and Expression segments.
 Bounds, values, and rounding use numeric inputs; Linear points use individual x/y
 inputs. Add, reorder, collapse, and remove segments with their inline controls.
 **Values** edits each integer-domain value numerically. Converting Values to

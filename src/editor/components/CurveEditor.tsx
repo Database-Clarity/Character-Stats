@@ -120,6 +120,10 @@ export function CurveEditor({
                 }))}
                 domain={domain}
                 compare={compare}
+                fieldLabel={spec.label ?? spec.key}
+                {...(spec.reciprocalLabel ? { reciprocalLabel: spec.reciprocalLabel } : {})}
+                {...(segmented ? { segments } : {})}
+                onCompareChange={setCompare}
             />
             {segmented ? (
                 <SegmentList

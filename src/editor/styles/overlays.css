@@ -40,6 +40,10 @@ dialog::backdrop {
     margin: 48px 0 0 auto;
     border-radius: 0;
 }
+.plot-modal {
+    width: min(1160px, calc(100vw - 32px));
+    max-height: 92dvh;
+}
 .changes-dialog .collapse-body {
     padding: 4px 8px;
 }

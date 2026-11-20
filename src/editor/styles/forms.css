@@ -269,10 +269,96 @@
     overflow: hidden;
 }
 .plot {
-    height: 166px;
     min-width: 0;
     margin: 4px 0;
+}
+.plot-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #14171b;
+    font-size: 11px;
+}
+.plot-slider {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-weight: 400;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.plot-slider > input[type='range'] {
+    width: 96px;
+    min-height: 20px;
+}
+.plot-slider-value {
+    min-width: 36px;
+    text-align: right;
+    color: #e2e4e9;
+}
+.plot-range-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.plot-control-label {
+    color: var(--muted);
+    margin-right: 2px;
+}
+.plot-range-group > input[type='number'] {
+    width: 54px;
+    min-height: 22px;
+    padding: 1px 4px;
+    font-size: 11px;
+    line-height: 16px;
+}
+.plot-mini-button {
+    min-width: 22px;
+    min-height: 22px;
+    height: 22px;
+    padding: 0 4px;
+    font-size: 11px;
+    line-height: 16px;
+}
+.plot-toggles {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-left: auto;
+}
+.plot-toggles .check {
+    margin: 0;
+    gap: 5px;
+    font-size: 11px;
+}
+.plot-reset-button {
+    min-height: 22px;
+    padding: 1px 8px;
+    font-size: 11px;
+    line-height: 16px;
+}
+.plot-stage {
+    min-width: 0;
+    overflow: hidden;
+}
+.plot-stage.is-squished {
+    background: #12151a;
+    border: 1px solid #262a31;
+    border-radius: 3px;
+    padding: 2px 0;
+}
+.plot-canvas {
     position: relative;
+    margin: 0 auto;
+    min-width: 0;
 }
 .plot-tooltip {
     position: absolute;
@@ -289,8 +375,17 @@
 }
 .plot svg {
     width: 100%;
-    height: 150px;
     display: block;
+    user-select: none;
+}
+.plot svg.is-zoomable {
+    cursor: crosshair;
+    touch-action: pan-y;
+}
+.plot-selection {
+    fill: #1cdcfc28;
+    stroke: #1cdcfc;
+    stroke-width: 1;
 }
 .plot svg text {
     fill: var(--muted);
@@ -302,12 +397,23 @@
 }
 .plot-legend {
     display: flex;
-    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
     font-size: 10px;
-    padding-left: 4px;
+    padding: 4px 2px 0;
 }
-.plot-legend > :last-child {
+.plot-legend-actions {
     margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.plot-action-button {
+    min-height: 20px;
+    padding: 0 6px;
+    font-size: 10px;
+    line-height: 18px;
 }
 .rounding {
     max-width: 300px;

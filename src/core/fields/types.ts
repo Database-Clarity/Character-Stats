@@ -47,6 +47,8 @@ export interface FieldSpec extends NumericConstraints {
     indexLabel?: string;
     /** Editor-only: collection rows sharing this field's value are listed and edited as a group. */
     groupBy?: boolean;
+    /** Editor-only: offers a 1/y reciprocal view toggle on the curve plot with this label. */
+    reciprocalLabel?: string;
 }
 
 export type EntityRole = 'ability' | 'superAbility' | 'override' | 'movementClass';
