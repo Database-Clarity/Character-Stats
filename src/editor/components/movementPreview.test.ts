@@ -75,12 +75,11 @@ describe('movement preview calculations', () => {
             54: selection,
             1888623310: { ...selection, boosted: true },
         });
-        expect(row(stats, 'sprint')).toMatchObject({ baseline: 8, value: 8.8 });
-        expect(row(stats, 'sprint').delta).toBeCloseTo(0.8, 12);
-        expect(row(stats, 'walk')).toMatchObject({
-            baseline: 5.6,
-            value: 5.236,
-        });
+        expect(row(stats, 'sprint').baseline).toBe(8);
+        expect(row(stats, 'sprint').value).toBeCloseTo(8.8816, 12);
+        expect(row(stats, 'sprint').delta).toBeCloseTo(0.8816, 12);
+        expect(row(stats, 'walk').baseline).toBe(5.6);
+        expect(row(stats, 'walk').value).toBeCloseTo(5.66202, 12);
     });
 
     it('reports positive mobility and sprint changes from a real Lightweight source', () => {

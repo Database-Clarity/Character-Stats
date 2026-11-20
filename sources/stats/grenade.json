@@ -11,14 +11,62 @@
                 {
                     "Type": "Expression",
                     "From": 0,
+                    "To": 10,
+                    "Expression": "1/(1 + 0.0072*x)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 11,
+                    "To": 20,
+                    "Expression": "1/(1.072 + 0.012*(x - 10))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 21,
+                    "To": 30,
+                    "Expression": "1/(1.192 + 0.0179*(x - 20))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 31,
+                    "To": 40,
+                    "Expression": "1/(1.371 + 0.024*(x - 30))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 41,
+                    "To": 50,
+                    "Expression": "1/(1.611 + 0.0275*(x - 40))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 51,
+                    "To": 60,
+                    "Expression": "1/(1.886 + 0.0288*(x - 50))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 61,
                     "To": 70,
-                    "Expression": "1/(1 + (219.5/76 - 1)*x/70 + 0.000298916*x*(x-70))"
+                    "Expression": "1/(2.174 + 0.0393*(x - 60))"
                 },
                 {
                     "Type": "Expression",
                     "From": 71,
+                    "To": 80,
+                    "Expression": "1/(2.567 + 0.006*(x - 70))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 81,
+                    "To": 90,
+                    "Expression": "1/(2.627 + 0.006*(x - 80))"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 91,
                     "To": 100,
-                    "Expression": "(26600/219.5)/(x + 280)"
+                    "Expression": "1/(2.687 + 0.0063*(x - 90))"
                 }
             ]
         },
@@ -27,12 +75,25 @@
                 0,
                 100
             ],
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Constant",
+                    "Type": "Expression",
                     "From": 0,
+                    "To": 27,
+                    "Expression": "0.4 + 0.5*(-1.0485*(x/100)^3 + 2.58045*(x/100)^2)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 28,
+                    "To": 82,
+                    "Expression": "0.4 + 0.5*(-2.384775*(x/100)^3 + 3.590805*(x/100)^2 - 0.234323*(x/100) + 0.015878)"
+                },
+                {
+                    "Type": "Expression",
+                    "From": 83,
                     "To": 100,
-                    "Value": 1
+                    "Expression": "0.4 + 0.5*(-0.994798*(x/100)^3 + 0.439715*(x/100)^2 + 2.104965*(x/100) - 0.549882)"
                 }
             ]
         },
@@ -79,7 +140,7 @@
             ]
         }
     },
-    "Notes": "Placeholder field values — replace with tested data.",
+    "Notes": "CooldownScalars (table 9, x1 to x2.75), EnergyGainScalar (0x6E6D7F08 spline, 0.4 to 0.9; event-grant assembly probable), Warlock 1.1x regen override, and PvE/PvP damage curves verified from live package data (d2damage). Bleak Watcher cooldown override and Prismatic PvP x0.8 chunk penalty still need review.",
     "Abilities": [
         {
             "Hash": 1582574009,

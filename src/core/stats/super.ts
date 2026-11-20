@@ -9,13 +9,23 @@ export const superSpec: StatSpec = {
     collections: { SuperAbilities: superAbilitySpec, Overrides: overrideSpec },
     fields: [
         curve('EnergyGainScalar', {
-            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
+            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are in PvE at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
-            label: 'Energy gain scalar',
+            label: 'PvE energy gain scalar',
             description:
                 'Values represent how effective external sources of Super Energy (Orbs of ' +
-                'Power, exchanging damage, perks, etc.) are.',
+                'Power, exchanging damage, perks, etc.) are in PvE.',
+        }),
+
+        curve('PVPEnergyGainScalar', {
+            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are in PvP at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
+            domain: [0, 100],
+            items: { min: 0 },
+            label: 'PvP energy gain scalar',
+            description:
+                'Values represent how effective external sources of Super Energy (Orbs of ' +
+                'Power, exchanging damage, perks, etc.) are in PvP.',
         }),
 
         curve('ActiveRegenScalars', {
@@ -29,13 +39,21 @@ export const superSpec: StatSpec = {
         }),
 
         curve('SuperDamageIncrease', {
-            help: 'Extra Super damage, in %, for an enhanced Super stat (100–200). Stat 100 means no enhancement.',
+            help: 'Extra Super damage in PvE, in %, for an enhanced Super stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
-            label: 'Super damage increase (%)',
+            label: 'PvE Super damage increase (%)',
             description:
-                'Values represent how much increased damage your Super Ability deals when ' +
-                'the Super stat is enhanced.',
+                'Percentage increase to Super Ability damage in PvE at each enhanced Super stat value.',
+        }),
+
+        curve('PVPSuperDamageIncrease', {
+            help: 'Extra Super damage in PvP, in %, for an enhanced Super stat (100–200). Stat 100 means no enhancement.',
+            domain: ENHANCED_STAT_DOMAIN,
+            items: { min: 0 },
+            label: 'PvP Super damage increase (%)',
+            description:
+                'Percentage increase to Super Ability damage in PvP at each enhanced Super stat value.',
         }),
 
         curve('SuperDurationIncrease', {

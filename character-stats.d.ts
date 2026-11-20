@@ -485,19 +485,29 @@ export interface Super {
     EnhancedStatTooltip: EnhancedStatTooltip;
     /**
      * Values represent how effective external sources of Super Energy (Orbs of Power, exchanging
-     * damage, perks, etc.) are. Stat values 0-100: index = stat value.
+     * damage, perks, etc.) are in PvE. Stat values 0-100: index = stat value.
      */
     EnergyGainScalar: number[];
+    /**
+     * Values represent how effective external sources of Super Energy (Orbs of Power, exchanging
+     * damage, perks, etc.) are in PvP. Stat values 0-100: index = stat value.
+     */
+    PVPEnergyGainScalar: number[];
     /**
      * Values multiply the Super Ability's <ActiveRegenScalar> to determine active Super
      * regeneration. Stat values 0-100: index = stat value.
      */
     ActiveRegenScalars: number[];
     /**
-     * Values represent how much increased damage your Super Ability deals when the Super stat is
-     * enhanced. Stat values 100-200: index = stat value - 100.
+     * Percentage increase to Super Ability damage in PvE at each enhanced Super stat value. Stat
+     * values 100-200: index = stat value - 100.
      */
     SuperDamageIncrease: number[];
+    /**
+     * Percentage increase to Super Ability damage in PvP at each enhanced Super stat value. Stat
+     * values 100-200: index = stat value - 100.
+     */
+    PVPSuperDamageIncrease: number[];
     /**
      * Percentage duration increase for SuperAbilities that define BaseDuration. Supers without
      * BaseDuration do not receive a duration change through this field. Stat values 100-200: index
@@ -625,18 +635,19 @@ export interface Weapons {
      */
     Handling: number[];
     /**
-     * Values represent how much increased damage your weapons deal against Minor, Elite, and
-     * Miniboss combatants. Stat values 0-100: index = stat value.
+     * Values represent how much increased damage your weapons deal against Minor and Elite
+     * combatants (excluding Minibosses and Bosses). Stat values 0-100: index = stat value.
      */
     NonBossDamageIncrease: number[];
     /**
-     * Values represent how much increased damage Special weapons deal against Bosses when the
-     * Weapons stat is enhanced. Stat values 100-200: index = stat value - 100.
+     * Values represent how much increased damage Primary and Special weapons deal against
+     * Minibosses and Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat
+     * value - 100.
      */
     SpecialDamageIncrease: number[];
     /**
-     * Values represent how much increased damage Power weapons deal against Bosses when the Weapons
-     * stat is enhanced. Stat values 100-200: index = stat value - 100.
+     * Values represent how much increased damage Power weapons deal against Minibosses and Bosses
+     * when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100.
      */
     PowerDamageIncrease: number[];
     /**

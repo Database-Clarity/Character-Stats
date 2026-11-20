@@ -137,9 +137,9 @@ describe('fractional HP values', () => {
 
         const values = health.PVEBonusShieldHP as number[];
         expect(values[0]).toBe(0);
-        expect(values[1]).toBe(0.3);
-        expect(values[50]).toBe(15);
-        expect(values[51]).toBe(15.1);
+        expect(values[10]).toBe(3.993);
+        expect(values[50]).toBe(14.249);
+        expect(values[100]).toBe(20);
     });
 
     it('keeps nonnegative bounds and unrelated integer-only field validation', () => {

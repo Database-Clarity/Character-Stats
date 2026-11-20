@@ -77,7 +77,7 @@
         {
             "Hash": 1458010786,
             "Name": "Lightweight Frame",
-            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137: all Lightweight Frame plugs and movement-granting grenade-launcher Micro-Missile Frame plugs verified.",
+            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137 plus Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348) verified from live package data (d2damage). Note: 2753228730 does not spawn lightweight_frame.pattern.tft in package data and should be verified in-game.",
             "RefType": "item",
             "AlsoMatches": [
                 118439741,
@@ -86,8 +86,11 @@
                 395096174,
                 474269988,
                 539564471,
+                540070330,
+                745725302,
                 885620491,
                 956390015,
+                1278053348,
                 1665848857,
                 1671927875,
                 1713206376,
@@ -122,13 +125,36 @@
             ]
         },
         {
+            "Hash": 377257911,
+            "Name": "MIDA Multi-Tool",
+            "Notes": "Verified Intrinsic plug for MIDA Multi-Tool (weapon hash 1331482397) from live package data (d2damage #565): +20 Mobility and x1.1102 movement speed.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        2
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.1102
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 2213377102,
             "Name": "MIDA Synergy",
-            "Notes": "Value unknown — needs testing. Boosted forward multiplier with MIDA Multi-Tool is unknown; 1 is a neutral placeholder. Do not also apply Lightweight Frame for this weapon.",
+            "Notes": "Verified from live package data (d2damage #1461 / #563): base Lightweight (+20 Mobility, x1.0625) stacks with mida_minitool (x1.0449) when MIDA Multi-Tool is equipped -> 1.0625 * 1.0449 = 1.1102. Do not also apply Lightweight Frame for this weapon.",
             "RefType": "item",
             "AlsoMatches": [
+                1057935015,
+                1891876363,
                 2179934441,
-                1057935015
+                2670025099
             ],
             "Activation": "WhileHeld",
             "Effects": [
@@ -144,7 +170,7 @@
                         1.0625
                     ],
                     "BoostedValues": [
-                        1.1
+                        1.1102
                     ]
                 }
             ],
@@ -155,17 +181,26 @@
         {
             "Hash": 1888623310,
             "Name": "MIDA Synergy (Macro-Tool)",
-            "Notes": "Grants only the 10% forward movement bonus while MIDA Multi-Tool is equipped. Does not grant base Lightweight Mobility tiers or sprint bonuses.",
+            "Notes": "Verified from live package data (d2damage #4643, mida_synergy_non_lightweight_bonus): grants no base movement bonus, and while MIDA Multi-Tool is equipped grants +20 Mobility (+2 tiers) and x1.1102 movement speed.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
+                {
+                    "Type": "MobilityTiers",
+                    "Values": [
+                        0
+                    ],
+                    "BoostedValues": [
+                        2
+                    ]
+                },
                 {
                     "Type": "ForwardMultiplier",
                     "Values": [
                         1
                     ],
                     "BoostedValues": [
-                        1.1
+                        1.1102
                     ]
                 }
             ],
@@ -232,14 +267,14 @@
         {
             "Hash": 25692695,
             "Name": "The Scientific Method (Tractor Cannon)",
-            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581). Grounded speed only; no jump-height change.",
+            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581) from live package data (d2damage #545, 6s): op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [
                 {
                     "Type": "ForwardMultiplier",
                     "Values": [
-                        1.125
+                        1.5
                     ]
                 }
             ]
@@ -247,14 +282,14 @@
         {
             "Hash": 3072857252,
             "Name": "Wraithwalk (Heartshadow Catalyst)",
-            "Notes": "Value unknown — needs testing. Wraithwalk is DestinySandboxPerkDefinition 3936394000, linked by this verified DestinyInventoryItemDefinition catalyst. Grounded speed only; no jump-height change.",
+            "Notes": "Verified from live package data (d2damage #3552, DestinySandboxPerkDefinition 3936394000 via catalyst 3072857252): while invisible with weapon ready and reserves remaining, op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [
                 {
-                    "Type": "GroundedMultiplier",
+                    "Type": "ForwardMultiplier",
                     "Values": [
-                        1
+                        1.5
                     ]
                 }
             ]

@@ -15,9 +15,9 @@
         "EnhancedStatTooltip": "Your Grenade Ability has a {{Cooldown}}{{Time}} passive cooldown, and external sources of Grenade Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Your Grenade Ability deals {{PVEGrenadeDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPGrenadeDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Super": {
-        "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nEnhanced Super stat data tracks Super damage changes. Well of Radiance and Ward of Dawn have an enhanced duration benefit; whether that replaces or adds to any Super damage change is unconfirmed.",
-        "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} For Well of Radiance and Ward of Dawn, the enhanced benefit is increased duration (shown in their ability details). Whether this replaces or adds to the Super damage increase is unconfirmed. The SuperDamageIncrease value is {{SuperDamageIncrease}}{{Percent}}.",
+        "Overview": "Super governs how much Super energy you gain from Orbs of Power, Perks, or other sources.\n\nEnhanced Super stat increases Super damage in PvE and PvP. Well of Radiance and Ward of Dawn have an enhanced duration benefit; whether that replaces or adds to any Super damage change is unconfirmed.",
+        "BaseStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness in PvE and {{PVPEnergyGainScalar|ScalarPercent}} effectiveness in PvP.",
+        "EnhancedStatTooltip": "Your Super Ability's passive cooldown does not depend on the Super stat. External sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) function at {{EnergyGainScalar|ScalarPercent}} effectiveness in PvE and {{PVPEnergyGainScalar|ScalarPercent}} effectiveness in PvP.\n\n{{Enhancement}} Your Super Ability deals {{SuperDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPSuperDamageIncrease}}{{Percent}} increased damage in PvP. For Well of Radiance and Ward of Dawn, the enhanced benefit is increased duration (shown in their ability details); whether this replaces or adds to the Super damage increase is unconfirmed.",
         "SuperAbilities": {
             "2274196887": {
                 "EnhancedDurationTooltip": "Enhanced Super stat increases {{AbilityName}}'s duration by {{SuperDurationIncrease}}{{Percent}}, from {{BaseDuration}}{{Time}} to {{SuperDuration}}{{Time}}. Whether this duration benefit replaces or adds to the Super Damage increase is unconfirmed."
@@ -33,9 +33,9 @@
         "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants {{PVEOvershieldHP}}{{HP}} raw Overshield HP in PvE and {{PVPOvershieldHP}}{{HP}} raw Overshield HP in PvP. PvP Overshields have {{PVPOvershieldDamageResistance}}{{Percent}} damage resistance; this resistance is separate from raw Overshield HP. Your Class Ability deals {{PVEClassAbilityDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPClassAbilityDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Weapons": {
-        "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor, Elite, and Miniboss combatants.\n\nWhen enhanced, it increases your weapons' damage against Boss combatants and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
-        "BaseStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.",
-        "EnhancedStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor, Elite, and Miniboss combatants.\n\n{{Enhancement}} Special and Power weapons deal {{SpecialDamageIncrease}}{{Percent}} and {{PowerDamageIncrease}}{{Percent}} increased damage against Bosses, respectively. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
+        "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor and Elite combatants.\n\nWhen enhanced, it increases your weapons' damage against Minibosses, Bosses, and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
+        "BaseStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor and Elite combatants.",
+        "EnhancedStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor and Elite combatants.\n\n{{Enhancement}} Primary and Special weapons deal {{SpecialDamageIncrease}}{{Percent}} increased damage and Power weapons deal {{PowerDamageIncrease}}{{Percent}} increased damage against Minibosses and Bosses. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
     },
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling|ChargeList}} when you have {{ChargeCount|ChargeList}} active charges stored up.",
     "Movement": {
@@ -71,8 +71,11 @@
                 "Condition": "While guarding with a sword."
             },
             "25692695": {
-                "Description": "The Scientific Method increases grounded movement speed without increasing jump height. The speed bonus has not been measured yet.",
-                "Condition": "For a short time after dealing damage with Tractor Cannon."
+                "Description": "The Scientific Method increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
+                "Condition": "For 6 seconds after dealing damage with Tractor Cannon."
+            },
+            "377257911": {
+                "Description": "Grants 2 Mobility tiers and an 11.02% forward movement speed multiplier while held."
             },
             "1133590731": {
                 "Description": "Enhanced Athletics grants 3|5|6 Mobility tiers with 1|2|3 mods equipped."
@@ -81,15 +84,15 @@
                 "Description": "Grants Lightweight benefits while held: 2 Mobility tiers and a 6.25% forward movement speed multiplier."
             },
             "1888623310": {
-                "Description": "While MIDA Multi-Tool is equipped, MIDA Synergy shotguns also grant an increase in forward movement speed. As opposed to MIDA Synergy Submachine Guns, it does not grant lightweight movement benefits.",
+                "Description": "While MIDA Multi-Tool is equipped, MIDA Synergy shotguns grant 2 Mobility tiers and an 11.02% forward movement speed multiplier while held.",
                 "Condition": "While MIDA Macro-Tool is held and MIDA Multi-Tool is equipped."
             },
             "2213377102": {
-                "Description": "MIDA Synergy grants lightweight movement bonuses and increases forward movement speed on Submachine Guns. MIDA Multi-Tool increases the forward multiplier even further when equipped."
+                "Description": "MIDA Synergy grants Lightweight movement bonuses (2 Mobility tiers and a 6.25% forward multiplier) on Submachine Guns, increasing the forward multiplier to 11.02% when MIDA Multi-Tool is equipped."
             },
             "3072857252": {
-                "Description": "Wraithwalk increases grounded movement speed without increasing jump height. The speed bonus has not been measured.",
-                "Condition": "While invisible with the Heartshadow Catalyst equipped."
+                "Description": "Wraithwalk increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
+                "Condition": "While invisible with the Heartshadow Catalyst equipped, weapon readied, and ammo in reserves."
             }
         }
     }
