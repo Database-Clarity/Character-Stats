@@ -184,7 +184,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 1, x1 to x2.4, Round 4), EnergyGainScalar (0x1CAD6FDA spline, 0.4 to 0.9, Round 4; +125% vs stat-0), Overshield HP (40 PvE / 10 PvP; decoded PvE OS DR 25%, duration 5s Dodge/Thruster/Quickfall, 10s Rift/Barricade), and PvE/PvP damage curves (+65% / +10%) verified across live package data (d2damage) and Monument of Triumph in-game testing. PVPOvershieldDamageResistance (50% vs 0% in table 12), Rally Barricade (55.1s vs 54.2s), Arbor Warden Rally/Thruster, Icefall/Hoarfrost/Crackshot chunk overrides, and Spirit of Hoarfrost still need in-game verification.",
+    "Notes": "CooldownScalars (x1 to x2.4, Round 4), EnergyGainScalar (0.4 to 0.9, Round 4; +125% vs stat-0), Overshield HP (40 PvE / 10 PvP; PvE OS DR 25%, duration 5s Dodge/Thruster/Quickfall, 10s Rift/Barricade), and PvE/PvP damage curves (+65% / +10%) verified across live game data and Monument of Triumph in-game testing. PVPOvershieldDamageResistance (50% vs 0%), Rally Barricade (55.1s vs 54.2s), Arbor Warden Rally/Thruster, Icefall/Hoarfrost/Crackshot chunk overrides, and Spirit of Hoarfrost still need in-game verification.",
     "Abilities": [
         {
             "Hash": 3636300852,
@@ -457,7 +457,7 @@
         {
             "Hash": 1602994569,
             "Name": "Bastion - Void Aspect",
-            "Notes": "Cooldown penalty (100s Towering / 80s Rally) is PvP-only per live decode (dodge.md 0xA16E5919), Compendium, and Clarity; PvE base cooldown is unchanged. ChunkEnergyOverride 0.5 matches Rally Bastion testing (verify PvE chunk in-game).",
+            "Notes": "Cooldown penalty (100s Towering / 80s Rally) is PvP-only per live game data, Compendium, and Clarity; PvE base cooldown is unchanged. ChunkEnergyOverride 0.5 matches Rally Bastion testing (verify PvE chunk in-game).",
             "Requirements": [
                 2722641741,
                 2722641740

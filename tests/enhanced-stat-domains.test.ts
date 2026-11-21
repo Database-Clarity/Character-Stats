@@ -184,7 +184,7 @@ describe('enhanced stat curve domains', () => {
             const source = project.sources.stats.find((entry) => entry.Name === name) as
                 StatSource | undefined;
             if (!source) throw new Error(`Missing ${name} source`);
-            expect(source.Notes).toContain('d2damage');
+            expect(source.Notes).toContain('live game data');
 
             const exported = project.data[String(spec.hash)] as Record<string, unknown>;
             const exportedFields = Object.keys(maximums);

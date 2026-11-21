@@ -134,7 +134,7 @@
             ]
         }
     },
-    "Notes": "EnergyGainScalar (0x7CEE3265 PvE 0.4 to 0.9, Round 4, confirmed in-game for Monument of Triumph / +125% vs stat-0; PvP 0.4 to 1.15, Round 4) and SuperDamageIncrease (45% PvE / 15% PvP) verified from live package data (d2damage). Storm's Edge (625s vs 500s), Silkstrike (556s vs ~500s), Roaming Super PvE ActiveRegenScalar (2.5x vs 3.0x), ActiveRegenScalars policy, and SuperDurationIncrease (33% vs 33.33%) still need review/in-game verification.",
+    "Notes": "EnergyGainScalar (PvE 0.4 to 0.9, Round 4, confirmed in-game for Monument of Triumph / +125% vs stat-0; PvP 0.4 to 1.15, Round 4) and SuperDamageIncrease (45% PvE / 15% PvP) verified from live game data. Storm's Edge (625s vs 500s), Silkstrike (556s vs ~500s), Roaming Super PvE ActiveRegenScalar (2.5x vs 3.0x), ActiveRegenScalars policy, and SuperDurationIncrease (33% vs 33.33%) still need review/in-game verification.",
     "Overrides": [],
     "SuperAbilities": [
         {

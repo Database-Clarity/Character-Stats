@@ -77,7 +77,7 @@
         {
             "Hash": 1458010786,
             "Name": "Lightweight Frame",
-            "Notes": "Bungie manifest Lightweight Frame intrinsics, Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348, 4024789138), Heat Lightweight frames (2167115920, 4108848057), and 7 Exotic Intrinsics spawning lightweight_frame.pattern.tft (Fighting Lion, Chaperone, Le Monarque, Manticore, Verglas Curve, Alethonym, Third Iteration) verified from live package data (d2damage). Removed 2753228730 (Ergo Sum sword frame plug #4174, does not spawn lightweight_frame.pattern.tft).",
+            "Notes": "Bungie manifest Lightweight Frame intrinsics, Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348, 4024789138), Heat Lightweight frames (2167115920, 4108848057), and 7 Exotic Intrinsics granting the Lightweight movement bonus (Fighting Lion, Chaperone, Le Monarque, Manticore, Verglas Curve, Alethonym, Third Iteration). Removed 2753228730 (Ergo Sum sword-frame plug, does not grant the Lightweight movement bonus).",
             "RefType": "item",
             "AlsoMatches": [
                 118439741,
@@ -136,7 +136,7 @@
         {
             "Hash": 377257911,
             "Name": "MIDA Multi-Tool",
-            "Notes": "Verified Intrinsic plug for MIDA Multi-Tool (weapon hash 1331482397) from live package data (d2damage #565): +20 Mobility and x1.1102 movement speed.",
+            "Notes": "Verified Intrinsic plug for MIDA Multi-Tool (weapon hash 1331482397): +20 Mobility (+2 tiers) and x1.1102 movement speed.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
@@ -157,7 +157,7 @@
         {
             "Hash": 2213377102,
             "Name": "MIDA Synergy",
-            "Notes": "Verified from live package data (d2damage #1461 / #563): base Lightweight (+20 Mobility, x1.0625) stacks with mida_minitool (x1.0449) when MIDA Multi-Tool is equipped -> 1.0625 * 1.0449 = 1.1102. Do not also apply Lightweight Frame for this weapon.",
+            "Notes": "Base Lightweight (+20 Mobility, x1.0625) stacks with the MIDA Mini-Tool synergy bonus (x1.0449) when MIDA Multi-Tool is equipped -> 1.0625 * 1.0449 = 1.1102. Do not also apply Lightweight Frame for this weapon.",
             "RefType": "item",
             "AlsoMatches": [
                 1057935015,
@@ -191,7 +191,7 @@
         {
             "Hash": 1888623310,
             "Name": "MIDA Synergy (Macro-Tool)",
-            "Notes": "Verified from live package data (d2damage #4643, mida_synergy_non_lightweight_bonus): grants no base movement bonus, and while MIDA Multi-Tool is equipped grants +20 Mobility (+2 tiers) and x1.1102 movement speed.",
+            "Notes": "Grants no base movement bonus; while MIDA Multi-Tool is equipped, grants +20 Mobility (+2 tiers) and x1.1102 movement speed.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
@@ -277,7 +277,7 @@
         {
             "Hash": 25692695,
             "Name": "The Scientific Method (Tractor Cannon)",
-            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581) from live package data (d2damage #545, 6s): op-6 0x00 x1.5 forward walk and 0x03 x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether 0x00 also raises sprint to the 9 m/s cap).",
+            "Notes": "Trait plug for Tractor Cannon (weapon hash 3580904581, 6s): x1.5 forward walk and x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether forward bonus also raises sprint to the 9 m/s cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [
@@ -292,7 +292,7 @@
         {
             "Hash": 3072857252,
             "Name": "Wraithwalk (Heartshadow Catalyst)",
-            "Notes": "Verified from live package data (d2damage #3552, DestinySandboxPerkDefinition 3936394000 via catalyst 3072857252): while invisible with weapon ready and reserves remaining, op-6 0x00 x1.5 forward walk and 0x03 x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether 0x00 also raises sprint to the 9 m/s cap).",
+            "Notes": "Heartshadow Catalyst (3072857252 / sandbox perk 3936394000): while invisible with weapon ready and reserves remaining, x1.5 forward walk and x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether forward bonus also raises sprint to the 9 m/s cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [

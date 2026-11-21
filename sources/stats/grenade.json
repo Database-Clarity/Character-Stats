@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 9, x1 to x2.75, Round 4), EnergyGainScalar (0x6E6D7F08 spline, 0.4 to 0.9, Round 4; +125% vs stat-0), Warlock 1.1x regen override, and PvE/PvP damage curves (+65% / +20%) verified across live package data (d2damage) and Monument of Triumph in-game testing. Shatter Grenade (1399218, 105.4s, chunk scalar untested), Unbreakable chunk override (0.5x on Prismatic?), Chaos Accelerant HHSN scalar, and Prismatic PvP x0.8 chunk penalty still need in-game testing.",
+    "Notes": "CooldownScalars (x1 to x2.75, Round 4), EnergyGainScalar (0.4 to 0.9, Round 4; +125% vs stat-0), Warlock 1.1x regen override, and PvE/PvP damage curves (+65% / +20%) verified across live game data and Monument of Triumph in-game testing. Shatter Grenade (1399218, 105.4s, chunk scalar untested), Unbreakable chunk override (0.5x on Prismatic?), Chaos Accelerant HHSN scalar, and Prismatic PvP x0.8 chunk penalty still need in-game testing.",
     "Abilities": [
         {
             "Hash": 1582574009,

@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 10, x1 to x2.75, Round 4), EnergyGainScalar (0x514BA0CA spline, 0.4 to 0.9, Round 4; +125% vs stat-0), PvE/PvP damage curves (+30% / +20%), and Prismatic Titan/Warlock 0.7x regen penalties verified across live package data (d2damage), Compendium, and Monument of Triumph in-game testing. Frenzied Blade base cooldown (143.1s vs 159.6s), Chain Lightning (Arc-only) 2-charge scaling, and shoulder-charge chunk scalars (0.8/0.7 vs 0.9) still need in-game verification.",
+    "Notes": "CooldownScalars (x1 to x2.75, Round 4), EnergyGainScalar (0.4 to 0.9, Round 4; +125% vs stat-0), PvE/PvP damage curves (+30% / +20%), and Prismatic Titan/Warlock 0.7x regen penalties verified across live game data, Compendium, and Monument of Triumph in-game testing. Frenzied Blade base cooldown (143.1s vs 159.6s), Chain Lightning (Arc-only) 2-charge scaling, and shoulder-charge chunk scalars (0.8/0.7 vs 0.9) still need in-game verification.",
     "Abilities": [
         {
             "Hash": 2307689415,
