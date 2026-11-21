@@ -76,7 +76,7 @@
                 0,
                 100
             ],
-            "Round": 3,
+            "Round": 4,
             "Segments": [
                 {
                     "Type": "Expression",
@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 10, x1 to x2.75), EnergyGainScalar (0x514BA0CA spline, 0.4 to 0.9; event-grant assembly probable), and PvE/PvP damage curves verified from live package data (d2damage). Individual melee BaseCooldowns, ChargeBasedScaling, and Prismatic Titan/Warlock melee overrides still need in-game verification.",
+    "Notes": "CooldownScalars (table 10, x1 to x2.75, Round 4), EnergyGainScalar (0x514BA0CA spline, 0.4 to 0.9, Round 4; +125% vs stat-0), PvE/PvP damage curves (+30% / +20%), and Prismatic Titan/Warlock 0.7x regen penalties verified across live package data (d2damage), Compendium, and Monument of Triumph in-game testing. Frenzied Blade base cooldown (143.1s vs 159.6s), Chain Lightning (Arc-only) 2-charge scaling, and shoulder-charge chunk scalars (0.8/0.7 vs 0.9) still need in-game verification.",
     "Abilities": [
         {
             "Hash": 2307689415,
@@ -294,16 +294,30 @@
             "ChunkEnergyScalar": 0.8
         },
         {
+            "Hash": 1139822080,
+            "Name": "Phantom Surge",
+            "BaseCooldown": 130.7,
+            "ChunkEnergyScalar": 0.9
+        },
+        {
             "Hash": 2299867342,
             "Name": "Pocket Singularity",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "ChargeBasedScaling": [
+                1,
+                1
+            ]
         },
         {
             "Hash": 3644045870,
             "Name": "Pocket Singularity - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "ChargeBasedScaling": [
+                1,
+                1
+            ]
         },
         {
             "Hash": 4016776973,
@@ -420,6 +434,7 @@
         {
             "Hash": 1616346845,
             "Name": "Prismatic Titan - Subclass",
+            "Notes": "Frenzied Blade receives a 0.7x passive regeneration speed penalty on Prismatic (1 / 0.7 = 1.4285714286).",
             "Requirements": [
                 1980796564
             ],
@@ -430,6 +445,7 @@
         {
             "Hash": 3893112950,
             "Name": "Prismatic Warlock - Subclass",
+            "Notes": "Arcane Needle receives a 0.7x passive regeneration speed penalty on Prismatic (1 / 0.7 = 1.4285714286).",
             "Requirements": [
                 3644045871
             ],

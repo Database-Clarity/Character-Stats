@@ -98,7 +98,6 @@ sources/*.json + locale/en.json -> src/core (registries) -> src/cli  -> versions
 - Numeric constraints encode structure, not guessed balance ranges. Don't invent gameplay
   values. Unknown movement values are written as 0 tiers or a ×1 multiplier, with
   `Notes: "Value unknown — needs testing"`.
-  - Weapon `ReloadSpeed` and `Handling` curves are known placeholders.
 - Keep core calculation results exact. Round only for display, for example with
   `formatMovementSpeed` in `src/editor/components/previewData.ts`.
 - TypeScript runs with `strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes`.

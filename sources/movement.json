@@ -77,13 +77,16 @@
         {
             "Hash": 1458010786,
             "Name": "Lightweight Frame",
-            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137 plus Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348) verified from live package data (d2damage). Note: 2753228730 does not spawn lightweight_frame.pattern.tft in package data and should be verified in-game.",
+            "Notes": "Bungie manifest Lightweight Frame intrinsics, Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348, 4024789138), Heat Lightweight frames (2167115920, 4108848057), and 7 Exotic Intrinsics spawning lightweight_frame.pattern.tft (Fighting Lion, Chaperone, Le Monarque, Manticore, Verglas Curve, Alethonym, Third Iteration) verified from live package data (d2damage). Removed 2753228730 (Ergo Sum sword frame plug #4174, does not spawn lightweight_frame.pattern.tft).",
             "RefType": "item",
             "AlsoMatches": [
                 118439741,
                 132189785,
+                228577175,
                 308595185,
                 395096174,
+                425960662,
+                470163129,
                 474269988,
                 539564471,
                 540070330,
@@ -91,13 +94,17 @@
                 885620491,
                 956390015,
                 1278053348,
+                1394384862,
                 1665848857,
                 1671927875,
                 1713206376,
                 2012877834,
                 2105054824,
                 2108556049,
-                2753228730,
+                2144580852,
+                2167115920,
+                2186532310,
+                2636679416,
                 3048420653,
                 3272152575,
                 3377988521,
@@ -106,7 +113,9 @@
                 3728676938,
                 3758615625,
                 4008973208,
-                4080055066
+                4024789138,
+                4080055066,
+                4108848057
             ],
             "Activation": "WhileHeld",
             "Effects": [
@@ -154,6 +163,7 @@
                 1057935015,
                 1891876363,
                 2179934441,
+                2470575005,
                 2670025099
             ],
             "Activation": "WhileHeld",
@@ -267,7 +277,7 @@
         {
             "Hash": 25692695,
             "Name": "The Scientific Method (Tractor Cannon)",
-            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581) from live package data (d2damage #545, 6s): op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
+            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581) from live package data (d2damage #545, 6s): op-6 0x00 x1.5 forward walk and 0x03 x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether 0x00 also raises sprint to the 9 m/s cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [
@@ -282,7 +292,7 @@
         {
             "Hash": 3072857252,
             "Name": "Wraithwalk (Heartshadow Catalyst)",
-            "Notes": "Verified from live package data (d2damage #3552, DestinySandboxPerkDefinition 3936394000 via catalyst 3072857252): while invisible with weapon ready and reserves remaining, op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
+            "Notes": "Verified from live package data (d2damage #3552, DestinySandboxPerkDefinition 3936394000 via catalyst 3072857252): while invisible with weapon ready and reserves remaining, op-6 0x00 x1.5 forward walk and 0x03 x1.2 acceleration (strafe/crouch/jump unaffected; verify in-game whether 0x00 also raises sprint to the 9 m/s cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [

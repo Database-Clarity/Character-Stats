@@ -629,7 +629,7 @@
                 "PVEDamageResistance": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "This number represents the percentage damage resistance applied to Health, not Shields, in PVE activities, independent of the Health stat value. The current value is 34.5."
+                    "description": "This number represents the percentage damage resistance applied to Health, not Shields, in PVE activities, independent of the Health stat value."
                 }
             },
             "required": [
@@ -993,7 +993,7 @@
                 "PVPOvershieldDamageResistance": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "PvP Overshield damage resistance as a percentage. Do not apply this value to PvE; PvE Overshield damage resistance is unknown."
+                    "description": "PvP Overshield damage resistance as a percentage. Do not apply this value to PvE."
                 },
                 "PVEClassAbilityDamageIncrease": {
                     "type": "array",

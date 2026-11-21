@@ -112,7 +112,7 @@
                 }
             ]
         },
-        "PVEDamageResistance": 34.5
+        "PVEDamageResistance": 34.12
     },
-    "Notes": "FlinchResistance, OrbOfPowerHealthRestore (over 1.5s), PVEHealthHP, HealthRegenDelay, BaseShieldHP, and the PVEBonusShieldHP cubic curve are verified from live package data (d2damage). BaseShieldRechargeDelay (decoded table is 5.3s vs 4.9s here), ShieldRechargeDelay/ShieldRechargeSpeed above 100 (decoded cubic rows x0.6/x0.5 with probable slot roles), HealthRegenSpeed, and PVEDamageResistance still need in-game verification."
+    "Notes": "FlinchResistance, OrbOfPowerHealthRestore (over 1.5s), PVPHealthHP (70 + 30 Crucible hop-on), PVEHealthHP, HealthRegenDelay, BaseShieldHP, PVEBonusShieldHP (cubic), and PVEDamageResistance (table 19, 0.6588 -> 34.12%) are verified from live package data (d2damage). BaseShieldRechargeDelay (decoded 5.3s vs 4.9s), ShieldRechargeDelay/ShieldRechargeSpeed above 100 (decoded cubic 0x80A680C3 x0.6/x0.5 vs linear), and HealthRegenSpeed (3.2s vs 3.3s) still need 3-point in-game frame timing."
 }

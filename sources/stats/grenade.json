@@ -76,7 +76,7 @@
                 0,
                 100
             ],
-            "Round": 3,
+            "Round": 4,
             "Segments": [
                 {
                     "Type": "Expression",
@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 9, x1 to x2.75), EnergyGainScalar (0x6E6D7F08 spline, 0.4 to 0.9; event-grant assembly probable), Warlock 1.1x regen override, and PvE/PvP damage curves verified from live package data (d2damage). Bleak Watcher cooldown override and Prismatic PvP x0.8 chunk penalty still need review.",
+    "Notes": "CooldownScalars (table 9, x1 to x2.75, Round 4), EnergyGainScalar (0x6E6D7F08 spline, 0.4 to 0.9, Round 4; +125% vs stat-0), Warlock 1.1x regen override, and PvE/PvP damage curves (+65% / +20%) verified across live package data (d2damage) and Monument of Triumph in-game testing. Shatter Grenade (1399218, 105.4s, chunk scalar untested), Unbreakable chunk override (0.5x on Prismatic?), Chaos Accelerant HHSN scalar, and Prismatic PvP x0.8 chunk penalty still need in-game testing.",
     "Abilities": [
         {
             "Hash": 1582574009,
@@ -306,6 +306,12 @@
             "ChunkEnergyScalar": 0.75
         },
         {
+            "Hash": 1377143502,
+            "Name": "Slicewire Grenade",
+            "BaseCooldown": 219.5,
+            "ChunkEnergyScalar": 0.5
+        },
+        {
             "Hash": 2216698406,
             "Name": "Solar Grenade",
             "BaseCooldown": 219.5,
@@ -406,7 +412,7 @@
         {
             "Hash": 790664813,
             "Name": "Bleak Watcher - Prismatic Aspect",
-            "Notes": "Replacement cooldown at stat 0 before the Warlock override. The sheet lists 159.6 s in its Warlock table, which already includes the Warlock 1.1x grenade regen; the Warlock override (cooldown x0.909) applies on top of this value, giving the same 159.6 s.",
+            "Notes": "Floor replacement cooldown (175.6s at stat 0) before the Warlock override (x0.909 -> 159.6s); Healing Grenade - Prismatic is the only Prismatic Warlock grenade shorter than 175.6s. Chunk scalar is inherited.",
             "Requirements": [
                 3040080535
             ],
@@ -415,33 +421,21 @@
         {
             "Hash": 2642597904,
             "Name": "Bleak Watcher - Stasis Aspect",
+            "Notes": "Sets shorter Stasis grenades to Glacier Grenade's base cooldown (175.6s) and chunk scalar (0.625x). Add Shatter Grenade (1399218) once its base chunk scalar and Bleak Watcher interaction are tested in-game.",
             "Requirements": [
                 1399216,
                 1399219
             ],
-            "Scalar": [
-                1.3296703297,
-                1
-            ],
+            "CooldownOverride": 175.6,
             "ChunkEnergyOverride": [
                 0.625,
                 0.625
             ]
         },
         {
-            "Hash": 3534173884,
-            "Name": "Mothkeeper's Wraps - Exotic Arms",
-            "Requirements": [
-                0
-            ],
-            "CooldownOverride": 105.4,
-            "ChunkEnergyOverride": [
-                1
-            ]
-        },
-        {
             "Hash": 1262901521,
             "Name": "Unbreakable - Prismatic Aspect",
+            "Notes": "Cooldown override 219.5s confirmed. Live decode (0xFFE4EE9A) also steps Void/Fusion chunk scalar to 0.5x; test non-Void Prismatic grenades before adding ChunkEnergyOverride [0.5].",
             "Requirements": [
                 0
             ],
@@ -450,6 +444,7 @@
         {
             "Hash": 1602994571,
             "Name": "Unbreakable - Void Aspect",
+            "Notes": "Cooldown override 219.5s confirmed. Live decode (0xFFE4EE9A) also steps Void grenade chunk scalars to 0.5x; verify in-game before adding ChunkEnergyOverride [0.5].",
             "Requirements": [
                 0
             ],

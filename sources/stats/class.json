@@ -76,7 +76,7 @@
                 0,
                 100
             ],
-            "Round": 3,
+            "Round": 4,
             "Segments": [
                 {
                     "Type": "Expression",
@@ -184,7 +184,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 1, x1 to x2.4), EnergyGainScalar (0x1CAD6FDA spline, 0.4 to 0.9; event-grant assembly probable), Overshield HP (40 PvE / 10 PvP), and PvE/PvP damage curves verified from live package data (d2damage). PVPOvershieldDamageResistance, Acrobat's Dodge PvP cooldown (decoded 118.8s), and Bastion/Rally/Threaded Specter overrides still need in-game verification.",
+    "Notes": "CooldownScalars (table 1, x1 to x2.4, Round 4), EnergyGainScalar (0x1CAD6FDA spline, 0.4 to 0.9, Round 4; +125% vs stat-0), Overshield HP (40 PvE / 10 PvP; decoded PvE OS DR 25%, duration 5s Dodge/Thruster/Quickfall, 10s Rift/Barricade), and PvE/PvP damage curves (+65% / +10%) verified across live package data (d2damage) and Monument of Triumph in-game testing. PVPOvershieldDamageResistance (50% vs 0% in table 12), Rally Barricade (55.1s vs 54.2s), Arbor Warden Rally/Thruster, Icefall/Hoarfrost/Crackshot chunk overrides, and Spirit of Hoarfrost still need in-game verification.",
     "Abilities": [
         {
             "Hash": 3636300852,
@@ -201,37 +201,37 @@
         {
             "Hash": 25156514,
             "Name": "Empowering Rift - Arc",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664839,
             "Name": "Empowering Rift - Prismatic",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2979486802,
             "Name": "Empowering Rift - Solar",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047640,
             "Name": "Empowering Rift - Stasis",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852321,
             "Name": "Empowering Rift - Strand",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081648,
             "Name": "Empowering Rift - Void",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -273,37 +273,37 @@
         {
             "Hash": 25156515,
             "Name": "Healing Rift - Arc",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664838,
             "Name": "Healing Rift - Prismatic",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2979486803,
             "Name": "Healing Rift - Solar",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047641,
             "Name": "Healing Rift - Stasis",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852320,
             "Name": "Healing Rift - Strand",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081649,
             "Name": "Healing Rift - Void",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -443,29 +443,24 @@
         {
             "Hash": 90009855,
             "Name": "Arbor Warden - Exotic Chest",
+            "Notes": "Live package decode (barrinade_class_ability_override_hopon = 1/70.0s) and Compendium confirm Towering Barricade cooldown is reduced to 70s. Rally Barricade (38s Compendium vs 70s decode) and Thruster (52.1s Clarity vs 70s/101.3s Compendium) conflict and need in-game timing.",
             "Requirements": [
-                489583098,
-                2868073563
+                489583096,
+                2868073561,
+                2495523340,
+                3260056808,
+                2087010645,
+                2722641740
             ],
-            "Scalar": [
-                1.9444444444,
-                1.9444444444
-            ],
-            "ChunkEnergyOverride": [
-                1,
-                1
-            ]
+            "CooldownOverride": 70
         },
         {
             "Hash": 1602994569,
             "Name": "Bastion - Void Aspect",
+            "Notes": "Cooldown penalty (100s Towering / 80s Rally) is PvP-only per live decode (dodge.md 0xA16E5919), Compendium, and Clarity; PvE base cooldown is unchanged. ChunkEnergyOverride 0.5 matches Rally Bastion testing (verify PvE chunk in-game).",
             "Requirements": [
                 2722641741,
                 2722641740
-            ],
-            "Scalar": [
-                2.1052631579,
-                1.4285714286
             ],
             "ChunkEnergyOverride": [
                 0.5,
@@ -473,16 +468,24 @@
             ]
         },
         {
+            "Hash": 3066103997,
+            "Name": "Crackshot - Solar Aspect",
+            "Notes": "Added in Update 9.7.0 (Monument of Triumph). Overrides Solar Class Ability cooldown to Marksman's Dodge (42s). ChunkEnergyOverride (likely 1.0) needs in-game testing.",
+            "Requirements": [
+                3636300855,
+                3636300852
+            ],
+            "CooldownOverride": 42
+        },
+        {
             "Hash": 1322544481,
             "Name": "Hoarfrost-Z - Exotic Chest",
+            "Notes": "Overrides Rally Barricade cooldown to Towering Barricade (101.3s). ChunkEnergyOverride (1.0 here vs 0.5 in Monument of Triumph CSV) needs in-game testing.",
             "Requirements": [
                 3260056809,
                 2868073560
             ],
-            "Scalar": [
-                1.8421052632,
-                1.8421052632
-            ],
+            "CooldownOverride": 101.3,
             "ChunkEnergyOverride": [
                 1,
                 1
@@ -490,30 +493,33 @@
         },
         {
             "Hash": 1467044898,
-            "Name": "Icefall Mantle - Exotic Arns",
+            "Name": "Icefall Mantle - Exotic Arms",
+            "Notes": "Requires a Stasis Super (Stasis or Prismatic Titan). Live decode (selfish_brace_override_hopon = 1/70.0s), Clarity, and Compendium confirm 70s base cooldown on Barricades. Prismatic Thruster interaction (70s vs unchanged) and ChunkEnergyOverride (decoded tier 3 = 0.5 vs 1.0 in CSV) need in-game testing.",
             "Requirements": [
-                489583097,
-                2495523341,
                 3260056809,
-                2087010644,
-                2722641741,
                 2868073560,
-                2868073563
+                3260056808,
+                2868073561
             ],
-            "Scalar": [
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.9444444444
-            ],
+            "CooldownOverride": 70,
             "ChunkEnergyOverride": [
                 1,
                 1,
                 1,
-                1,
+                1
+            ]
+        },
+        {
+            "Hash": 1619425569,
+            "Name": "Mask of Bakris - Exotic Helmet",
+            "Notes": "Requires an Arc or Stasis Super. Overrides Gambler's Dodge cooldown and chunk scalar to Marksman's Dodge (42s, 1.0x); does not replace Acrobat's Dodge. Passive regen pauses during the 11s Light Shift buff.",
+            "Requirements": [
+                426473317,
+                3933525367,
+                2711519340
+            ],
+            "CooldownOverride": 42,
+            "ChunkEnergyOverride": [
                 1,
                 1,
                 1

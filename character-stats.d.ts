@@ -325,7 +325,7 @@ export interface Health {
     ShieldRechargeSpeed: number[];
     /**
      * This number represents the percentage damage resistance applied to Health, not Shields, in
-     * PVE activities, independent of the Health stat value. The current value is 34.5.
+     * PVE activities, independent of the Health stat value.
      */
     PVEDamageResistance: number;
 }
@@ -578,10 +578,7 @@ export interface Class {
      * effective HP. Stat values 100-200: index = stat value - 100.
      */
     PVPOvershieldHP: number[];
-    /**
-     * PvP Overshield damage resistance as a percentage. Do not apply this value to PvE; PvE
-     * Overshield damage resistance is unknown.
-     */
+    /** PvP Overshield damage resistance as a percentage. Do not apply this value to PvE. */
     PVPOvershieldDamageResistance: number;
     /**
      * Percentage increase to Class Ability damage in PvE at each enhanced Class stat value. Stat

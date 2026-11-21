@@ -54,12 +54,12 @@ export const classSpec: StatSpec = {
         }),
 
         numberField('PVPOvershieldDamageResistance', {
-            help: 'Damage resistance of the Class ability Overshield in PvP, in %. The PvE value is unknown, so this does not apply to PvE.',
+            help: 'Damage resistance of the Class ability Overshield in PvP, in %. Does not apply to PvE (decoded PvE Class Overshield damage resistance is 25%).',
             min: 0,
             label: 'PvP Overshield damage resistance (%)',
             description:
                 'PvP Overshield damage resistance as a percentage. Do not apply this ' +
-                'value to PvE; PvE Overshield damage resistance is unknown.',
+                'value to PvE.',
         }),
 
         curve('PVEClassAbilityDamageIncrease', {

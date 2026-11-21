@@ -38,12 +38,19 @@ describe('movement calculator', () => {
                 expect(movementSpeed(input({ sources: [{ hash: alias }] }))).toEqual(expected);
         }
         const lightweight = data().Sources.find((source) => source.Hash === 1458010786)!;
-        expect(lightweight.AlsoMatches).toHaveLength(27);
+        expect(lightweight.AlsoMatches).toHaveLength(36);
         expect(lightweight.AlsoMatches).toContain(3758615625);
         expect(lightweight.AlsoMatches).toContain(540070330);
         expect(lightweight.AlsoMatches).toContain(745725302);
         expect(lightweight.AlsoMatches).toContain(1278053348);
+        expect(lightweight.AlsoMatches).toContain(4024789138);
+        expect(lightweight.AlsoMatches).toContain(2167115920);
+        expect(lightweight.AlsoMatches).toContain(4108848057);
+        expect(lightweight.AlsoMatches).toContain(425960662);
+        expect(lightweight.AlsoMatches).not.toContain(2753228730);
         expect(lightweight.AlsoMatches).not.toContain(2928496916);
+        const midaSynergy = data().Sources.find((source) => source.Hash === 2213377102)!;
+        expect(midaSynergy.AlsoMatches).toContain(2470575005);
     });
     it('applies MIDA Multi-Tool, boosted MIDA Synergy, Wraithwalk, and The Scientific Method', () => {
         const multiTool = movementSpeed(input({ sources: [{ hash: 377257911 }] }));

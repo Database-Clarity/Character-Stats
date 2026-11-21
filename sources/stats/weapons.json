@@ -156,5 +156,5 @@
             ]
         }
     },
-    "Notes": "Damage curves verified from live package data (d2damage): 0-100 applies to Minor/Elite combatants (excluding Miniboss/Enforcer/Boss); 100-200 SpecialDamageIncrease covers both Primary and Special weapons vs Minibosses and Bosses. ReloadSpeed/Handling driver scaling (0.9x at 100) and LargeAmmoBrickChance drop mapping remain probable pending in-game verification; see docs/DEVELOPMENT.md for duration conversion."
+    "Notes": "All Weapons stat curves verified across live package data (d2damage), Compendium, and Monument of Triumph community testing: ReloadSpeed/Handling scale linearly to 10% shorter animations (0.9x multiplier at 100; Handling stow bonus respects the 100-Handling stow floor); 0-100 NonBossDamageIncrease applies to Minor/Elite combatants (excluding Miniboss/Enforcer/Boss); 100-200 SpecialDamageIncrease covers Primary and Special vs Minibosses/Bosses (+15%), PowerDamageIncrease covers Heavy (+10%), PVPDamageIncrease covers Players (+5%), and LargeAmmoBrickChance scales linearly to 100%."
 }

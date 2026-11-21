@@ -107,9 +107,8 @@ properties; do not infer effective HP or an unmeasured activity value.
 Weapon ReloadSpeed and Handling curves are percentages by which their animation
 durations decrease, not duration multipliers. Convert a measured duration
 multiplier with `(1 - multiplier) * 100` (for example, `0.9` becomes `10%`
-shorter). The current weapon values are placeholders carried over from the
-previous `1.0` to `0.9` multiplier curves; they are not verified gameplay
-measurements and must be replaced with tested data.
+shorter). Both scale linearly from `0%` to `10%` across `0–100` Weapons
+(corroborated across live package data, Compendium, and community testing).
 
 ## Enum and nested-object fields
 
