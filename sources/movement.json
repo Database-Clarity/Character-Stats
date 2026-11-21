@@ -66,6 +66,21 @@
     ],
     "Sources": [
         {
+            "Hash": 1657056865,
+            "Name": "Ahamkara's Eye (One Thousand Voices)",
+            "Notes": "Exotic Fusion Rifle intrinsic (weapon hash 2069224589): while readied, multiplies sideways and backward walk speed and run acceleration by 5/6 (~0.8333x) and jump velocity by 0.875x; forward walk and sprint are unaffected.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        0.8333333
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 1,
             "Name": "Amplified",
             "Notes": "Global Arc subclass buff (15s): +50 Mobility, +1 m/s sideways strafe speed, +2 m/s^2 run acceleration, and extended slide.",
@@ -100,6 +115,43 @@
                     "Type": "ForwardMultiplier",
                     "Values": [
                         1.5
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1685137410,
+            "Name": "Crossbows",
+            "Notes": "Weapon item hashes for Crossbows (Heirloom 1685137410, A Good Shout 649691506/3615748501, Opaque Hourglass 1553681400, Submersion 1724104236/3524386983): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms. Legendary Crossbows reuse the shared Combat Bow category and High-Impact Frame intrinsic, so weapon hashes are listed directly.",
+            "RefType": "item",
+            "AlsoMatches": [
+                649691506,
+                1553681400,
+                1724104236,
+                3524386983,
+                3615748501
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3884127242,
+            "Name": "Dornröschen (Sleeper Simulant)",
+            "Notes": "Exotic Linear Fusion Rifle intrinsic (weapon hash 4036115577): while readied, multiplies sideways and backward walk speed and run acceleration by 5/6 (~0.8333x) and jump velocity by ~0.8696x; forward walk and sprint are unaffected.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        0.8333333
                     ]
                 }
             ]
@@ -449,6 +501,30 @@
             ]
         },
         {
+            "Hash": 2928496916,
+            "Name": "Micro-Missile Frame (Rocket Pulse Rifles & Sidearms)",
+            "Notes": "Micro-Missile Frame intrinsics (base 2928496916, enhanced 368110299/651554065/687584589/1225770249/2100231191/3178379945) and New Malpais intrinsic Atomizing Rounds (2575933030): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms.",
+            "RefType": "item",
+            "AlsoMatches": [
+                368110299,
+                651554065,
+                687584589,
+                1225770249,
+                2100231191,
+                2575933030,
+                3178379945
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 588594999,
             "Name": "Moving Target",
             "Notes": "Weapon trait (base 588594999, enhanced 2717805783): reduces ADS movement penalty by 10% (x0.9 penalty multiplier -> 0.775x ADS speed on standard weapons, 0.865x on Sidearms).",
@@ -590,6 +666,33 @@
                     "Type": "GroundedNonSprintMultiplier",
                     "Values": [
                         0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 117669763,
+            "Name": "The Dance (Radiant Dance Machines)",
+            "Notes": "Exotic Hunter leg intrinsic (item 1702288800): passively active while a Primary weapon is readied and not aiming down sights. Grants +30 Mobility, x1.045 forward/backward walk and sprint speed (and crouched forward/backward), x1.1 sideways strafe speed (standing and crouched), and x1.2 run/crouch acceleration.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        30
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.045
+                    ]
+                },
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        1.1
                     ]
                 }
             ]

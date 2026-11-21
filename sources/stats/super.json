@@ -121,12 +121,12 @@
             ]
         }
     },
-    "Notes": "EnergyGainScalar (PvE 0.4 to 0.9, Round 4) and PVPEnergyGainScalar (PvP 0.4 to 1.15, Round 4) scale external and active Super energy gains directly (ActiveRegenScalars removed). Roaming Supers include the PvE ~3x active regeneration bonus (with PVPActiveRegenScalar preserving the base tier scalar in PvP); Celestial Nighthawk and Pyrogale Gauntlets remove the roaming bonus. Storm's Edge and Silkstrike updated to 500s; SuperDurationIncrease set to 33.33% (40.0s at 200 Super).",
+    "Notes": "EnergyGainScalar (PvE 0.4 to 0.9, Round 4) and PVPEnergyGainScalar (PvP 0.4 to 1.15, Round 4) scale external and active Super energy gains directly (ActiveRegenScalars removed). Roaming Supers include the PvE ~3x active regeneration bonus (with PVPActiveRegenScalar preserving the base tier scalar in PvP); Prismatic Supers additionally receive a 0.9x PvP active regeneration penalty. Celestial Nighthawk and Pyrogale Gauntlets remove the roaming bonus (with Celestial Nighthawk preserving the 0.81x Prismatic PvP scalar via PVPActiveRegenOverride). Storm's Edge and Silkstrike updated to 500s; SuperDurationIncrease set to 33.33% (40.0s at 200 Super).",
     "Overrides": [
         {
             "Hash": 3960926756,
             "Name": "Celestial Nighthawk - Exotic Helmet",
-            "Notes": "Removes the PvE roaming Super active regeneration bonus from Golden Gun.",
+            "Notes": "Removes the PvE roaming Super active regeneration bonus from Golden Gun while preserving the 0.9x Prismatic PvP active regeneration penalty (0.81x) on Golden Gun: Marksman - Prismatic.",
             "Requirements": [
                 375052469,
                 375052468,
@@ -136,6 +136,11 @@
                 0.9,
                 0.9,
                 0.9
+            ],
+            "PVPActiveRegenOverride": [
+                0.9,
+                0.9,
+                0.81
             ]
         },
         {
@@ -176,7 +181,7 @@
             "Name": "Bladefury - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 2747500760,
@@ -223,7 +228,7 @@
             "Name": "Glacial Quake - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 375052469,
@@ -244,7 +249,7 @@
             "Name": "Golden Gun: Marksman - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 2747500761,
@@ -258,7 +263,7 @@
             "Name": "Hammer of Sol - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 1885339915,
@@ -270,7 +275,8 @@
             "Hash": 1869939001,
             "Name": "Needlestorm - Prismatic",
             "BaseCooldown": 500,
-            "ActiveRegenScalar": 1
+            "ActiveRegenScalar": 1,
+            "PVPActiveRegenScalar": 0.9
         },
         {
             "Hash": 1656118682,
@@ -282,7 +288,8 @@
             "Hash": 1869939004,
             "Name": "Nova Bomb: Cataclysm - Prismatic",
             "BaseCooldown": 500,
-            "ActiveRegenScalar": 1
+            "ActiveRegenScalar": 1,
+            "PVPActiveRegenScalar": 0.9
         },
         {
             "Hash": 1656118681,
@@ -314,7 +321,8 @@
             "Hash": 2370269389,
             "Name": "Shadowshot: Deadfall - Prismatic",
             "BaseCooldown": 455,
-            "ActiveRegenScalar": 1.1
+            "ActiveRegenScalar": 1.1,
+            "PVPActiveRegenScalar": 0.99
         },
         {
             "Hash": 2722573681,
@@ -332,7 +340,8 @@
             "Hash": 2370269391,
             "Name": "Silence and Squall - Prismatic",
             "BaseCooldown": 455,
-            "ActiveRegenScalar": 1.1
+            "ActiveRegenScalar": 1.1,
+            "PVPActiveRegenScalar": 0.99
         },
         {
             "Hash": 2463983862,
@@ -346,7 +355,7 @@
             "Name": "Silkstrike - Prismatic",
             "BaseCooldown": 500,
             "ActiveRegenScalar": 3,
-            "PVPActiveRegenScalar": 1
+            "PVPActiveRegenScalar": 0.9
         },
         {
             "Hash": 2274196884,
@@ -358,7 +367,8 @@
             "Hash": 1869939005,
             "Name": "Song of Flame - Prismatic",
             "BaseCooldown": 556,
-            "ActiveRegenScalar": 0.9
+            "ActiveRegenScalar": 0.9,
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 2722573682,
@@ -377,7 +387,8 @@
             "Hash": 2370269388,
             "Name": "Storm's Edge - Prismatic",
             "BaseCooldown": 500,
-            "ActiveRegenScalar": 1
+            "ActiveRegenScalar": 1,
+            "PVPActiveRegenScalar": 0.9
         },
         {
             "Hash": 1081893460,
@@ -391,7 +402,7 @@
             "Name": "Stormtrance - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 119041298,
@@ -403,7 +414,8 @@
             "Hash": 2529942644,
             "Name": "Thundercrash - Prismatic",
             "BaseCooldown": 556,
-            "ActiveRegenScalar": 0.9
+            "ActiveRegenScalar": 0.9,
+            "PVPActiveRegenScalar": 0.81
         },
         {
             "Hash": 4260353955,
@@ -415,7 +427,8 @@
             "Hash": 2529942646,
             "Name": "Twilight Arsenal - Prismatic",
             "BaseCooldown": 500,
-            "ActiveRegenScalar": 1
+            "ActiveRegenScalar": 1,
+            "PVPActiveRegenScalar": 0.9
         },
         {
             "Hash": 4260353953,
@@ -445,7 +458,7 @@
             "Name": "Winter's Wrath - Prismatic",
             "BaseCooldown": 556,
             "ActiveRegenScalar": 2.7,
-            "PVPActiveRegenScalar": 0.9
+            "PVPActiveRegenScalar": 0.81
         }
     ]
 }

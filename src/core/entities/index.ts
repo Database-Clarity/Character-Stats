@@ -225,7 +225,7 @@ export const superAbilitySpec: EntitySpec = {
         }),
 
         numberField('PVPActiveRegenScalar', {
-            help: "Set only if this Super's active regeneration multiplier differs in PvP (for example, Roaming Supers do not receive their PvE roaming bonus in PvP). Multiplied by PVPEnergyGainScalar.",
+            help: "Set only if this Super's active regeneration multiplier differs in PvP (for example, Roaming Supers do not receive their PvE roaming bonus in PvP, and Prismatic Supers receive a 0.9x PvP active regeneration penalty). Multiplied by PVPEnergyGainScalar.",
             min: 0,
             required: false,
             label: 'PvP active regeneration scalar',

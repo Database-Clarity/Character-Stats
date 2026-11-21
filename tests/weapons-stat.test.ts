@@ -24,9 +24,12 @@ describe('Weapons stat fields', () => {
                 ['NonBossDamageIncrease', 'Minor/Elite PvE damage increase (%)'],
                 [
                     'SpecialDamageIncrease',
-                    'Primary/Special weapon vs. Miniboss/Boss damage increase (%)',
+                    'Primary/Special weapon vs. Miniboss/Champion/Boss damage increase (%)',
                 ],
-                ['PowerDamageIncrease', 'Power weapon vs. Miniboss/Boss damage increase (%)'],
+                [
+                    'PowerDamageIncrease',
+                    'Power weapon vs. Miniboss/Champion/Boss damage increase (%)',
+                ],
                 ['PVPDamageIncrease', 'PvP damage increase vs. Players (%)'],
             ]),
         );
@@ -87,7 +90,7 @@ describe('Weapons stat fields', () => {
         );
         expect(base).toContain('increased damage against Minor and Elite combatants');
         expect(enhanced).toContain(
-            'Primary and Special weapons deal 15% increased damage and Power weapons deal 10% increased damage against Minibosses and Bosses',
+            'Primary and Special weapons deal 15% increased damage and Power weapons deal 10% increased damage against Minibosses, Champions, and Bosses',
         );
         expect(enhanced).toContain('increased damage against Players');
     });
@@ -103,8 +106,12 @@ describe('Weapons stat fields', () => {
         expect(fields?.ReloadSpeed?.description).toContain('percentage decrease');
         expect(fields?.Handling?.description).toContain('percentage decrease');
         expect(fields?.NonBossDamageIncrease?.description).toContain('Minor and Elite combatants');
-        expect(fields?.SpecialDamageIncrease?.description).toContain('Minibosses and Bosses');
-        expect(fields?.PowerDamageIncrease?.description).toContain('Minibosses and Bosses');
+        expect(fields?.SpecialDamageIncrease?.description).toContain(
+            'Minibosses, Champions, and Bosses',
+        );
+        expect(fields?.PowerDamageIncrease?.description).toContain(
+            'Minibosses, Champions, and Bosses',
+        );
         expect(fields?.PVPDamageIncrease?.description).toContain('against Players');
     });
 });

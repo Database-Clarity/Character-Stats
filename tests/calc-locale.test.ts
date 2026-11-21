@@ -17,6 +17,9 @@ import {
     type SuperOverride,
 } from '../src/core';
 import { fixture } from './fixtures';
+import superData from '../sources/stats/super.json';
+import classData from '../sources/stats/class.json';
+import type { StatSource } from '../src/core';
 const curve: Curve = { Values: Array.from({ length: 101 }, (_, x) => 1 - x / 200) };
 const ability = { Hash: 1, Name: 'A', BaseCooldown: 100, ChunkEnergyScalar: 0.5 };
 describe('context calculations', () => {
@@ -71,6 +74,43 @@ describe('context calculations', () => {
         expect(effectiveActiveRegen(superSource, superAbility, 100, [], 'PVP')).toBe(0.9);
         const source = fixture().stats.find((s) => s.Name === 'Melee')!;
         expect(effectiveCooldown(source, source.Abilities![0]!, 0).cooldown).toBe(100);
+    });
+    it('applies the 0.9x PvP active regen penalty to Prismatic Supers and preserves it under Celestial Nighthawk', () => {
+        const superSource = superData as unknown as StatSource;
+        const solarMarksman = superSource.SuperAbilities!.find((a) => a.Hash === 375052468)!;
+        const prismMarksman = superSource.SuperAbilities!.find((a) => a.Hash === 2370269390)!;
+        const prismDeadfall = superSource.SuperAbilities!.find((a) => a.Hash === 2370269389)!;
+        const nighthawk = (superSource.Overrides as SuperOverride[]).find(
+            (o) => o.Hash === 3960926756,
+        )!;
+        expect(effectiveActiveRegen(superSource, solarMarksman, 100, [], 'PVP')).toBeCloseTo(
+            0.9 * 1.15,
+            12,
+        );
+        expect(effectiveActiveRegen(superSource, prismMarksman, 100, [], 'PVP')).toBeCloseTo(
+            0.81 * 1.15,
+            12,
+        );
+        expect(
+            effectiveActiveRegen(superSource, solarMarksman, 100, [nighthawk], 'PVP'),
+        ).toBeCloseTo(0.9 * 1.15, 12);
+        expect(
+            effectiveActiveRegen(superSource, prismMarksman, 100, [nighthawk], 'PVP'),
+        ).toBeCloseTo(0.81 * 1.15, 12);
+        expect(effectiveActiveRegen(superSource, prismDeadfall, 100, [], 'PVP')).toBeCloseTo(
+            0.99 * 1.15,
+            12,
+        );
+    });
+    it('applies Threaded Specter - Prismatic cooldown scalar to Acrobat’s Dodge - Prismatic', () => {
+        const classSource = classData as unknown as StatSource;
+        const prismAcrobat = classSource.Abilities!.find((a) => a.Hash === 2711519343)!;
+        const threadedSpecter = (classSource.Overrides as Override[]).find(
+            (o) => o.Hash === 2835214897,
+        )!;
+        expect(
+            effectiveCooldown(classSource, prismAcrobat, 0, [threadedSpecter], 'PVE').cooldown,
+        ).toBeCloseTo(56 * 1.6666666667, 2);
     });
     it('supports PvP base cooldowns, cooldown overrides, and scalars when activity is PVP', () => {
         const pvpAbility = {

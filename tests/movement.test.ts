@@ -677,4 +677,112 @@ describe('movement source validation', () => {
             2,
         );
     });
+    it('models passive weapon ADS/strafe modifiers and Radiant Dance Machines hip-fire bonuses', () => {
+        const repo = data();
+        const titan = 3655393761;
+        const hunter = 671679327;
+        // Rocket Pulse Rifle (New Malpais alias) and Crossbow (Submersion alias) share 0.85x ADS
+        const rocketPulseAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 2575933030 }],
+                heldWeaponSources: [2575933030],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(rocketPulseAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        // Rocket Sidearm matches both Sidearm (14) and Micro-Missile Frame (2928496916) without conflict
+        const rocketSidearmAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 14 }, { hash: 2928496916 }],
+                heldWeaponSources: [14, 2928496916],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(rocketSidearmAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        const crossbowAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 3524386983 }],
+                heldWeaponSources: [3524386983],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(crossbowAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        // Sleeper Simulant & One Thousand Voices slow strafe while leaving forward/sprint unchanged
+        for (const intrinsic of [3884127242, 1657056865]) {
+            const strafe = movementSpeed(
+                {
+                    classHash: titan,
+                    activity: 'PVE',
+                    sources: [{ hash: intrinsic }],
+                    direction: 'Strafe',
+                    posture: 'Standing',
+                },
+                repo,
+            );
+            const forward = movementSpeed(
+                {
+                    classHash: titan,
+                    activity: 'PVE',
+                    sources: [{ hash: intrinsic }],
+                    direction: 'Forward',
+                    posture: 'Standing',
+                },
+                repo,
+            );
+            expect(strafe.speed).toBeCloseTo(5.6 * 0.85 * 0.8333333, 6);
+            expect(forward.speed).toBeCloseTo(5.6, 10);
+        }
+        // Radiant Dance Machines hip-fire bonus (+30 Mobility, 1.045x forward/sprint, 1.1x strafe)
+        const rdmForward = movementSpeed(
+            {
+                classHash: hunter,
+                activity: 'PVP',
+                sources: [{ hash: 117669763 }],
+                direction: 'Forward',
+                posture: 'Standing',
+            },
+            repo,
+        );
+        expect(rdmForward.mobility).toBe(100);
+        expect(rdmForward.speed).toBeCloseTo(7.0 * 1.045, 10);
+        const rdmSprint = movementSpeed(
+            {
+                classHash: hunter,
+                activity: 'PVP',
+                sources: [{ hash: 117669763 }],
+                direction: 'Forward',
+                posture: 'Standing',
+                sprint: true,
+            },
+            repo,
+        );
+        expect(rdmSprint.speed).toBeCloseTo(8.6 * 1.045, 10);
+        const rdmStrafe = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 117669763 }],
+                direction: 'Strafe',
+                posture: 'Standing',
+            },
+            repo,
+        );
+        expect(rdmStrafe.mobility).toBe(60);
+        expect(rdmStrafe.speed).toBeCloseTo(6.2 * 0.85 * 1.1, 10);
+    });
 });

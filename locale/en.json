@@ -33,9 +33,9 @@
         "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants {{PVEOvershieldHP}}{{HP}} raw Overshield HP in PvE ({{PVEOvershieldDamageResistance}}{{Percent}} damage resistance) and {{PVPOvershieldHP}}{{HP}} raw Overshield HP in PvP ({{PVPOvershieldDamageResistance}}{{Percent}} damage resistance); damage resistance is separate from raw Overshield HP. Your Class Ability deals {{PVEClassAbilityDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPClassAbilityDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Weapons": {
-        "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor and Elite combatants.\n\nWhen enhanced, it increases your weapons' damage against Minibosses, Bosses, and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
+        "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor and Elite combatants.\n\nWhen enhanced, it increases your weapons' damage against Minibosses, Champions, Bosses, and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
         "BaseStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor and Elite combatants.",
-        "EnhancedStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor and Elite combatants.\n\n{{Enhancement}} Primary and Special weapons deal {{SpecialDamageIncrease}}{{Percent}} increased damage and Power weapons deal {{PowerDamageIncrease}}{{Percent}} increased damage against Minibosses and Bosses. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
+        "EnhancedStatTooltip": "Your weapons' Reload and Handling animation durations are reduced by {{ReloadSpeed}}{{Percent}} and {{Handling}}{{Percent}}, respectively.\n\nYour weapons deal {{NonBossDamageIncrease}}{{Percent}} increased damage against Minor and Elite combatants.\n\n{{Enhancement}} Primary and Special weapons deal {{SpecialDamageIncrease}}{{Percent}} increased damage and Power weapons deal {{PowerDamageIncrease}}{{Percent}} increased damage against Minibosses, Champions, and Bosses. All weapons deal {{PVPDamageIncrease}}{{Percent}} increased damage against Players.\n\nYou have a {{LargeAmmoBrickChance}}{{Percent}} chance of spawning Large Ammo Bricks through the Ammo Meter system."
     },
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling|ChargeList}} when you have {{ChargeCount|ChargeList}} active charges stored up.",
     "Movement": {
@@ -44,7 +44,7 @@
         "StrafeSpeed": "Walking left, right, or backward uses 0.85 times your base walk speed, with a cap of 6 m/s. Forward-only bonuses do not apply.",
         "CrouchSpeed": "Crouching uses 0.55 times your walking speed, in either direction, with a cap of 4 m/s. Forward-only bonuses apply while crouch-walking forward, not while crouch-strafing.",
         "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.6 m/s for Hunters. Non-stacking sprint boosts (such as movement Exotics) raise base sprint speed to at least 8.5 m/s before multipliers. Lightweight weapons provide a 1.0625 forward multiplier that stacks up to the 9 m/s cap.",
-        "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS penalty multipliers scale the ADS penalty fraction (1 - ADS multiplier). ADS and hip-fire overweight penalties are mutually exclusive, and all applicable direction and posture caps still apply.",
+        "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm, rocket-assisted micro-missile pulse rifle, or crossbow. ADS penalty multipliers scale the ADS penalty fraction (1 - ADS multiplier). ADS and hip-fire overweight penalties are mutually exclusive, and all applicable direction and posture caps still apply.",
         "Classes": {
             "671679327": {
                 "Description": "Hunters have a 70|100 baseline Mobility stat in PvP|PvE and an 8.6 m/s base sprint speed."
@@ -82,6 +82,10 @@
                 "Description": "The Scientific Method increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
                 "Condition": "For 6 seconds after dealing damage with Tractor Cannon."
             },
+            "117669763": {
+                "Description": "The Dance grants +30 Mobility, 4.5% faster forward movement and sprint speed, and 10% faster sideways strafe speed while hip-firing a Primary weapon.",
+                "Condition": "While a Primary weapon is readied and not aiming down sights."
+            },
             "354401740": {
                 "Description": "Assassin's Blade increases forward walking speed by 50% and sprint speed up to the 9 m/s cap.",
                 "Condition": "For 5 seconds (6 seconds enhanced) after a sword final blow."
@@ -108,6 +112,12 @@
             },
             "1458010786": {
                 "Description": "Grants Lightweight benefits while held: +20 Mobility and a 6.25% forward movement speed multiplier."
+            },
+            "1657056865": {
+                "Description": "Ahamkara's Eye reduces strafe and backward walking speed by 16.67% while One Thousand Voices is readied."
+            },
+            "1685137410": {
+                "Description": "A readied crossbow replaces the normal ADS multiplier with 0.85."
             },
             "1694242448": {
                 "Description": "Illegally Modded Holster grants the non-stacking 8.5 m/s sprint boost while a Hand Cannon is readied."
@@ -138,6 +148,9 @@
                 "Description": "Killing Wind grants +50 Mobility and reduces the ADS movement speed penalty by 30%.",
                 "Condition": "For 5.5 seconds after a weapon final blow."
             },
+            "2928496916": {
+                "Description": "A readied rocket-assisted Micro-Missile Frame weapon replaces the normal ADS multiplier with 0.85."
+            },
             "3072857252": {
                 "Description": "Wraithwalk increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
                 "Condition": "While invisible with the Heartshadow Catalyst equipped, weapon readied, and ammo in reserves."
@@ -157,6 +170,9 @@
             },
             "3511092054": {
                 "Description": "Elemental Capacitor reduces the ADS movement speed penalty by 20% while held with a Stasis Super equipped."
+            },
+            "3884127242": {
+                "Description": "Dornröschen reduces strafe and backward walking speed by 16.67% while Sleeper Simulant is readied."
             }
         }
     }

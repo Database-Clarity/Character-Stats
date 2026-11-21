@@ -713,18 +713,19 @@ export interface Weapons {
     Handling: number[];
     /**
      * Values represent how much increased damage your weapons deal against Minor and Elite
-     * combatants (excluding Minibosses and Bosses). Stat values 0-100: index = stat value.
+     * combatants (excluding Minibosses, Champions, and Bosses). Stat values 0-100: index = stat
+     * value.
      */
     NonBossDamageIncrease: number[];
     /**
      * Values represent how much increased damage Primary and Special weapons deal against
-     * Minibosses and Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat
-     * value - 100.
+     * Minibosses, Champions, and Bosses when the Weapons stat is enhanced. Stat values 100-200:
+     * index = stat value - 100.
      */
     SpecialDamageIncrease: number[];
     /**
-     * Values represent how much increased damage Power weapons deal against Minibosses and Bosses
-     * when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100.
+     * Values represent how much increased damage Power weapons deal against Minibosses, Champions,
+     * and Bosses when the Weapons stat is enhanced. Stat values 100-200: index = stat value - 100.
      */
     PowerDamageIncrease: number[];
     /**
