@@ -13,7 +13,7 @@ export type MovementStatKey = 'mobility' | 'sprint' | 'walk' | 'strafe' | 'crouc
 export interface MovementStat {
     key: MovementStatKey;
     label: string;
-    unit: 'tier' | 'm/s';
+    unit: 'mobility' | 'm/s';
     value?: number;
     baseline?: number;
     delta?: number;
@@ -126,7 +126,7 @@ const scenarios: { key: ScenarioKey; label: string; input: Scenario }[] = [
 
 interface Calculation {
     value?: number;
-    tier?: number;
+    mobility?: number;
     cappedBy?: string;
     error?: string;
 }
@@ -146,7 +146,7 @@ function calculate(
         );
         return {
             value: result.speed,
-            tier: result.tier,
+            mobility: result.mobility,
             ...(result.cappedBy ? { cappedBy: result.cappedBy } : {}),
         };
     } catch (cause) {
@@ -194,8 +194,8 @@ export function calculateMovementStats(
             baseline.error ? `Baseline: ${baseline.error}` : '',
             current.error ? `Current: ${current.error}` : '',
         ].filter(Boolean);
-        const baselineValue = unit === 'tier' ? baseline.tier : baseline.value;
-        const currentValue = unit === 'tier' ? current.tier : current.value;
+        const baselineValue = unit === 'mobility' ? baseline.mobility : baseline.value;
+        const currentValue = unit === 'mobility' ? current.mobility : current.value;
         return {
             key,
             label,
@@ -213,7 +213,7 @@ export function calculateMovementStats(
     const sprint = results.get('sprint')!,
         walk = results.get('walk')!;
     return [
-        row('mobility', 'Mobility', 'tier', walk.baseline, walk.current),
+        row('mobility', 'Mobility', 'mobility', walk.baseline, walk.current),
         row('sprint', 'Sprint', 'm/s', sprint.baseline, sprint.current),
         row('walk', 'Walk', 'm/s', walk.baseline, walk.current),
         row(
@@ -241,9 +241,9 @@ export interface FormattedMovementDelta {
     accessibleLabel: string;
 }
 
-function formatDeltaAmount(value: number): string {
+function formatDeltaAmount(value: number, unit: MovementStat['unit']): string {
     return new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 2,
+        minimumFractionDigits: unit === 'mobility' ? 0 : 2,
         maximumFractionDigits: 6,
         useGrouping: false,
     }).format(Math.abs(value));
@@ -254,22 +254,21 @@ export function formatMovementDelta(
     unit: MovementStat['unit'],
 ): FormattedMovementDelta {
     const rounded = Number(delta.toFixed(6));
-    const unitLabel = unit === 'tier' ? 'tier' : 'm/s';
-    const pluralizedUnit = unit === 'tier' && Math.abs(rounded) !== 1 ? 'tiers' : unitLabel;
+    const unitLabel = unit === 'mobility' ? 'Mobility' : 'm/s';
     if (rounded === 0) {
         return {
             direction: 'neutral',
             arrow: '—',
-            text: `0.00 ${unit === 'tier' ? 'tiers' : 'm/s'}`,
+            text: unit === 'mobility' ? '0 Mobility' : '0.00 m/s',
             accessibleLabel: 'Same as with no sources',
         };
     }
     const direction = rounded > 0 ? 'increase' : 'decrease';
-    const amount = formatDeltaAmount(rounded);
+    const amount = formatDeltaAmount(rounded, unit);
     return {
         direction,
         arrow: direction === 'increase' ? '↑' : '↓',
-        text: `${rounded > 0 ? '+' : '-'}${amount} ${pluralizedUnit}`,
-        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${pluralizedUnit} compared with no sources`,
+        text: `${rounded > 0 ? '+' : '-'}${amount} ${unitLabel}`,
+        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${unitLabel} compared with no sources`,
     };
 }

@@ -96,7 +96,7 @@ sources/*.json + locale/en.json -> src/core (registries) -> src/cli  -> versions
   - `exported: false` is for permanent author-only metadata such as `Notes`.
 - "Enhanced-only" curves use the domain `[100, 200]`, so export index 0 is stat 100.
 - Numeric constraints encode structure, not guessed balance ranges. Don't invent gameplay
-  values. Unknown movement values are written as 0 tiers or a ×1 multiplier, with
+  values. Unknown movement values are written as 0 Mobility/additive or a ×1 multiplier, with
   `Notes: "Value unknown — needs testing"`.
 - Keep core calculation results exact. Round only for display, for example with
   `formatMovementSpeed` in `src/editor/components/previewData.ts`.

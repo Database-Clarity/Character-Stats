@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (x1 to x2.75, Round 4), EnergyGainScalar (0.4 to 0.9, Round 4; +125% vs stat-0), Warlock 1.1x regen override, and PvE/PvP damage curves (+65% / +20%) verified across live game data and Monument of Triumph in-game testing. Shatter Grenade (1399218, 105.4s, chunk scalar untested), Unbreakable chunk override (0.5x on Prismatic?), Chaos Accelerant HHSN scalar, and Prismatic PvP x0.8 chunk penalty still need in-game testing.",
+    "Notes": "CooldownScalars (1 -> 1/2.75, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEGrenadeDamageIncrease (0 -> 65%), and PVPGrenadeDamageIncrease (0 -> 20%) verified from live game data. All grenade BaseCooldown and CooldownOverride tiers standardized to 1-decimal exact 1/rate (219.6 / 175.7 / 151.5 / 131.8 / 118.6 / 105.4 / 92.2 s). Prismatic grenades include the 0.8x PvP chunk energy scalar.",
     "Abilities": [
         {
             "Hash": 1582574009,
@@ -153,37 +153,40 @@
             "Hash": 3897682694,
             "Name": "Arcbolt Grenade - Prismatic",
             "BaseCooldown": 151.5,
-            "ChunkEnergyScalar": 0.75
+            "ChunkEnergyScalar": 0.75,
+            "PVPChunkEnergyScalar": 0.6
         },
         {
             "Hash": 3232422679,
             "Name": "Axion Bolt",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1399219,
             "Name": "Coldsnap Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 4265391440,
             "Name": "Coldsnap Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1399216,
             "Name": "Duskfield Grenade",
-            "BaseCooldown": 131.7,
+            "BaseCooldown": 131.8,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 4051767608,
             "Name": "Duskfield Grenade - Prismatic",
-            "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.875
+            "BaseCooldown": 131.8,
+            "ChunkEnergyScalar": 0.875,
+            "PVPChunkEnergyScalar": 0.7
         },
         {
             "Hash": 2202441959,
@@ -194,7 +197,7 @@
         {
             "Hash": 2909720723,
             "Name": "Flashbang Grenade",
-            "BaseCooldown": 131.7,
+            "BaseCooldown": 131.8,
             "ChunkEnergyScalar": 0.875
         },
         {
@@ -212,38 +215,41 @@
         {
             "Hash": 1399217,
             "Name": "Glacier Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 934199459,
             "Name": "Glacier Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2470512752,
             "Name": "Grapple",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.6,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 1225978592,
             "Name": "Grapple - Prismatic",
-            "BaseCooldown": 118.7,
-            "ChunkEnergyScalar": 0.875
+            "BaseCooldown": 118.6,
+            "ChunkEnergyScalar": 0.875,
+            "PVPChunkEnergyScalar": 0.7
         },
         {
             "Hash": 1841016428,
             "Name": "Healing Grenade",
-            "BaseCooldown": 131.7,
+            "BaseCooldown": 131.8,
             "ChunkEnergyScalar": 0.875
         },
         {
             "Hash": 3040080535,
             "Name": "Healing Grenade - Prismatic",
-            "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.875
+            "BaseCooldown": 131.8,
+            "ChunkEnergyScalar": 0.875,
+            "PVPChunkEnergyScalar": 0.7
         },
         {
             "Hash": 2581086849,
@@ -254,7 +260,7 @@
         {
             "Hash": 2994412667,
             "Name": "Lightning Grenade",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -267,19 +273,21 @@
             "Hash": 886607940,
             "Name": "Magnetic Grenade - Prismatic",
             "BaseCooldown": 151.5,
-            "ChunkEnergyScalar": 0.75
+            "ChunkEnergyScalar": 0.75,
+            "PVPChunkEnergyScalar": 0.6
         },
         {
             "Hash": 1713935764,
             "Name": "Pulse Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1323461861,
             "Name": "Pulse Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1514173218,
@@ -290,14 +298,22 @@
         {
             "Hash": 2809342386,
             "Name": "Shackle Grenade",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1517917190,
             "Name": "Shackle Grenade - Prismatic",
-            "BaseCooldown": 219.5,
-            "ChunkEnergyScalar": 0.5
+            "BaseCooldown": 219.6,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
+        },
+        {
+            "Hash": 1399218,
+            "Name": "Shatter Grenade",
+            "BaseCooldown": 105.4,
+            "ChunkEnergyScalar": 0.875,
+            "Notes": "Added in Update 9.7.0 (Monument of Triumph). Cooldown matches the 105.4s tier; ChunkEnergyScalar provisionally set to 0.875 pending in-game verification."
         },
         {
             "Hash": 146194908,
@@ -308,38 +324,40 @@
         {
             "Hash": 1377143502,
             "Name": "Slicewire Grenade",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2216698406,
             "Name": "Solar Grenade",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2481624867,
             "Name": "Storm Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 4241856103,
             "Name": "Storm Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2265076177,
             "Name": "Suppressor Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 3923577992,
             "Name": "Suppressor Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3199702642,
@@ -351,83 +369,89 @@
             "Hash": 2842514288,
             "Name": "Swarm Grenade - Prismatic",
             "BaseCooldown": 151.5,
-            "ChunkEnergyScalar": 0.75
+            "ChunkEnergyScalar": 0.75,
+            "PVPChunkEnergyScalar": 0.6
         },
         {
             "Hash": 3969294337,
             "Name": "Thermite Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2400634603,
             "Name": "Thermite Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 4228170798,
             "Name": "Threadling Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 3994381207,
             "Name": "Threadling Grenade - Prismatic",
-            "BaseCooldown": 175.6,
-            "ChunkEnergyScalar": 0.625
+            "BaseCooldown": 175.7,
+            "ChunkEnergyScalar": 0.625,
+            "PVPChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2946990961,
             "Name": "Tripmine Grenade",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1255073825,
             "Name": "Void Spike",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 2809141585,
             "Name": "Void Wall",
-            "BaseCooldown": 175.6,
+            "BaseCooldown": 175.7,
             "ChunkEnergyScalar": 0.625
         },
         {
             "Hash": 1016030582,
             "Name": "Vortex Grenade",
-            "BaseCooldown": 219.5,
+            "BaseCooldown": 219.6,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1048847436,
             "Name": "Vortex Grenade - Prismatic",
-            "BaseCooldown": 219.5,
-            "ChunkEnergyScalar": 0.5
+            "BaseCooldown": 219.6,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         }
     ],
     "Overrides": [
         {
             "Hash": 790664813,
             "Name": "Bleak Watcher - Prismatic Aspect",
-            "Notes": "Floor replacement cooldown (175.6s at stat 0) before the Warlock override (x0.909 -> 159.6s); Healing Grenade - Prismatic is the only Prismatic Warlock grenade shorter than 175.6s. Chunk scalar is inherited.",
+            "Notes": "Floor replacement cooldown (175.7s at stat 0) before the Warlock override (x0.909 -> 159.7s); Healing Grenade - Prismatic is the only Prismatic Warlock grenade shorter than 175.7s. Chunk scalar is inherited.",
             "Requirements": [
                 3040080535
             ],
-            "CooldownOverride": 175.6
+            "CooldownOverride": 175.7
         },
         {
             "Hash": 2642597904,
             "Name": "Bleak Watcher - Stasis Aspect",
-            "Notes": "Sets shorter Stasis grenades to Glacier Grenade's base cooldown (175.6s) and chunk scalar (0.625x). Add Shatter Grenade (1399218) once its base chunk scalar and Bleak Watcher interaction are tested in-game.",
+            "Notes": "Sets shorter Stasis grenades (Coldsnap, Shatter, Duskfield) to Glacier Grenade's base cooldown (175.7s) and chunk scalar (0.625x).",
             "Requirements": [
                 1399216,
+                1399218,
                 1399219
             ],
-            "CooldownOverride": 175.6,
+            "CooldownOverride": 175.7,
             "ChunkEnergyOverride": [
+                0.625,
                 0.625,
                 0.625
             ]
@@ -435,20 +459,29 @@
         {
             "Hash": 1262901521,
             "Name": "Unbreakable - Prismatic Aspect",
-            "Notes": "Cooldown override 219.5s confirmed. Live decode (0xFFE4EE9A) also steps Void/Fusion chunk scalar to 0.5x; test non-Void Prismatic grenades before adding ChunkEnergyOverride [0.5].",
+            "Notes": "Overrides grenade cooldown to 219.6s and chunk scalar to 0.5x (0.4x on Prismatic in PvP). Confirm non-Void Prismatic grenade chunk scalars in-game.",
             "Requirements": [
                 0
             ],
-            "CooldownOverride": 219.5
+            "CooldownOverride": 219.6,
+            "ChunkEnergyOverride": [
+                0.5
+            ],
+            "PVPChunkEnergyOverride": [
+                0.4
+            ]
         },
         {
             "Hash": 1602994571,
             "Name": "Unbreakable - Void Aspect",
-            "Notes": "Cooldown override 219.5s confirmed. Live decode (0xFFE4EE9A) also steps Void grenade chunk scalars to 0.5x; verify in-game before adding ChunkEnergyOverride [0.5].",
+            "Notes": "Overrides Void grenade cooldown to 219.6s and chunk energy scalar to 0.5x (verified across all Void grenade definitions and in-game testing).",
             "Requirements": [
                 0
             ],
-            "CooldownOverride": 219.5
+            "CooldownOverride": 219.6,
+            "ChunkEnergyOverride": [
+                0.5
+            ]
         },
         {
             "Hash": 2271682572,

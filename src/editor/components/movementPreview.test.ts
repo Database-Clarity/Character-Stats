@@ -43,10 +43,10 @@ describe('movement preview calculations', () => {
             'ads',
         ]);
         expect(row(stats, 'mobility')).toMatchObject({
-            value: walk.tier,
-            baseline: walk.tier,
+            value: walk.mobility,
+            baseline: walk.mobility,
             delta: 0,
-            unit: 'tier',
+            unit: 'mobility',
         });
         for (const stat of stats) expect(stat.delta).toBe(0);
     });
@@ -86,7 +86,7 @@ describe('movement preview calculations', () => {
         const stats = calculateMovementStats(source(), titan, 'PVE', {
             1458010786: selection,
         });
-        expect(row(stats, 'mobility')).toMatchObject({ baseline: 3, value: 5, delta: 2 });
+        expect(row(stats, 'mobility')).toMatchObject({ baseline: 30, value: 50, delta: 20 });
         expect(row(stats, 'sprint')).toMatchObject({ baseline: 8, value: 8.5, delta: 0.5 });
         expect(row(stats, 'sprint').cappedBy).toBeUndefined();
     });
@@ -111,10 +111,10 @@ describe('movement preview calculations', () => {
             arrow: '↓',
             text: '-0.50 m/s',
         });
-        expect(formatMovementDelta(0, 'tier')).toMatchObject({
+        expect(formatMovementDelta(0, 'mobility')).toMatchObject({
             direction: 'neutral',
             arrow: '—',
-            text: '0.00 tiers',
+            text: '0 Mobility',
             accessibleLabel: 'Same as with no sources',
         });
         expect(formatMovementDelta(0.0000004, 'm/s').direction).toBe('neutral');
@@ -161,7 +161,7 @@ describe('movement stack selection', () => {
 
         const stackable = data.Sources.find((entry) => entry.Hash === 1458010786)!;
         stackable.Effects = [
-            { Type: 'MobilityTiers', Values: [1, 2, 3], BoostedValues: [2, 4] },
+            { Type: 'Mobility', Values: [10, 20, 30], BoostedValues: [20, 40] },
             { Type: 'SprintMultiplier', Values: [1.01, 1.02] },
         ];
         stackable.BoostRequiresAll = [123];
@@ -173,7 +173,7 @@ describe('movement stack selection', () => {
         const data = source();
         const stackable = data.Sources.find((entry) => entry.Hash === 1458010786)!;
         stackable.Effects = [
-            { Type: 'MobilityTiers', Values: [1, 2, 3], BoostedValues: [2, 4] },
+            { Type: 'Mobility', Values: [10, 20, 30], BoostedValues: [20, 40] },
             { Type: 'SprintMultiplier', Values: [1.01, 1.02, 1.03] },
         ];
         stackable.BoostRequiresAll = [123];
@@ -181,13 +181,13 @@ describe('movement stack selection', () => {
         const atFirstStack = calculateMovementStats(data, titan, 'PVE', {
             [stackable.Hash]: { stacks: 1, boosted: false, held: false },
         });
-        expect(row(atFirstStack, 'mobility').value).toBe(4);
+        expect(row(atFirstStack, 'mobility').value).toBe(40);
         expect(row(atFirstStack, 'sprint').value).toBeCloseTo(8.08, 12);
 
         const atSecondStack = calculateMovementStats(data, titan, 'PVE', {
             [stackable.Hash]: { stacks: 2, boosted: false, held: false },
         });
-        expect(row(atSecondStack, 'mobility').value).toBe(5);
+        expect(row(atSecondStack, 'mobility').value).toBe(50);
         expect(row(atSecondStack, 'sprint').value).toBeCloseTo(8.16, 12);
 
         const boosted = reconcileMovementSources(
@@ -196,16 +196,16 @@ describe('movement stack selection', () => {
         );
         expect(boosted[stackable.Hash]).toEqual({ stacks: 3, boosted: true, held: false });
         const boostedStats = calculateMovementStats(data, titan, 'PVE', boosted);
-        expect(row(boostedStats, 'mobility').value).toBe(7);
+        expect(row(boostedStats, 'mobility').value).toBe(70);
         expect(row(boostedStats, 'sprint').value).toBeCloseTo(8.24, 12);
 
-        stackable.Effects[0]!.BoostedValues = [2];
+        stackable.Effects[0]!.BoostedValues = [20];
         stackable.Effects[1]!.Values = [1.02];
         const edited = reconcileMovementSources(boosted, data.Sources);
         expect(edited[stackable.Hash]).toEqual({ stacks: 1, boosted: true, held: false });
 
         delete stackable.BoostRequiresAll;
-        stackable.Effects = [{ Type: 'MobilityTiers', Values: [1, 2, 3] }];
+        stackable.Effects = [{ Type: 'Mobility', Values: [10, 20, 30] }];
         const noLongerBoostable = reconcileMovementSources(edited, data.Sources);
         expect(noLongerBoostable[stackable.Hash]).toEqual({
             stacks: 1,

@@ -30,7 +30,7 @@
     "Class": {
         "Overview": "Class governs your Class Ability's passive cooldown and how much Class Ability Energy you gain from external sources.\n\nWhen enhanced, casting your Class Ability grants you an Overshield and damaging Class Abilities deal increased damage.",
         "BaseStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.",
-        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants {{PVEOvershieldHP}}{{HP}} raw Overshield HP in PvE and {{PVPOvershieldHP}}{{HP}} raw Overshield HP in PvP. PvP Overshields have {{PVPOvershieldDamageResistance}}{{Percent}} damage resistance; this resistance is separate from raw Overshield HP. Your Class Ability deals {{PVEClassAbilityDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPClassAbilityDamageIncrease}}{{Percent}} increased damage in PvP."
+        "EnhancedStatTooltip": "Your Class Ability has a {{Cooldown}}{{Time}} passive cooldown and external sources of Class Ability Energy function at {{EnergyGainScalar|ScalarPercent}} effectiveness.\n\n{{Enhancement}} Casting your Class Ability grants {{PVEOvershieldHP}}{{HP}} raw Overshield HP in PvE ({{PVEOvershieldDamageResistance}}{{Percent}} damage resistance) and {{PVPOvershieldHP}}{{HP}} raw Overshield HP in PvP ({{PVPOvershieldDamageResistance}}{{Percent}} damage resistance); damage resistance is separate from raw Overshield HP. Your Class Ability deals {{PVEClassAbilityDamageIncrease}}{{Percent}} increased damage in PvE and {{PVPClassAbilityDamageIncrease}}{{Percent}} increased damage in PvP."
     },
     "Weapons": {
         "Overview": "Weapons grants you passive Reload Speed and Handling bonuses and increases your weapons' damage against Minor and Elite combatants.\n\nWhen enhanced, it increases your weapons' damage against Minibosses, Bosses, and Players. It also grants you a chance of spawning Large Ammo Bricks through the Ammo Meter system.",
@@ -39,29 +39,37 @@
     },
     "ChargeBasedScaling": "The passive recharge speed of {{AbilityName}} is increased by {{ChargeBasedScaling|ChargeList}} when you have {{ChargeCount|ChargeList}} active charges stored up.",
     "Movement": {
-        "Overview": "Hidden Mobility uses tiers, with a maximum of 13. Higher tiers increase walking speed. Sprint speed does not depend on Mobility. Active movement bonuses multiply together, then speed caps apply. Jump height is not included because measured values are not available.",
-        "WalkSpeed": "Forward walk speed is 5 + 0.2 times your hidden Mobility tier, in metres per second. Forward movement, including sprint, is capped at 9 m/s. Forward multipliers affect forward walking and sprint, but never strafing.",
+        "Overview": "Hidden Mobility is measured in stat points, up to 130. Mobility increases walking speed from 30 to 130. Sprint speed does not depend on Mobility. Additive bonuses apply to the base lane before multiplicative bonuses, then speed caps apply. Jump height is not included because measured apex values are not published yet.",
+        "WalkSpeed": "Forward walk speed is 5.6 m/s at 0–30 Mobility, then 5 + 0.02 times your hidden Mobility stat up to 7.6 m/s at 130. Forward movement, including sprint, is capped at 9 m/s. Forward multipliers affect forward walking and sprint, but never strafing.",
         "StrafeSpeed": "Walking left, right, or backward uses 0.85 times your base walk speed, with a cap of 6 m/s. Forward-only bonuses do not apply.",
         "CrouchSpeed": "Crouching uses 0.55 times your walking speed, in either direction, with a cap of 4 m/s. Forward-only bonuses apply while crouch-walking forward, not while crouch-strafing.",
-        "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.5 m/s for Hunters. Lightweight weapons provide a 1.0625 sprint multiplier. Applicable forward, sprint, and grounded multipliers stack multiplicatively before the 9 m/s cap.",
-        "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS bonuses are evaluated for one held weapon at a time. ADS stacks with strafe and crouch multipliers, and all applicable direction and posture caps still apply.",
+        "SprintSpeed": "Base sprint speed is 8 m/s for Titans and Warlocks, and 8.6 m/s for Hunters. Non-stacking sprint boosts (such as movement Exotics) raise base sprint speed to at least 8.5 m/s before multipliers. Lightweight weapons provide a 1.0625 forward multiplier that stacks up to the 9 m/s cap.",
+        "ADSSpeed": "Aiming down sights multiplies walking speed by 0.75, or 0.85 when the held weapon is a sidearm. ADS penalty multipliers scale the ADS penalty fraction (1 - ADS multiplier). ADS and hip-fire overweight penalties are mutually exclusive, and all applicable direction and posture caps still apply.",
         "Classes": {
             "671679327": {
-                "Description": "Hunters have a Tier 7|10 baseline Mobility stat in PvP|PvE."
+                "Description": "Hunters have a 70|100 baseline Mobility stat in PvP|PvE and an 8.6 m/s base sprint speed."
             },
             "2271682572": {
-                "Description": "Warlocks have a Tier 3 baseline Mobility stat."
+                "Description": "Warlocks have a 30 baseline Mobility stat."
             },
             "3655393761": {
-                "Description": "Titans have a Tier 3 baseline Mobility stat."
+                "Description": "Titans have a 30 baseline Mobility stat."
             }
         },
         "Sources": {
+            "1": {
+                "Description": "Amplified grants +50 Mobility and +1 m/s strafe speed (plus extended slide).",
+                "Condition": "While Amplified."
+            },
+            "2": {
+                "Description": "Speed Booster grants the non-stacking 8.5 m/s sprint boost and reaches the 9 m/s forward/sprint and 6 m/s strafe speed caps.",
+                "Condition": "After sprinting for 2.5 seconds while Amplified."
+            },
             "12": {
-                "Description": "A readied Machine Gun decreases movement speed by 15%. Sprinting is exempt from the reduction."
+                "Description": "A readied Machine Gun decreases hip-fire walking speed by 15%. Sprinting and aiming down sights are exempt."
             },
             "13": {
-                "Description": "A readied Rocket Launcher decreases movement speed by 15%. Sprinting is exempt from the reduction."
+                "Description": "A readied Rocket Launcher decreases hip-fire walking speed by 15%. Sprinting and aiming down sights are exempt."
             },
             "14": {
                 "Description": "A readied sidearm replaces the normal ADS multiplier with 0.85."
@@ -74,25 +82,81 @@
                 "Description": "The Scientific Method increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
                 "Condition": "For 6 seconds after dealing damage with Tractor Cannon."
             },
+            "354401740": {
+                "Description": "Assassin's Blade increases forward walking speed by 50% and sprint speed up to the 9 m/s cap.",
+                "Condition": "For 5 seconds (6 seconds enhanced) after a sword final blow."
+            },
             "377257911": {
-                "Description": "Grants 2 Mobility tiers and an 11.02% forward movement speed multiplier while held."
+                "Description": "Grants +20 Mobility and an 11.02% forward movement speed multiplier while held."
+            },
+            "588594999": {
+                "Description": "Moving Target reduces the ADS movement speed penalty by 10% while held."
+            },
+            "593361144": {
+                "Description": "Wraithmetal Mail reduces the ADS movement speed penalty by 33%.",
+                "Condition": "For 15 seconds after dodging."
+            },
+            "897181301": {
+                "Description": "Rapid Cooldown grants the non-stacking 8.5 m/s sprint boost.",
+                "Condition": "For 10 seconds after using a Class Ability."
             },
             "1133590731": {
-                "Description": "Enhanced Athletics grants 3|5|6 Mobility tiers with 1|2|3 mods equipped."
+                "Description": "Enhanced Athletics grants +30|+50|+60 Mobility with 1|2|3 mods equipped."
+            },
+            "1322370662": {
+                "Description": "Precision Frame Hand Cannons reduce the ADS movement speed penalty by 10% while held."
             },
             "1458010786": {
-                "Description": "Grants Lightweight benefits while held: 2 Mobility tiers and a 6.25% forward movement speed multiplier."
+                "Description": "Grants Lightweight benefits while held: +20 Mobility and a 6.25% forward movement speed multiplier."
+            },
+            "1694242448": {
+                "Description": "Illegally Modded Holster grants the non-stacking 8.5 m/s sprint boost while a Hand Cannon is readied."
+            },
+            "1694242450": {
+                "Description": "Hydraulic Boosters grants the non-stacking 8.5 m/s sprint boost."
             },
             "1888623310": {
-                "Description": "While MIDA Multi-Tool is equipped, MIDA Synergy shotguns grant 2 Mobility tiers and an 11.02% forward movement speed multiplier while held.",
+                "Description": "While MIDA Multi-Tool is equipped, MIDA Synergy shotguns grant +20 Mobility and an 11.02% forward movement speed multiplier while held.",
                 "Condition": "While MIDA Macro-Tool is held and MIDA Multi-Tool is equipped."
             },
             "2213377102": {
-                "Description": "MIDA Synergy grants Lightweight movement bonuses (2 Mobility tiers and a 6.25% forward multiplier) on Submachine Guns, increasing the forward multiplier to 11.02% when MIDA Multi-Tool is equipped."
+                "Description": "MIDA Synergy grants Lightweight movement bonuses (+20 Mobility and a 6.25% forward multiplier) on Submachine Guns, increasing the forward multiplier to 11.02% when MIDA Multi-Tool is equipped."
+            },
+            "2272984656": {
+                "Description": "Echo of Dilation doubles crouched movement speed up to the 4 m/s crouch cap.",
+                "Condition": "While crouched."
+            },
+            "2272984657": {
+                "Description": "Echo of Domineering increases forward walking, sprint, and strafe speed by 5%.",
+                "Condition": "For 10 seconds after suppressing a target."
+            },
+            "2341747657": {
+                "Description": "Kismet grants +50 Mobility and the non-stacking 8.5 m/s sprint boost.",
+                "Condition": "For 5 seconds after Overshield depletes following a final blow with Overshield."
+            },
+            "2450788523": {
+                "Description": "Killing Wind grants +50 Mobility and reduces the ADS movement speed penalty by 30%.",
+                "Condition": "For 5.5 seconds after a weapon final blow."
             },
             "3072857252": {
                 "Description": "Wraithwalk increases forward walking speed by 50% and sprint speed up to the 9 m/s cap without increasing jump height.",
                 "Condition": "While invisible with the Heartshadow Catalyst equipped, weapon readied, and ammo in reserves."
+            },
+            "3241194941": {
+                "Description": "Mecha Holster grants +30 Mobility, the non-stacking 8.5 m/s sprint boost, and reduces the ADS movement speed penalty by 33% while a Submachine Gun is readied."
+            },
+            "3241194942": {
+                "Description": "Linear Actuators grants the non-stacking 8.5 m/s sprint boost."
+            },
+            "3347978673": {
+                "Description": "Strange Protractor grants the non-stacking 8.5 m/s sprint boost and maximizes crouched movement speed at the 4 m/s crouch cap."
+            },
+            "3469412970": {
+                "Description": "Whisper of Hedrons grants +30 Mobility.",
+                "Condition": "For 11 seconds after freezing a target."
+            },
+            "3511092054": {
+                "Description": "Elemental Capacitor reduces the ADS movement speed penalty by 20% while held with a Stasis Super equipped."
             }
         }
     }

@@ -31,12 +31,12 @@ describe('movement effect numeric stepping', () => {
         ['Values', 'Values'],
         ['BoostedValues', 'Boosted values'],
     ] as const)(
-        'uses whole-tier increments for %s only when the effect is MobilityTiers',
+        'uses whole-point increments for %s only when the effect is Mobility',
         (key, label) => {
-            const tiers = renderEffectValues(key, 'MobilityTiers', [2.5]);
-            expect(tiers.html).toContain(`aria-label="Increase ${label} stacks 1 by 1"`);
-            expect(tiers.html).toContain('value="2.5"');
-            expect(tiers.changes).toEqual([]);
+            const mobility = renderEffectValues(key, 'Mobility', [2.5]);
+            expect(mobility.html).toContain(`aria-label="Increase ${label} stacks 1 by 1"`);
+            expect(mobility.html).toContain('value="2.5"');
+            expect(mobility.changes).toEqual([]);
             expect(boundedStepNumericValue(2.5, 1, 1)).toBe('3.5');
 
             const multiplier = renderEffectValues(key, 'ForwardMultiplier', [0.875]);

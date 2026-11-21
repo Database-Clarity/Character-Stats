@@ -3,6 +3,7 @@ import {
     abilitySpec,
     superAbilitySpec,
     overrideSpec,
+    superOverrideSpec,
     movementClassSpec,
     movementRulesSpec,
     movementEffectSpec,
@@ -13,6 +14,7 @@ import {
     type Ability,
     type SuperAbility,
     type Override,
+    type SuperOverride,
     type MovementClass,
 } from '../src/core';
 
@@ -21,7 +23,9 @@ const abilityKeys = {
     Hash: true,
     Name: true,
     BaseCooldown: true,
+    PVPBaseCooldown: true,
     ChunkEnergyScalar: true,
+    PVPChunkEnergyScalar: true,
     ChargeBasedScaling: true,
     Notes: true,
 } satisfies Record<keyof Ability, true>;
@@ -30,7 +34,9 @@ const superAbilityKeys = {
     Hash: true,
     Name: true,
     BaseCooldown: true,
+    PVPBaseCooldown: true,
     ActiveRegenScalar: true,
+    PVPActiveRegenScalar: true,
     BaseDuration: true,
     EnhancedDurationTooltip: true,
     Notes: true,
@@ -41,16 +47,32 @@ const overrideKeys = {
     Name: true,
     Requirements: true,
     CooldownOverride: true,
+    PVPCooldownOverride: true,
     Scalar: true,
+    PVPScalar: true,
     ChunkEnergyOverride: true,
+    PVPChunkEnergyOverride: true,
     Notes: true,
 } satisfies Record<keyof Override, true>;
+
+const superOverrideKeys = {
+    Hash: true,
+    Name: true,
+    Requirements: true,
+    CooldownOverride: true,
+    PVPCooldownOverride: true,
+    Scalar: true,
+    PVPScalar: true,
+    ActiveRegenOverride: true,
+    PVPActiveRegenOverride: true,
+    Notes: true,
+} satisfies Record<keyof SuperOverride, true>;
 
 const movementClassKeys = {
     ClassHash: true,
     Name: true,
-    BaseMobilityTier: true,
-    BaseMobilityTierPVP: true,
+    BaseMobility: true,
+    BaseMobilityPVP: true,
     BaseSprintSpeed: true,
     Notes: true,
 } satisfies Record<keyof MovementClass, true>;
@@ -64,7 +86,7 @@ const movementRulesKeys = {
     ForwardSpeedCap: true,
     StrafeSpeedCap: true,
     CrouchSpeedCap: true,
-    MaxMobilityTier: true,
+    MaxMobility: true,
 } satisfies Record<keyof MovementRules, true>;
 const movementEffectKeys = { Type: true, Values: true, BoostedValues: true } satisfies Record<
     keyof MovementEffect,
@@ -86,6 +108,7 @@ describe('explicit entity interfaces', () => {
         { name: 'Ability', spec: abilitySpec, keys: abilityKeys },
         { name: 'SuperAbility', spec: superAbilitySpec, keys: superAbilityKeys },
         { name: 'Override', spec: overrideSpec, keys: overrideKeys },
+        { name: 'SuperOverride', spec: superOverrideSpec, keys: superOverrideKeys },
         { name: 'MovementClass', spec: movementClassSpec, keys: movementClassKeys },
         { name: 'MovementRules', spec: movementRulesSpec, keys: movementRulesKeys },
         { name: 'MovementEffect', spec: movementEffectSpec, keys: movementEffectKeys },

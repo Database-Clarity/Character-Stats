@@ -49,7 +49,7 @@
         "PVPHealthHP": 100,
         "PVEHealthHP": 70,
         "HealthRegenDelay": 1.75,
-        "HealthRegenSpeed": 31.25,
+        "HealthRegenSpeed": 30.3,
         "BaseShieldHP": 130,
         "PVEBonusShieldHP": {
             "Domain": [
@@ -66,30 +66,23 @@
                 }
             ]
         },
-        "BaseShieldRechargeDelay": 4.9,
+        "BaseShieldRechargeDelay": 5.3,
         "ShieldRechargeDelay": {
             "Domain": [
                 100,
                 200
             ],
-            "Round": 2,
+            "Round": 3,
             "Segments": [
                 {
-                    "Type": "Linear",
-                    "Points": [
-                        [
-                            100,
-                            4.9
-                        ],
-                        [
-                            200,
-                            3.675
-                        ]
-                    ]
+                    "Type": "Expression",
+                    "From": 100,
+                    "To": 200,
+                    "Expression": "5.3 * (1 - 0.4 * (0.641564 * ((x - 100) / 100)^3 - 1.777694 * ((x - 100) / 100)^2 + 2.136129 * ((x - 100) / 100)))"
                 }
             ]
         },
-        "BaseShieldRechargeSpeed": 34.48,
+        "BaseShieldRechargeSpeed": 30.3,
         "ShieldRechargeSpeed": {
             "Domain": [
                 100,
@@ -98,21 +91,14 @@
             "Round": 2,
             "Segments": [
                 {
-                    "Type": "Linear",
-                    "Points": [
-                        [
-                            100,
-                            34.48
-                        ],
-                        [
-                            200,
-                            50
-                        ]
-                    ]
+                    "Type": "Expression",
+                    "From": 100,
+                    "To": 200,
+                    "Expression": "100 / (3.3 * (1 - 0.5 * (0.641564 * ((x - 100) / 100)^3 - 1.777694 * ((x - 100) / 100)^2 + 2.136129 * ((x - 100) / 100))))"
                 }
             ]
         },
         "PVEDamageResistance": 34.12
     },
-    "Notes": "FlinchResistance, OrbOfPowerHealthRestore (over 1.5s), PVPHealthHP (70 + 30 Crucible hop-on), PVEHealthHP, HealthRegenDelay, BaseShieldHP, PVEBonusShieldHP (cubic), and PVEDamageResistance (34.12%) are verified from live game data. BaseShieldRechargeDelay (5.3s vs 4.9s), ShieldRechargeDelay/ShieldRechargeSpeed above 100 (cubic x0.6/x0.5 vs linear), and HealthRegenSpeed (3.2s vs 3.3s) still need 3-point in-game frame timing."
+    "Notes": "All values verified from live game data: FlinchResistance (0-10%), OrbOfPowerHealthRestore (0-70 HP over 1.5s), PVPHealthHP (70 + 30 Crucible), PVEHealthHP (70), BaseShieldHP (130), PVEBonusShieldHP (cubic 0-20 HP), HealthRegenDelay (1.75s), HealthRegenSpeed (3.3s duration = 30.30%/s), BaseShieldRechargeDelay (5.3s), ShieldRechargeDelay (cubic x0.6 -> 3.18s at 200), BaseShieldRechargeSpeed (3.3s duration = 30.30%/s), ShieldRechargeSpeed (cubic x0.5 duration -> 1.65s = 60.61%/s at 200), and PVEDamageResistance (34.12% body section DR vs combatants; Guardians also have an innate 30% DR against combatants across shields and health)."
 }

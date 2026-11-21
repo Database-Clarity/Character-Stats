@@ -43,23 +43,29 @@ export const classSpec: StatSpec = {
         }),
 
         curve('PVPOvershieldHP', {
-            help: 'Raw Overshield HP from casting your Class ability in PvP, for an enhanced Class stat (100–200). Stat 100 means no enhancement. Enter raw HP; the PvP damage resistance below is separate.',
+            help: 'Raw Overshield HP from casting your Class ability in PvP, for an enhanced Class stat (100–200). Stat 100 means no enhancement. Enter raw HP; damage resistance is tracked separately below.',
             label: 'PvP overshield (HP)',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
             description:
                 'Values represent how much raw Overshield HP casting your Class Ability ' +
-                'grants in PvP when the Class stat is enhanced. PvP Overshields have ' +
-                '50% damage resistance; this value is not effective HP.',
+                'grants in PvP when the Class stat is enhanced. This value is raw HP, ' +
+                'separate from damage resistance.',
+        }),
+
+        numberField('PVEOvershieldDamageResistance', {
+            help: 'Damage resistance of the Class ability Overshield against combatants in PvE, in %.',
+            min: 0,
+            label: 'PvE Overshield damage resistance (%)',
+            description:
+                'PvE Class Overshield damage resistance against combatants as a percentage.',
         }),
 
         numberField('PVPOvershieldDamageResistance', {
-            help: 'Damage resistance of the Class ability Overshield in PvP, in %. Does not apply to PvE (decoded PvE Class Overshield damage resistance is 25%).',
+            help: 'Damage resistance of the Class ability Overshield against players in PvP, in %.',
             min: 0,
             label: 'PvP Overshield damage resistance (%)',
-            description:
-                'PvP Overshield damage resistance as a percentage. Do not apply this ' +
-                'value to PvE.',
+            description: 'PvP Class Overshield damage resistance against players as a percentage.',
         }),
 
         curve('PVEClassAbilityDamageIncrease', {

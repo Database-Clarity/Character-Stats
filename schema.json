@@ -46,12 +46,22 @@
                 "BaseCooldown": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Base cooldown in seconds at a stat value of 0. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
+                    "description": "Base cooldown in seconds at a stat value of 0 in PvE (and in PvP when PVPBaseCooldown is omitted). Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result."
+                },
+                "PVPBaseCooldown": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Base cooldown in seconds at a stat value of 0 in PvP when it differs from PvE."
                 },
                 "ChunkEnergyScalar": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "Nonnegative scalar for chunk energy gains."
+                    "description": "Nonnegative scalar for chunk energy gains in PvE (and in PvP when PVPChunkEnergyScalar is omitted)."
+                },
+                "PVPChunkEnergyScalar": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Nonnegative scalar for chunk energy gains in PvP when it differs from PvE."
                 },
                 "ChargeBasedScaling": {
                     "type": "array",
@@ -93,12 +103,22 @@
                 "BaseCooldown": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Fixed Super cooldown in seconds, independent of the Super stat. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it."
+                    "description": "Fixed Super cooldown in seconds in PvE (and in PvP when PVPBaseCooldown is omitted), independent of the Super stat. Applicable CooldownOverride values replace this base first (last matching replacement wins in collection order), then all matching Scalar entries multiply it."
+                },
+                "PVPBaseCooldown": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Fixed Super cooldown in seconds in PvP when it differs from PvE."
                 },
                 "ActiveRegenScalar": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "Nonnegative active Super regeneration scalar."
+                    "description": "Nonnegative active Super regeneration scalar in PvE (and in PvP when PVPActiveRegenScalar is omitted), multiplied by EnergyGainScalar."
+                },
+                "PVPActiveRegenScalar": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Nonnegative active Super regeneration scalar in PvP when it differs from PvE, multiplied by PVPEnergyGainScalar."
                 },
                 "BaseDuration": {
                     "type": "number",
@@ -146,7 +166,12 @@
                 "CooldownOverride": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Replacement base cooldown in seconds for matching Requirements (at a stat value of 0 for non-Super abilities). Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
+                    "description": "Replacement base cooldown in seconds for matching Requirements in PvE (and in PvP when PVPCooldownOverride is omitted; at a stat value of 0 for non-Super abilities). Applied before all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection order wins."
+                },
+                "PVPCooldownOverride": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Replacement base cooldown in seconds for matching Requirements in PvP when it differs from PvE."
                 },
                 "Scalar": {
                     "type": "array",
@@ -155,7 +180,16 @@
                         "exclusiveMinimum": 0
                     },
                     "minItems": 1,
-                    "description": "Multiplies the cooldown duration for matching Requirements. After BaseCooldown or CooldownOverride is selected, each active Scalar multiplies the result, then non-Super abilities also multiply it by CooldownScalars[min(stat value, 100)]. A Scalar of 0.8 makes the cooldown 20% shorter; 1.25 makes it 25% longer."
+                    "description": "Multiplies the cooldown duration for matching Requirements in PvE (and in PvP when PVPScalar is omitted). After BaseCooldown or CooldownOverride is selected, each active Scalar multiplies the result, then non-Super abilities also multiply it by CooldownScalars[min(stat value, 100)]. A Scalar of 0.8 makes the cooldown 20% shorter; 1.25 makes it 25% longer."
+                },
+                "PVPScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Multiplies the cooldown duration for matching Requirements in PvP when it differs from PvE."
                 },
                 "ChunkEnergyOverride": {
                     "type": "array",
@@ -165,6 +199,15 @@
                     },
                     "minItems": 1,
                     "description": "Chunk energy scalars for corresponding Requirements, applied in place of ChunkEnergyScalar."
+                },
+                "PVPChunkEnergyOverride": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Chunk energy scalars for corresponding Requirements in PvP when they differ from PvE."
                 }
             },
             "required": [
@@ -180,12 +223,138 @@
                 },
                 {
                     "required": [
+                        "PVPCooldownOverride"
+                    ]
+                },
+                {
+                    "required": [
                         "Scalar"
                     ]
                 },
                 {
                     "required": [
+                        "PVPScalar"
+                    ]
+                },
+                {
+                    "required": [
                         "ChunkEnergyOverride"
+                    ]
+                },
+                {
+                    "required": [
+                        "PVPChunkEnergyOverride"
+                    ]
+                }
+            ]
+        },
+        "SuperOverride": {
+            "title": "SuperOverride",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Hash": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295,
+                    "description": "D2 Manifest inventoryItem hash"
+                },
+                "Name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "For organization purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
+                },
+                "Requirements": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": -4294967295,
+                        "maximum": 4294967295
+                    },
+                    "minItems": 1,
+                    "description": "Any matching requirement selects this override for Supers: 0 is a wildcard, positive values are Super manifest hashes, and negative values are negated subclass hashes requiring consumer-side resolution. Each matching index selects the corresponding parallel-array entry."
+                },
+                "CooldownOverride": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Replacement base cooldown in seconds for matching Requirements in PvE (and in PvP when PVPCooldownOverride is omitted)."
+                },
+                "PVPCooldownOverride": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Replacement base cooldown in seconds for matching Requirements in PvP when it differs from PvE."
+                },
+                "Scalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Multiplies the Super cooldown duration for matching Requirements in PvE (and in PvP when PVPScalar is omitted)."
+                },
+                "PVPScalar": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Multiplies the Super cooldown duration for matching Requirements in PvP when it differs from PvE."
+                },
+                "ActiveRegenOverride": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Replacement active Super regeneration scalars for corresponding Requirements in PvE, applied in place of the Super's ActiveRegenScalar."
+                },
+                "PVPActiveRegenOverride": {
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "minItems": 1,
+                    "description": "Replacement active Super regeneration scalars for corresponding Requirements in PvP when they differ from PvE."
+                }
+            },
+            "required": [
+                "Hash",
+                "Name",
+                "Requirements"
+            ],
+            "anyOf": [
+                {
+                    "required": [
+                        "CooldownOverride"
+                    ]
+                },
+                {
+                    "required": [
+                        "PVPCooldownOverride"
+                    ]
+                },
+                {
+                    "required": [
+                        "Scalar"
+                    ]
+                },
+                {
+                    "required": [
+                        "PVPScalar"
+                    ]
+                },
+                {
+                    "required": [
+                        "ActiveRegenOverride"
+                    ]
+                },
+                {
+                    "required": [
+                        "PVPActiveRegenOverride"
                     ]
                 }
             ]
@@ -206,15 +375,15 @@
                     "minLength": 1,
                     "description": "For organization/debugging purposes only. Does not necessarily match the inventoryItem entry name from the D2 Manifest."
                 },
-                "BaseMobilityTier": {
+                "BaseMobility": {
                     "type": "integer",
                     "minimum": 0,
-                    "description": "Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified."
+                    "description": "Base hidden Mobility stat in PvE, and in PvP when no PvP value is specified."
                 },
-                "BaseMobilityTierPVP": {
+                "BaseMobilityPVP": {
                     "type": "integer",
                     "minimum": 0,
-                    "description": "Base hidden Mobility tier in PvP when it differs from PvE."
+                    "description": "Base hidden Mobility stat in PvP when it differs from PvE."
                 },
                 "BaseSprintSpeed": {
                     "type": "number",
@@ -225,7 +394,7 @@
             "required": [
                 "ClassHash",
                 "Name",
-                "BaseMobilityTier",
+                "BaseMobility",
                 "BaseSprintSpeed"
             ]
         },
@@ -240,9 +409,9 @@
                         "type": "number",
                         "minimum": 0
                     },
-                    "minItems": 14,
-                    "maxItems": 14,
-                    "description": "Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value."
+                    "minItems": 131,
+                    "maxItems": 131,
+                    "description": "Forward walk speed in m/s by hidden Mobility stat (0–130). Stat values 0-130: index = stat value."
                 },
                 "StrafeMultiplier": {
                     "type": "number",
@@ -257,7 +426,7 @@
                 "ADSMultiplier": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Default walking multiplier while aiming down sights; active source effects can replace it."
+                    "description": "Default walking multiplier while aiming down sights; active source effects can replace it or scale its penalty."
                 },
                 "ForwardSpeedCap": {
                     "type": "number",
@@ -274,11 +443,11 @@
                     "exclusiveMinimum": 0,
                     "description": "Maximum crouched movement speed in m/s."
                 },
-                "MaxMobilityTier": {
+                "MaxMobility": {
                     "type": "integer",
                     "minimum": 0,
-                    "maximum": 13,
-                    "description": "Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain."
+                    "maximum": 130,
+                    "description": "Highest effective hidden Mobility stat; capped at the WalkSpeed curve domain."
                 }
             },
             "required": [
@@ -289,7 +458,7 @@
                 "ForwardSpeedCap",
                 "StrafeSpeedCap",
                 "CrouchSpeedCap",
-                "MaxMobilityTier"
+                "MaxMobility"
             ]
         },
         "MovementEffect": {
@@ -300,18 +469,28 @@
                 "Type": {
                     "type": "string",
                     "enum": [
-                        "MobilityTiers",
+                        "Mobility",
+                        "SprintBoost",
                         "ForwardMultiplier",
                         "SprintMultiplier",
+                        "StrafeMultiplier",
+                        "CrouchMultiplier",
+                        "StrafeAdditive",
+                        "CrouchAdditive",
                         "GroundedMultiplier",
                         "GroundedNonSprintMultiplier",
                         "OverweightMultiplier",
-                        "ADSMultiplier"
+                        "ADSMultiplier",
+                        "ADSPenaltyMultiplier"
                     ],
                     "oneOf": [
                         {
-                            "const": "MobilityTiers",
-                            "description": "Add hidden Mobility tiers before clamping to the tier cap."
+                            "const": "Mobility",
+                            "description": "Add hidden Mobility stat points before clamping to [0, MaxMobility]."
+                        },
+                        {
+                            "const": "SprintBoost",
+                            "description": "Non-stacking sprint speed floor in m/s (for example 8.5 m/s from movement exotics): raises base sprint speed to max(BaseSprintSpeed, value) before forward/sprint multipliers."
                         },
                         {
                             "const": "ForwardMultiplier",
@@ -320,6 +499,22 @@
                         {
                             "const": "SprintMultiplier",
                             "description": "Multiply sprint speed only."
+                        },
+                        {
+                            "const": "StrafeMultiplier",
+                            "description": "Multiply strafing speed before the speed cap."
+                        },
+                        {
+                            "const": "CrouchMultiplier",
+                            "description": "Multiply crouched movement speed before the speed cap."
+                        },
+                        {
+                            "const": "StrafeAdditive",
+                            "description": "Add flat m/s to strafe speed before multipliers and the speed cap."
+                        },
+                        {
+                            "const": "CrouchAdditive",
+                            "description": "Add flat m/s to crouched movement speed before multipliers and the speed cap."
                         },
                         {
                             "const": "GroundedMultiplier",
@@ -331,11 +526,15 @@
                         },
                         {
                             "const": "OverweightMultiplier",
-                            "description": "Multiply grounded movement except sprint; does not affect jump height."
+                            "description": "Hip-fire grounded penalty except sprint; mutually exclusive with ADS movement penalty."
                         },
                         {
                             "const": "ADSMultiplier",
                             "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
+                        },
+                        {
+                            "const": "ADSPenaltyMultiplier",
+                            "description": "Multiply the weapon ADS movement penalty fraction (1 - ADSMultiplier), yielding 1 - (1 - ADSMultiplier) * product."
                         }
                     ],
                     "description": "Movement effect to apply."
@@ -346,7 +545,7 @@
                         "type": "number"
                     },
                     "minItems": 1,
-                    "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
+                    "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown Mobility/additive values use 0; unknown multipliers use 1."
                 },
                 "BoostedValues": {
                     "type": "array",
@@ -371,7 +570,7 @@
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 4294967295,
-                    "description": "Manifest inventory item, plug, mod or perk hash, or item-category hash according to RefType; 0 warns that verification is needed."
+                    "description": "Manifest inventory item, plug, mod or perk hash, item-category hash, or stable buff identifier according to RefType; 0 warns that verification is needed."
                 },
                 "Name": {
                     "type": "string",
@@ -382,7 +581,8 @@
                     "type": "string",
                     "enum": [
                         "item",
-                        "itemCategory"
+                        "itemCategory",
+                        "buff"
                     ],
                     "oneOf": [
                         {
@@ -392,9 +592,13 @@
                         {
                             "const": "itemCategory",
                             "description": "DestinyItemCategoryDefinition hash."
+                        },
+                        {
+                            "const": "buff",
+                            "description": "Global subclass status or combatant buff without a single inventory-item manifest hash (for example Amplified or Speed Booster)."
                         }
                     ],
-                    "description": "Manifest definition table used by Hash."
+                    "description": "Manifest definition table or buff identity used by Hash."
                 },
                 "AlsoMatches": {
                     "type": "array",
@@ -440,18 +644,28 @@
                             "Type": {
                                 "type": "string",
                                 "enum": [
-                                    "MobilityTiers",
+                                    "Mobility",
+                                    "SprintBoost",
                                     "ForwardMultiplier",
                                     "SprintMultiplier",
+                                    "StrafeMultiplier",
+                                    "CrouchMultiplier",
+                                    "StrafeAdditive",
+                                    "CrouchAdditive",
                                     "GroundedMultiplier",
                                     "GroundedNonSprintMultiplier",
                                     "OverweightMultiplier",
-                                    "ADSMultiplier"
+                                    "ADSMultiplier",
+                                    "ADSPenaltyMultiplier"
                                 ],
                                 "oneOf": [
                                     {
-                                        "const": "MobilityTiers",
-                                        "description": "Add hidden Mobility tiers before clamping to the tier cap."
+                                        "const": "Mobility",
+                                        "description": "Add hidden Mobility stat points before clamping to [0, MaxMobility]."
+                                    },
+                                    {
+                                        "const": "SprintBoost",
+                                        "description": "Non-stacking sprint speed floor in m/s (for example 8.5 m/s from movement exotics): raises base sprint speed to max(BaseSprintSpeed, value) before forward/sprint multipliers."
                                     },
                                     {
                                         "const": "ForwardMultiplier",
@@ -460,6 +674,22 @@
                                     {
                                         "const": "SprintMultiplier",
                                         "description": "Multiply sprint speed only."
+                                    },
+                                    {
+                                        "const": "StrafeMultiplier",
+                                        "description": "Multiply strafing speed before the speed cap."
+                                    },
+                                    {
+                                        "const": "CrouchMultiplier",
+                                        "description": "Multiply crouched movement speed before the speed cap."
+                                    },
+                                    {
+                                        "const": "StrafeAdditive",
+                                        "description": "Add flat m/s to strafe speed before multipliers and the speed cap."
+                                    },
+                                    {
+                                        "const": "CrouchAdditive",
+                                        "description": "Add flat m/s to crouched movement speed before multipliers and the speed cap."
                                     },
                                     {
                                         "const": "GroundedMultiplier",
@@ -471,11 +701,15 @@
                                     },
                                     {
                                         "const": "OverweightMultiplier",
-                                        "description": "Multiply grounded movement except sprint; does not affect jump height."
+                                        "description": "Hip-fire grounded penalty except sprint; mutually exclusive with ADS movement penalty."
                                     },
                                     {
                                         "const": "ADSMultiplier",
                                         "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
+                                    },
+                                    {
+                                        "const": "ADSPenaltyMultiplier",
+                                        "description": "Multiply the weapon ADS movement penalty fraction (1 - ADSMultiplier), yielding 1 - (1 - ADSMultiplier) * product."
                                     }
                                 ],
                                 "description": "Movement effect to apply."
@@ -486,7 +720,7 @@
                                     "type": "number"
                                 },
                                 "minItems": 1,
-                                "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown tiers use 0; unknown multipliers use 1."
+                                "description": "Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown Mobility/additive values use 0; unknown multipliers use 1."
                             },
                             "BoostedValues": {
                                 "type": "array",
@@ -850,7 +1084,7 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how effective external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) are in PvE. Stat values 0-100: index = stat value."
+                    "description": "Values represent how effective external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) are in PvE, and multiply each Super Ability's <ActiveRegenScalar> for active Super regeneration in PvE. Stat values 0-100: index = stat value."
                 },
                 "PVPEnergyGainScalar": {
                     "type": "array",
@@ -860,17 +1094,7 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how effective external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) are in PvP. Stat values 0-100: index = stat value."
-                },
-                "ActiveRegenScalars": {
-                    "type": "array",
-                    "items": {
-                        "type": "number",
-                        "minimum": 0
-                    },
-                    "minItems": 101,
-                    "maxItems": 101,
-                    "description": "Values multiply the Super Ability's <ActiveRegenScalar> to determine active Super regeneration. Stat values 0-100: index = stat value."
+                    "description": "Values represent how effective external sources of Super Energy (Orbs of Power, exchanging damage, perks, etc.) are in PvP, and multiply each Super Ability's <PVPActiveRegenScalar> (or <ActiveRegenScalar>) for active Super regeneration in PvP. Stat values 0-100: index = stat value."
                 },
                 "SuperDamageIncrease": {
                     "type": "array",
@@ -911,7 +1135,7 @@
                 "Overrides": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Override"
+                        "$ref": "#/definitions/SuperOverride"
                     }
                 }
             },
@@ -921,7 +1145,6 @@
                 "EnhancedStatTooltip",
                 "EnergyGainScalar",
                 "PVPEnergyGainScalar",
-                "ActiveRegenScalars",
                 "SuperDamageIncrease",
                 "PVPSuperDamageIncrease",
                 "SuperDurationIncrease",
@@ -988,12 +1211,17 @@
                     },
                     "minItems": 101,
                     "maxItems": 101,
-                    "description": "Values represent how much raw Overshield HP casting your Class Ability grants in PvP when the Class stat is enhanced. PvP Overshields have 50% damage resistance; this value is not effective HP. Stat values 100-200: index = stat value - 100."
+                    "description": "Values represent how much raw Overshield HP casting your Class Ability grants in PvP when the Class stat is enhanced. This value is raw HP, separate from damage resistance. Stat values 100-200: index = stat value - 100."
+                },
+                "PVEOvershieldDamageResistance": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "PvE Class Overshield damage resistance against combatants as a percentage."
                 },
                 "PVPOvershieldDamageResistance": {
                     "type": "number",
                     "minimum": 0,
-                    "description": "PvP Overshield damage resistance as a percentage. Do not apply this value to PvE."
+                    "description": "PvP Class Overshield damage resistance against players as a percentage."
                 },
                 "PVEClassAbilityDamageIncrease": {
                     "type": "array",
@@ -1037,6 +1265,7 @@
                 "EnergyGainScalar",
                 "PVEOvershieldHP",
                 "PVPOvershieldHP",
+                "PVEOvershieldDamageResistance",
                 "PVPOvershieldDamageResistance",
                 "PVEClassAbilityDamageIncrease",
                 "PVPClassAbilityDamageIncrease",
@@ -1162,9 +1391,9 @@
                                 "type": "number",
                                 "minimum": 0
                             },
-                            "minItems": 14,
-                            "maxItems": 14,
-                            "description": "Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value."
+                            "minItems": 131,
+                            "maxItems": 131,
+                            "description": "Forward walk speed in m/s by hidden Mobility stat (0–130). Stat values 0-130: index = stat value."
                         },
                         "StrafeMultiplier": {
                             "type": "number",
@@ -1179,7 +1408,7 @@
                         "ADSMultiplier": {
                             "type": "number",
                             "exclusiveMinimum": 0,
-                            "description": "Default walking multiplier while aiming down sights; active source effects can replace it."
+                            "description": "Default walking multiplier while aiming down sights; active source effects can replace it or scale its penalty."
                         },
                         "ForwardSpeedCap": {
                             "type": "number",
@@ -1196,11 +1425,11 @@
                             "exclusiveMinimum": 0,
                             "description": "Maximum crouched movement speed in m/s."
                         },
-                        "MaxMobilityTier": {
+                        "MaxMobility": {
                             "type": "integer",
                             "minimum": 0,
-                            "maximum": 13,
-                            "description": "Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain."
+                            "maximum": 130,
+                            "description": "Highest effective hidden Mobility stat; capped at the WalkSpeed curve domain."
                         }
                     },
                     "required": [
@@ -1211,7 +1440,7 @@
                         "ForwardSpeedCap",
                         "StrafeSpeedCap",
                         "CrouchSpeedCap",
-                        "MaxMobilityTier"
+                        "MaxMobility"
                     ],
                     "description": "Shared movement curves, state multipliers, and caps."
                 },

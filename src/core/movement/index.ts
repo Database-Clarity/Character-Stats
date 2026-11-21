@@ -6,7 +6,7 @@ export const movementSpec = {
     fields: [
         objectField('Rules', movementRulesSpec, {
             label: 'Rules',
-            help: 'Movement rules shared by every class: walk speed by Mobility tier, state multipliers and speed caps.',
+            help: 'Movement rules shared by every class: walk speed by Mobility stat, state multipliers and speed caps.',
             description: 'Shared movement curves, state multipliers, and caps.',
         }),
     ],

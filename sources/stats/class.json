@@ -140,7 +140,8 @@
                 }
             ]
         },
-        "PVPOvershieldDamageResistance": 50,
+        "PVEOvershieldDamageResistance": 25,
+        "PVPOvershieldDamageResistance": 0,
         "PVEClassAbilityDamageIncrease": {
             "Domain": [
                 100,
@@ -184,19 +185,22 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (x1 to x2.4, Round 4), EnergyGainScalar (0.4 to 0.9, Round 4; +125% vs stat-0), Overshield HP (40 PvE / 10 PvP; PvE OS DR 25%, duration 5s Dodge/Thruster/Quickfall, 10s Rift/Barricade), and PvE/PvP damage curves (+65% / +10%) verified across live game data and Monument of Triumph in-game testing. PVPOvershieldDamageResistance (50% vs 0%), Rally Barricade (55.1s vs 54.2s), Arbor Warden Rally/Thruster, Icefall/Hoarfrost/Crackshot chunk overrides, and Spirit of Hoarfrost still need in-game verification.",
+    "Notes": "CooldownScalars (1 -> 1/2.4, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEOvershieldHP (0 -> 40), PVPOvershieldHP (0 -> 10), PVEOvershieldDamageResistance (25% vs combatants), PVPOvershieldDamageResistance (0% vs players), PVEClassAbilityDamageIncrease (0 -> 65%), and PVPClassAbilityDamageIncrease (0 -> 10%) verified from live game data. Class Overshield lasts 5s on Dodge/Thruster/Phoenix Dive and 10s on Rift/Barricade. Prismatic abilities include the 0.8x PvP chunk energy scalar.",
     "Abilities": [
         {
             "Hash": 3636300852,
             "Name": "Acrobat's Dodge",
             "BaseCooldown": 56,
+            "PVPBaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2711519343,
             "Name": "Acrobat's Dodge - Prismatic",
             "BaseCooldown": 56,
-            "ChunkEnergyScalar": 0.5
+            "PVPBaseCooldown": 118.8,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 25156514,
@@ -208,7 +212,8 @@
             "Hash": 1444664839,
             "Name": "Empowering Rift - Prismatic",
             "BaseCooldown": 118.8,
-            "ChunkEnergyScalar": 0.5
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2979486802,
@@ -244,7 +249,8 @@
             "Hash": 2711519340,
             "Name": "Gambler's Dodge - Prismatic",
             "BaseCooldown": 56,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 3636300855,
@@ -280,7 +286,8 @@
             "Hash": 1444664838,
             "Name": "Healing Rift - Prismatic",
             "BaseCooldown": 118.8,
-            "ChunkEnergyScalar": 0.5
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2979486803,
@@ -316,7 +323,8 @@
             "Hash": 2711519341,
             "Name": "Marksman's Dodge - Prismatic",
             "BaseCooldown": 42,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3636300854,
@@ -352,7 +360,8 @@
             "Hash": 1444664836,
             "Name": "Phoenix Dive - Prismatic",
             "BaseCooldown": 79.6,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 489583097,
@@ -364,7 +373,8 @@
             "Hash": 2868073560,
             "Name": "Rally Barricade - Prismatic",
             "BaseCooldown": 55.1,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2495523341,
@@ -400,7 +410,8 @@
             "Hash": 2868073563,
             "Name": "Thruster - Prismatic",
             "BaseCooldown": 52.1,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 489583096,
@@ -412,7 +423,8 @@
             "Hash": 2868073561,
             "Name": "Towering Barricade - Prismatic",
             "BaseCooldown": 101.3,
-            "ChunkEnergyScalar": 0.5
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2495523340,
@@ -443,24 +455,47 @@
         {
             "Hash": 90009855,
             "Name": "Arbor Warden - Exotic Chest",
-            "Notes": "Live package decode (barrinade_class_ability_override_hopon = 1/70.0s) and Compendium confirm Towering Barricade cooldown is reduced to 70s. Rally Barricade (38s Compendium vs 70s decode) and Thruster (52.1s Clarity vs 70s/101.3s Compendium) conflict and need in-game timing.",
+            "Notes": "Reduces Towering Barricade cooldown from 101.3s to 70s and Rally Barricade cooldown from 55.1s to 38s (~1.45x passive regen). Non-Barricade class abilities default to Towering Barricade behavior when active.",
             "Requirements": [
                 489583096,
                 2868073561,
                 2495523340,
                 3260056808,
                 2087010645,
-                2722641740
+                2722641740,
+                489583097,
+                2868073560,
+                2495523341,
+                3260056809,
+                2087010644,
+                2722641741
             ],
-            "CooldownOverride": 70
+            "Scalar": [
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724
+            ]
         },
         {
             "Hash": 1602994569,
             "Name": "Bastion - Void Aspect",
-            "Notes": "Cooldown penalty (100s Towering / 80s Rally) is PvP-only per live game data, Compendium, and Clarity; PvE base cooldown is unchanged. ChunkEnergyOverride 0.5 matches Rally Bastion testing (verify PvE chunk in-game).",
+            "Notes": "Cooldown penalty is PvP-only (1/0.71 = 1.4085x on Towering Barricade -> 142.7s base, 1.9601x on Rally Barricade -> 108.0s base before Crucible mode scaling); PvE base cooldown is unchanged. ChunkEnergyOverride is 0.5x.",
             "Requirements": [
                 2722641741,
                 2722641740
+            ],
+            "PVPScalar": [
+                1.9600725953,
+                1.4084507042
             ],
             "ChunkEnergyOverride": [
                 0.5,
@@ -470,17 +505,21 @@
         {
             "Hash": 3066103997,
             "Name": "Crackshot - Solar Aspect",
-            "Notes": "Added in Update 9.7.0 (Monument of Triumph). Overrides Solar Class Ability cooldown to Marksman's Dodge (42s). ChunkEnergyOverride (likely 1.0) needs in-game testing.",
+            "Notes": "Added in Update 9.7.0 (Monument of Triumph). Overrides Solar Gambler's and Acrobat's Dodge cooldown and chunk scalar to Marksman's Dodge (42s, 1.0x).",
             "Requirements": [
                 3636300855,
                 3636300852
             ],
-            "CooldownOverride": 42
+            "CooldownOverride": 42,
+            "ChunkEnergyOverride": [
+                1,
+                1
+            ]
         },
         {
             "Hash": 1322544481,
             "Name": "Hoarfrost-Z - Exotic Chest",
-            "Notes": "Overrides Rally Barricade cooldown to Towering Barricade (101.3s). ChunkEnergyOverride (1.0 here vs 0.5 in Monument of Triumph CSV) needs in-game testing.",
+            "Notes": "Overrides Rally Barricade cooldown to Towering Barricade (101.3s) while keeping a 1.0x chunk energy scalar.",
             "Requirements": [
                 3260056809,
                 2868073560
@@ -494,7 +533,7 @@
         {
             "Hash": 1467044898,
             "Name": "Icefall Mantle - Exotic Arms",
-            "Notes": "Requires a Stasis Super (Stasis or Prismatic Titan). Live decode (selfish_brace_override_hopon = 1/70.0s), Clarity, and Compendium confirm 70s base cooldown on Barricades. Prismatic Thruster interaction (70s vs unchanged) and ChunkEnergyOverride (decoded tier 3 = 0.5 vs 1.0 in CSV) need in-game testing.",
+            "Notes": "Requires a Stasis Super (Stasis or Prismatic Titan). Replaces Barricades with Glacial Guard at a 70s base cooldown and 0.5x chunk energy scalar (class ability recharge tier 3).",
             "Requirements": [
                 3260056809,
                 2868073560,
@@ -503,10 +542,10 @@
             ],
             "CooldownOverride": 70,
             "ChunkEnergyOverride": [
-                1,
-                1,
-                1,
-                1
+                0.5,
+                0.5,
+                0.5,
+                0.5
             ]
         },
         {
@@ -522,6 +561,18 @@
             "ChunkEnergyOverride": [
                 1,
                 1,
+                1
+            ]
+        },
+        {
+            "Hash": 3573490508,
+            "Name": "Spirit of Hoarfrost - Exotic Class Item Perk",
+            "Notes": "Shares the same barricade-replacement behavior as Hoarfrost-Z on Prismatic Rally Barricade (101.3s cooldown, 1.0x chunk scalar).",
+            "Requirements": [
+                2868073560
+            ],
+            "CooldownOverride": 101.3,
+            "ChunkEnergyOverride": [
                 1
             ]
         },

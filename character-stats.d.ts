@@ -76,13 +76,21 @@ export interface Ability {
      */
     Name: string;
     /**
-     * Base cooldown in seconds at a stat value of 0. Applicable CooldownOverride values replace
-     * this base first (last matching replacement wins in collection order), then all matching
-     * Scalar entries multiply it, then CooldownScalars[min(stat value, 100)] multiplies the result.
+     * Base cooldown in seconds at a stat value of 0 in PvE (and in PvP when PVPBaseCooldown is
+     * omitted). Applicable CooldownOverride values replace this base first (last matching
+     * replacement wins in collection order), then all matching Scalar entries multiply it, then
+     * CooldownScalars[min(stat value, 100)] multiplies the result.
      */
     BaseCooldown: number;
-    /** Nonnegative scalar for chunk energy gains. */
+    /** Base cooldown in seconds at a stat value of 0 in PvP when it differs from PvE. */
+    PVPBaseCooldown?: number;
+    /**
+     * Nonnegative scalar for chunk energy gains in PvE (and in PvP when PVPChunkEnergyScalar is
+     * omitted).
+     */
     ChunkEnergyScalar: number;
+    /** Nonnegative scalar for chunk energy gains in PvP when it differs from PvE. */
+    PVPChunkEnergyScalar?: number;
     /**
      * Entry i is the charge-rate scalar while i charges are stored (starting at i = 0). Array
      * length is the maximum number of charges. AbilityName, ChargeCount and ChargeBasedScaling
@@ -106,13 +114,24 @@ export interface SuperAbility {
      */
     Name: string;
     /**
-     * Fixed Super cooldown in seconds, independent of the Super stat. Applicable CooldownOverride
-     * values replace this base first (last matching replacement wins in collection order), then all
-     * matching Scalar entries multiply it.
+     * Fixed Super cooldown in seconds in PvE (and in PvP when PVPBaseCooldown is omitted),
+     * independent of the Super stat. Applicable CooldownOverride values replace this base first
+     * (last matching replacement wins in collection order), then all matching Scalar entries
+     * multiply it.
      */
     BaseCooldown: number;
-    /** Nonnegative active Super regeneration scalar. */
+    /** Fixed Super cooldown in seconds in PvP when it differs from PvE. */
+    PVPBaseCooldown?: number;
+    /**
+     * Nonnegative active Super regeneration scalar in PvE (and in PvP when PVPActiveRegenScalar is
+     * omitted), multiplied by EnergyGainScalar.
+     */
     ActiveRegenScalar: number;
+    /**
+     * Nonnegative active Super regeneration scalar in PvP when it differs from PvE, multiplied by
+     * PVPEnergyGainScalar.
+     */
+    PVPActiveRegenScalar?: number;
     /**
      * Base active duration in seconds. Set only for Supers with a measured duration benefit from
      * enhanced Super stat.
@@ -141,21 +160,76 @@ export interface Override {
      */
     Requirements: number[];
     /**
-     * Replacement base cooldown in seconds for matching Requirements (at a stat value of 0 for
-     * non-Super abilities). Applied before all Scalar multipliers and, for non-Super abilities,
-     * CooldownScalars[min(stat value, 100)]. If multiple replacements match, the last in collection
-     * order wins.
+     * Replacement base cooldown in seconds for matching Requirements in PvE (and in PvP when
+     * PVPCooldownOverride is omitted; at a stat value of 0 for non-Super abilities). Applied before
+     * all Scalar multipliers and, for non-Super abilities, CooldownScalars[min(stat value, 100)].
+     * If multiple replacements match, the last in collection order wins.
      */
     CooldownOverride?: number;
     /**
-     * Multiplies the cooldown duration for matching Requirements. After BaseCooldown or
-     * CooldownOverride is selected, each active Scalar multiplies the result, then non-Super
-     * abilities also multiply it by CooldownScalars[min(stat value, 100)]. A Scalar of 0.8 makes
-     * the cooldown 20% shorter; 1.25 makes it 25% longer.
+     * Replacement base cooldown in seconds for matching Requirements in PvP when it differs from
+     * PvE.
+     */
+    PVPCooldownOverride?: number;
+    /**
+     * Multiplies the cooldown duration for matching Requirements in PvE (and in PvP when PVPScalar
+     * is omitted). After BaseCooldown or CooldownOverride is selected, each active Scalar
+     * multiplies the result, then non-Super abilities also multiply it by CooldownScalars[min(stat
+     * value, 100)]. A Scalar of 0.8 makes the cooldown 20% shorter; 1.25 makes it 25% longer.
      */
     Scalar?: number[];
+    /** Multiplies the cooldown duration for matching Requirements in PvP when it differs from PvE. */
+    PVPScalar?: number[];
     /** Chunk energy scalars for corresponding Requirements, applied in place of ChunkEnergyScalar. */
     ChunkEnergyOverride?: number[];
+    /** Chunk energy scalars for corresponding Requirements in PvP when they differ from PvE. */
+    PVPChunkEnergyOverride?: number[];
+}
+
+export interface SuperOverride {
+    /** D2 Manifest inventoryItem hash */
+    Hash: number;
+    /**
+     * For organization purposes only. Does not necessarily match the inventoryItem entry name from
+     * the D2 Manifest.
+     */
+    Name: string;
+    /**
+     * Any matching requirement selects this override for Supers: 0 is a wildcard, positive values
+     * are Super manifest hashes, and negative values are negated subclass hashes requiring
+     * consumer-side resolution. Each matching index selects the corresponding parallel-array entry.
+     */
+    Requirements: number[];
+    /**
+     * Replacement base cooldown in seconds for matching Requirements in PvE (and in PvP when
+     * PVPCooldownOverride is omitted).
+     */
+    CooldownOverride?: number;
+    /**
+     * Replacement base cooldown in seconds for matching Requirements in PvP when it differs from
+     * PvE.
+     */
+    PVPCooldownOverride?: number;
+    /**
+     * Multiplies the Super cooldown duration for matching Requirements in PvE (and in PvP when
+     * PVPScalar is omitted).
+     */
+    Scalar?: number[];
+    /**
+     * Multiplies the Super cooldown duration for matching Requirements in PvP when it differs from
+     * PvE.
+     */
+    PVPScalar?: number[];
+    /**
+     * Replacement active Super regeneration scalars for corresponding Requirements in PvE, applied
+     * in place of the Super's ActiveRegenScalar.
+     */
+    ActiveRegenOverride?: number[];
+    /**
+     * Replacement active Super regeneration scalars for corresponding Requirements in PvP when they
+     * differ from PvE.
+     */
+    PVPActiveRegenOverride?: number[];
 }
 
 export interface MovementClass {
@@ -166,22 +240,28 @@ export interface MovementClass {
      * name from the D2 Manifest.
      */
     Name: string;
-    /** Base hidden Mobility tier in PvE, and in PvP when no PvP value is specified. */
-    BaseMobilityTier: number;
-    /** Base hidden Mobility tier in PvP when it differs from PvE. */
-    BaseMobilityTierPVP?: number;
+    /** Base hidden Mobility stat in PvE, and in PvP when no PvP value is specified. */
+    BaseMobility: number;
+    /** Base hidden Mobility stat in PvP when it differs from PvE. */
+    BaseMobilityPVP?: number;
     /** Base sprint speed in m/s, independent of Mobility. */
     BaseSprintSpeed: number;
 }
 
 export interface MovementRules {
-    /** Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value. */
+    /**
+     * Forward walk speed in m/s by hidden Mobility stat (0–130). Stat values 0-130: index = stat
+     * value.
+     */
     WalkSpeed: number[];
     /** Multiplier for left, right, and backward walking. */
     StrafeMultiplier: number;
     /** Multiplier for crouched walking. */
     CrouchMultiplier: number;
-    /** Default walking multiplier while aiming down sights; active source effects can replace it. */
+    /**
+     * Default walking multiplier while aiming down sights; active source effects can replace it or
+     * scale its penalty.
+     */
     ADSMultiplier: number;
     /** Maximum forward movement speed, including sprint, in m/s. */
     ForwardSpeedCap: number;
@@ -189,16 +269,16 @@ export interface MovementRules {
     StrafeSpeedCap: number;
     /** Maximum crouched movement speed in m/s. */
     CrouchSpeedCap: number;
-    /** Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain. */
-    MaxMobilityTier: number;
+    /** Highest effective hidden Mobility stat; capped at the WalkSpeed curve domain. */
+    MaxMobility: number;
 }
 
 export interface MovementEffect {
     /** Movement effect to apply. */
-    Type: "MobilityTiers" | "ForwardMultiplier" | "SprintMultiplier" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier";
+    Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier" | "ADSPenaltyMultiplier";
     /**
      * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
-     * tiers use 0; unknown multipliers use 1.
+     * Mobility/additive values use 0; unknown multipliers use 1.
      */
     Values: number[];
     /** Replacement values when every BoostRequiresAll hash is equipped; length must match Values. */
@@ -207,8 +287,8 @@ export interface MovementEffect {
 
 export interface MovementSource {
     /**
-     * Manifest inventory item, plug, mod or perk hash, or item-category hash according to RefType;
-     * 0 warns that verification is needed.
+     * Manifest inventory item, plug, mod or perk hash, item-category hash, or stable buff
+     * identifier according to RefType; 0 warns that verification is needed.
      */
     Hash: number;
     /**
@@ -216,8 +296,8 @@ export interface MovementSource {
      * name from the D2 Manifest.
      */
     Name: string;
-    /** Manifest definition table used by Hash. */
-    RefType: "item" | "itemCategory";
+    /** Manifest definition table or buff identity used by Hash. */
+    RefType: "item" | "itemCategory" | "buff";
     /**
      * Other inventory-item or plug hashes that activate this same source. Hash remains the primary
      * identity; apply the source only once.
@@ -228,10 +308,10 @@ export interface MovementSource {
     /** Effects from this source, with at most one entry for each effect type. */
     Effects: Array<{
         /** Movement effect to apply. */
-        Type: "MobilityTiers" | "ForwardMultiplier" | "SprintMultiplier" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier";
+        Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier" | "ADSPenaltyMultiplier";
         /**
          * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
-         * tiers use 0; unknown multipliers use 1.
+         * Mobility/additive values use 0; unknown multipliers use 1.
          */
         Values: number[];
         /**
@@ -485,19 +565,17 @@ export interface Super {
     EnhancedStatTooltip: EnhancedStatTooltip;
     /**
      * Values represent how effective external sources of Super Energy (Orbs of Power, exchanging
-     * damage, perks, etc.) are in PvE. Stat values 0-100: index = stat value.
+     * damage, perks, etc.) are in PvE, and multiply each Super Ability's <ActiveRegenScalar> for
+     * active Super regeneration in PvE. Stat values 0-100: index = stat value.
      */
     EnergyGainScalar: number[];
     /**
      * Values represent how effective external sources of Super Energy (Orbs of Power, exchanging
-     * damage, perks, etc.) are in PvP. Stat values 0-100: index = stat value.
+     * damage, perks, etc.) are in PvP, and multiply each Super Ability's <PVPActiveRegenScalar> (or
+     * <ActiveRegenScalar>) for active Super regeneration in PvP. Stat values 0-100: index = stat
+     * value.
      */
     PVPEnergyGainScalar: number[];
-    /**
-     * Values multiply the Super Ability's <ActiveRegenScalar> to determine active Super
-     * regeneration. Stat values 0-100: index = stat value.
-     */
-    ActiveRegenScalars: number[];
     /**
      * Percentage increase to Super Ability damage in PvE at each enhanced Super stat value. Stat
      * values 100-200: index = stat value - 100.
@@ -515,7 +593,7 @@ export interface Super {
      */
     SuperDurationIncrease: number[];
     SuperAbilities: SuperAbility[];
-    Overrides: Override[];
+    Overrides: SuperOverride[];
 }
 
 export interface Class {
@@ -574,11 +652,13 @@ export interface Class {
     PVEOvershieldHP: number[];
     /**
      * Values represent how much raw Overshield HP casting your Class Ability grants in PvP when the
-     * Class stat is enhanced. PvP Overshields have 50% damage resistance; this value is not
-     * effective HP. Stat values 100-200: index = stat value - 100.
+     * Class stat is enhanced. This value is raw HP, separate from damage resistance. Stat values
+     * 100-200: index = stat value - 100.
      */
     PVPOvershieldHP: number[];
-    /** PvP Overshield damage resistance as a percentage. Do not apply this value to PvE. */
+    /** PvE Class Overshield damage resistance against combatants as a percentage. */
+    PVEOvershieldDamageResistance: number;
+    /** PvP Class Overshield damage resistance against players as a percentage. */
     PVPOvershieldDamageResistance: number;
     /**
      * Percentage increase to Class Ability damage in PvE at each enhanced Class stat value. Stat
@@ -662,15 +742,18 @@ export interface Weapons {
 export interface Movement {
     /** Shared movement curves, state multipliers, and caps. */
     Rules: {
-        /** Forward walk speed in m/s by hidden Mobility tier. Stat values 0-13: index = stat value. */
+        /**
+         * Forward walk speed in m/s by hidden Mobility stat (0–130). Stat values 0-130: index =
+         * stat value.
+         */
         WalkSpeed: number[];
         /** Multiplier for left, right, and backward walking. */
         StrafeMultiplier: number;
         /** Multiplier for crouched walking. */
         CrouchMultiplier: number;
         /**
-         * Default walking multiplier while aiming down sights; active source effects can replace
-         * it.
+         * Default walking multiplier while aiming down sights; active source effects can replace it
+         * or scale its penalty.
          */
         ADSMultiplier: number;
         /** Maximum forward movement speed, including sprint, in m/s. */
@@ -679,8 +762,8 @@ export interface Movement {
         StrafeSpeedCap: number;
         /** Maximum crouched movement speed in m/s. */
         CrouchSpeedCap: number;
-        /** Highest effective hidden Mobility tier; capped at the WalkSpeed curve domain. */
-        MaxMobilityTier: number;
+        /** Highest effective hidden Mobility stat; capped at the WalkSpeed curve domain. */
+        MaxMobility: number;
     };
     Classes: MovementClass[];
     Sources: MovementSource[];
