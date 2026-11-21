@@ -132,21 +132,21 @@ describe('enhanced stat curve domains', () => {
 
         expect(classSource.Fields.PVEOvershieldDamageResistance).toBe(25);
         expect(exported.PVEOvershieldDamageResistance).toBe(25);
-        expect(classSource.Fields.PVPOvershieldDamageResistance).toBe(0);
-        expect(exported.PVPOvershieldDamageResistance).toBe(0);
+        expect(classSource.Fields.PVPOvershieldDamageResistance).toBe(50);
+        expect(exported.PVPOvershieldDamageResistance).toBe(50);
         expect(
             checkpoints.map((statValue) =>
                 renderTooltip(tooltip, classSource, classSpec, statValue, { Cooldown: 1 }),
             ),
         ).toEqual([
             expect.stringContaining(
-                '0 HP raw Overshield HP in PvE (25% damage resistance) and 0 HP raw Overshield HP in PvP (0% damage resistance)',
+                '0 HP raw Overshield HP in PvE (25% damage resistance) and 0 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
             expect.stringContaining(
-                '20 HP raw Overshield HP in PvE (25% damage resistance) and 5 HP raw Overshield HP in PvP (0% damage resistance)',
+                '20 HP raw Overshield HP in PvE (25% damage resistance) and 5 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
             expect.stringContaining(
-                '40 HP raw Overshield HP in PvE (25% damage resistance) and 10 HP raw Overshield HP in PvP (0% damage resistance)',
+                '40 HP raw Overshield HP in PvE (25% damage resistance) and 10 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
         ]);
         expect(tooltip).toContain('{{PVEOvershieldDamageResistance}}{{Percent}}');

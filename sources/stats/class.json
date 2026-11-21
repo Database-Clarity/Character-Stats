@@ -141,7 +141,7 @@
             ]
         },
         "PVEOvershieldDamageResistance": 25,
-        "PVPOvershieldDamageResistance": 0,
+        "PVPOvershieldDamageResistance": 50,
         "PVEClassAbilityDamageIncrease": {
             "Domain": [
                 100,
@@ -185,7 +185,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (1 -> 1/2.4, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEOvershieldHP (0 -> 40), PVPOvershieldHP (0 -> 10), PVEOvershieldDamageResistance (25% vs combatants), PVPOvershieldDamageResistance (0% vs players), PVEClassAbilityDamageIncrease (0 -> 65%), and PVPClassAbilityDamageIncrease (0 -> 10%) verified from live game data. Class Overshield lasts 5s on Dodge/Thruster/Phoenix Dive and 10s on Rift/Barricade. Prismatic abilities include the 0.8x PvP chunk energy scalar.",
+    "Notes": "CooldownScalars (1 -> 1/2.4, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEOvershieldHP (0 -> 40), PVPOvershieldHP (0 -> 10), PVEOvershieldDamageResistance (25% vs combatants), PVEClassAbilityDamageIncrease (0 -> 65%), and PVPClassAbilityDamageIncrease (0 -> 10%) verified from live game data. PVPOvershieldDamageResistance (50% vs players, 20 eHP at 200 Class) matches Compendium in-game PvP testing (per-section override rows and the overshield damage-commit path are not yet decoded in static dumps). Class Overshield lasts 5s on Dodge/Thruster/Phoenix Dive and 10s on Rift/Barricade. Prismatic abilities include the 0.8x PvP chunk energy scalar.",
     "Abilities": [
         {
             "Hash": 3636300852,

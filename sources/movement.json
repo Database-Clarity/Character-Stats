@@ -627,11 +627,8 @@
         {
             "Hash": 593361144,
             "Name": "Wraithmetal Mail (The Dragon's Shadow)",
-            "Notes": "Exotic Hunter chest intrinsic (593361144; also Spirit of the Dragon 3751917999): reduces ADS movement penalty by 33% (x0.67 penalty multiplier) for 15s after dodging.",
+            "Notes": "Exotic Hunter chest intrinsic (593361144): reduces ADS movement penalty by 33% (x0.67 penalty multiplier) for 15s after dodging. Spirit of the Dragon (3751917999) skips this buff state when the exotic class item is equipped.",
             "RefType": "item",
-            "AlsoMatches": [
-                3751917999
-            ],
             "Activation": "Conditional",
             "Effects": [
                 {
