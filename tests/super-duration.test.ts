@@ -13,8 +13,8 @@ import { tooltipAbilityContext } from '../src/editor/components/previewData';
 
 const expected = [
     { statValue: 100, increase: 0, duration: 30, damage: 0 },
-    { statValue: 150, increase: 16.5, duration: 34.95, damage: 22.5 },
-    { statValue: 200, increase: 33, duration: 39.9, damage: 45 },
+    { statValue: 150, increase: 16.66, duration: 35, damage: 22.5 },
+    { statValue: 200, increase: 33.33, duration: 40, damage: 45 },
 ] as const;
 
 describe('enhanced duration for support Supers', () => {

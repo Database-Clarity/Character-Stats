@@ -184,7 +184,7 @@ describe('fractional HP values', () => {
         ).toEqual([]);
         expect(
             validateField(
-                movementClassSpec.fields.find((candidate) => candidate.key === 'BaseMobilityTier')!,
+                movementClassSpec.fields.find((candidate) => candidate.key === 'BaseMobility')!,
                 2.5,
             ).map((issue) => issue.message),
         ).toContain('Enter a whole number');
@@ -211,8 +211,7 @@ describe('fractional HP values', () => {
         expect(field('PVPHealthHP').precision).toBe(3);
         expect(field('PVEBonusShieldHP').precision).toBe(3);
         expect(
-            movementClassSpec.fields.find((candidate) => candidate.key === 'BaseMobilityTier')
-                ?.kind,
+            movementClassSpec.fields.find((candidate) => candidate.key === 'BaseMobility')?.kind,
         ).toBe('int');
     });
 });

@@ -128,7 +128,7 @@ function MovementControls({ source }: { source: MovementSource }) {
                                         {stat.value === undefined
                                             ? 'Unavailable'
                                             : stat.key === 'mobility'
-                                              ? `Tier ${formatMovementTier(stat.value)}`
+                                              ? formatMovementStat(stat.value)
                                               : `${formatMovementSpeed(stat.value)} m/s`}
                                     </strong>
                                 </span>
@@ -191,7 +191,7 @@ function MovementControls({ source }: { source: MovementSource }) {
                                     <HashIdentity
                                         hash={entry.Hash}
                                         name={entry.Name}
-                                        table={entry.RefType}
+                                        table={entry.RefType === 'buff' ? undefined : entry.RefType}
                                         compact
                                     />
                                 </label>
@@ -272,9 +272,9 @@ function MovementControls({ source }: { source: MovementSource }) {
     );
 }
 
-function formatMovementTier(tier: number): string {
+function formatMovementStat(mobility: number): string {
     return new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 6,
         useGrouping: false,
-    }).format(tier);
+    }).format(mobility);
 }

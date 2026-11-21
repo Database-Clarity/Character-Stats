@@ -3,27 +3,33 @@
         "WalkSpeed": {
             "Domain": [
                 0,
-                13
+                130
             ],
             "Segments": [
                 {
-                    "Type": "Expression",
+                    "Type": "Constant",
                     "From": 0,
-                    "To": 13,
-                    "Expression": "5 + 0.2*x"
+                    "To": 29,
+                    "Value": 5.6
+                },
+                {
+                    "Type": "Expression",
+                    "From": 30,
+                    "To": 130,
+                    "Expression": "5 + 0.02*x"
                 }
             ]
         },
         "JumpHeight": {
             "Domain": [
                 0,
-                13
+                130
             ],
             "Segments": [
                 {
                     "Type": "Constant",
                     "From": 0,
-                    "To": 13,
+                    "To": 130,
                     "Value": 0
                 }
             ]
@@ -34,30 +40,176 @@
         "ForwardSpeedCap": 9,
         "StrafeSpeedCap": 6,
         "CrouchSpeedCap": 4,
-        "MaxMobilityTier": 13
+        "MaxMobility": 130
     },
     "Classes": [
         {
             "Name": "Hunter",
             "ClassHash": 671679327,
-            "BaseMobilityTier": 10,
-            "BaseMobilityTierPVP": 7,
-            "BaseSprintSpeed": 8.5
+            "Notes": "Update 9.1.5 set Hunter baseline Mobility to 100 PvE / 70 PvP and default sprint speed to 8.6 m/s.",
+            "BaseMobility": 100,
+            "BaseMobilityPVP": 70,
+            "BaseSprintSpeed": 8.6
         },
         {
             "Name": "Titan",
             "ClassHash": 3655393761,
-            "BaseMobilityTier": 3,
+            "BaseMobility": 30,
             "BaseSprintSpeed": 8
         },
         {
             "Name": "Warlock",
             "ClassHash": 2271682572,
-            "BaseMobilityTier": 3,
+            "BaseMobility": 30,
             "BaseSprintSpeed": 8
         }
     ],
     "Sources": [
+        {
+            "Hash": 1657056865,
+            "Name": "Ahamkara's Eye (One Thousand Voices)",
+            "Notes": "Exotic Fusion Rifle intrinsic (weapon hash 2069224589): while readied, multiplies sideways and backward walk speed and run acceleration by 5/6 (~0.8333x) and jump velocity by 0.875x; forward walk and sprint are unaffected.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        0.8333333
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1,
+            "Name": "Amplified",
+            "Notes": "Global Arc subclass buff (15s): +50 Mobility, +1 m/s sideways strafe speed, +2 m/s^2 run acceleration, and extended slide.",
+            "RefType": "buff",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        50
+                    ]
+                },
+                {
+                    "Type": "StrafeAdditive",
+                    "Values": [
+                        1
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 354401740,
+            "Name": "Assassin's Blade",
+            "Notes": "Sword trait (base 354401740, enhanced 3678483220): x1.5 forward walk and x1.2 acceleration for 5s (6s enhanced) after a sword final blow.",
+            "RefType": "item",
+            "AlsoMatches": [
+                3678483220
+            ],
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.5
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1685137410,
+            "Name": "Crossbows",
+            "Notes": "Weapon item hashes for Crossbows (Heirloom 1685137410, A Good Shout 649691506/3615748501, Opaque Hourglass 1553681400, Submersion 1724104236/3524386983): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms. Legendary Crossbows reuse the shared Combat Bow category and High-Impact Frame intrinsic, so weapon hashes are listed directly.",
+            "RefType": "item",
+            "AlsoMatches": [
+                649691506,
+                1553681400,
+                1724104236,
+                3524386983,
+                3615748501
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3884127242,
+            "Name": "Dornröschen (Sleeper Simulant)",
+            "Notes": "Exotic Linear Fusion Rifle intrinsic (weapon hash 4036115577): while readied, multiplies sideways and backward walk speed and run acceleration by 5/6 (~0.8333x) and jump velocity by ~0.8696x; forward walk and sprint are unaffected.",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        0.8333333
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2272984656,
+            "Name": "Echo of Dilation",
+            "Notes": "Void Fragment: doubles crouch movement speed (x2.0), always reaching the 4 m/s crouch speed cap.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "CrouchMultiplier",
+                    "Values": [
+                        2
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2272984657,
+            "Name": "Echo of Domineering",
+            "Notes": "Void Fragment: grants x1.05 walk and strafe speed (and x1.2 acceleration) for 10s after suppressing a target.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.05
+                    ]
+                },
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        1.05
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3511092054,
+            "Name": "Elemental Capacitor (Stasis)",
+            "Notes": "Weapon trait (base 3511092054, enhanced 711234314): while a Stasis Super is equipped, reduces ADS movement penalty by 20% (x0.8 penalty multiplier -> 0.80x ADS speed on standard weapons).",
+            "RefType": "item",
+            "AlsoMatches": [
+                711234314
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.8
+                    ]
+                }
+            ]
+        },
         {
             "Hash": 1133590731,
             "Name": "Enhanced Athletics",
@@ -65,11 +217,86 @@
             "Activation": "Always",
             "Effects": [
                 {
-                    "Type": "MobilityTiers",
+                    "Type": "Mobility",
                     "Values": [
-                        3,
-                        5,
-                        6
+                        30,
+                        50,
+                        60
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1694242450,
+            "Name": "Hydraulic Boosters (St0mp-EE5)",
+            "Notes": "Exotic Hunter leg intrinsic (item 193869520): grants the non-stacking 8.5 m/s sprint boost, extended slide, and jump enhancement (sprint boost is redundant with Hunter's 8.6 m/s base sprint speed).",
+            "RefType": "item",
+            "Activation": "Always",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1694242448,
+            "Name": "Illegally Modded Holster (Lucky Pants)",
+            "Notes": "Exotic Hunter leg intrinsic (item 193869522): grants the non-stacking 8.5 m/s sprint boost and extended slide while a Hand Cannon is readied (redundant with Hunter's 8.6 m/s base sprint speed).",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2450788523,
+            "Name": "Killing Wind",
+            "Notes": "Weapon trait (base 2450788523, enhanced 4207509907): grants +50 Mobility and reduces ADS movement penalty by 30% (x0.7 penalty multiplier) for 5.5s on final blow.",
+            "RefType": "item",
+            "AlsoMatches": [
+                4207509907
+            ],
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        50
+                    ]
+                },
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.7
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2341747657,
+            "Name": "Kismet (Fortune's Favor)",
+            "Notes": "Exotic Hunter leg intrinsic (item 4010324161): grants +50 Mobility, non-stacking 8.5 m/s sprint boost, and extended slide for 5s when Overshield depletes after a kill with Overshield.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        50
+                    ]
+                },
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
                     ]
                 }
             ]
@@ -77,13 +304,16 @@
         {
             "Hash": 1458010786,
             "Name": "Lightweight Frame",
-            "Notes": "Bungie manifest 245114.26.10.13.2000-1-bnet.66137 plus Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348) verified from live package data (d2damage). Note: 2753228730 does not spawn lightweight_frame.pattern.tft in package data and should be verified in-game.",
+            "Notes": "Verified Lightweight Frame intrinsics, Enhanced GL Micro-Missile Frame plugs (540070330, 745725302, 1278053348, 4024789138), Heat Lightweight frames (2167115920, 4108848057), and 7 Exotic Intrinsics granting the Lightweight movement bonus (Fighting Lion, Chaperone, Le Monarque, Manticore, Verglas Curve, Alethonym, Third Iteration). Excludes 2753228730 (Ergo Sum sword-frame plug sets sword heavy-attack type only and does not grant Lightweight movement speed) and pruned unlinked stub 3377988521.",
             "RefType": "item",
             "AlsoMatches": [
                 118439741,
                 132189785,
+                228577175,
                 308595185,
                 395096174,
+                425960662,
+                470163129,
                 474269988,
                 539564471,
                 540070330,
@@ -91,29 +321,34 @@
                 885620491,
                 956390015,
                 1278053348,
+                1394384862,
                 1665848857,
                 1671927875,
                 1713206376,
                 2012877834,
                 2105054824,
                 2108556049,
-                2753228730,
+                2144580852,
+                2167115920,
+                2186532310,
+                2636679416,
                 3048420653,
                 3272152575,
-                3377988521,
                 3472640090,
                 3725333007,
                 3728676938,
                 3758615625,
                 4008973208,
-                4080055066
+                4024789138,
+                4080055066,
+                4108848057
             ],
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "MobilityTiers",
+                    "Type": "Mobility",
                     "Values": [
-                        2
+                        20
                     ]
                 },
                 {
@@ -125,16 +360,31 @@
             ]
         },
         {
+            "Hash": 3241194942,
+            "Name": "Linear Actuators (Dunemarchers)",
+            "Notes": "Exotic Titan leg intrinsic (item 1160559849): grants the non-stacking 8.5 m/s sprint boost and extended slide.",
+            "RefType": "item",
+            "Activation": "Always",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 377257911,
             "Name": "MIDA Multi-Tool",
-            "Notes": "Verified Intrinsic plug for MIDA Multi-Tool (weapon hash 1331482397) from live package data (d2damage #565): +20 Mobility and x1.1102 movement speed.",
+            "Notes": "Verified Intrinsic plug for MIDA Multi-Tool (weapon hash 1331482397): +20 Mobility and x1.1102 forward/backward movement speed.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "MobilityTiers",
+                    "Type": "Mobility",
                     "Values": [
-                        2
+                        20
                     ]
                 },
                 {
@@ -148,20 +398,21 @@
         {
             "Hash": 2213377102,
             "Name": "MIDA Synergy",
-            "Notes": "Verified from live package data (d2damage #1461 / #563): base Lightweight (+20 Mobility, x1.0625) stacks with mida_minitool (x1.0449) when MIDA Multi-Tool is equipped -> 1.0625 * 1.0449 = 1.1102. Do not also apply Lightweight Frame for this weapon.",
+            "Notes": "Base Lightweight (+20 Mobility, x1.0625) stacks with the MIDA Mini-Tool synergy bonus (x1.0449) when MIDA Multi-Tool is equipped -> 1.0625 * 1.0449 = 1.1102. Do not also apply Lightweight Frame for this weapon.",
             "RefType": "item",
             "AlsoMatches": [
                 1057935015,
                 1891876363,
                 2179934441,
+                2470575005,
                 2670025099
             ],
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "MobilityTiers",
+                    "Type": "Mobility",
                     "Values": [
-                        2
+                        20
                     ]
                 },
                 {
@@ -181,17 +432,17 @@
         {
             "Hash": 1888623310,
             "Name": "MIDA Synergy (Macro-Tool)",
-            "Notes": "Verified from live package data (d2damage #4643, mida_synergy_non_lightweight_bonus): grants no base movement bonus, and while MIDA Multi-Tool is equipped grants +20 Mobility (+2 tiers) and x1.1102 movement speed.",
+            "Notes": "Grants no base movement bonus; while MIDA Multi-Tool is equipped, grants +20 Mobility and x1.1102 forward/backward movement speed.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
                 {
-                    "Type": "MobilityTiers",
+                    "Type": "Mobility",
                     "Values": [
                         0
                     ],
                     "BoostedValues": [
-                        2
+                        20
                     ]
                 },
                 {
@@ -218,6 +469,113 @@
                     "Type": "OverweightMultiplier",
                     "Values": [
                         0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3241194941,
+            "Name": "Mecha Holster (Peacekeepers)",
+            "Notes": "Exotic Titan leg intrinsic (item 53126580): while a Submachine Gun is readied, grants +30 Mobility, non-stacking 8.5 m/s sprint boost, extended slide, and reduces ADS movement penalty by 33% (x0.67 penalty multiplier -> 0.8325x ADS speed).",
+            "RefType": "item",
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        30
+                    ]
+                },
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                },
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.67
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 2928496916,
+            "Name": "Micro-Missile Frame (Rocket Pulse Rifles & Sidearms)",
+            "Notes": "Micro-Missile Frame intrinsics (base 2928496916, enhanced 368110299/651554065/687584589/1225770249/2100231191/3178379945) and New Malpais intrinsic Atomizing Rounds (2575933030): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms.",
+            "RefType": "item",
+            "AlsoMatches": [
+                368110299,
+                651554065,
+                687584589,
+                1225770249,
+                2100231191,
+                2575933030,
+                3178379945
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSMultiplier",
+                    "Values": [
+                        0.85
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 588594999,
+            "Name": "Moving Target",
+            "Notes": "Weapon trait (base 588594999, enhanced 2717805783): reduces ADS movement penalty by 10% (x0.9 penalty multiplier -> 0.775x ADS speed on standard weapons, 0.865x on Sidearms).",
+            "RefType": "item",
+            "AlsoMatches": [
+                2717805783
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.9
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 1322370662,
+            "Name": "Precision Frame (180 RPM Hand Cannons)",
+            "Notes": "Precision Frame Hand Cannon intrinsics (plus Malfeasance 1791592647 and Dynamic Heat Hand Cannon 1611330137): reduces ADS movement penalty by 10% (x0.9 penalty multiplier -> 0.775x ADS speed).",
+            "RefType": "item",
+            "AlsoMatches": [
+                433469519,
+                886865893,
+                1034287523,
+                1611330137,
+                1791592647,
+                4113841443
+            ],
+            "Activation": "WhileHeld",
+            "Effects": [
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.9
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 897181301,
+            "Name": "Rapid Cooldown (Fr0st-EE5)",
+            "Notes": "Exotic Hunter leg intrinsic (item 609852545): grants the non-stacking 8.5 m/s sprint boost for 10s after using a Class Ability (redundant with Hunter's 8.6 m/s base sprint speed).",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
                     ]
                 }
             ]
@@ -251,6 +609,54 @@
             ]
         },
         {
+            "Hash": 2,
+            "Name": "Speed Booster",
+            "Notes": "Global Arc subclass buff (after sprinting 2.5s while Amplified): raises base sprint via SprintBoost and applies x5 forward / x2 strafe multipliers, hitting the 9 m/s forward/sprint and 6 m/s strafe speed caps (+25% jump velocity, extended slide).",
+            "RefType": "buff",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        5
+                    ]
+                },
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        2
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 3347978673,
+            "Name": "Strange Protractor (Transversive Steps)",
+            "Notes": "Exotic Warlock leg intrinsic (item 138282166): grants the non-stacking 8.5 m/s sprint boost, extended slide, and +5 m/s crouched speed (always reaching the 4 m/s crouch speed cap).",
+            "RefType": "item",
+            "Activation": "Always",
+            "Effects": [
+                {
+                    "Type": "SprintBoost",
+                    "Values": [
+                        8.5
+                    ]
+                },
+                {
+                    "Type": "CrouchAdditive",
+                    "Values": [
+                        5
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 54,
             "Name": "Sword guarding",
             "RefType": "itemCategory",
@@ -265,9 +671,36 @@
             ]
         },
         {
+            "Hash": 117669763,
+            "Name": "The Dance (Radiant Dance Machines)",
+            "Notes": "Exotic Hunter leg intrinsic (item 1702288800): passively active while a Primary weapon is readied and not aiming down sights. Grants +30 Mobility, x1.045 forward/backward walk and sprint speed (and crouched forward/backward), x1.1 sideways strafe speed (standing and crouched), and x1.2 run/crouch acceleration.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        30
+                    ]
+                },
+                {
+                    "Type": "ForwardMultiplier",
+                    "Values": [
+                        1.045
+                    ]
+                },
+                {
+                    "Type": "StrafeMultiplier",
+                    "Values": [
+                        1.1
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 25692695,
             "Name": "The Scientific Method (Tractor Cannon)",
-            "Notes": "Verified Trait plug for Tractor Cannon (weapon hash 3580904581) from live package data (d2damage #545, 6s): op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
+            "Notes": "Trait plug for Tractor Cannon (weapon hash 3580904581, 6s): x1.5 forward walk and x1.2 acceleration (strafe/crouch/jump unaffected; hits 9 m/s sprint cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [
@@ -280,9 +713,39 @@
             ]
         },
         {
+            "Hash": 3469412970,
+            "Name": "Whisper of Hedrons",
+            "Notes": "Stasis Fragment: grants +30 Mobility (and +30 Health) for 11s after freezing a target.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "Mobility",
+                    "Values": [
+                        30
+                    ]
+                }
+            ]
+        },
+        {
+            "Hash": 593361144,
+            "Name": "Wraithmetal Mail (The Dragon's Shadow)",
+            "Notes": "Exotic Hunter chest intrinsic (593361144): reduces ADS movement penalty by 33% (x0.67 penalty multiplier) for 15s after dodging. Spirit of the Dragon (3751917999) skips this buff state when the exotic class item is equipped.",
+            "RefType": "item",
+            "Activation": "Conditional",
+            "Effects": [
+                {
+                    "Type": "ADSPenaltyMultiplier",
+                    "Values": [
+                        0.67
+                    ]
+                }
+            ]
+        },
+        {
             "Hash": 3072857252,
             "Name": "Wraithwalk (Heartshadow Catalyst)",
-            "Notes": "Verified from live package data (d2damage #3552, DestinySandboxPerkDefinition 3936394000 via catalyst 3072857252): while invisible with weapon ready and reserves remaining, op-6 0x00 x1.5 forward walk and 0x03 x1.2 sprint (both hit the 9 m/s sprint cap; strafe/crouch/jump unaffected).",
+            "Notes": "Heartshadow Catalyst (3072857252): while invisible with weapon ready and reserves remaining, grants x1.5 forward walk and x1.2 acceleration (strafe/crouch/jump unaffected; hits 9 m/s sprint cap).",
             "RefType": "item",
             "Activation": "Conditional",
             "Effects": [

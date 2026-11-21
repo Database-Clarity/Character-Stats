@@ -76,7 +76,7 @@
                 0,
                 100
             ],
-            "Round": 3,
+            "Round": 4,
             "Segments": [
                 {
                     "Type": "Expression",
@@ -141,7 +141,7 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 10, x1 to x2.75), EnergyGainScalar (0x514BA0CA spline, 0.4 to 0.9; event-grant assembly probable), and PvE/PvP damage curves verified from live package data (d2damage). Individual melee BaseCooldowns, ChargeBasedScaling, and Prismatic Titan/Warlock melee overrides still need in-game verification.",
+    "Notes": "CooldownScalars (1 -> 1/2.75, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEMeleeDamageIncrease (0 -> 30%, applies to unpowered, powered, and glaive melees), and PVPMeleeDamageIncrease (0 -> 20%) verified from live game data. Frenzied Blade (143.1s, 0.7x) and Shoulder Charge chunk scalars (Hammer Strike 0.8x, Seismic Strike 0.8x, Shield Bash 0.7x) confirmed against community testing sheets. Prismatic melees include the 0.8x PvP chunk energy scalar.",
     "Abilities": [
         {
             "Hash": 2307689415,
@@ -159,6 +159,7 @@
             "Name": "Arcane Needle - Prismatic",
             "BaseCooldown": 125.9,
             "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64,
             "ChargeBasedScaling": [
                 1,
                 1.415,
@@ -187,13 +188,19 @@
             "Hash": 1232050831,
             "Name": "Chain Lightning",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "ChargeBasedScaling": [
+                1,
+                1
+            ],
+            "Notes": "Arc Warlock exclusive: has 2 innate melee charges (Prismatic Chain Lightning has 1 charge)."
         },
         {
             "Hash": 3644045868,
             "Name": "Chain Lightning - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 2716335211,
@@ -205,7 +212,8 @@
             "Hash": 2657901005,
             "Name": "Combination Blow - Prismatic",
             "BaseCooldown": 58.1,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2716335210,
@@ -229,6 +237,7 @@
             "Name": "Frenzied Blade - Prismatic",
             "BaseCooldown": 143.1,
             "ChunkEnergyScalar": 0.7,
+            "PVPChunkEnergyScalar": 0.56,
             "ChargeBasedScaling": [
                 1,
                 1.35,
@@ -245,7 +254,8 @@
             "Hash": 1980796562,
             "Name": "Hammer Strike - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 1470370538,
@@ -257,7 +267,8 @@
             "Hash": 3644045869,
             "Name": "Incinerator Snap - Prismatic",
             "BaseCooldown": 119.8,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 4016776972,
@@ -269,7 +280,8 @@
             "Hash": 2657901004,
             "Name": "Knife Trick - Prismatic",
             "BaseCooldown": 118.8,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 4016776974,
@@ -291,19 +303,35 @@
             "Hash": 3644045867,
             "Name": "Penumbral Blast - Prismatic",
             "BaseCooldown": 146.3,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
+        },
+        {
+            "Hash": 1139822080,
+            "Name": "Phantom Surge",
+            "BaseCooldown": 130.7,
+            "ChunkEnergyScalar": 0.9
         },
         {
             "Hash": 2299867342,
             "Name": "Pocket Singularity",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "ChargeBasedScaling": [
+                1,
+                1
+            ]
         },
         {
             "Hash": 3644045870,
             "Name": "Pocket Singularity - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72,
+            "ChargeBasedScaling": [
+                1,
+                1
+            ]
         },
         {
             "Hash": 4016776973,
@@ -333,7 +361,8 @@
             "Hash": 1980796560,
             "Name": "Shield Throw - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 2028772231,
@@ -345,7 +374,8 @@
             "Hash": 1980796561,
             "Name": "Shiver Strike - Prismatic",
             "BaseCooldown": 146.3,
-            "ChunkEnergyScalar": 0.7
+            "ChunkEnergyScalar": 0.7,
+            "PVPChunkEnergyScalar": 0.56
         },
         {
             "Hash": 1139822081,
@@ -357,7 +387,8 @@
             "Hash": 2657901007,
             "Name": "Snare Bomb - Prismatic",
             "BaseCooldown": 130.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 1680616210,
@@ -369,7 +400,8 @@
             "Hash": 2657901002,
             "Name": "Threaded Spike - Prismatic",
             "BaseCooldown": 145.2,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 852252789,
@@ -387,7 +419,8 @@
             "Hash": 1980796563,
             "Name": "Thunderclap - Prismatic",
             "BaseCooldown": 131.7,
-            "ChunkEnergyScalar": 0.9
+            "ChunkEnergyScalar": 0.9,
+            "PVPChunkEnergyScalar": 0.72
         },
         {
             "Hash": 4016776975,
@@ -410,6 +443,7 @@
             "Name": "Withering Blade - Prismatic",
             "BaseCooldown": 145.2,
             "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64,
             "ChargeBasedScaling": [
                 1,
                 1
@@ -420,6 +454,7 @@
         {
             "Hash": 1616346845,
             "Name": "Prismatic Titan - Subclass",
+            "Notes": "Frenzied Blade receives a 0.7x passive regeneration speed penalty on Prismatic (1 / 0.7 = 1.4285714286).",
             "Requirements": [
                 1980796564
             ],
@@ -430,6 +465,7 @@
         {
             "Hash": 3893112950,
             "Name": "Prismatic Warlock - Subclass",
+            "Notes": "Arcane Needle receives a 0.7x passive regeneration speed penalty on Prismatic (1 / 0.7 = 1.4285714286).",
             "Requirements": [
                 3644045871
             ],

@@ -38,26 +38,34 @@ describe('movement calculator', () => {
                 expect(movementSpeed(input({ sources: [{ hash: alias }] }))).toEqual(expected);
         }
         const lightweight = data().Sources.find((source) => source.Hash === 1458010786)!;
-        expect(lightweight.AlsoMatches).toHaveLength(27);
+        expect(lightweight.AlsoMatches).toHaveLength(35);
         expect(lightweight.AlsoMatches).toContain(3758615625);
         expect(lightweight.AlsoMatches).toContain(540070330);
         expect(lightweight.AlsoMatches).toContain(745725302);
         expect(lightweight.AlsoMatches).toContain(1278053348);
+        expect(lightweight.AlsoMatches).toContain(4024789138);
+        expect(lightweight.AlsoMatches).toContain(2167115920);
+        expect(lightweight.AlsoMatches).toContain(4108848057);
+        expect(lightweight.AlsoMatches).toContain(425960662);
+        expect(lightweight.AlsoMatches).not.toContain(2753228730);
+        expect(lightweight.AlsoMatches).not.toContain(3377988521);
         expect(lightweight.AlsoMatches).not.toContain(2928496916);
+        const midaSynergy = data().Sources.find((source) => source.Hash === 2213377102)!;
+        expect(midaSynergy.AlsoMatches).toContain(2470575005);
     });
     it('applies MIDA Multi-Tool, boosted MIDA Synergy, Wraithwalk, and The Scientific Method', () => {
         const multiTool = movementSpeed(input({ sources: [{ hash: 377257911 }] }));
-        expect(multiTool.tier).toBe(5);
+        expect(multiTool.mobility).toBe(50);
         expect(multiTool.speed).toBeCloseTo(6 * 1.1102, 12);
 
         const boostedSmg = movementSpeed(input({ sources: [{ hash: 2213377102, boosted: true }] }));
-        expect(boostedSmg.tier).toBe(5);
+        expect(boostedSmg.mobility).toBe(50);
         expect(boostedSmg.speed).toBeCloseTo(6 * 1.1102, 12);
 
         for (const hash of [25692695, 3072857252]) {
             expect(movementSpeed(input({ sources: [{ hash }] })).speed).toBeCloseTo(5.6 * 1.5, 12);
             expect(movementSpeed(input({ sources: [{ hash }], sprint: true }))).toEqual({
-                tier: 3,
+                mobility: 30,
                 speed: 9,
                 cappedBy: 'ForwardSpeedCap',
             });
@@ -71,7 +79,7 @@ describe('movement calculator', () => {
         expect(source.Sources.find((entry) => entry.Hash === 1888623310)).toMatchObject({
             Activation: 'WhileHeld',
             Effects: [
-                { Type: 'MobilityTiers', Values: [0], BoostedValues: [2] },
+                { Type: 'Mobility', Values: [0], BoostedValues: [20] },
                 { Type: 'ForwardMultiplier', Values: [1], BoostedValues: [1.1102] },
             ],
             BoostRequiresAll: [1331482397],
@@ -82,7 +90,7 @@ describe('movement calculator', () => {
         const boostedWalk = movementSpeed(
             input({ sources: [{ hash: 1888623310, boosted: true }] }),
         );
-        expect(boostedWalk.tier).toBe(5);
+        expect(boostedWalk.mobility).toBe(50);
         expect(boostedWalk.speed).toBeCloseTo(6 * 1.1102, 12);
         expect(
             movementSpeed(input({ sources: [{ hash: 1888623310, boosted: true }], sprint: true }))
@@ -119,34 +127,38 @@ describe('movement calculator', () => {
             ).speed,
         ).toBeCloseTo(5.6 * 0.85, 12);
     });
-    it('uses current source data by default and class-specific PvE/PvP tiers', () => {
-        expect(movementSpeed(input())).toEqual({ tier: 3, speed: 5.6 });
-        expect(movementSpeed(input({ classHash: warlock }))).toEqual({ tier: 3, speed: 5.6 });
-        expect(movementSpeed(input({ classHash: hunter }))).toEqual({ tier: 10, speed: 7 });
+    it('uses current source data by default and class-specific PvE/PvP Mobility and sprint speeds', () => {
+        expect(movementSpeed(input())).toEqual({ mobility: 30, speed: 5.6 });
+        expect(movementSpeed(input({ classHash: warlock }))).toEqual({ mobility: 30, speed: 5.6 });
+        expect(movementSpeed(input({ classHash: hunter }))).toEqual({ mobility: 100, speed: 7 });
         expect(movementSpeed(input({ classHash: hunter, activity: 'PVP' }))).toEqual({
-            tier: 7,
+            mobility: 70,
             speed: 6.4,
         });
-        expect(movementSpeed(input({ activity: 'PVP' }))).toEqual({ tier: 3, speed: 5.6 });
+        expect(movementSpeed(input({ activity: 'PVP' }))).toEqual({ mobility: 30, speed: 5.6 });
+        expect(movementSpeed(input({ classHash: hunter, sprint: true }))).toEqual({
+            mobility: 100,
+            speed: 8.6,
+        });
     });
-    it('reproduces the Compendium tier-5 ADS strafe example without rounding', () => {
+    it('reproduces the Compendium 50-Mobility ADS strafe example without rounding', () => {
         const source = data();
-        source.Classes[0]!.BaseMobilityTier = 5;
+        source.Classes[0]!.BaseMobility = 50;
         expect(
             movementSpeed(input({ classHash: hunter, direction: 'Strafe', ads: true }), source)
                 .speed,
         ).toBeCloseTo(3.825, 12);
     });
-    it('reproduces tier-10 sidearm ADS plus Lightweight using current source values', () => {
+    it('reproduces 100-Mobility sidearm ADS plus Lightweight using current source values', () => {
         const source = data();
-        source.Classes[0]!.BaseMobilityTier = 8;
+        source.Classes[0]!.BaseMobility = 80;
         const options = input({
             classHash: hunter,
             ads: true,
             sources: [{ hash: 1458010786 }, { hash: 14 }],
             heldWeaponSources: [14],
         });
-        expect(movementSpeed(options, source)).toMatchObject({ tier: 10 });
+        expect(movementSpeed(options, source)).toMatchObject({ mobility: 100 });
         expect(movementSpeed(options, source).speed).toBeCloseTo(7 * 0.85 * 1.0625, 12);
         expect(movementSpeed({ ...options, adsMultiplierOverride: 0.5 }, source).speed).toBeCloseTo(
             7 * 1.0625 * 0.5,
@@ -154,34 +166,66 @@ describe('movement calculator', () => {
         );
     });
     it.each([
-        [1, 6],
-        [2, 8],
-        [3, 9],
-        [9, 9],
-    ])('selects cumulative Athletics values at %i stacks', (stacks, tier) => {
-        expect(movementSpeed(input({ sources: [{ hash: 1133590731, stacks }] })).tier).toBe(tier);
+        [1, 60],
+        [2, 80],
+        [3, 90],
+        [9, 90],
+    ])('selects cumulative Athletics values at %i stacks', (stacks, mobility) => {
+        expect(movementSpeed(input({ sources: [{ hash: 1133590731, stacks }] })).mobility).toBe(
+            mobility,
+        );
     });
-    it('clamps tiers to both ends and uses the cap tier for walking', () => {
+    it('clamps Mobility to both ends and uses flat 5.6 m/s walk speed below 30 Mobility', () => {
         const source = data();
         expect(
             movementSpeed(
                 input({ classHash: hunter, sources: [{ hash: 1133590731, stacks: 3 }] }),
                 source,
             ),
-        ).toEqual({ tier: 13, speed: 7.6 });
-        source.Classes[0]!.BaseMobilityTier = -5;
-        expect(movementSpeed(input({ classHash: hunter }), source)).toEqual({ tier: 0, speed: 5 });
+        ).toEqual({ mobility: 130, speed: 7.6 });
+        source.Classes[0]!.BaseMobility = -50;
+        expect(movementSpeed(input({ classHash: hunter }), source)).toEqual({
+            mobility: 0,
+            speed: 5.6,
+        });
     });
-    it('keeps sprint independent of Mobility and applies multiplicative sprint bonuses', () => {
+    it('keeps sprint independent of Mobility, applies non-stacking SprintBoost, and multiplies sprint bonuses', () => {
         expect(movementSpeed(input({ sprint: true })).speed).toBe(8);
         expect(
             movementSpeed(input({ sprint: true, sources: [{ hash: 1133590731, stacks: 3 }] }))
                 .speed,
         ).toBe(8);
         expect(movementSpeed(input({ sprint: true, sources: [{ hash: 1458010786 }] }))).toEqual({
-            tier: 5,
+            mobility: 50,
             speed: 8.5,
         });
+        // Non-stacking 8.5 m/s SprintBoost raises Titan/Warlock base sprint to 8.5, does not stack with itself,
+        // is redundant on Hunter (base 8.6), and stacks with ForwardMultiplier up to ForwardSpeedCap.
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 3241194942 }] }))).toEqual({
+            mobility: 30,
+            speed: 8.5,
+        });
+        expect(
+            movementSpeed(
+                input({
+                    sprint: true,
+                    sources: [{ hash: 3241194942 }, { hash: 3347978673 }],
+                }),
+            ),
+        ).toEqual({ mobility: 30, speed: 8.5 });
+        expect(
+            movementSpeed(
+                input({ classHash: hunter, sprint: true, sources: [{ hash: 1694242450 }] }),
+            ),
+        ).toEqual({ mobility: 100, speed: 8.6 });
+        expect(
+            movementSpeed(
+                input({
+                    sprint: true,
+                    sources: [{ hash: 3241194942 }, { hash: 1458010786 }],
+                }),
+            ),
+        ).toEqual({ mobility: 50, speed: 9, cappedBy: 'ForwardSpeedCap' });
         const source = data();
         source.Sources.push({
             Hash: 123,
@@ -195,12 +239,57 @@ describe('movement calculator', () => {
                 input({ sprint: true, sources: [{ hash: 1458010786 }, { hash: 123 }] }),
                 source,
             ),
-        ).toEqual({ tier: 5, speed: 9, cappedBy: 'ForwardSpeedCap' });
+        ).toEqual({ mobility: 50, speed: 9, cappedBy: 'ForwardSpeedCap' });
         expect(
             movementSpeed(
                 input({ classHash: hunter, sprint: true, sources: [{ hash: 1458010786 }] }),
             ),
-        ).toEqual({ tier: 12, speed: 9, cappedBy: 'ForwardSpeedCap' });
+        ).toEqual({ mobility: 120, speed: 9, cappedBy: 'ForwardSpeedCap' });
+    });
+    it('applies ADSPenaltyMultiplier, StrafeAdditive, CrouchAdditive, CrouchMultiplier, and Speed Booster', () => {
+        // Moving Target: 1 - (1 - 0.75) * 0.9 = 0.775
+        expect(
+            movementSpeed(input({ ads: true, sources: [{ hash: 588594999 }] })).speed,
+        ).toBeCloseTo(5.6 * 0.775, 12);
+        // Moving Target + Sidearm (0.85): 1 - (1 - 0.85) * 0.9 = 0.865
+        expect(
+            movementSpeed(
+                input({
+                    ads: true,
+                    sources: [{ hash: 588594999 }, { hash: 14 }],
+                    heldWeaponSources: [14],
+                }),
+            ).speed,
+        ).toBeCloseTo(5.6 * 0.865, 12);
+        // Peacekeepers: +30 Mobility (60 -> 6.2 m/s), SprintBoost 8.5, ADSPenaltyMultiplier 0.67 (0.8325)
+        const pkAds = movementSpeed(input({ ads: true, sources: [{ hash: 3241194941 }] }));
+        expect(pkAds.mobility).toBe(60);
+        expect(pkAds.speed).toBeCloseTo(6.2 * (1 - 0.25 * 0.67), 12);
+        // Amplified: +50 Mobility (80 -> 6.6 m/s), +1 m/s strafe additive -> 6.6*0.85 + 1 = 6.61 -> 6 cap
+        expect(movementSpeed(input({ direction: 'Strafe', sources: [{ hash: 1 }] }))).toEqual({
+            mobility: 80,
+            speed: 6,
+            cappedBy: 'StrafeSpeedCap',
+        });
+        // Transversive Steps (+5 crouch additive) & Echo of Dilation (x2 crouch) hit CrouchSpeedCap
+        for (const hash of [3347978673, 2272984656]) {
+            expect(movementSpeed(input({ posture: 'Crouched', sources: [{ hash }] }))).toEqual({
+                mobility: 30,
+                speed: 4,
+                cappedBy: 'CrouchSpeedCap',
+            });
+        }
+        // Speed Booster hits forward/sprint 9 m/s cap and strafe 6 m/s cap
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 2 }] }))).toEqual({
+            mobility: 30,
+            speed: 9,
+            cappedBy: 'ForwardSpeedCap',
+        });
+        expect(movementSpeed(input({ direction: 'Strafe', sources: [{ hash: 2 }] }))).toEqual({
+            mobility: 30,
+            speed: 6,
+            cappedBy: 'StrafeSpeedCap',
+        });
     });
     it('stacks forward, sprint and grounded multipliers before capping sprint, independent of source order', () => {
         const source = data();
@@ -214,7 +303,7 @@ describe('movement calculator', () => {
         const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }, { hash: 123 }];
         for (const order of [sources, [...sources].reverse()]) {
             const result = movementSpeed(input({ sprint: true, sources: order }), source);
-            expect(result.tier).toBe(5);
+            expect(result.mobility).toBe(50);
             expect(result.speed).toBeCloseTo(8 * 1.0625 * 0.85, 12);
             expect(result.cappedBy).toBeUndefined();
         }
@@ -222,33 +311,44 @@ describe('movement calculator', () => {
             movementSpeed(
                 input({ sprint: true, sources: [{ hash: 1888623310 }, { hash: 1458010786 }] }),
             ),
-        ).toEqual({ tier: 5, speed: 8.5 });
+        ).toEqual({ mobility: 50, speed: 8.5 });
     });
     it.each([
         { hash: 12, name: 'Machine Gun' },
         { hash: 13, name: 'Rocket Launcher' },
-    ])('uses the real $name category as an overweight-only penalty', ({ hash, name }) => {
-        const source = data();
-        const entry = source.Sources.find((candidate) => candidate.Hash === hash);
-        expect(entry).toMatchObject({
-            Name: name,
-            RefType: 'itemCategory',
-            Activation: 'WhileHeld',
-            Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
-        });
-        expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
-            5.6 * 0.85,
-            12,
-        );
-        expect(
-            movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
-        ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
-        expect(
-            movementSpeed(input({ posture: 'Crouched', ads: true, sources: [{ hash }] }), source)
-                .speed,
-        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
-        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(8);
-    });
+    ])(
+        'uses the real $name category as an overweight hip-fire penalty mutually exclusive with ADS',
+        ({ hash, name }) => {
+            const source = data();
+            const entry = source.Sources.find((candidate) => candidate.Hash === hash);
+            expect(entry).toMatchObject({
+                Name: name,
+                RefType: 'itemCategory',
+                Activation: 'WhileHeld',
+                Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
+            });
+            expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
+                5.6 * 0.85,
+                12,
+            );
+            expect(
+                movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
+            ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
+            expect(
+                movementSpeed(input({ posture: 'Crouched', sources: [{ hash }] }), source).speed,
+            ).toBeCloseTo(5.6 * 0.55 * 0.85, 12);
+            // ADS and hip-fire overweight penalties are mutually exclusive: ADS replaces the hip penalty.
+            expect(
+                movementSpeed(
+                    input({ posture: 'Crouched', ads: true, sources: [{ hash }] }),
+                    source,
+                ).speed,
+            ).toBeCloseTo(5.6 * 0.55 * 0.75, 12);
+            expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(
+                8,
+            );
+        },
+    );
     it('applies sword-guarding penalty to grounded movement but not sprint', () => {
         const source = data();
         const guard = source.Sources.find((entry) => entry.Hash === 54)!;
@@ -313,7 +413,7 @@ describe('movement calculator', () => {
                 input({ direction, posture, ads: true, sources: [{ hash: 123 }] }),
                 source,
             ),
-        ).toEqual({ tier: 3, speed, cappedBy });
+        ).toEqual({ mobility: 30, speed, cappedBy });
     });
     it.each([
         ['Forward', 'Standing', 6 * 1.0625],
@@ -332,13 +432,13 @@ describe('movement calculator', () => {
         const source = data();
         source.Rules.StrafeSpeedCap = 2;
         expect(movementSpeed(input({ direction: 'Strafe', posture: 'Crouched' }), source)).toEqual({
-            tier: 3,
+            mobility: 30,
             speed: 2,
             cappedBy: 'StrafeSpeedCap',
         });
         source.Rules.ForwardSpeedCap = 1;
         expect(movementSpeed(input({ direction: 'Strafe', posture: 'Crouched' }), source)).toEqual({
-            tier: 3,
+            mobility: 30,
             speed: 1,
             cappedBy: 'ForwardSpeedCap',
         });
@@ -398,17 +498,18 @@ describe('movement calculator', () => {
     });
     it('replaces boosted values only when the caller asserts all required equipment is present', () => {
         const source = data();
-        source.Sources[0]!.BoostRequiresAll = [1331482397];
-        source.Sources[0]!.Effects[0]!.BoostedValues = [4, 6, 7];
+        const athletics = source.Sources.find((entry) => entry.Hash === 1133590731)!;
+        athletics.BoostRequiresAll = [1331482397];
+        athletics.Effects[0]!.BoostedValues = [40, 60, 70];
         expect(
             movementSpeed(
                 input({ sources: [{ hash: 1133590731, stacks: 2, boosted: true }] }),
                 source,
-            ).tier,
-        ).toBe(9);
+            ).mobility,
+        ).toBe(90);
         expect(
-            movementSpeed(input({ sources: [{ hash: 1133590731, stacks: 2 }] }), source).tier,
-        ).toBe(8);
+            movementSpeed(input({ sources: [{ hash: 1133590731, stacks: 2 }] }), source).mobility,
+        ).toBe(80);
     });
     it('rejects unknown classes/sources, duplicate sources, invalid stacks and ADS during sprint', () => {
         for (const options of [
@@ -492,9 +593,9 @@ describe('movement source validation', () => {
             expect(validateSources(source).some((issue) => issue.severity === 'error')).toBe(true);
         }
     });
-    it('allows tiers above the cap, negative tier effects and unbounded positive multipliers', () => {
+    it('allows Mobility above the cap, negative Mobility effects and unbounded positive multipliers', () => {
         const source = fixture();
-        source.movement.Classes[0]!.BaseMobilityTier = 20;
+        source.movement.Classes[0]!.BaseMobility = 200;
         source.movement.Sources = [
             {
                 Hash: 123,
@@ -502,7 +603,7 @@ describe('movement source validation', () => {
                 RefType: 'item',
                 Activation: 'Always',
                 Effects: [
-                    { Type: 'MobilityTiers', Values: [-2] },
+                    { Type: 'Mobility', Values: [-20] },
                     { Type: 'ForwardMultiplier', Values: [10] },
                 ],
             },
@@ -538,7 +639,7 @@ describe('movement source validation', () => {
                 Name: 'Unverified',
                 RefType: 'item',
                 Activation: 'Conditional',
-                Effects: [{ Type: 'MobilityTiers', Values: [0] }],
+                Effects: [{ Type: 'Mobility', Values: [0] }],
             },
         ];
         const warnings = validateSources(source, english);
@@ -552,9 +653,10 @@ describe('movement source validation', () => {
     it('rejects nested invalid effect types, stack lengths, duplicate types, and unknown keys', () => {
         const source = fixture();
         source.movement = data();
-        const effect = source.movement.Sources[0]!.Effects[0]!;
-        effect.BoostedValues = [1];
-        source.movement.Sources[0]!.Effects.push({ ...effect });
+        const athletics = source.movement.Sources.find((entry) => entry.Hash === 1133590731)!;
+        const effect = athletics.Effects[0]!;
+        effect.BoostedValues = [10];
+        athletics.Effects.push({ ...effect });
         const errors = validateSources(source).filter((issue) => issue.severity === 'error');
         expect(
             errors.some(
@@ -564,13 +666,123 @@ describe('movement source validation', () => {
         expect(errors.some((issue) => issue.message.includes('Duplicate Type'))).toBe(true);
         expect(errors.some((issue) => issue.path.endsWith('BoostRequiresAll'))).toBe(true);
     });
-    it('requires integer tiers and positive multipliers', () => {
+    it('requires integer Mobility points and positive multipliers', () => {
         const source = fixture();
         source.movement = data();
-        source.movement.Sources[0]!.Effects[0]!.Values = [0.5];
-        source.movement.Sources[1]!.Effects[1]!.Values = [0];
+        const athletics = source.movement.Sources.find((entry) => entry.Hash === 1133590731)!;
+        const lightweight = source.movement.Sources.find((entry) => entry.Hash === 1458010786)!;
+        athletics.Effects[0]!.Values = [0.5];
+        lightweight.Effects[1]!.Values = [0];
         expect(validateSources(source).filter((issue) => issue.severity === 'error')).toHaveLength(
             2,
         );
+    });
+    it('models passive weapon ADS/strafe modifiers and Radiant Dance Machines hip-fire bonuses', () => {
+        const repo = data();
+        const titan = 3655393761;
+        const hunter = 671679327;
+        // Rocket Pulse Rifle (New Malpais alias) and Crossbow (Submersion alias) share 0.85x ADS
+        const rocketPulseAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 2575933030 }],
+                heldWeaponSources: [2575933030],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(rocketPulseAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        // Rocket Sidearm matches both Sidearm (14) and Micro-Missile Frame (2928496916) without conflict
+        const rocketSidearmAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 14 }, { hash: 2928496916 }],
+                heldWeaponSources: [14, 2928496916],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(rocketSidearmAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        const crossbowAds = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 3524386983 }],
+                heldWeaponSources: [3524386983],
+                direction: 'Forward',
+                posture: 'Standing',
+                ads: true,
+            },
+            repo,
+        );
+        expect(crossbowAds.speed).toBeCloseTo(5.6 * 0.85, 10);
+        // Sleeper Simulant & One Thousand Voices slow strafe while leaving forward/sprint unchanged
+        for (const intrinsic of [3884127242, 1657056865]) {
+            const strafe = movementSpeed(
+                {
+                    classHash: titan,
+                    activity: 'PVE',
+                    sources: [{ hash: intrinsic }],
+                    direction: 'Strafe',
+                    posture: 'Standing',
+                },
+                repo,
+            );
+            const forward = movementSpeed(
+                {
+                    classHash: titan,
+                    activity: 'PVE',
+                    sources: [{ hash: intrinsic }],
+                    direction: 'Forward',
+                    posture: 'Standing',
+                },
+                repo,
+            );
+            expect(strafe.speed).toBeCloseTo(5.6 * 0.85 * 0.8333333, 6);
+            expect(forward.speed).toBeCloseTo(5.6, 10);
+        }
+        // Radiant Dance Machines hip-fire bonus (+30 Mobility, 1.045x forward/sprint, 1.1x strafe)
+        const rdmForward = movementSpeed(
+            {
+                classHash: hunter,
+                activity: 'PVP',
+                sources: [{ hash: 117669763 }],
+                direction: 'Forward',
+                posture: 'Standing',
+            },
+            repo,
+        );
+        expect(rdmForward.mobility).toBe(100);
+        expect(rdmForward.speed).toBeCloseTo(7.0 * 1.045, 10);
+        const rdmSprint = movementSpeed(
+            {
+                classHash: hunter,
+                activity: 'PVP',
+                sources: [{ hash: 117669763 }],
+                direction: 'Forward',
+                posture: 'Standing',
+                sprint: true,
+            },
+            repo,
+        );
+        expect(rdmSprint.speed).toBeCloseTo(8.6 * 1.045, 10);
+        const rdmStrafe = movementSpeed(
+            {
+                classHash: titan,
+                activity: 'PVE',
+                sources: [{ hash: 117669763 }],
+                direction: 'Strafe',
+                posture: 'Standing',
+            },
+            repo,
+        );
+        expect(rdmStrafe.mobility).toBe(60);
+        expect(rdmStrafe.speed).toBeCloseTo(6.2 * 0.85 * 1.1, 10);
     });
 });

@@ -2,6 +2,7 @@ import type {
     Ability,
     SuperAbility,
     Override,
+    SuperOverride,
     MovementClass,
     MovementRules,
     MovementSourceEntry,
@@ -20,7 +21,7 @@ export interface StatSource {
     Fields: Record<string, FieldValue>;
     Abilities?: Ability[];
     SuperAbilities?: SuperAbility[];
-    Overrides?: Override[];
+    Overrides?: (Override | SuperOverride)[];
     Notes?: string;
 }
 

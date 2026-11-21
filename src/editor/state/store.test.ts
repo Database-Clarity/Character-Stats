@@ -77,7 +77,7 @@ describe('editor in-memory state', () => {
             ...(state.values[path] as Record<string, unknown>),
             Rules: {
                 ...(state.values[path] as { Rules: Record<string, unknown> }).Rules,
-                MaxMobilityTier: -1,
+                MaxMobility: -1,
             },
         };
         const changed = editorReducer(state, { type: 'set', file: path, value });

@@ -50,7 +50,7 @@ describe('declarative nested field controls', () => {
     });
     it('formats editor speed previews to two decimal places without rounding the core result', () => {
         const source = structuredClone(movementData) as unknown as MovementSource;
-        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobilityTier = 8;
+        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobility = 80;
         const result = movementSpeed(
             {
                 classHash: 3655393761,
@@ -65,7 +65,7 @@ describe('declarative nested field controls', () => {
         );
         expect(result.speed).toBeCloseTo(6.321875, 12);
         expect(formatMovementSpeed(result.speed)).toBe('6.32');
-        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobilityTier = 5;
+        source.Classes.find((entry) => entry.ClassHash === 3655393761)!.BaseMobility = 50;
         const strafe = movementSpeed(
             {
                 classHash: 3655393761,
@@ -107,7 +107,7 @@ describe('declarative nested field controls', () => {
         },
         {
             spec: movementEffectSpec.fields.find((field) => field.key === 'Type')!,
-            value: 'MobilityTiers',
+            value: 'Mobility',
         },
     ])('renders $spec.kind as structured editable controls', ({ spec, value }) => {
         const html = renderToStaticMarkup(
@@ -122,7 +122,7 @@ describe('declarative nested field controls', () => {
             }),
         );
         expect(html).not.toContain('Read-only preview');
-        expect(html).toContain('MobilityTiers');
+        expect(html).toContain('Mobility');
         expect(html).toContain('<select');
         if (spec.kind === 'objectArray') {
             expect(html).toContain('Values stacks 1');
@@ -144,7 +144,7 @@ describe('declarative nested field controls', () => {
             }),
         );
         expect(html).toContain('Effects[0].Type');
-        expect(html).toContain('Add hidden Mobility tiers');
+        expect(html).toContain('Add hidden Mobility stat points');
         expect(html).toContain('aria-invalid="true"');
     });
 });

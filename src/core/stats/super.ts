@@ -1,41 +1,34 @@
 import { ENHANCED_STAT_DOMAIN, type StatSpec } from './types';
 import { curve } from '../fields/builders';
-import { superAbilitySpec, overrideSpec } from '../entities';
+import { superAbilitySpec, superOverrideSpec } from '../entities';
 
 export const superSpec: StatSpec = {
     name: 'Super',
     hash: 144602215,
     abilityKind: 'super',
-    collections: { SuperAbilities: superAbilitySpec, Overrides: overrideSpec },
+    collections: { SuperAbilities: superAbilitySpec, Overrides: superOverrideSpec },
     fields: [
         curve('EnergyGainScalar', {
-            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are in PvE at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
+            help: "How effective outside sources of Super energy (Orbs of Power, dealing/taking damage, perks) are in PvE at each stat value (0–100), as a multiplier: 1 is normal. Also scales active Super regeneration alongside each Super's Active regeneration scalar. Stat values above 100 use the value at 100.",
             domain: [0, 100],
             items: { min: 0 },
             label: 'PvE energy gain scalar',
             description:
                 'Values represent how effective external sources of Super Energy (Orbs of ' +
-                'Power, exchanging damage, perks, etc.) are in PvE.',
+                'Power, exchanging damage, perks, etc.) are in PvE, and multiply each ' +
+                "Super Ability's <ActiveRegenScalar> for active Super regeneration in PvE.",
         }),
 
         curve('PVPEnergyGainScalar', {
-            help: 'How effective outside sources of Super energy (Orbs of Power, dealing damage, perks) are in PvP at each stat value (0–100), as a multiplier: 1 is normal. Stat values above 100 use the value at 100.',
+            help: 'How effective outside sources of Super energy (Orbs of Power, dealing/taking damage, perks) are in PvP at each stat value (0–100), as a multiplier: 1 is normal. Also scales active Super regeneration in PvP. Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'PvP energy gain scalar',
             description:
                 'Values represent how effective external sources of Super Energy (Orbs of ' +
-                'Power, exchanging damage, perks, etc.) are in PvP.',
-        }),
-
-        curve('ActiveRegenScalars', {
-            help: "Multiplier on each Super's Active regeneration scalar at each Super stat value (0–100), giving its active regeneration rate. Stat values above 100 use the value at 100.",
-            domain: [0, 100],
-            items: { min: 0 },
-            label: 'Active regeneration scalar',
-            description:
-                "Values multiply the Super Ability's <ActiveRegenScalar> to determine " +
-                'active Super regeneration.',
+                'Power, exchanging damage, perks, etc.) are in PvP, and multiply each ' +
+                "Super Ability's <PVPActiveRegenScalar> (or <ActiveRegenScalar>) for active " +
+                'Super regeneration in PvP.',
         }),
 
         curve('SuperDamageIncrease', {
