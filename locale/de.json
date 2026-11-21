@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "Mobilität bestimmt, wie hoch du springen kannst, ohne deine Sprungfähigkeit einzusetzen. Sie bestimmt auch deine Bewegungsgeschwindigkeit, wenn du gehst oder schleichst.\n\nMobilität hat jedoch keinen Einfluss auf die Sprintgeschwindigkeit, diese ist immer auf 8 Meter pro Sekunde festgelegt.\n\nMobilität bestimmt zusätzlich die Abklingzeit der Klassenfähigkeit von Jägern.",
-        "WalkSpeed": "Wie schnell du vorwärts laufen kannst.",
-        "StrafeSpeed": "Wie schnell du seit- und rückwärts laufen kannst.",
-        "CrouchSpeed": "Wie schnell du dich schleichend bewegen kannst."
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "Belastbarkeit bestimmt, wie viele LP dein \"Schild\" hat, gewährt in PvE passive Schadensresistenz, und bietet passiven Widerstand gegen Zurückweichen. Außerdem verringert sie den Schaden, den du beim Ausbrechen aus Stasis-Frost erleidest.\n\nDein \"Schild\" macht einen Anteil von 115 bis 130 LP an deinen Gesamt-LP aus. Dazu kommt ein fester Anteil von 70 LP, die deine \"Gesundheit\" ausmachen.\n\nBelastbarkeit bestimmt auch die Abklingzeit der Klassenfähigkeiten von Titanen.",
-        "ShieldHP": "",
-        "PvEDamageResistance": "Wie viel passive Schadensresistenz du in PvE-Aktivitäten hast.",
-        "FlinchResistance": "Wie viel passiven Zurückweichen-Widerstand du hast."
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "Erholung regelt die Verzögerung, bevor deine \"Gesundheit\" und dein \"Schild\" anfangen, zu regenerieren, und wie schnell sie dies tun.\n\nErholung bestimmt auch die Abklingzeit der Klassenfähigkeit von Warlocks.",
-        "TotalRegenTime": "Wie lange es dauert, bis deine Gesundheit und dein Schild von 0 LP vollständig wieder regenerieren.",
-        "HealthRegenDelay": "Wie lange es dauert, bis du anfängst, \"Gesundheit\" zu regenerieren, nachdem du Schaden genommen hast.\n\n\"Gesundheit\" ist der Anteil deiner LP, der feste 70 LP ausmacht, neben deinem \"Schild\".",
-        "HealthRegenSpeed": "Wie schnell deine \"Gesundheit\" nach der Verzögerung regeneriert, nachdem du Schaden genommen hast.",
-        "ShieldRegenDelay": "Wie lange es dauert, bis du anfängst, dein \"Schild\" zu regenerieren, nachdem du Schaden genommen hast.\n\nDein \"Schild\" ist der Anteil deiner LP, der 115 bis 130 LP ausmacht, neben deiner \"Gesundheit\".",
-        "ShieldRegenSpeed": "Wie schnell dein \"Schild\" nach der Verzögerung regeneriert, nachdem du Schaden genommen hast."
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "Disziplin regelt die Abklingzeit deiner Granaten-Fähigkeit."
-    },
-    "Intellect": {
-        "Description": "Intellekt regelt deine passive Abklingzeit von Super-Fähigkeiten.\n\nSuper-Fähigkeiten mit längeren Abklingzeiten erhalten weniger Super-Energie, wenn du Schaden verursachst oder einsteckst, sowie von Kills und Assists. Umgekehrt erhalten Super-Fähigkeiten mit kürzeren Abklingzeiten mehr Super-Energie aus den gleichen Aktionen.",
-        "SuperTier": "",
-        "ActiveRegenScalar": "",
-        "PvPDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvP bietet.",
-        "PvEDamageResistance": "Wie viel Schadensresistenz deine Super-Fähigkeit in PvE bietet.",
-        "DRCondition": {
-            "Passive": "Passiv",
-            "CastAnimation": "Aktiv, während du in deiner Super-Animation bist.",
-            "GoldenGunDeadShot1": "Passiv mit dem \"Mäh sie nieder\"-Aspekt",
-            "SpectralBlades1": "Aktiv während Unsichtbarkeit",
-            "WellOfRadiance1": "Gegen Primärwaffen-Schaden",
-            "WellOfRadiance2": "Gegen jeglichen Schaden, der nicht von einer Primärwaffe kommt"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "Stärke bestimmt die Abklingzeit deiner Nahkampf-Fähigkeit."
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": ""
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }

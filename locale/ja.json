@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "可動性は、ジャンプスキル以外のジャンプ高度と、前方への歩行速度・左右と後方への歩行速度・しゃがみ歩き速度を決定する。\n\nダッシュ速度は8 m/sで固定であり可動性の影響を受けない。\n\nまた、可動性はハンターのクラススキルのクールダウン時間を決定する。",
-        "WalkSpeed": "前方への歩行速度",
-        "StrafeSpeed": "左右・後方への歩行速度",
-        "CrouchSpeed": "しゃがみ歩きの速度"
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "耐久力は、\"シールド\"の容量、PvEでの被ダメージの軽減率、ひるみ軽減率を決定する。またステイシスによる凍結状態から解放された際に受けるダメージが減少する。\n\nまた、耐久力はタイタンのクラススキルのクールダウン時間を決定する。",
-        "ShieldHP": "最大HP内にあるシールドの量\n\nシールドはHPバーの「右側部分」のことで、最大HPは115から130までとなっている。体力はアクティビティにもよるが、ほとんどのクルーシブル・プレイリスト(モメンタム・コントロールとカオスを除く) ではHP100、それ以外ではHP70となる。",
-        "PvEDamageResistance": "PvEアクティビティで受けるダメージをどれだけ軽減できるか。",
-        "FlinchResistance": "被ダメージ時のひるみをどれだけ軽減できるか。"
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "回復力は\"体力\"と\"シールド\"の回復が始まるまでの時間と回復速度を決定する。\n\nまた、回復力はウォーロックのクラススキルのクールダウン時間を決定する。",
-        "TotalRegenTime": "HP0から\"体力\"と\"シールド\"が全回復するまでにかかる時間。",
-        "HealthRegenDelay": "ダメージを受けた後、体力の回復が始まるまで時間。",
-        "HealthRegenSpeed": "ダメージを受けた後に回復が開始すると、どれだけ速く体力が回復するか。",
-        "ShieldRegenDelay": "ダメージを受けた後、シールドの回復が始まるまでの時間。",
-        "ShieldRegenSpeed": "ダメージを受けた後に回復が開始すると、どれだけ速くシールドが回復するか。"
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "鍛錬はグレネードスキルのクールダウン時間を決定する。"
-    },
-    "Intellect": {
-        "Description": "知性はスーパースキルのクールダウン時間を決定する。",
-        "SuperTier": "スーパーTierとは、スーパースキルのクールダウン時間に基づいて5段階に分類されます。 Tier 5はクールダウンが最短で、Tier 1はクールダウン時間が最も長くなります。\n\nスーパーTierは、各種のスーパースキルの回復スキルにも影響します。より高いTierだと回復速度が向上します。",
-        "ActiveRegenScalar": "各スキルでの回復係数はスーパースキルのTierに関連しており、スキルから得られるスーパースキルの回復量に影響する。範囲はTier 1の0.8からTier 5の1.2まであり、Tier 3は1.0が基準である。\n\nスキルから得られるスーパースキルの回復とは、通常のスーパースキル回復と数パーセントの回復促進するパーク以外から得られる方法を指す。例えばキルやアシスト、ダメージを与えたり受けたりすることでスーパースキルを回復させるパークや、力のオーブなどのスーパースキル自体を回復するアイテムが含まれる。",
-        "PvPDamageResistance": "PvPでスーパースキル使用中にどれだけダメージを軽減できるか。",
-        "PvEDamageResistance": "PvEでスーパースキル使用中にどれだけダメージを軽減できるか。",
-        "DRCondition": {
-            "Passive": "有効",
-            "CastAnimation": "スーパースキル発動アニメーション中に有効。",
-            "GoldenGunDeadShot1": "特性\"一網打尽\"使用時に有効",
-            "SpectralBlades1": "不可視化中に有効",
-            "WellOfRadiance1": "対メイン弾武器ダメージ",
-            "WellOfRadiance2": "対メイン弾武器以外のダメージ"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "腕力は近接スキルのクールダウン時間を決定する。"
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "エネルギーチャンク係数は一般的にアビリティのクールダウンに関連付けられており、一度にエネルギーチャンクから得られるアビリティエネルギーの量に影響します。例えば、100%のアビリティエネルギーを回復するパークがあったとして、係数が0.6なら60%しか受け取れません。\n\n一般的に、カテゴリ内のクールダウン時間が長いアビリティ(例:グレネード)は、回復係数が低くなるため、パークから得られるアビリティエネルギー量は低くなります。",
-    "ChargeBasedScaling": "一部のスキルで複数スキルを回復できる特性があるものは、装備したアビリティチャージの数によって回復速度が異なる場合がある。そのため、最初のスキル回復では標準スピードで開始することがあるが、2つ目、3つ目が早く回復することがある。"
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "一部のスキルで複数スキルを回復できる特性があるものは、装備したアビリティチャージの数によって回復速度が異なる場合がある。そのため、最初のスキル回復では標準スピードで開始することがあるが、2つ目、3つ目が早く回復することがある。",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }
