@@ -413,20 +413,6 @@
             ]
         },
         {
-            "Hash": 12,
-            "Name": "Machine Gun",
-            "RefType": "itemCategory",
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "OverweightMultiplier",
-                    "Values": [
-                        0.85
-                    ]
-                }
-            ]
-        },
-        {
             "Hash": 3241194941,
             "Name": "Mecha Holster (Peacekeepers)",
             "Notes": "Exotic Titan leg intrinsic (item 53126580): while a Submachine Gun is readied, grants +30 Mobility, non-stacking 8.5 m/s sprint boost, and extended slide.",
@@ -458,20 +444,6 @@
                     "Type": "SprintBoost",
                     "Values": [
                         8.5
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 13,
-            "Name": "Rocket Launcher",
-            "RefType": "itemCategory",
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "OverweightMultiplier",
-                    "Values": [
-                        0.85
                     ]
                 }
             ]

@@ -93,8 +93,7 @@ export type MovementEffectType =
     | 'StrafeAdditive'
     | 'CrouchAdditive'
     | 'GroundedMultiplier'
-    | 'GroundedNonSprintMultiplier'
-    | 'OverweightMultiplier';
+    | 'GroundedNonSprintMultiplier';
 export interface MovementEffect {
     Type: MovementEffectType;
     Values: number[];
@@ -612,10 +611,6 @@ export const movementEffectSpec: EntitySpec = {
                     description:
                         'Multiply grounded movement except sprint; does not affect jump height.',
                 },
-                {
-                    value: 'OverweightMultiplier',
-                    description: 'Hip-fire grounded movement penalty except sprint.',
-                },
             ],
             {
                 label: 'Effect type',
@@ -669,7 +664,7 @@ export const movementSourceSpec: EntitySpec = {
             ],
             {
                 label: 'Reference type',
-                help: 'Whether Hash is a specific item, perk or mod, an item category such as all Machine Guns, or a global subclass buff.',
+                help: 'Whether Hash is a specific item, perk or mod, an item category such as Swords, or a global subclass buff.',
                 description: 'Manifest definition table or buff identity used by Hash.',
             },
         ),

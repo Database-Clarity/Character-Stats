@@ -64,12 +64,6 @@
                 "Description": "Speed Booster grants the non-stacking 8.5 m/s sprint boost and reaches the 9 m/s forward/sprint and 6 m/s strafe speed caps.",
                 "Condition": "After sprinting for 2.5 seconds while Amplified."
             },
-            "12": {
-                "Description": "A readied Machine Gun decreases hip-fire walking speed by 15%. Sprinting is exempt."
-            },
-            "13": {
-                "Description": "A readied Rocket Launcher decreases hip-fire walking speed by 15%. Sprinting is exempt."
-            },
             "54": {
                 "Description": "Guarding with a sword decreases movement speed by 15%.",
                 "Condition": "While guarding with a sword."

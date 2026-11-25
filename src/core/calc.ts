@@ -229,7 +229,6 @@ export function movementSpeed(
         CrouchMultiplier: 1,
         GroundedMultiplier: 1,
         GroundedNonSprintMultiplier: 1,
-        OverweightMultiplier: 1,
     };
     const seen = new Set<number>();
     const activeSourceHashes = new Set<number>();
@@ -284,10 +283,7 @@ export function movementSpeed(
         if (input.direction === 'Forward') speed *= multipliers.ForwardMultiplier;
         if (input.direction === 'Strafe') speed *= multipliers.StrafeMultiplier;
         if (input.posture === 'Crouched') speed *= multipliers.CrouchMultiplier;
-        speed *=
-            multipliers.OverweightMultiplier *
-            multipliers.GroundedMultiplier *
-            multipliers.GroundedNonSprintMultiplier;
+        speed *= multipliers.GroundedMultiplier * multipliers.GroundedNonSprintMultiplier;
     }
     let cappedBy: NonNullable<MovementSpeedResult['cappedBy']> = 'ForwardSpeedCap';
     if (input.direction === 'Strafe' && rules.StrafeSpeedCap < rules[cappedBy])

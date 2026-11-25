@@ -472,8 +472,7 @@
                         "StrafeAdditive",
                         "CrouchAdditive",
                         "GroundedMultiplier",
-                        "GroundedNonSprintMultiplier",
-                        "OverweightMultiplier"
+                        "GroundedNonSprintMultiplier"
                     ],
                     "oneOf": [
                         {
@@ -515,10 +514,6 @@
                         {
                             "const": "GroundedNonSprintMultiplier",
                             "description": "Multiply grounded movement except sprint; does not affect jump height."
-                        },
-                        {
-                            "const": "OverweightMultiplier",
-                            "description": "Hip-fire grounded movement penalty except sprint."
                         }
                     ],
                     "description": "Movement effect to apply."
@@ -637,8 +632,7 @@
                                     "StrafeAdditive",
                                     "CrouchAdditive",
                                     "GroundedMultiplier",
-                                    "GroundedNonSprintMultiplier",
-                                    "OverweightMultiplier"
+                                    "GroundedNonSprintMultiplier"
                                 ],
                                 "oneOf": [
                                     {
@@ -680,10 +674,6 @@
                                     {
                                         "const": "GroundedNonSprintMultiplier",
                                         "description": "Multiply grounded movement except sprint; does not affect jump height."
-                                    },
-                                    {
-                                        "const": "OverweightMultiplier",
-                                        "description": "Hip-fire grounded movement penalty except sprint."
                                     }
                                 ],
                                 "description": "Movement effect to apply."

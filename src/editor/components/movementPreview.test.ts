@@ -50,22 +50,6 @@ describe('movement preview calculations', () => {
         for (const stat of stats) expect(stat.delta).toBe(0);
     });
 
-    it.each([
-        { hash: 12, name: 'Machine Gun' },
-        { hash: 13, name: 'Rocket Launcher' },
-    ])('keeps real $name sprint unchanged while applying its grounded penalty', ({ hash }) => {
-        const data = source();
-        const stats = calculateMovementStats(data, titan, 'PVE', {
-            [hash]: selection,
-        });
-        expect(row(stats, 'sprint')).toMatchObject({ value: 8, baseline: 8, delta: 0 });
-        expect(row(stats, 'walk').value).toBeCloseTo(4.76, 12);
-        expect(row(stats, 'walk').baseline).toBeCloseTo(5.6, 12);
-        expect(row(stats, 'walk').delta).toBeCloseTo(-0.84, 12);
-        expect(row(stats, 'strafe').delta).toBeCloseTo(-0.714, 12);
-        expect(row(stats, 'crouch').delta).toBeCloseTo(-0.462, 12);
-    });
-
     it('previews sword guarding as grounded-only and keeps other selected source effects', () => {
         const data = source();
         const guard = data.Sources.find((entry) => entry.Hash === 54)!;
@@ -126,23 +110,23 @@ describe('exclusive WhileHeld source selection', () => {
         const data = source();
         const always = data.Sources.find((entry) => entry.Activation === 'Always')!;
         const conditional = data.Sources.find((entry) => entry.Activation === 'Conditional')!;
-        const machineGun = data.Sources.find((entry) => entry.Hash === 12)!;
-        const rocketLauncher = data.Sources.find((entry) => entry.Hash === 13)!;
-        expect(machineGun.Activation).toBe('WhileHeld');
-        expect(rocketLauncher.Activation).toBe('WhileHeld');
+        const lightweight = data.Sources.find((entry) => entry.Hash === 1458010786)!;
+        const mida = data.Sources.find((entry) => entry.Hash === 377257911)!;
+        expect(lightweight.Activation).toBe('WhileHeld');
+        expect(mida.Activation).toBe('WhileHeld');
 
         let active: ActiveMovementSources = {};
         active = setMovementSourceActive(active, data.Sources, always.Hash, true);
         active = setMovementSourceActive(active, data.Sources, conditional.Hash, true);
-        active = setMovementSourceActive(active, data.Sources, machineGun.Hash, true);
-        active = setMovementSourceActive(active, data.Sources, rocketLauncher.Hash, true);
+        active = setMovementSourceActive(active, data.Sources, lightweight.Hash, true);
+        active = setMovementSourceActive(active, data.Sources, mida.Hash, true);
         expect(active).toEqual({
             [always.Hash]: selection,
             [conditional.Hash]: selection,
-            [rocketLauncher.Hash]: selection,
+            [mida.Hash]: selection,
         });
 
-        active = setMovementSourceActive(active, data.Sources, rocketLauncher.Hash, false);
+        active = setMovementSourceActive(active, data.Sources, mida.Hash, false);
         expect(active).toEqual({
             [always.Hash]: selection,
             [conditional.Hash]: selection,
@@ -218,9 +202,9 @@ describe('exclusive WhileHeld source reconciliation', () => {
         const data = source();
         const always = data.Sources.find((entry) => entry.Activation === 'Always')!;
         const reconciled = reconcileWhileHeldSources(
-            { 12: selection, 13: selection, [always.Hash]: selection },
+            { 1458010786: selection, 377257911: selection, [always.Hash]: selection },
             data.Sources,
         );
-        expect(reconciled).toEqual({ 12: selection, [always.Hash]: selection });
+        expect(reconciled).toEqual({ 1458010786: selection, [always.Hash]: selection });
     });
 });

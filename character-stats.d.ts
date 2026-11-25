@@ -270,7 +270,7 @@ export interface MovementRules {
 
 export interface MovementEffect {
     /** Movement effect to apply. */
-    Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier";
+    Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier";
     /**
      * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
      * Mobility/additive values use 0; unknown multipliers use 1.
@@ -303,7 +303,7 @@ export interface MovementSource {
     /** Effects from this source, with at most one entry for each effect type. */
     Effects: Array<{
         /** Movement effect to apply. */
-        Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier";
+        Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier";
         /**
          * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
          * Mobility/additive values use 0; unknown multipliers use 1.

@@ -272,7 +272,7 @@ describe('movement calculator', () => {
             Activation: 'Always',
             Effects: [{ Type: 'GroundedMultiplier', Values: [0.85] }],
         });
-        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 12 }, { hash: 123 }];
+        const sources = [{ hash: 1888623310 }, { hash: 1458010786 }, { hash: 54 }, { hash: 123 }];
         for (const order of [sources, [...sources].reverse()]) {
             const result = movementSpeed(input({ sprint: true, sources: order }), source);
             expect(result.mobility).toBe(50);
@@ -284,30 +284,6 @@ describe('movement calculator', () => {
                 input({ sprint: true, sources: [{ hash: 1888623310 }, { hash: 1458010786 }] }),
             ),
         ).toEqual({ mobility: 50, speed: 8.5 });
-    });
-    it.each([
-        { hash: 12, name: 'Machine Gun' },
-        { hash: 13, name: 'Rocket Launcher' },
-    ])('uses the real $name category as a hip-fire overweight penalty', ({ hash, name }) => {
-        const source = data();
-        const entry = source.Sources.find((candidate) => candidate.Hash === hash);
-        expect(entry).toMatchObject({
-            Name: name,
-            RefType: 'itemCategory',
-            Activation: 'WhileHeld',
-            Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
-        });
-        expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
-            5.6 * 0.85,
-            12,
-        );
-        expect(
-            movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
-        ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
-        expect(
-            movementSpeed(input({ posture: 'Crouched', sources: [{ hash }] }), source).speed,
-        ).toBeCloseTo(5.6 * 0.55 * 0.85, 12);
-        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(8);
     });
     it('applies sword-guarding penalty to grounded movement but not sprint', () => {
         const source = data();
@@ -485,7 +461,7 @@ describe('movement source validation', () => {
         ).toEqual([]);
     });
     it('rejects ambiguous, repeated, invalid and empty aliases', () => {
-        for (const aliases of [[12], [123, 123], [0], [-1], [4294967296], [1.5], []]) {
+        for (const aliases of [[54], [123, 123], [0], [-1], [4294967296], [1.5], []]) {
             const source = fixture();
             source.movement = data();
             source.movement.Sources[0]!.AlsoMatches = aliases;
