@@ -82,7 +82,6 @@ const movementRulesKeys = {
     JumpHeight: true,
     StrafeMultiplier: true,
     CrouchMultiplier: true,
-    ADSMultiplier: true,
     ForwardSpeedCap: true,
     StrafeSpeedCap: true,
     CrouchSpeedCap: true,

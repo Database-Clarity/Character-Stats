@@ -8,7 +8,6 @@ import {
     formatMovementDelta,
     movementStackCount,
     reconcileMovementSources,
-    reconcileWhileHeldSources,
     setMovementSourceActive,
     type ActiveMovementSource,
     type ActiveMovementSources,
@@ -243,22 +242,6 @@ function MovementControls({ source }: { source: MovementSource }) {
                                                     }
                                                 />
                                                 Boosted
-                                            </label>
-                                        )}
-                                        {entry.Effects.some(
-                                            (effect) => effect.Type === 'ADSMultiplier',
-                                        ) && (
-                                            <label className="check">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={state.held}
-                                                    onChange={(e) =>
-                                                        update(entry.Hash, {
-                                                            held: e.currentTarget.checked,
-                                                        })
-                                                    }
-                                                />
-                                                Held ADS
                                             </label>
                                         )}
                                     </div>

@@ -11,5 +11,5 @@ export const movementSpec = {
         }),
     ],
     collections: { Classes: movementClassSpec, Sources: movementSourceSpec },
-    localeKeys: ['Overview', 'WalkSpeed', 'StrafeSpeed', 'CrouchSpeed', 'SprintSpeed', 'ADSSpeed'],
+    localeKeys: ['Overview', 'WalkSpeed', 'StrafeSpeed', 'CrouchSpeed', 'SprintSpeed'],
 };

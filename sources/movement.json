@@ -36,7 +36,6 @@
         },
         "StrafeMultiplier": 0.85,
         "CrouchMultiplier": 0.55,
-        "ADSMultiplier": 0.75,
         "ForwardSpeedCap": 9,
         "StrafeSpeedCap": 6,
         "CrouchSpeedCap": 4,
@@ -120,28 +119,6 @@
             ]
         },
         {
-            "Hash": 1685137410,
-            "Name": "Crossbows",
-            "Notes": "Weapon item hashes for Crossbows (Heirloom 1685137410, A Good Shout 649691506/3615748501, Opaque Hourglass 1553681400, Submersion 1724104236/3524386983): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms. Legendary Crossbows reuse the shared Combat Bow category and High-Impact Frame intrinsic, so weapon hashes are listed directly.",
-            "RefType": "item",
-            "AlsoMatches": [
-                649691506,
-                1553681400,
-                1724104236,
-                3524386983,
-                3615748501
-            ],
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSMultiplier",
-                    "Values": [
-                        0.85
-                    ]
-                }
-            ]
-        },
-        {
             "Hash": 3884127242,
             "Name": "Dornröschen (Sleeper Simulant)",
             "Notes": "Exotic Linear Fusion Rifle intrinsic (weapon hash 4036115577): while readied, multiplies sideways and backward walk speed and run acceleration by 5/6 (~0.8333x) and jump velocity by ~0.8696x; forward walk and sprint are unaffected.",
@@ -188,24 +165,6 @@
                     "Type": "StrafeMultiplier",
                     "Values": [
                         1.05
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 3511092054,
-            "Name": "Elemental Capacitor (Stasis)",
-            "Notes": "Weapon trait (base 3511092054, enhanced 711234314): while a Stasis Super is equipped, reduces ADS movement penalty by 20% (x0.8 penalty multiplier -> 0.80x ADS speed on standard weapons).",
-            "RefType": "item",
-            "AlsoMatches": [
-                711234314
-            ],
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.8
                     ]
                 }
             ]
@@ -259,7 +218,7 @@
         {
             "Hash": 2450788523,
             "Name": "Killing Wind",
-            "Notes": "Weapon trait (base 2450788523, enhanced 4207509907): grants +50 Mobility and reduces ADS movement penalty by 30% (x0.7 penalty multiplier) for 5.5s on final blow.",
+            "Notes": "Weapon trait (base 2450788523, enhanced 4207509907): grants +50 Mobility for 5.5s on final blow.",
             "RefType": "item",
             "AlsoMatches": [
                 4207509907
@@ -270,12 +229,6 @@
                     "Type": "Mobility",
                     "Values": [
                         50
-                    ]
-                },
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.7
                     ]
                 }
             ]
@@ -476,7 +429,7 @@
         {
             "Hash": 3241194941,
             "Name": "Mecha Holster (Peacekeepers)",
-            "Notes": "Exotic Titan leg intrinsic (item 53126580): while a Submachine Gun is readied, grants +30 Mobility, non-stacking 8.5 m/s sprint boost, extended slide, and reduces ADS movement penalty by 33% (x0.67 penalty multiplier -> 0.8325x ADS speed).",
+            "Notes": "Exotic Titan leg intrinsic (item 53126580): while a Submachine Gun is readied, grants +30 Mobility, non-stacking 8.5 m/s sprint boost, and extended slide.",
             "RefType": "item",
             "Activation": "WhileHeld",
             "Effects": [
@@ -490,77 +443,6 @@
                     "Type": "SprintBoost",
                     "Values": [
                         8.5
-                    ]
-                },
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.67
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 2928496916,
-            "Name": "Micro-Missile Frame (Rocket Pulse Rifles & Sidearms)",
-            "Notes": "Micro-Missile Frame intrinsics (base 2928496916, enhanced 368110299/651554065/687584589/1225770249/2100231191/3178379945) and New Malpais intrinsic Atomizing Rounds (2575933030): share the 0.85x ADS movement multiplier (0.825x-0.875x across Handling) with Sidearms.",
-            "RefType": "item",
-            "AlsoMatches": [
-                368110299,
-                651554065,
-                687584589,
-                1225770249,
-                2100231191,
-                2575933030,
-                3178379945
-            ],
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSMultiplier",
-                    "Values": [
-                        0.85
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 588594999,
-            "Name": "Moving Target",
-            "Notes": "Weapon trait (base 588594999, enhanced 2717805783): reduces ADS movement penalty by 10% (x0.9 penalty multiplier -> 0.775x ADS speed on standard weapons, 0.865x on Sidearms).",
-            "RefType": "item",
-            "AlsoMatches": [
-                2717805783
-            ],
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.9
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 1322370662,
-            "Name": "Precision Frame (180 RPM Hand Cannons)",
-            "Notes": "Precision Frame Hand Cannon intrinsics (plus Malfeasance 1791592647 and Dynamic Heat Hand Cannon 1611330137): reduces ADS movement penalty by 10% (x0.9 penalty multiplier -> 0.775x ADS speed).",
-            "RefType": "item",
-            "AlsoMatches": [
-                433469519,
-                886865893,
-                1034287523,
-                1611330137,
-                1791592647,
-                4113841443
-            ],
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.9
                     ]
                 }
             ]
@@ -588,20 +470,6 @@
             "Effects": [
                 {
                     "Type": "OverweightMultiplier",
-                    "Values": [
-                        0.85
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 14,
-            "Name": "Sidearm",
-            "RefType": "itemCategory",
-            "Activation": "WhileHeld",
-            "Effects": [
-                {
-                    "Type": "ADSMultiplier",
                     "Values": [
                         0.85
                     ]
@@ -723,21 +591,6 @@
                     "Type": "Mobility",
                     "Values": [
                         30
-                    ]
-                }
-            ]
-        },
-        {
-            "Hash": 593361144,
-            "Name": "Wraithmetal Mail (The Dragon's Shadow)",
-            "Notes": "Exotic Hunter chest intrinsic (593361144): reduces ADS movement penalty by 33% (x0.67 penalty multiplier) for 15s after dodging. Spirit of the Dragon (3751917999) skips this buff state when the exotic class item is equipped.",
-            "RefType": "item",
-            "Activation": "Conditional",
-            "Effects": [
-                {
-                    "Type": "ADSPenaltyMultiplier",
-                    "Values": [
-                        0.67
                     ]
                 }
             ]

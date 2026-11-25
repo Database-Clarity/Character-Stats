@@ -3,12 +3,11 @@ import { movementSpeed, type MovementSource, type MovementSpeedInput } from '../
 export interface ActiveMovementSource {
     stacks: number;
     boosted: boolean;
-    held: boolean;
 }
 
 export type ActiveMovementSources = Record<string, ActiveMovementSource>;
 
-export type MovementStatKey = 'mobility' | 'sprint' | 'walk' | 'strafe' | 'crouch' | 'ads';
+export type MovementStatKey = 'mobility' | 'sprint' | 'walk' | 'strafe' | 'crouch';
 
 export interface MovementStat {
     key: MovementStatKey;
@@ -59,21 +58,14 @@ export function reconcileMovementSources(
     for (const [hash, state] of Object.entries(reconciled)) {
         const source = entries.get(hash);
         const boosted = !!source?.BoostRequiresAll?.length && state.boosted;
-        const held =
-            !!source?.Effects.some((effect) => effect.Type === 'ADSMultiplier') && state.held;
         const stackCount = source ? movementStackCount(source, boosted) : 0;
         const stacks = Math.min(
             stackCount,
             Number.isSafeInteger(state.stacks) && state.stacks > 0 ? state.stacks : 1,
         );
-        if (
-            !source ||
-            stacks !== state.stacks ||
-            boosted !== state.boosted ||
-            held !== state.held
-        ) {
+        if (!source || stacks !== state.stacks || boosted !== state.boosted) {
             next ??= { ...reconciled };
-            if (source) next[hash] = { ...state, stacks, boosted, held };
+            if (source) next[hash] = { ...state, stacks, boosted };
             else delete next[hash];
         }
     }
@@ -105,12 +97,12 @@ export function setMovementSourceActive(
             if (candidate.Activation === 'WhileHeld') delete next[candidate.Hash];
         }
     }
-    next[key] = { stacks: 1, boosted: false, held: false };
+    next[key] = { stacks: 1, boosted: false };
     return next;
 }
 
 type ScenarioKey = Exclude<MovementStatKey, 'mobility'>;
-type Scenario = Pick<MovementSpeedInput, 'direction' | 'posture' | 'sprint' | 'ads'>;
+type Scenario = Pick<MovementSpeedInput, 'direction' | 'posture' | 'sprint'>;
 
 const scenarios: { key: ScenarioKey; label: string; input: Scenario }[] = [
     {
@@ -121,7 +113,6 @@ const scenarios: { key: ScenarioKey; label: string; input: Scenario }[] = [
     { key: 'walk', label: 'Walk', input: { direction: 'Forward', posture: 'Standing' } },
     { key: 'strafe', label: 'Strafe', input: { direction: 'Strafe', posture: 'Standing' } },
     { key: 'crouch', label: 'Crouch', input: { direction: 'Forward', posture: 'Crouched' } },
-    { key: 'ads', label: 'ADS', input: { direction: 'Forward', posture: 'Standing', ads: true } },
 ];
 
 interface Calculation {
@@ -137,13 +128,9 @@ function calculate(
     activity: MovementSpeedInput['activity'],
     scenario: Scenario,
     sources: MovementSpeedInput['sources'],
-    heldWeaponSources: number[],
 ): Calculation {
     try {
-        const result = movementSpeed(
-            { classHash, activity, sources, heldWeaponSources, ...scenario },
-            source,
-        );
+        const result = movementSpeed({ classHash, activity, sources, ...scenario }, source);
         return {
             value: result.speed,
             mobility: result.mobility,
@@ -164,22 +151,12 @@ export function calculateMovementStats(
         const state = active[entry.Hash];
         return state ? [{ hash: entry.Hash, stacks: state.stacks, boosted: state.boosted }] : [];
     });
-    const heldWeaponSources = source.Sources.filter((entry) => active[entry.Hash]?.held).map(
-        (entry) => entry.Hash,
-    );
     const results = new Map<ScenarioKey, { baseline: Calculation; current: Calculation }>();
 
     for (const scenario of scenarios) {
         results.set(scenario.key, {
-            baseline: calculate(source, classHash, activity, scenario.input, [], []),
-            current: calculate(
-                source,
-                classHash,
-                activity,
-                scenario.input,
-                activeSources,
-                heldWeaponSources,
-            ),
+            baseline: calculate(source, classHash, activity, scenario.input, []),
+            current: calculate(source, classHash, activity, scenario.input, activeSources),
         });
     }
 
@@ -230,7 +207,6 @@ export function calculateMovementStats(
             results.get('crouch')!.baseline,
             results.get('crouch')!.current,
         ),
-        row('ads', 'ADS', 'm/s', results.get('ads')!.baseline, results.get('ads')!.current),
     ];
 }
 

@@ -77,7 +77,6 @@ export interface MovementRules {
     JumpHeight: Curve;
     StrafeMultiplier: number;
     CrouchMultiplier: number;
-    ADSMultiplier: number;
     ForwardSpeedCap: number;
     StrafeSpeedCap: number;
     CrouchSpeedCap: number;
@@ -95,9 +94,7 @@ export type MovementEffectType =
     | 'CrouchAdditive'
     | 'GroundedMultiplier'
     | 'GroundedNonSprintMultiplier'
-    | 'OverweightMultiplier'
-    | 'ADSMultiplier'
-    | 'ADSPenaltyMultiplier';
+    | 'OverweightMultiplier';
 export interface MovementEffect {
     Type: MovementEffectType;
     Values: number[];
@@ -511,7 +508,7 @@ export const movementRulesSpec: EntitySpec = {
     name: 'MovementRules',
     fields: [
         curve('WalkSpeed', {
-            help: 'Forward walking speed in m/s for each hidden Mobility stat value (0–130). Strafe, crouch and ADS speeds are multiples of it.',
+            help: 'Forward walking speed in m/s for each hidden Mobility stat value (0–130). Strafe and crouch speeds are multiples of it.',
             label: 'Walk speed (m/s)',
             domain: [0, 130],
             description: 'Forward walk speed in m/s by hidden Mobility stat (0–130).',
@@ -535,13 +532,6 @@ export const movementRulesSpec: EntitySpec = {
             exclusiveMin: 0,
             description: 'Multiplier for crouched walking.',
         }),
-        numberField('ADSMultiplier', {
-            help: 'Multiplier on walk speed while aiming down sights. Sources with an ADS effect replace it for their weapon, and ADS penalty multipliers scale its penalty fraction (1 - ADSMultiplier).',
-            label: 'ADS multiplier',
-            exclusiveMin: 0,
-            description:
-                'Default walking multiplier while aiming down sights; active source effects can replace it or scale its penalty.',
-        }),
         numberField('ForwardSpeedCap', {
             help: 'Highest forward speed in m/s, including sprint. Faster speeds are capped.',
             label: 'Forward speed cap (m/s)',
@@ -549,10 +539,10 @@ export const movementRulesSpec: EntitySpec = {
             description: 'Maximum forward movement speed, including sprint, in m/s.',
         }),
         numberField('StrafeSpeedCap', {
-            help: 'Highest sideways or backward speed in m/s, including while aiming down sights.',
+            help: 'Highest sideways or backward speed in m/s.',
             label: 'Strafe speed cap (m/s)',
             exclusiveMin: 0,
-            description: 'Maximum strafe speed in m/s, including while aiming down sights.',
+            description: 'Maximum strafe speed in m/s.',
         }),
         numberField('CrouchSpeedCap', {
             help: 'Highest crouched speed in m/s.',
@@ -624,18 +614,7 @@ export const movementEffectSpec: EntitySpec = {
                 },
                 {
                     value: 'OverweightMultiplier',
-                    description:
-                        'Hip-fire grounded penalty except sprint; mutually exclusive with ADS movement penalty.',
-                },
-                {
-                    value: 'ADSMultiplier',
-                    description:
-                        'Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value.',
-                },
-                {
-                    value: 'ADSPenaltyMultiplier',
-                    description:
-                        'Multiply the weapon ADS movement penalty fraction (1 - ADSMultiplier), yielding 1 - (1 - ADSMultiplier) * product.',
+                    description: 'Hip-fire grounded movement penalty except sprint.',
                 },
             ],
             {

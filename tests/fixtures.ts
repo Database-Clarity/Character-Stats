@@ -66,7 +66,6 @@ export function fixture(): SourceSet {
                 JumpHeight: { Values: Array(131).fill(0) },
                 StrafeMultiplier: 0.85,
                 CrouchMultiplier: 0.55,
-                ADSMultiplier: 0.75,
                 ForwardSpeedCap: 9,
                 StrafeSpeedCap: 6,
                 CrouchSpeedCap: 4,

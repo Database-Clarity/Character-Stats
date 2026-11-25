@@ -258,14 +258,9 @@ export interface MovementRules {
     StrafeMultiplier: number;
     /** Multiplier for crouched walking. */
     CrouchMultiplier: number;
-    /**
-     * Default walking multiplier while aiming down sights; active source effects can replace it or
-     * scale its penalty.
-     */
-    ADSMultiplier: number;
     /** Maximum forward movement speed, including sprint, in m/s. */
     ForwardSpeedCap: number;
-    /** Maximum strafe speed in m/s, including while aiming down sights. */
+    /** Maximum strafe speed in m/s. */
     StrafeSpeedCap: number;
     /** Maximum crouched movement speed in m/s. */
     CrouchSpeedCap: number;
@@ -275,7 +270,7 @@ export interface MovementRules {
 
 export interface MovementEffect {
     /** Movement effect to apply. */
-    Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier" | "ADSPenaltyMultiplier";
+    Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier";
     /**
      * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
      * Mobility/additive values use 0; unknown multipliers use 1.
@@ -308,7 +303,7 @@ export interface MovementSource {
     /** Effects from this source, with at most one entry for each effect type. */
     Effects: Array<{
         /** Movement effect to apply. */
-        Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier" | "ADSMultiplier" | "ADSPenaltyMultiplier";
+        Type: "Mobility" | "SprintBoost" | "ForwardMultiplier" | "SprintMultiplier" | "StrafeMultiplier" | "CrouchMultiplier" | "StrafeAdditive" | "CrouchAdditive" | "GroundedMultiplier" | "GroundedNonSprintMultiplier" | "OverweightMultiplier";
         /**
          * Entry i is the effect value with i + 1 stacks; length 1 for nonstacking effects. Unknown
          * Mobility/additive values use 0; unknown multipliers use 1.
@@ -752,14 +747,9 @@ export interface Movement {
         StrafeMultiplier: number;
         /** Multiplier for crouched walking. */
         CrouchMultiplier: number;
-        /**
-         * Default walking multiplier while aiming down sights; active source effects can replace it
-         * or scale its penalty.
-         */
-        ADSMultiplier: number;
         /** Maximum forward movement speed, including sprint, in m/s. */
         ForwardSpeedCap: number;
-        /** Maximum strafe speed in m/s, including while aiming down sights. */
+        /** Maximum strafe speed in m/s. */
         StrafeSpeedCap: number;
         /** Maximum crouched movement speed in m/s. */
         CrouchSpeedCap: number;
@@ -778,8 +768,6 @@ export interface Movement {
     CrouchSpeed: string;
     /** Locale ID for Movement.SprintSpeed */
     SprintSpeed: string;
-    /** Locale ID for Movement.ADSSpeed */
-    ADSSpeed: string;
 }
 
 /** Root keys are decimal-string stat manifest hashes plus the non-hash Movement key. */

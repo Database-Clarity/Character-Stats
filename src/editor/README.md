@@ -95,15 +95,15 @@ middleware or configuration changes are needed.
   `Rules` object's fields directly with an outline, using the same `FieldsPage` as stat
   Fields tabs. `MovementContext`
   validates working data before calling core `movementSpeed` and keeps Mobility,
-  Sprint, Walk, Strafe, Crouch and ADS results visible together. Class and activity
+  Sprint, Walk, Strafe and Crouch results visible together. Class and activity
   are global settings; every row shows its signed delta (under a **Δ vs no sources** heading) against the same settings
   with no active optional sources. `Capped:` labels appear only on rows a cap limits, and source rows show readable activation labels; caps and calculation errors remain visible.
-  Active sources retain their stack, boosted and per-held-weapon ADS controls;
+  Active sources retain their stack and boosted controls;
   selecting a WhileHeld source replaces the previous one, and unchecking it clears
   that selection without removing Always or Conditional sources. The summary and
   source selector stay together in one panel; below 1280px that panel is a toggled
   panel opened with **Speed preview**, like Context on other stats.
-  Invalid data and conflicting ADS choices show errors, not fallback speeds.
+  Invalid data shows errors, not fallback speeds.
   Source RefType scopes lookups/icons/hash pickers to items or item categories;
   collection manifest drafts infer RefType from the picked definition table.
   Movement Sources place AlsoMatches immediately after Hash and RefType.

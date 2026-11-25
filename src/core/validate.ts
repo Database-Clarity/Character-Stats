@@ -227,13 +227,6 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
                                     if (!Number.isFinite(value)) {
                                         error(fieldPath, 'Movement effect values must be finite');
                                     }
-                                } else if (effect.Type === 'ADSPenaltyMultiplier') {
-                                    if (value < 0) {
-                                        error(
-                                            fieldPath,
-                                            'ADS penalty multipliers must be nonnegative',
-                                        );
-                                    }
                                 } else if (value <= 0) {
                                     error(
                                         fieldPath,

@@ -186,10 +186,6 @@ export interface MovementSpeedInput {
     direction: 'Forward' | 'Strafe';
     posture: 'Standing' | 'Crouched';
     sprint?: boolean;
-    /** Hashes from sources belonging to the single weapon whose ADS speed is requested. */
-    heldWeaponSources?: readonly number[];
-    ads?: boolean;
-    adsMultiplierOverride?: number;
 }
 
 export interface MovementSpeedResult {
@@ -212,13 +208,6 @@ export function movementSpeed(
         throw new Error('Unknown movement posture');
     if (input.sprint && (input.direction !== 'Forward' || input.posture !== 'Standing'))
         throw new Error('Sprint requires forward standing movement');
-    if (input.ads && input.sprint) throw new Error('Cannot aim down sights while sprinting');
-    if (
-        input.adsMultiplierOverride !== undefined &&
-        (!Number.isFinite(input.adsMultiplierOverride) || input.adsMultiplierOverride <= 0)
-    ) {
-        throw new Error('ADS multiplier override must be finite and positive');
-    }
     const rules = source.Rules;
     let mobility =
         input.activity === 'PVP'
@@ -227,16 +216,10 @@ export function movementSpeed(
     let sprintBoost = 0;
     let strafeAdditive = 0;
     let crouchAdditive = 0;
-    let adsPenaltyMultiplier = 1;
     const multipliers: Record<
         Exclude<
             MovementEffectType,
-            | 'Mobility'
-            | 'SprintBoost'
-            | 'StrafeAdditive'
-            | 'CrouchAdditive'
-            | 'ADSMultiplier'
-            | 'ADSPenaltyMultiplier'
+            'Mobility' | 'SprintBoost' | 'StrafeAdditive' | 'CrouchAdditive'
         >,
         number
     > = {
@@ -250,8 +233,6 @@ export function movementSpeed(
     };
     const seen = new Set<number>();
     const activeSourceHashes = new Set<number>();
-    const heldWeaponSources = new Set(input.heldWeaponSources ?? []);
-    const adsMultipliers = new Set<number>();
     for (const active of input.sources) {
         if (seen.has(active.hash))
             throw new Error('Duplicate active movement source ' + active.hash);
@@ -280,27 +261,9 @@ export function movementSpeed(
             else if (effect.Type === 'SprintBoost') sprintBoost = Math.max(sprintBoost, value);
             else if (effect.Type === 'StrafeAdditive') strafeAdditive += value;
             else if (effect.Type === 'CrouchAdditive') crouchAdditive += value;
-            else if (effect.Type === 'ADSPenaltyMultiplier') adsPenaltyMultiplier *= value;
-            else if (effect.Type === 'ADSMultiplier') {
-                if (heldWeaponSources.has(active.hash)) adsMultipliers.add(value);
-            } else multipliers[effect.Type] *= value;
+            else multipliers[effect.Type] *= value;
         }
     }
-    for (const hash of heldWeaponSources) {
-        if (!seen.has(hash))
-            throw new Error('Held weapon source must be present in active sources: ' + hash);
-    }
-    if (input.ads && adsMultipliers.size > 1 && input.adsMultiplierOverride === undefined) {
-        throw new Error(
-            'Conflicting ADS multipliers for the selected held weapon; select one weapon or provide an explicit override',
-        );
-    }
-    const baseAdsMultiplier =
-        input.adsMultiplierOverride ?? adsMultipliers.values().next().value ?? rules.ADSMultiplier;
-    const adsMultiplier =
-        input.adsMultiplierOverride !== undefined
-            ? baseAdsMultiplier
-            : 1 - (1 - baseAdsMultiplier) * adsPenaltyMultiplier;
     mobility = Math.max(0, Math.min(rules.MaxMobility, mobility));
     let speed: number;
     if (input.sprint) {
@@ -321,10 +284,10 @@ export function movementSpeed(
         if (input.direction === 'Forward') speed *= multipliers.ForwardMultiplier;
         if (input.direction === 'Strafe') speed *= multipliers.StrafeMultiplier;
         if (input.posture === 'Crouched') speed *= multipliers.CrouchMultiplier;
-        // ADS and hip (overweight) weapon penalties are mutually exclusive.
-        if (input.ads) speed *= adsMultiplier;
-        else speed *= multipliers.OverweightMultiplier;
-        speed *= multipliers.GroundedMultiplier * multipliers.GroundedNonSprintMultiplier;
+        speed *=
+            multipliers.OverweightMultiplier *
+            multipliers.GroundedMultiplier *
+            multipliers.GroundedNonSprintMultiplier;
     }
     let cappedBy: NonNullable<MovementSpeedResult['cappedBy']> = 'ForwardSpeedCap';
     if (input.direction === 'Strafe' && rules.StrafeSpeedCap < rules[cappedBy])

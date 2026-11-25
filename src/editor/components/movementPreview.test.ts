@@ -14,14 +14,14 @@ import {
 
 const titan = 3655393761;
 const source = () => structuredClone(movementData) as unknown as MovementSource;
-const selection: ActiveMovementSource = { stacks: 1, boosted: false, held: false };
+const selection: ActiveMovementSource = { stacks: 1, boosted: false };
 
 function row(stats: ReturnType<typeof calculateMovementStats>, key: string) {
     return stats.find((stat) => stat.key === key)!;
 }
 
 describe('movement preview calculations', () => {
-    it('calculates all six global-only baseline rows through the core calculator', () => {
+    it('calculates all five global-only baseline rows through the core calculator', () => {
         const data = source();
         const stats = calculateMovementStats(data, titan, 'PVE', {});
         const walk = movementSpeed(
@@ -40,7 +40,6 @@ describe('movement preview calculations', () => {
             'walk',
             'strafe',
             'crouch',
-            'ads',
         ]);
         expect(row(stats, 'mobility')).toMatchObject({
             value: walk.mobility,
@@ -179,22 +178,22 @@ describe('movement stack selection', () => {
         stackable.BoostRequiresAll = [123];
 
         const atFirstStack = calculateMovementStats(data, titan, 'PVE', {
-            [stackable.Hash]: { stacks: 1, boosted: false, held: false },
+            [stackable.Hash]: { stacks: 1, boosted: false },
         });
         expect(row(atFirstStack, 'mobility').value).toBe(40);
         expect(row(atFirstStack, 'sprint').value).toBeCloseTo(8.08, 12);
 
         const atSecondStack = calculateMovementStats(data, titan, 'PVE', {
-            [stackable.Hash]: { stacks: 2, boosted: false, held: false },
+            [stackable.Hash]: { stacks: 2, boosted: false },
         });
         expect(row(atSecondStack, 'mobility').value).toBe(50);
         expect(row(atSecondStack, 'sprint').value).toBeCloseTo(8.16, 12);
 
         const boosted = reconcileMovementSources(
-            { [stackable.Hash]: { stacks: 3, boosted: true, held: true } },
+            { [stackable.Hash]: { stacks: 3, boosted: true } },
             data.Sources,
         );
-        expect(boosted[stackable.Hash]).toEqual({ stacks: 3, boosted: true, held: false });
+        expect(boosted[stackable.Hash]).toEqual({ stacks: 3, boosted: true });
         const boostedStats = calculateMovementStats(data, titan, 'PVE', boosted);
         expect(row(boostedStats, 'mobility').value).toBe(70);
         expect(row(boostedStats, 'sprint').value).toBeCloseTo(8.24, 12);
@@ -202,7 +201,7 @@ describe('movement stack selection', () => {
         stackable.Effects[0]!.BoostedValues = [20];
         stackable.Effects[1]!.Values = [1.02];
         const edited = reconcileMovementSources(boosted, data.Sources);
-        expect(edited[stackable.Hash]).toEqual({ stacks: 1, boosted: true, held: false });
+        expect(edited[stackable.Hash]).toEqual({ stacks: 1, boosted: true });
 
         delete stackable.BoostRequiresAll;
         stackable.Effects = [{ Type: 'Mobility', Values: [10, 20, 30] }];
@@ -210,7 +209,6 @@ describe('movement stack selection', () => {
         expect(noLongerBoostable[stackable.Hash]).toEqual({
             stacks: 1,
             boosted: false,
-            held: false,
         });
     });
 });

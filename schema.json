@@ -423,11 +423,6 @@
                     "exclusiveMinimum": 0,
                     "description": "Multiplier for crouched walking."
                 },
-                "ADSMultiplier": {
-                    "type": "number",
-                    "exclusiveMinimum": 0,
-                    "description": "Default walking multiplier while aiming down sights; active source effects can replace it or scale its penalty."
-                },
                 "ForwardSpeedCap": {
                     "type": "number",
                     "exclusiveMinimum": 0,
@@ -436,7 +431,7 @@
                 "StrafeSpeedCap": {
                     "type": "number",
                     "exclusiveMinimum": 0,
-                    "description": "Maximum strafe speed in m/s, including while aiming down sights."
+                    "description": "Maximum strafe speed in m/s."
                 },
                 "CrouchSpeedCap": {
                     "type": "number",
@@ -454,7 +449,6 @@
                 "WalkSpeed",
                 "StrafeMultiplier",
                 "CrouchMultiplier",
-                "ADSMultiplier",
                 "ForwardSpeedCap",
                 "StrafeSpeedCap",
                 "CrouchSpeedCap",
@@ -479,9 +473,7 @@
                         "CrouchAdditive",
                         "GroundedMultiplier",
                         "GroundedNonSprintMultiplier",
-                        "OverweightMultiplier",
-                        "ADSMultiplier",
-                        "ADSPenaltyMultiplier"
+                        "OverweightMultiplier"
                     ],
                     "oneOf": [
                         {
@@ -526,15 +518,7 @@
                         },
                         {
                             "const": "OverweightMultiplier",
-                            "description": "Hip-fire grounded penalty except sprint; mutually exclusive with ADS movement penalty."
-                        },
-                        {
-                            "const": "ADSMultiplier",
-                            "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
-                        },
-                        {
-                            "const": "ADSPenaltyMultiplier",
-                            "description": "Multiply the weapon ADS movement penalty fraction (1 - ADSMultiplier), yielding 1 - (1 - ADSMultiplier) * product."
+                            "description": "Hip-fire grounded movement penalty except sprint."
                         }
                     ],
                     "description": "Movement effect to apply."
@@ -654,9 +638,7 @@
                                     "CrouchAdditive",
                                     "GroundedMultiplier",
                                     "GroundedNonSprintMultiplier",
-                                    "OverweightMultiplier",
-                                    "ADSMultiplier",
-                                    "ADSPenaltyMultiplier"
+                                    "OverweightMultiplier"
                                 ],
                                 "oneOf": [
                                     {
@@ -701,15 +683,7 @@
                                     },
                                     {
                                         "const": "OverweightMultiplier",
-                                        "description": "Hip-fire grounded penalty except sprint; mutually exclusive with ADS movement penalty."
-                                    },
-                                    {
-                                        "const": "ADSMultiplier",
-                                        "description": "Replace the default ADS multiplier only for the selected held weapon; conflicting selected overrides require an explicit value."
-                                    },
-                                    {
-                                        "const": "ADSPenaltyMultiplier",
-                                        "description": "Multiply the weapon ADS movement penalty fraction (1 - ADSMultiplier), yielding 1 - (1 - ADSMultiplier) * product."
+                                        "description": "Hip-fire grounded movement penalty except sprint."
                                     }
                                 ],
                                 "description": "Movement effect to apply."
@@ -1405,11 +1379,6 @@
                             "exclusiveMinimum": 0,
                             "description": "Multiplier for crouched walking."
                         },
-                        "ADSMultiplier": {
-                            "type": "number",
-                            "exclusiveMinimum": 0,
-                            "description": "Default walking multiplier while aiming down sights; active source effects can replace it or scale its penalty."
-                        },
                         "ForwardSpeedCap": {
                             "type": "number",
                             "exclusiveMinimum": 0,
@@ -1418,7 +1387,7 @@
                         "StrafeSpeedCap": {
                             "type": "number",
                             "exclusiveMinimum": 0,
-                            "description": "Maximum strafe speed in m/s, including while aiming down sights."
+                            "description": "Maximum strafe speed in m/s."
                         },
                         "CrouchSpeedCap": {
                             "type": "number",
@@ -1436,7 +1405,6 @@
                         "WalkSpeed",
                         "StrafeMultiplier",
                         "CrouchMultiplier",
-                        "ADSMultiplier",
                         "ForwardSpeedCap",
                         "StrafeSpeedCap",
                         "CrouchSpeedCap",
@@ -1475,10 +1443,6 @@
                 "SprintSpeed": {
                     "type": "string",
                     "description": "Locale ID for Movement.SprintSpeed"
-                },
-                "ADSSpeed": {
-                    "type": "string",
-                    "description": "Locale ID for Movement.ADSSpeed"
                 }
             },
             "required": [
@@ -1489,8 +1453,7 @@
                 "WalkSpeed",
                 "StrafeSpeed",
                 "CrouchSpeed",
-                "SprintSpeed",
-                "ADSSpeed"
+                "SprintSpeed"
             ]
         },
         "CharacterStats": {

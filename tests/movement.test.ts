@@ -106,7 +106,7 @@ describe('movement calculator', () => {
             ).speed,
         ).toBeCloseTo(6 * 1.1102 * 0.55, 12);
     });
-    it('rejects duplicate aliases of the same source and supports alias ADS selection', () => {
+    it('rejects duplicate aliases of the same source', () => {
         expect(() =>
             movementSpeed(
                 input({
@@ -114,18 +114,6 @@ describe('movement calculator', () => {
                 }),
             ),
         ).toThrow('Duplicate active movement source');
-        const source = data();
-        source.Sources.find((entry) => entry.Hash === 14)!.AlsoMatches = [123];
-        expect(
-            movementSpeed(
-                input({
-                    ads: true,
-                    sources: [{ hash: 123 }],
-                    heldWeaponSources: [123],
-                }),
-                source,
-            ).speed,
-        ).toBeCloseTo(5.6 * 0.85, 12);
     });
     it('uses current source data by default and class-specific PvE/PvP Mobility and sprint speeds', () => {
         expect(movementSpeed(input())).toEqual({ mobility: 30, speed: 5.6 });
@@ -141,29 +129,19 @@ describe('movement calculator', () => {
             speed: 8.6,
         });
     });
-    it('reproduces the Compendium 50-Mobility ADS strafe example without rounding', () => {
+    it('reproduces 50-Mobility strafe and 100-Mobility Lightweight speeds without rounding', () => {
         const source = data();
         source.Classes[0]!.BaseMobility = 50;
         expect(
-            movementSpeed(input({ classHash: hunter, direction: 'Strafe', ads: true }), source)
-                .speed,
-        ).toBeCloseTo(3.825, 12);
-    });
-    it('reproduces 100-Mobility sidearm ADS plus Lightweight using current source values', () => {
-        const source = data();
+            movementSpeed(input({ classHash: hunter, direction: 'Strafe' }), source).speed,
+        ).toBeCloseTo(5.1, 12);
         source.Classes[0]!.BaseMobility = 80;
         const options = input({
             classHash: hunter,
-            ads: true,
-            sources: [{ hash: 1458010786 }, { hash: 14 }],
-            heldWeaponSources: [14],
+            sources: [{ hash: 1458010786 }],
         });
         expect(movementSpeed(options, source)).toMatchObject({ mobility: 100 });
-        expect(movementSpeed(options, source).speed).toBeCloseTo(7 * 0.85 * 1.0625, 12);
-        expect(movementSpeed({ ...options, adsMultiplierOverride: 0.5 }, source).speed).toBeCloseTo(
-            7 * 1.0625 * 0.5,
-            12,
-        );
+        expect(movementSpeed(options, source).speed).toBeCloseTo(7 * 1.0625, 12);
     });
     it.each([
         [1, 60],
@@ -246,25 +224,19 @@ describe('movement calculator', () => {
             ),
         ).toEqual({ mobility: 120, speed: 9, cappedBy: 'ForwardSpeedCap' });
     });
-    it('applies ADSPenaltyMultiplier, StrafeAdditive, CrouchAdditive, CrouchMultiplier, and Speed Booster', () => {
-        // Moving Target: 1 - (1 - 0.75) * 0.9 = 0.775
-        expect(
-            movementSpeed(input({ ads: true, sources: [{ hash: 588594999 }] })).speed,
-        ).toBeCloseTo(5.6 * 0.775, 12);
-        // Moving Target + Sidearm (0.85): 1 - (1 - 0.85) * 0.9 = 0.865
-        expect(
-            movementSpeed(
-                input({
-                    ads: true,
-                    sources: [{ hash: 588594999 }, { hash: 14 }],
-                    heldWeaponSources: [14],
-                }),
-            ).speed,
-        ).toBeCloseTo(5.6 * 0.865, 12);
-        // Peacekeepers: +30 Mobility (60 -> 6.2 m/s), SprintBoost 8.5, ADSPenaltyMultiplier 0.67 (0.8325)
-        const pkAds = movementSpeed(input({ ads: true, sources: [{ hash: 3241194941 }] }));
-        expect(pkAds.mobility).toBe(60);
-        expect(pkAds.speed).toBeCloseTo(6.2 * (1 - 0.25 * 0.67), 12);
+    it('applies StrafeAdditive, CrouchAdditive, CrouchMultiplier, Peacekeepers, and Speed Booster', () => {
+        // Peacekeepers: +30 Mobility (60 -> 6.2 m/s), SprintBoost 8.5
+        const pk = movementSpeed(input({ sources: [{ hash: 3241194941 }] }));
+        expect(pk.mobility).toBe(60);
+        expect(pk.speed).toBeCloseTo(6.2, 12);
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash: 3241194941 }] })).speed).toBe(
+            8.5,
+        );
+        // Killing Wind: +50 Mobility (80 -> 6.6 m/s)
+        expect(movementSpeed(input({ sources: [{ hash: 2450788523 }] }))).toEqual({
+            mobility: 80,
+            speed: 6.6,
+        });
         // Amplified: +50 Mobility (80 -> 6.6 m/s), +1 m/s strafe additive -> 6.6*0.85 + 1 = 6.61 -> 6 cap
         expect(movementSpeed(input({ direction: 'Strafe', sources: [{ hash: 1 }] }))).toEqual({
             mobility: 80,
@@ -316,39 +288,27 @@ describe('movement calculator', () => {
     it.each([
         { hash: 12, name: 'Machine Gun' },
         { hash: 13, name: 'Rocket Launcher' },
-    ])(
-        'uses the real $name category as an overweight hip-fire penalty mutually exclusive with ADS',
-        ({ hash, name }) => {
-            const source = data();
-            const entry = source.Sources.find((candidate) => candidate.Hash === hash);
-            expect(entry).toMatchObject({
-                Name: name,
-                RefType: 'itemCategory',
-                Activation: 'WhileHeld',
-                Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
-            });
-            expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
-                5.6 * 0.85,
-                12,
-            );
-            expect(
-                movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
-            ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
-            expect(
-                movementSpeed(input({ posture: 'Crouched', sources: [{ hash }] }), source).speed,
-            ).toBeCloseTo(5.6 * 0.55 * 0.85, 12);
-            // ADS and hip-fire overweight penalties are mutually exclusive: ADS replaces the hip penalty.
-            expect(
-                movementSpeed(
-                    input({ posture: 'Crouched', ads: true, sources: [{ hash }] }),
-                    source,
-                ).speed,
-            ).toBeCloseTo(5.6 * 0.55 * 0.75, 12);
-            expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(
-                8,
-            );
-        },
-    );
+    ])('uses the real $name category as a hip-fire overweight penalty', ({ hash, name }) => {
+        const source = data();
+        const entry = source.Sources.find((candidate) => candidate.Hash === hash);
+        expect(entry).toMatchObject({
+            Name: name,
+            RefType: 'itemCategory',
+            Activation: 'WhileHeld',
+            Effects: [{ Type: 'OverweightMultiplier', Values: [0.85] }],
+        });
+        expect(movementSpeed(input({ sources: [{ hash }] }), source).speed).toBeCloseTo(
+            5.6 * 0.85,
+            12,
+        );
+        expect(
+            movementSpeed(input({ direction: 'Strafe', sources: [{ hash }] }), source).speed,
+        ).toBeCloseTo(5.6 * 0.85 * 0.85, 12);
+        expect(
+            movementSpeed(input({ posture: 'Crouched', sources: [{ hash }] }), source).speed,
+        ).toBeCloseTo(5.6 * 0.55 * 0.85, 12);
+        expect(movementSpeed(input({ sprint: true, sources: [{ hash }] }), source).speed).toBe(8);
+    });
     it('applies sword-guarding penalty to grounded movement but not sprint', () => {
         const source = data();
         const guard = source.Sources.find((entry) => entry.Hash === 54)!;
@@ -363,11 +323,8 @@ describe('movement calculator', () => {
             12,
         );
         expect(
-            movementSpeed(
-                input({ posture: 'Crouched', ads: true, sources: [{ hash: 54 }] }),
-                source,
-            ).speed,
-        ).toBeCloseTo(5.6 * 0.55 * 0.75 * 0.85, 12);
+            movementSpeed(input({ posture: 'Crouched', sources: [{ hash: 54 }] }), source).speed,
+        ).toBeCloseTo(5.6 * 0.55 * 0.85, 12);
         expect(movementSpeed(input({ sprint: true, sources: [{ hash: 54 }] }), source).speed).toBe(
             8,
         );
@@ -409,10 +366,7 @@ describe('movement calculator', () => {
             Effects: [{ Type: 'GroundedMultiplier', Values: [100] }],
         });
         expect(
-            movementSpeed(
-                input({ direction, posture, ads: true, sources: [{ hash: 123 }] }),
-                source,
-            ),
+            movementSpeed(input({ direction, posture, sources: [{ hash: 123 }] }), source),
         ).toEqual({ mobility: 30, speed, cappedBy });
     });
     it.each([
@@ -443,59 +397,6 @@ describe('movement calculator', () => {
             cappedBy: 'ForwardSpeedCap',
         });
     });
-    it('evaluates ADS separately for each held weapon in a three-weapon loadout, independent of source order', () => {
-        const source = data();
-        for (const [Hash, value] of [
-            [123, 0.6],
-            [456, 0.9],
-        ] as const)
-            source.Sources.push({
-                Hash,
-                Name: 'Weapon ADS',
-                RefType: 'item',
-                Activation: 'WhileHeld',
-                Effects: [{ Type: 'ADSMultiplier', Values: [value] }],
-            });
-        const sources = [{ hash: 14 }, { hash: 123 }, { hash: 456 }];
-        for (const order of [sources, [...sources].reverse()]) {
-            expect(movementSpeed(input({ ads: true, sources: order }), source).speed).toBeCloseTo(
-                5.6 * 0.75,
-                12,
-            );
-            for (const [hash, value] of [
-                [14, 0.85],
-                [123, 0.6],
-                [456, 0.9],
-            ] as const) {
-                expect(
-                    movementSpeed(
-                        input({ ads: true, sources: order, heldWeaponSources: [hash] }),
-                        source,
-                    ).speed,
-                ).toBeCloseTo(5.6 * value, 12);
-            }
-            expect(() =>
-                movementSpeed(
-                    input({ ads: true, sources: order, heldWeaponSources: [14, 123] }),
-                    source,
-                ),
-            ).toThrow('Conflicting ADS');
-            expect(
-                movementSpeed(
-                    input({
-                        ads: true,
-                        sources: order,
-                        heldWeaponSources: [14, 123],
-                        adsMultiplierOverride: 0.8,
-                    }),
-                    source,
-                ).speed,
-            ).toBeCloseTo(5.6 * 0.8, 12);
-        }
-        expect(() =>
-            movementSpeed(input({ ads: true, sources, heldWeaponSources: [999] }), source),
-        ).toThrow('must be present');
-    });
     it('replaces boosted values only when the caller asserts all required equipment is present', () => {
         const source = data();
         const athletics = source.Sources.find((entry) => entry.Hash === 1133590731)!;
@@ -511,7 +412,7 @@ describe('movement calculator', () => {
             movementSpeed(input({ sources: [{ hash: 1133590731, stacks: 2 }] }), source).mobility,
         ).toBe(80);
     });
-    it('rejects unknown classes/sources, duplicate sources, invalid stacks and ADS during sprint', () => {
+    it('rejects unknown classes/sources, duplicate sources, invalid stacks and invalid sprint states', () => {
         for (const options of [
             input({ classHash: 0 }),
             input({ sources: [{ hash: 0 }] }),
@@ -519,10 +420,8 @@ describe('movement calculator', () => {
             ...[0, -1, 1.5, NaN, Infinity].map((stacks) =>
                 input({ sources: [{ hash: 1133590731, stacks }] }),
             ),
-            input({ sprint: true, ads: true }),
             input({ sprint: true, direction: 'Strafe' }),
             input({ sprint: true, posture: 'Crouched' }),
-            input({ adsMultiplierOverride: NaN }),
         ])
             expect(() => movementSpeed(options)).toThrow();
     });
@@ -677,51 +576,10 @@ describe('movement source validation', () => {
             2,
         );
     });
-    it('models passive weapon ADS/strafe modifiers and Radiant Dance Machines hip-fire bonuses', () => {
+    it('models passive weapon strafe modifiers and Radiant Dance Machines hip-fire bonuses', () => {
         const repo = data();
         const titan = 3655393761;
         const hunter = 671679327;
-        // Rocket Pulse Rifle (New Malpais alias) and Crossbow (Submersion alias) share 0.85x ADS
-        const rocketPulseAds = movementSpeed(
-            {
-                classHash: titan,
-                activity: 'PVE',
-                sources: [{ hash: 2575933030 }],
-                heldWeaponSources: [2575933030],
-                direction: 'Forward',
-                posture: 'Standing',
-                ads: true,
-            },
-            repo,
-        );
-        expect(rocketPulseAds.speed).toBeCloseTo(5.6 * 0.85, 10);
-        // Rocket Sidearm matches both Sidearm (14) and Micro-Missile Frame (2928496916) without conflict
-        const rocketSidearmAds = movementSpeed(
-            {
-                classHash: titan,
-                activity: 'PVE',
-                sources: [{ hash: 14 }, { hash: 2928496916 }],
-                heldWeaponSources: [14, 2928496916],
-                direction: 'Forward',
-                posture: 'Standing',
-                ads: true,
-            },
-            repo,
-        );
-        expect(rocketSidearmAds.speed).toBeCloseTo(5.6 * 0.85, 10);
-        const crossbowAds = movementSpeed(
-            {
-                classHash: titan,
-                activity: 'PVE',
-                sources: [{ hash: 3524386983 }],
-                heldWeaponSources: [3524386983],
-                direction: 'Forward',
-                posture: 'Standing',
-                ads: true,
-            },
-            repo,
-        );
-        expect(crossbowAds.speed).toBeCloseTo(5.6 * 0.85, 10);
         // Sleeper Simulant & One Thousand Voices slow strafe while leaving forward/sprint unchanged
         for (const intrinsic of [3884127242, 1657056865]) {
             const strafe = movementSpeed(
