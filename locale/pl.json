@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "Mobilność decyduje o wysokości skoku bez aktywacji zdolności ruchu. Określa również prędkość podczas ruchu do przodu, na boki lub podczas kucania.\n\nMobilność nie ma wpływu na prędkość podczas sprintu, ponieważ jest ona stała, i wynosi 8 metrów na sekundę.\n\nMobilność wpływa również na czas odnowienia zdolności klasowej Łowcy.",
-        "WalkSpeed": "Jak szybko możesz iść do przodu.",
-        "StrafeSpeed": "Jak szybko możesz poruszać się na boki oraz do tyłu.",
-        "CrouchSpeed": "Jak szybko możesz poruszać się podczas kucania."
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "Odporność decyduje o ilości HP, jaką posiada twoja 'Tarcza', zwiększa odporność na obrażenia w PvE, zapewnia pasywną odporność na odrzut wywołany otrzymywanymi obrażeniami. Zmniejsza również obrażenia otrzymywane podczas uwalniania się ze Stazy.\n\n'Tarcza' posiada od 115 do 130 punktów twojego całkowitego zdrowia razem ze stałymi 70 punktami 'Zdrowia'.\n\nOdporność wpływa również na czas odnowienia zdolności klasowej Tytanów.",
-        "ShieldHP": "",
-        "PvEDamageResistance": "Jak dużą posiadasz odporność na obrażenia w aktywnościach PvE.",
-        "FlinchResistance": "Jak dużą odporność na odrzut wywołany otrzymywanymi obrażeniami posiadasz."
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "Regeneracja decyduje o opóźnieniu, po którym twoje 'Zdrowie' i 'Tarcza' zaczynają regenerować się oraz jak szybko się regenerują.\n\nRegeneracja wpływa również na czas odnowienia zdolności klasowej Czarowników.",
-        "TotalRegenTime": "Jak długo zajmuje pełne odnowienie twojego Życia i Tarczy od 0 HP.",
-        "HealthRegenDelay": "Jak długo zajmuje rozpoczęcie regeneracji 'Zdrowia' po otrzymaniu obrażeń.\n\nZdrowie posiada stałe 70 HP twojego całkowitego Życia razem z 'Tarczą'.",
-        "HealthRegenSpeed": "Jak szybko twoje 'Zdrowie' regeneruje się po upływie opóźnienia po otrzymaniu obrażeń.",
-        "ShieldRegenDelay": "Jak długo zajmuje twojej 'Tarczy' rozpoczęcie regeneracji po otrzymaniu obrażeń.\n\nTarcza jest częścią od 115 do 130 HP twojego całkowitego Życia razem z 'Zdrowiem'.",
-        "ShieldRegenSpeed": "Jak szybko twoja 'Tarcza' regeneruje się po upływie opóźnienia po otrzymaniu obrażeń."
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "Dyscyplina decyduje o czasie odnowienia twojego granatu."
-    },
-    "Intellect": {
-        "Description": "Intelekt decyduje o twojej pasywnej regeneracji twojej superzdolności.\n\nSuperzdolności z dłuższymi czasami odnowienia otrzymują mniej energii z zadawania lub otrzymywania obrażeń, jak również z wykonywania zabójstw lub asyst. Z drugiej strony superzdolności z krótszymi czasami odnowienia otrzymują więcej energii z tym samych działań.",
-        "SuperTier": "",
-        "ActiveRegenScalar": "",
-        "PvPDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvP.",
-        "PvEDamageResistance": "Jak dużo odporności na obrażenia twoja superzdolność daje w PvE.",
-        "DRCondition": {
-            "Passive": "Aktywna biernie",
-            "CastAnimation": "Aktywna podczas animacji superzdolności.",
-            "GoldenGunDeadShot1": "Aktywna biernie z aspektem Eliminacja",
-            "SpectralBlades1": "Aktywna podczas niewidzialności",
-            "WellOfRadiance1": "Przeciwko obrażeniom zadawanym z głównej amunicji",
-            "WellOfRadiance2": "Przeciwko jakimkolwiek obrażeniom niezadawanym przy pomocy broni używającej głównej amunicji"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "Siła wpływa na czas odnowienia twojej zdolności walki wręcz."
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": ""
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }

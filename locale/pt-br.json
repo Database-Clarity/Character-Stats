@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "A Mobilidade governa o quão alto você pode pular sem usar sua habilidade de salto. Isso também determina sua velocidade de movimento enquanto anda para a frente, para os lados ou Agachado.\n\nMobilidade não tem efeito na Velocidade de Corrida, já que esta está fixa em 8 metros por segundo.\n\nMobilidade também determina o tempo de recarga das Habilidades de Classe dos Caçadores.",
-        "WalkSpeed": "O quão rápido você consegue andar para a frente.",
-        "StrafeSpeed": "O quão rápido você pode se mover horizontalmente e para trás.",
-        "CrouchSpeed": "O quão rápido você pode se mover enquanto agachado."
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "A Resiliência governa quanto HP seus 'Escudos' têm, concede Resistência a Dano passivo dentro de PvE, e fornece uma quantidade passiva de Resistência a Oscilação de sua arma a dano recebido. Também diminui o dano recebido ao sair forçadamente do Congelamento da Estase.\n\n'Escudos' são uma porção de 115 a 130 HP de seu HP total junto de uma porção fixa de 70 HP de 'Vida'.\n\nResiliência também determina o tempo de recarga da Habilidade de Classe dos Titãs.",
-        "ShieldHP": "",
-        "PvEDamageResistance": "Quantidade de Resistência a Dano passiva você tem nas atividades PvE.",
-        "FlinchResistance": "Quantidade de Resistência a Oscilação passiva você possui."
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "A Recuperação governa o atraso antes da sua 'Vida' e 'Escudos' iniciar a regeneração, bem como a rapidez com que eles regeneram.\n\nA Recuperação também determina o tempo de recarga da Habilidade de Classe de Arcanos.",
-        "TotalRegenTime": "Tempo necessário para regenerar completamente sua Vida e Escudos de 0 HP.",
-        "HealthRegenDelay": "Quantidade de tempo necessária para sua 'Vida' regenerar após tomar dano.\n\nVida é um valor fixo de 70 HP que compõem seu HP Total junto dos seus 'Escudos'.",
-        "HealthRegenSpeed": "Tempo necessário para sua 'Vida' regenerar após o atraso de tomar dano acabar.",
-        "ShieldRegenDelay": "Tempo necessário para seus 'Escudos' regenerarem após o atraso de tomar dano acabar.\n\nEscudos são uma parte de 115 a 130 de HP de seu HP Total junto de sua 'Vida'.",
-        "ShieldRegenSpeed": "O quão rápido seus 'Escudos' regeneram após o atraso de tomar dano acabar."
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "A Disciplina governa o tempo de recarga de suas Habilidades de Granadas."
-    },
-    "Intellect": {
-        "Description": "O Intelecto governa o tempo de recarga de sua Super-Habilidade.\n\nSuper-Habilidades com tempo de recarga mais longo recebem menos Energia de Super-Habilidade ao causar ou receber Dano, bem como por obter Abates ou Assistências. Inversamente, Super-Habilidade com tempo de recarga mais curtos recebem mais Energia de Super-Habilidade das mesmas ações.",
-        "SuperTier": "Níveis de Super são uma simples categorização das habilidades de Super em cinco níveis com base em seus tempos de recarga. Os Supers de nível 5 tem o tempo de recarga mais curto, e os Supers de nível 1 tem o maior.\n\nSuper Níveis também influenciam quanto de energia de Super você obtém por Regeneração Ativa de Super, com níveis mais altos se beneficiam mais da mecânica.",
-        "ActiveRegenScalar": "",
-        "PvPDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvP.",
-        "PvEDamageResistance": "Quantidade de resistência a dano sua Super-Habilidade fornece em PvE.",
-        "DRCondition": {
-            "Passive": "Ativo Passivamente",
-            "CastAnimation": "Ativo durante a animação inicial de usar um Super-Habilidade.",
-            "GoldenGunDeadShot1": "Ativo passivamente com o Aspecto Manda Bala",
-            "SpectralBlades1": "Ativo enquanto Invisível",
-            "WellOfRadiance1": "Contra dano de Armas de Munição Primária",
-            "WellOfRadiance2": "Contra qualquer dano não causado por uma Arma de Munição Primária"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "A Força governa o tempo de recarga de suas Habilidades Corpo-a-corpo."
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": ""
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }

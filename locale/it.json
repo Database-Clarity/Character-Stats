@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "La Mobilità determina quanto in alto puoi saltare senza usare la tua abilità di salto. Determina anche la tua velocità di movimento mentre Cammini in avanti, di lato o da Accovacciato.\n\nLa Mobilità non ha effetto sulla velocità di Corsa in quanto è fissa ad 8 metri al secondo.\n\nLa Mobilità determina inoltre la velocità di recupero dell'Abilità di Classe dei Cacciatori.",
-        "WalkSpeed": "Quanto veloce puoi camminare in avanti.",
-        "StrafeSpeed": "Quanto veloce puoi muoverti lateralmente ed all'indietro.",
-        "CrouchSpeed": "Quanto veloce puoi muoverti mentre sei accovacciato."
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "La Resilienza determina quanti Punti Vita il tuo 'Scudo' possiede, garantisce passivamente una Resistenza ai Danni in PvE, e fornisce in modo passivo Resistenza al Sussulto. Riduce anche il danno ricevuto quando ti liberi dal Congelamento Stasi.\n\nLa porzione di 'Scudo' va da 115 ai 130 Punti Vita da aggiungere alla porzione fissa di 'Salute' di 70 Punti Vita.\n\nLa Resilienza determina inoltre la velocità di recupero dell'Abilità di Classe dei Titani.",
-        "ShieldHP": "",
-        "PvEDamageResistance": "Quanta Resistenza al Danno passiva hai nelle attività PvE.",
-        "FlinchResistance": "Quanta Resistenza al Sussulto passiva hai."
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "Il Recupero determina il ritardo prima che la tua 'Salute' e 'Scudo' inizino a rigenerarsi cosi come anche quanto velocemente si rigenerano.\n\nIl Recupero determina inoltre la velocità di recupero dell'Abilità di Classe dei Stregoni.",
-        "TotalRegenTime": "Quanto tempo ci vuole per rigenerare completamente la tua 'Salute' e 'Scudo' a partire da 0 Punti Vita.",
-        "HealthRegenDelay": "Quanto tempo ci vuole per iniziare la rigenerazione della 'Salute' dopo aver subito dei danni.\n\nLa 'Salute' è una porzione fissa di 70 Punti Vita dei tuoi Punti Vita Totali insieme allo 'Scudo'.",
-        "HealthRegenSpeed": "Quanto velocemente la tua 'Salute' si rigenera quando il ritardo dopo aver subito danno è finito.",
-        "ShieldRegenDelay": "Quanto tempo ci vuole per il tuo 'Scudo' per iniziare a rigenerarsi dopo aver subito danno.\n\nLo 'Scudo' è una porzione che va da 115 a 130 Punti Vita dei tuoi Punti Vita Totali insieme alla 'Salute'.",
-        "ShieldRegenSpeed": "Quanto velocemente il tuo 'Scudo' si rigenera quando il ritardo dopo aver subito danno è finito."
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "La Disciplina determina la velocità di recupero della tua Abilità Granata."
-    },
-    "Intellect": {
-        "Description": "L'Intelletto determina la velocità di recupero passiva della tua Super Abilità.\n\nLe Super Abilità con una velocità di recupero più lunga ricevono meno Energia della Super quando infliggono o ricevono Danno, cosi come quando effettuano Eliminazioni o Assist. Al contrario, le Super Abilità con una velocità di recupero più corta ricevono più Energia della Super dalle stesse azioni.",
-        "SuperTier": "",
-        "ActiveRegenScalar": "",
-        "PvPDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvP.",
-        "PvEDamageResistance": "Quanta Resistenza ai Danni la tua Super Abilità fornisce in PvE.",
-        "DRCondition": {
-            "Passive": "Passivamente Attivo",
-            "CastAnimation": "Attivo durante l'animazione della Super Abilità.",
-            "GoldenGunDeadShot1": "Passivamente Attivo con la Natura 'Colpo di Grazia'",
-            "SpectralBlades1": "Attivo quando Invisibile",
-            "WellOfRadiance1": "Contro il danno da Arma che usa Munizioni Primarie",
-            "WellOfRadiance2": "Contro qualsiasi danno non inflitto da un' Arma che usa Munizioni Primarie"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "La Forza determina la velocità di recupero della tua Abilità Corpo a Corpo."
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": "Alcune abilità che intrinsecamente hanno multiple cariche potrebbero ricaricarsi a velocità diverse in base alla quantità di Cariche Abilità che hai già disponibili. Quindi, la prima carica di abilità potrebbe usare la Velocità di Ricarica di base, ma la seconda o la terza potrebbero ricaricarsi più velocemente."
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "Alcune abilità che intrinsecamente hanno multiple cariche potrebbero ricaricarsi a velocità diverse in base alla quantità di Cariche Abilità che hai già disponibili. Quindi, la prima carica di abilità potrebbe usare la Velocità di Ricarica di base, ma la seconda o la terza potrebbero ricaricarsi più velocemente.",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }

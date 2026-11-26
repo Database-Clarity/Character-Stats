@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "La Mobilité détermine la hauteur de saut sans utiliser votre compétence de saut. Elle détermine aussi votre vitesse de mouvement lorsque vous avancez en marchant, marchez sur le côté, ou vous déplacez accroupis.\n\nLa mobilité n'a aucun effet sur la Vitesse de Course, qui est fixe, à 8 mètres par seconde.\n\nLa mobilité détermine aussi le temps de recharge de la Compétence de Classe du Chasseur.",
-        "WalkSpeed": "La vitesse à laquelle vous avancez en marchant.",
-        "StrafeSpeed": "La vitesse à laquelle vous vous déplacez sur le côté et en reculant.",
-        "CrouchSpeed": "La vitesse à laquelle vous vous déplacez accroupis."
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "La Résistance détermine combien de PV votre \"Bouclier\" possède, augmente votre Résistance aux Dégâts en JcE, et réduit l'amplitude des tressaillements lorsque vous essuyez des tirs. Elle réduit aussi les dégâts reçus lorsque l'on se libère du Gel de la Stase.\n\nLe \"Bouclier\" vaux entre 115 à 130 PV de votre total de PV, avec un montant fixe de 70 PV pour votre \"Vie\".\n\nLa Résistance détermine aussi le temps de recharge de la Compétence de Classe des Titans.",
-        "ShieldHP": "",
-        "PvEDamageResistance": "La valeur de Résistance passive aux Dégâts que vous avez dans les activités JcE.",
-        "FlinchResistance": "La valeur de Résistance passive aux Tressaillements que vous avez."
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "La Récupération détermine le délai avant que votre \"Santé\" et votre \"Bouclier\" ne commencent à se régénérer ainsi que la vitesse à laquelle ils se régénèrent.\n\nLa Récupération détermine également le temps de recharge de la Compétence de Classe des Arcanistes.",
-        "TotalRegenTime": "Le temps nécessaire pour régénérer entièrement votre \"Santé\" et votre \"Bouclier\" à partir de 0 PV.",
-        "HealthRegenDelay": "Le temps nécessaire pour que votre \"Santé\" commence à se régénérer après avoir reçu des dégâts.\n\nLa Santé est une portion fixée à 70 PV de vos PV Totaux, différente du \"Bouclier\".",
-        "HealthRegenSpeed": "La vitesse à laquelle votre \"Santé\" se régénère une fois le délai de prise de dégâts terminé.",
-        "ShieldRegenDelay": "Le temps nécessaire pour que votre \"Bouclier\" commence à se régénérer après avoir reçu des dégâts.\n\nLe \"Bouclier\" est une portion de 115 à 130 PV de vos PV totaux, différent de la \"Santé\".",
-        "ShieldRegenSpeed": "La vitesse à laquelle votre 'Bouclier' se régénère une fois le délai de prise de dégâts terminé."
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "La Discipline détermine le temps de recharge de votre Compétence de Grenade."
-    },
-    "Intellect": {
-        "Description": "L'Intelligence détermine le temps de recharge de votre Compétence de Super.\n\nLes Compétences de Super avec des temps de rechargement plus long reçoivent moins d'énergie de Super en infligeant ou recevant des dégâts, de même pour les Kills et les Assistances. Inversement, les Compétences de Super avec des temps de recharge plus court reçoivent plus d'énergie de Super de ces mêmes actions.",
-        "SuperTier": "",
-        "ActiveRegenScalar": "",
-        "PvPDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcJ.",
-        "PvEDamageResistance": "La valeur de Résistance aux Dégâts fournie par votre Compétence de Super en JcE.",
-        "DRCondition": {
-            "Passive": "Passivement Actif",
-            "CastAnimation": "Actif pendant l'animation de déclenchement du Super.",
-            "GoldenGunDeadShot1": "Passivement actif avec l'aspect Assommez-les",
-            "SpectralBlades1": "Actif lorsque Invisible",
-            "WellOfRadiance1": "Contre les dégâts des armes utilisant des Munitions Principales",
-            "WellOfRadiance2": "Contre tous les dégâts non fait par les armes utilisant des munitions principales"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "La Force détermine le temps de recharge de la Compétence de Mêlée."
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "",
-    "ChargeBasedScaling": ""
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }

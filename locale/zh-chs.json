@@ -1,45 +1,99 @@
 {
-    "Mobility": {
-        "Description": "敏捷影响在不使用跳跃技能的情况下可以跳跃的高度，以及步行，侧移或蹲伏的移动速度。\n\n移动速度对冲刺速度没有影响，冲刺速度固定为8米/秒。\n\n敏捷也影响猎人的闪身能力冷却。",
-        "WalkSpeed": "向前步行的移动速度",
-        "StrafeSpeed": "侧向以及向后的移动速度",
-        "CrouchSpeed": "蹲伏时的移动速度"
+    "Health": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Resilience": {
-        "Description": "韧性影响总生命值中“护盾”的数值，在PvE给予被动地伤害减免，并且给予被动的武器退缩抗性。同时降低你在摆脱冰影冻结状态时所受到的伤害。\n\n韧性同时影响泰坦的职业技能冷却。",
-        "ShieldHP": "你的“护盾”有多少HP。\n\n“护盾”拥有115 - 130 HP，位于“基础生命值”右侧与其组成总生命值。“基础生命值”的总量取决于正在进行中的活动：绝大多数的熔炉游戏列表中拥有100 HP（不包括趋势控制和鏖战），其余活动拥有70 HP。",
-        "PvEDamageResistance": "在PvE活动中的被动伤害减免。",
-        "FlinchResistance": "被动的武器退缩抗性。"
+    "Melee": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Recovery": {
-        "Description": "恢复影响你的“基础生命值”和“护盾”开始恢复前的延迟以及恢复的速度。\n\n恢复同时影响术士的职业技能冷却。",
-        "TotalRegenTime": "从0生命值完全恢复满”基础生命值“以及”护盾“所需要的时间。",
-        "HealthRegenDelay": "受到伤害后开始恢复“基础生命值”前的延迟。",
-        "HealthRegenSpeed": "受到伤害后，延迟过后“基础生命值”的恢复速度。",
-        "ShieldRegenDelay": "你的“护盾”在遭受伤害后开始恢复所需的时间。",
-        "ShieldRegenSpeed": "受到伤害后，延迟过后“护盾”的恢复速度。"
+    "Grenade": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "Discipline": {
-        "Description": "纪律影响你的手雷技能冷却。"
-    },
-    "Intellect": {
-        "Description": "智慧影响你超能技能的被动冷却。",
-        "SuperTier": "超能阶级是通过超能的冷却时间将超能分为五个等级的简单分类。 五级超能冷却时间最短，一级超能最长。\n\n超能阶级也会影响从主动超能回复手段获取的能量，更高的阶级在这个机制中收益更大。",
-        "ActiveRegenScalar": "主动回复分级关联到超能阶级和从主动超能回复手段中获取的能量。分级的范围从一级超能的0.8到五级超能的1.2倍率不等，三级超能为基准线1.0\n\n主动超能回复手段指任何非被动的超能回复或武器特性获得的根据基础超能回复速率的百分比超能回复。包括击杀或助攻，造成或受到伤害，拾取能量球，以及武器特性如敲打。",
-        "PvPDamageResistance": "你的超能在PvP中提供多少伤害减免。",
-        "PvEDamageResistance": "你的超能在PvE中提供多少伤害减免。",
-        "DRCondition": {
-            "Passive": "被动触发",
-            "CastAnimation": "在超能技能的激活动画期间触发。",
-            "GoldenGunDeadShot1": "“重击”星象生效期间被动触发",
-            "SpectralBlades1": "隐形效果时触发",
-            "WellOfRadiance1": "针对主弹药武器伤害",
-            "WellOfRadiance2": "针对非主弹药武器的伤害"
+    "Super": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": "",
+        "SuperAbilities": {
+            "2274196887": {
+                "EnhancedDurationTooltip": ""
+            },
+            "4260353953": {
+                "EnhancedDurationTooltip": ""
+            }
         }
     },
-    "Strength": {
-        "Description": "力量影响你的近战技能冷却。"
+    "Class": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
     },
-    "ChunkEnergyScalar": "迟滞能量分级关联到技能的冷却时间并影响从武器特性中获取的技能能量百分比。例如武器特性会提供100%的技能能量而迟滞能量分级为0.6，则你只能从这个特性中获得60%的能量。\n\n一般情况下，相比其他技能拥有更长冷却时间的技能会拥有一个更低的分级，进而降低获取的技能能量。",
-    "ChargeBasedScaling": "一些会附带多层充能的技能会根据已拥有的充能层数决定充能速度，因此第一个层技能可能会以默认速度充能，而第二或第三层相比第一层会有更快的充能速度。"
+    "Weapons": {
+        "Overview": "",
+        "BaseStatTooltip": "",
+        "EnhancedStatTooltip": ""
+    },
+    "ChargeBasedScaling": "一些会附带多层充能的技能会根据已拥有的充能层数决定充能速度，因此第一个层技能可能会以默认速度充能，而第二或第三层相比第一层会有更快的充能速度。",
+    "Movement": {
+        "Overview": "",
+        "WalkSpeed": "",
+        "StrafeSpeed": "",
+        "CrouchSpeed": "",
+        "SprintSpeed": "",
+        "ADSSpeed": "",
+        "Classes": {
+            "671679327": {
+                "Description": ""
+            },
+            "2271682572": {
+                "Description": ""
+            },
+            "3655393761": {
+                "Description": ""
+            }
+        },
+        "Sources": {
+            "12": {
+                "Description": ""
+            },
+            "13": {
+                "Description": ""
+            },
+            "14": {
+                "Description": ""
+            },
+            "54": {
+                "Description": "",
+                "Condition": ""
+            },
+            "25692695": {
+                "Description": "",
+                "Condition": ""
+            },
+            "377257911": {
+                "Description": ""
+            },
+            "1133590731": {
+                "Description": ""
+            },
+            "1458010786": {
+                "Description": ""
+            },
+            "1888623310": {
+                "Description": "",
+                "Condition": ""
+            },
+            "2213377102": {
+                "Description": ""
+            },
+            "3072857252": {
+                "Description": "",
+                "Condition": ""
+            }
+        }
+    }
 }
