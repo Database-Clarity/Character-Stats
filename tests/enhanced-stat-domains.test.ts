@@ -130,24 +130,26 @@ describe('enhanced stat curve domains', () => {
             expect(html).toContain('100–200');
         }
 
+        expect(classSource.Fields.PVEOvershieldDamageResistance).toBe(25);
+        expect(exported.PVEOvershieldDamageResistance).toBe(25);
         expect(classSource.Fields.PVPOvershieldDamageResistance).toBe(50);
         expect(exported.PVPOvershieldDamageResistance).toBe(50);
-        expect(exported).not.toHaveProperty('PVEOvershieldDamageResistance');
         expect(
             checkpoints.map((statValue) =>
                 renderTooltip(tooltip, classSource, classSpec, statValue, { Cooldown: 1 }),
             ),
         ).toEqual([
             expect.stringContaining(
-                '0 HP raw Overshield HP in PvE and 0 HP raw Overshield HP in PvP',
+                '0 HP raw Overshield HP in PvE (25% damage resistance) and 0 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
             expect.stringContaining(
-                '20 HP raw Overshield HP in PvE and 5 HP raw Overshield HP in PvP',
+                '20 HP raw Overshield HP in PvE (25% damage resistance) and 5 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
             expect.stringContaining(
-                '40 HP raw Overshield HP in PvE and 10 HP raw Overshield HP in PvP',
+                '40 HP raw Overshield HP in PvE (25% damage resistance) and 10 HP raw Overshield HP in PvP (50% damage resistance)',
             ),
         ]);
+        expect(tooltip).toContain('{{PVEOvershieldDamageResistance}}{{Percent}}');
         expect(tooltip).toContain('{{PVPOvershieldDamageResistance}}{{Percent}}');
         expect(tooltip).toContain('{{PVEClassAbilityDamageIncrease}}{{Percent}}');
         expect(tooltip).toContain('{{PVPClassAbilityDamageIncrease}}{{Percent}}');
@@ -184,7 +186,7 @@ describe('enhanced stat curve domains', () => {
             const source = project.sources.stats.find((entry) => entry.Name === name) as
                 StatSource | undefined;
             if (!source) throw new Error(`Missing ${name} source`);
-            expect(source.Notes).toContain('d2damage');
+            expect(source.Notes).toContain('live game data');
 
             const exported = project.data[String(spec.hash)] as Record<string, unknown>;
             const exportedFields = Object.keys(maximums);
@@ -287,7 +289,7 @@ describe('enhanced stat curve domains', () => {
                 expect(previewValue).toBe(String(arrayValue));
                 return arrayValue;
             }),
-        ).toEqual([4.9, 4.89, 4.29, 3.67]);
+        ).toEqual([5.3, 5.255, 3.808, 3.18]);
         expect(
             [100, 101, 150, 200].map((statValue) => {
                 const arrayValue = exported.ShieldRechargeSpeed![statValue - 100]!;
@@ -300,28 +302,28 @@ describe('enhanced stat curve domains', () => {
                 expect(previewValue).toBe(String(arrayValue));
                 return arrayValue;
             }),
-        ).toEqual([34.48, 34.64, 42.24, 50]);
+        ).toEqual([30.3, 30.63, 46.76, 60.61]);
     });
 
     it('lets the editor enter stat 100 for an enhanced linear curve', async () => {
         const project = await validateProject();
         if (!project.sources) throw new Error('Project did not validate');
-        const health = project.sources.stats.find((entry) => entry.Name === 'Health');
-        if (!health) throw new Error('Missing Health source');
-        const curve = health.Fields.ShieldRechargeDelay;
+        const classSource = project.sources.stats.find((entry) => entry.Name === 'Class');
+        if (!classSource) throw new Error('Missing Class source');
+        const curve = classSource.Fields.PVEOvershieldHP;
         const html = renderToStaticMarkup(
             createElement(CurveEditor, {
-                spec: healthSpec.fields.find((field) => field.key === 'ShieldRechargeDelay')!,
+                spec: classSpec.fields.find((field) => field.key === 'PVEOvershieldHP')!,
                 value: curve,
                 saved: curve,
-                file: 'sources/stats/health.json',
-                path: 'Fields.ShieldRechargeDelay',
+                file: 'sources/stats/class.json',
+                path: 'Fields.PVEOvershieldHP',
                 onChange() {},
             }),
         );
 
         expect(html).toContain('100–200');
-        expect(html).toContain('Shield recharge delay (s) segment 1 point 0 stat value');
+        expect(html).toContain('PvE overshield (HP) segment 1 point 0 stat value');
         expect(html).toContain('min="100"');
         expect(html).toContain('max="200"');
     });

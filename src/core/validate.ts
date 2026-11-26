@@ -207,22 +207,31 @@ export function validateSources(input: unknown, locale?: LocaleData): Validation
                             if (!Array.isArray(values)) continue;
                             values.forEach((value: unknown, valueIndex: number) => {
                                 if (typeof value !== 'number') return;
-                                if (
-                                    effect.Type === 'MobilityTiers'
-                                        ? !Number.isSafeInteger(value)
-                                        : value <= 0
+                                const fieldPath =
+                                    path +
+                                    '.Effects[' +
+                                    effectIndex +
+                                    '].' +
+                                    key +
+                                    '[' +
+                                    valueIndex +
+                                    ']';
+                                if (effect.Type === 'Mobility') {
+                                    if (!Number.isInteger(value)) {
+                                        error(fieldPath, 'Mobility values must be whole numbers');
+                                    }
+                                } else if (
+                                    effect.Type === 'StrafeAdditive' ||
+                                    effect.Type === 'CrouchAdditive'
                                 ) {
+                                    if (!Number.isFinite(value)) {
+                                        error(fieldPath, 'Movement effect values must be finite');
+                                    }
+                                } else if (value <= 0) {
                                     error(
-                                        path +
-                                            '.Effects[' +
-                                            effectIndex +
-                                            '].' +
-                                            key +
-                                            '[' +
-                                            valueIndex +
-                                            ']',
-                                        effect.Type === 'MobilityTiers'
-                                            ? 'Mobility tiers must be safe integers'
+                                        fieldPath,
+                                        effect.Type === 'SprintBoost'
+                                            ? 'Sprint boost speed must be positive'
                                             : 'Movement multipliers must be positive',
                                     );
                                 }

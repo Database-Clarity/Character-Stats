@@ -3,17 +3,16 @@ import { movementSpeed, type MovementSource, type MovementSpeedInput } from '../
 export interface ActiveMovementSource {
     stacks: number;
     boosted: boolean;
-    held: boolean;
 }
 
 export type ActiveMovementSources = Record<string, ActiveMovementSource>;
 
-export type MovementStatKey = 'mobility' | 'sprint' | 'walk' | 'strafe' | 'crouch' | 'ads';
+export type MovementStatKey = 'mobility' | 'sprint' | 'walk' | 'strafe' | 'crouch';
 
 export interface MovementStat {
     key: MovementStatKey;
     label: string;
-    unit: 'tier' | 'm/s';
+    unit: 'mobility' | 'm/s';
     value?: number;
     baseline?: number;
     delta?: number;
@@ -59,21 +58,14 @@ export function reconcileMovementSources(
     for (const [hash, state] of Object.entries(reconciled)) {
         const source = entries.get(hash);
         const boosted = !!source?.BoostRequiresAll?.length && state.boosted;
-        const held =
-            !!source?.Effects.some((effect) => effect.Type === 'ADSMultiplier') && state.held;
         const stackCount = source ? movementStackCount(source, boosted) : 0;
         const stacks = Math.min(
             stackCount,
             Number.isSafeInteger(state.stacks) && state.stacks > 0 ? state.stacks : 1,
         );
-        if (
-            !source ||
-            stacks !== state.stacks ||
-            boosted !== state.boosted ||
-            held !== state.held
-        ) {
+        if (!source || stacks !== state.stacks || boosted !== state.boosted) {
             next ??= { ...reconciled };
-            if (source) next[hash] = { ...state, stacks, boosted, held };
+            if (source) next[hash] = { ...state, stacks, boosted };
             else delete next[hash];
         }
     }
@@ -105,12 +97,12 @@ export function setMovementSourceActive(
             if (candidate.Activation === 'WhileHeld') delete next[candidate.Hash];
         }
     }
-    next[key] = { stacks: 1, boosted: false, held: false };
+    next[key] = { stacks: 1, boosted: false };
     return next;
 }
 
 type ScenarioKey = Exclude<MovementStatKey, 'mobility'>;
-type Scenario = Pick<MovementSpeedInput, 'direction' | 'posture' | 'sprint' | 'ads'>;
+type Scenario = Pick<MovementSpeedInput, 'direction' | 'posture' | 'sprint'>;
 
 const scenarios: { key: ScenarioKey; label: string; input: Scenario }[] = [
     {
@@ -121,12 +113,11 @@ const scenarios: { key: ScenarioKey; label: string; input: Scenario }[] = [
     { key: 'walk', label: 'Walk', input: { direction: 'Forward', posture: 'Standing' } },
     { key: 'strafe', label: 'Strafe', input: { direction: 'Strafe', posture: 'Standing' } },
     { key: 'crouch', label: 'Crouch', input: { direction: 'Forward', posture: 'Crouched' } },
-    { key: 'ads', label: 'ADS', input: { direction: 'Forward', posture: 'Standing', ads: true } },
 ];
 
 interface Calculation {
     value?: number;
-    tier?: number;
+    mobility?: number;
     cappedBy?: string;
     error?: string;
 }
@@ -137,16 +128,12 @@ function calculate(
     activity: MovementSpeedInput['activity'],
     scenario: Scenario,
     sources: MovementSpeedInput['sources'],
-    heldWeaponSources: number[],
 ): Calculation {
     try {
-        const result = movementSpeed(
-            { classHash, activity, sources, heldWeaponSources, ...scenario },
-            source,
-        );
+        const result = movementSpeed({ classHash, activity, sources, ...scenario }, source);
         return {
             value: result.speed,
-            tier: result.tier,
+            mobility: result.mobility,
             ...(result.cappedBy ? { cappedBy: result.cappedBy } : {}),
         };
     } catch (cause) {
@@ -164,22 +151,12 @@ export function calculateMovementStats(
         const state = active[entry.Hash];
         return state ? [{ hash: entry.Hash, stacks: state.stacks, boosted: state.boosted }] : [];
     });
-    const heldWeaponSources = source.Sources.filter((entry) => active[entry.Hash]?.held).map(
-        (entry) => entry.Hash,
-    );
     const results = new Map<ScenarioKey, { baseline: Calculation; current: Calculation }>();
 
     for (const scenario of scenarios) {
         results.set(scenario.key, {
-            baseline: calculate(source, classHash, activity, scenario.input, [], []),
-            current: calculate(
-                source,
-                classHash,
-                activity,
-                scenario.input,
-                activeSources,
-                heldWeaponSources,
-            ),
+            baseline: calculate(source, classHash, activity, scenario.input, []),
+            current: calculate(source, classHash, activity, scenario.input, activeSources),
         });
     }
 
@@ -194,8 +171,8 @@ export function calculateMovementStats(
             baseline.error ? `Baseline: ${baseline.error}` : '',
             current.error ? `Current: ${current.error}` : '',
         ].filter(Boolean);
-        const baselineValue = unit === 'tier' ? baseline.tier : baseline.value;
-        const currentValue = unit === 'tier' ? current.tier : current.value;
+        const baselineValue = unit === 'mobility' ? baseline.mobility : baseline.value;
+        const currentValue = unit === 'mobility' ? current.mobility : current.value;
         return {
             key,
             label,
@@ -213,7 +190,7 @@ export function calculateMovementStats(
     const sprint = results.get('sprint')!,
         walk = results.get('walk')!;
     return [
-        row('mobility', 'Mobility', 'tier', walk.baseline, walk.current),
+        row('mobility', 'Mobility', 'mobility', walk.baseline, walk.current),
         row('sprint', 'Sprint', 'm/s', sprint.baseline, sprint.current),
         row('walk', 'Walk', 'm/s', walk.baseline, walk.current),
         row(
@@ -230,7 +207,6 @@ export function calculateMovementStats(
             results.get('crouch')!.baseline,
             results.get('crouch')!.current,
         ),
-        row('ads', 'ADS', 'm/s', results.get('ads')!.baseline, results.get('ads')!.current),
     ];
 }
 
@@ -241,9 +217,9 @@ export interface FormattedMovementDelta {
     accessibleLabel: string;
 }
 
-function formatDeltaAmount(value: number): string {
+function formatDeltaAmount(value: number, unit: MovementStat['unit']): string {
     return new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 2,
+        minimumFractionDigits: unit === 'mobility' ? 0 : 2,
         maximumFractionDigits: 6,
         useGrouping: false,
     }).format(Math.abs(value));
@@ -254,22 +230,21 @@ export function formatMovementDelta(
     unit: MovementStat['unit'],
 ): FormattedMovementDelta {
     const rounded = Number(delta.toFixed(6));
-    const unitLabel = unit === 'tier' ? 'tier' : 'm/s';
-    const pluralizedUnit = unit === 'tier' && Math.abs(rounded) !== 1 ? 'tiers' : unitLabel;
+    const unitLabel = unit === 'mobility' ? 'Mobility' : 'm/s';
     if (rounded === 0) {
         return {
             direction: 'neutral',
             arrow: '—',
-            text: `0.00 ${unit === 'tier' ? 'tiers' : 'm/s'}`,
+            text: unit === 'mobility' ? '0 Mobility' : '0.00 m/s',
             accessibleLabel: 'Same as with no sources',
         };
     }
     const direction = rounded > 0 ? 'increase' : 'decrease';
-    const amount = formatDeltaAmount(rounded);
+    const amount = formatDeltaAmount(rounded, unit);
     return {
         direction,
         arrow: direction === 'increase' ? '↑' : '↓',
-        text: `${rounded > 0 ? '+' : '-'}${amount} ${pluralizedUnit}`,
-        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${pluralizedUnit} compared with no sources`,
+        text: `${rounded > 0 ? '+' : '-'}${amount} ${unitLabel}`,
+        accessibleLabel: `${direction === 'increase' ? 'Increase' : 'Decrease'} of ${amount} ${unitLabel} compared with no sources`,
     };
 }

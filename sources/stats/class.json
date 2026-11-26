@@ -76,7 +76,7 @@
                 0,
                 100
             ],
-            "Round": 3,
+            "Round": 4,
             "Segments": [
                 {
                     "Type": "Expression",
@@ -140,6 +140,7 @@
                 }
             ]
         },
+        "PVEOvershieldDamageResistance": 25,
         "PVPOvershieldDamageResistance": 50,
         "PVEClassAbilityDamageIncrease": {
             "Domain": [
@@ -184,54 +185,58 @@
             ]
         }
     },
-    "Notes": "CooldownScalars (table 1, x1 to x2.4), EnergyGainScalar (0x1CAD6FDA spline, 0.4 to 0.9; event-grant assembly probable), Overshield HP (40 PvE / 10 PvP), and PvE/PvP damage curves verified from live package data (d2damage). PVPOvershieldDamageResistance, Acrobat's Dodge PvP cooldown (decoded 118.8s), and Bastion/Rally/Threaded Specter overrides still need in-game verification.",
+    "Notes": "CooldownScalars (1 -> 1/2.4, Round 4), EnergyGainScalar (0.4 -> 0.9, Round 4), PVEOvershieldHP (0 -> 40), PVPOvershieldHP (0 -> 10), PVEOvershieldDamageResistance (25% vs combatants), PVEClassAbilityDamageIncrease (0 -> 65%), and PVPClassAbilityDamageIncrease (0 -> 10%) verified from live game data. PVPOvershieldDamageResistance (50% vs players, 20 eHP at 200 Class) matches Compendium in-game PvP testing (per-section override rows and the overshield damage-commit path are not yet decoded in static dumps). Class Overshield lasts 5s on Dodge/Thruster/Phoenix Dive and 10s on Rift/Barricade. Prismatic abilities include the 0.8x PvP chunk energy scalar.",
     "Abilities": [
         {
             "Hash": 3636300852,
             "Name": "Acrobat's Dodge",
             "BaseCooldown": 56,
+            "PVPBaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2711519343,
             "Name": "Acrobat's Dodge - Prismatic",
             "BaseCooldown": 56,
-            "ChunkEnergyScalar": 0.5
+            "PVPBaseCooldown": 118.8,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 25156514,
             "Name": "Empowering Rift - Arc",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664839,
             "Name": "Empowering Rift - Prismatic",
-            "BaseCooldown": 118.7,
-            "ChunkEnergyScalar": 0.5
+            "BaseCooldown": 118.8,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2979486802,
             "Name": "Empowering Rift - Solar",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047640,
             "Name": "Empowering Rift - Stasis",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852321,
             "Name": "Empowering Rift - Strand",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081648,
             "Name": "Empowering Rift - Void",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -244,7 +249,8 @@
             "Hash": 2711519340,
             "Name": "Gambler's Dodge - Prismatic",
             "BaseCooldown": 56,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 3636300855,
@@ -273,37 +279,38 @@
         {
             "Hash": 25156515,
             "Name": "Healing Rift - Arc",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 1444664838,
             "Name": "Healing Rift - Prismatic",
-            "BaseCooldown": 118.7,
-            "ChunkEnergyScalar": 0.5
+            "BaseCooldown": 118.8,
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2979486803,
             "Name": "Healing Rift - Solar",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 3492047641,
             "Name": "Healing Rift - Stasis",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 383852320,
             "Name": "Healing Rift - Strand",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
             "Hash": 2209081649,
             "Name": "Healing Rift - Void",
-            "BaseCooldown": 118.7,
+            "BaseCooldown": 118.8,
             "ChunkEnergyScalar": 0.5
         },
         {
@@ -316,7 +323,8 @@
             "Hash": 2711519341,
             "Name": "Marksman's Dodge - Prismatic",
             "BaseCooldown": 42,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 3636300854,
@@ -352,7 +360,8 @@
             "Hash": 1444664836,
             "Name": "Phoenix Dive - Prismatic",
             "BaseCooldown": 79.6,
-            "ChunkEnergyScalar": 0.8
+            "ChunkEnergyScalar": 0.8,
+            "PVPChunkEnergyScalar": 0.64
         },
         {
             "Hash": 489583097,
@@ -364,7 +373,8 @@
             "Hash": 2868073560,
             "Name": "Rally Barricade - Prismatic",
             "BaseCooldown": 55.1,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 2495523341,
@@ -400,7 +410,8 @@
             "Hash": 2868073563,
             "Name": "Thruster - Prismatic",
             "BaseCooldown": 52.1,
-            "ChunkEnergyScalar": 1
+            "ChunkEnergyScalar": 1,
+            "PVPChunkEnergyScalar": 0.8
         },
         {
             "Hash": 489583096,
@@ -412,7 +423,8 @@
             "Hash": 2868073561,
             "Name": "Towering Barricade - Prismatic",
             "BaseCooldown": 101.3,
-            "ChunkEnergyScalar": 0.5
+            "ChunkEnergyScalar": 0.5,
+            "PVPChunkEnergyScalar": 0.4
         },
         {
             "Hash": 2495523340,
@@ -443,29 +455,47 @@
         {
             "Hash": 90009855,
             "Name": "Arbor Warden - Exotic Chest",
+            "Notes": "Reduces Towering Barricade cooldown from 101.3s to 70s and Rally Barricade cooldown from 55.1s to 38s (~1.45x passive regen). Non-Barricade class abilities default to Towering Barricade behavior when active.",
             "Requirements": [
-                489583098,
-                2868073563
+                489583096,
+                2868073561,
+                2495523340,
+                3260056808,
+                2087010645,
+                2722641740,
+                489583097,
+                2868073560,
+                2495523341,
+                3260056809,
+                2087010644,
+                2722641741
             ],
             "Scalar": [
-                1.9444444444,
-                1.9444444444
-            ],
-            "ChunkEnergyOverride": [
-                1,
-                1
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6910167818,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724,
+                0.6896551724
             ]
         },
         {
             "Hash": 1602994569,
             "Name": "Bastion - Void Aspect",
+            "Notes": "Cooldown penalty is PvP-only (1/0.71 = 1.4085x on Towering Barricade -> 142.7s base, 1.9601x on Rally Barricade -> 108.0s base before Crucible mode scaling); PvE base cooldown is unchanged. ChunkEnergyOverride is 0.5x.",
             "Requirements": [
                 2722641741,
                 2722641740
             ],
-            "Scalar": [
-                2.1052631579,
-                1.4285714286
+            "PVPScalar": [
+                1.9600725953,
+                1.4084507042
             ],
             "ChunkEnergyOverride": [
                 0.5,
@@ -473,16 +503,28 @@
             ]
         },
         {
+            "Hash": 3066103997,
+            "Name": "Crackshot - Solar Aspect",
+            "Notes": "Added in Update 9.7.0 (Monument of Triumph). Overrides Solar Gambler's and Acrobat's Dodge cooldown and chunk scalar to Marksman's Dodge (42s, 1.0x).",
+            "Requirements": [
+                3636300855,
+                3636300852
+            ],
+            "CooldownOverride": 42,
+            "ChunkEnergyOverride": [
+                1,
+                1
+            ]
+        },
+        {
             "Hash": 1322544481,
             "Name": "Hoarfrost-Z - Exotic Chest",
+            "Notes": "Overrides Rally Barricade cooldown to Towering Barricade (101.3s) while keeping a 1.0x chunk energy scalar.",
             "Requirements": [
                 3260056809,
                 2868073560
             ],
-            "Scalar": [
-                1.8421052632,
-                1.8421052632
-            ],
+            "CooldownOverride": 101.3,
             "ChunkEnergyOverride": [
                 1,
                 1
@@ -490,32 +532,47 @@
         },
         {
             "Hash": 1467044898,
-            "Name": "Icefall Mantle - Exotic Arns",
+            "Name": "Icefall Mantle - Exotic Arms",
+            "Notes": "Requires a Stasis Super (Stasis or Prismatic Titan). Replaces Barricades with Glacial Guard at a 70s base cooldown and 0.5x chunk energy scalar (class ability recharge tier 3).",
             "Requirements": [
-                489583097,
-                2495523341,
                 3260056809,
-                2087010644,
-                2722641741,
                 2868073560,
-                2868073563
+                3260056808,
+                2868073561
             ],
-            "Scalar": [
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.8421052632,
-                1.9444444444
+            "CooldownOverride": 70,
+            "ChunkEnergyOverride": [
+                0.5,
+                0.5,
+                0.5,
+                0.5
+            ]
+        },
+        {
+            "Hash": 1619425569,
+            "Name": "Mask of Bakris - Exotic Helmet",
+            "Notes": "Requires an Arc or Stasis Super. Overrides Gambler's Dodge cooldown and chunk scalar to Marksman's Dodge (42s, 1.0x); does not replace Acrobat's Dodge. Passive regen pauses during the 11s Light Shift buff.",
+            "Requirements": [
+                426473317,
+                3933525367,
+                2711519340
             ],
+            "CooldownOverride": 42,
             "ChunkEnergyOverride": [
                 1,
                 1,
-                1,
-                1,
-                1,
-                1,
+                1
+            ]
+        },
+        {
+            "Hash": 3573490508,
+            "Name": "Spirit of Hoarfrost - Exotic Class Item Perk",
+            "Notes": "Shares the same barricade-replacement behavior as Hoarfrost-Z on Prismatic Rally Barricade (101.3s cooldown, 1.0x chunk scalar).",
+            "Requirements": [
+                2868073560
+            ],
+            "CooldownOverride": 101.3,
+            "ChunkEnergyOverride": [
                 1
             ]
         },
@@ -535,10 +592,12 @@
             "Hash": 2835214897,
             "Name": "Threaded Specter - Prismatic",
             "Requirements": [
+                2711519343,
                 2711519340,
                 2711519341
             ],
             "Scalar": [
+                1.6666666667,
                 1.6666666667,
                 1.6666666667
             ]

@@ -128,7 +128,7 @@ export const healthSpec: StatSpec = {
             description:
                 'This number represents the percentage damage resistance applied ' +
                 'to Health, not Shields, in PVE activities, independent of the ' +
-                'Health stat value. The current value is 34.5.',
+                'Health stat value.',
         }),
     ],
 };

@@ -8,7 +8,6 @@ import {
     formatMovementDelta,
     movementStackCount,
     reconcileMovementSources,
-    reconcileWhileHeldSources,
     setMovementSourceActive,
     type ActiveMovementSource,
     type ActiveMovementSources,
@@ -128,7 +127,7 @@ function MovementControls({ source }: { source: MovementSource }) {
                                         {stat.value === undefined
                                             ? 'Unavailable'
                                             : stat.key === 'mobility'
-                                              ? `Tier ${formatMovementTier(stat.value)}`
+                                              ? formatMovementStat(stat.value)
                                               : `${formatMovementSpeed(stat.value)} m/s`}
                                     </strong>
                                 </span>
@@ -191,7 +190,7 @@ function MovementControls({ source }: { source: MovementSource }) {
                                     <HashIdentity
                                         hash={entry.Hash}
                                         name={entry.Name}
-                                        table={entry.RefType}
+                                        table={entry.RefType === 'buff' ? undefined : entry.RefType}
                                         compact
                                     />
                                 </label>
@@ -245,22 +244,6 @@ function MovementControls({ source }: { source: MovementSource }) {
                                                 Boosted
                                             </label>
                                         )}
-                                        {entry.Effects.some(
-                                            (effect) => effect.Type === 'ADSMultiplier',
-                                        ) && (
-                                            <label className="check">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={state.held}
-                                                    onChange={(e) =>
-                                                        update(entry.Hash, {
-                                                            held: e.currentTarget.checked,
-                                                        })
-                                                    }
-                                                />
-                                                Held ADS
-                                            </label>
-                                        )}
                                     </div>
                                 )}
                             </div>
@@ -272,9 +255,9 @@ function MovementControls({ source }: { source: MovementSource }) {
     );
 }
 
-function formatMovementTier(tier: number): string {
+function formatMovementStat(mobility: number): string {
     return new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 6,
         useGrouping: false,
-    }).format(tier);
+    }).format(mobility);
 }

@@ -251,17 +251,13 @@ are small numeric inputs labelled by stack count starting at 1; core checks thei
 lengths and effect-type uniqueness.
 
 The speed preview uses the current validated Movement data and core
-`movementSpeed`. Pick a class, PvE/PvP, direction, posture, Sprint, and ADS.
-Sprint selects forward/standing and turns ADS off; choosing ADS turns Sprint off.
+`movementSpeed`. Pick a class and PvE/PvP to compare Mobility, Sprint, Walk, Strafe, and Crouch speeds together.
 Activate sources explicitly (rows are labelled Always, While held or Conditional), set stack counts, and use **Boosted** to assert all
 of that source's prerequisite equipment is present. Conditions and loadout
 compatibility are not inferred: select only applicable sources, not both
 Lightweight Frame and MIDA Synergy for the same weapon.
 
-For ADS effects, **Held ADS** marks active sources belonging to the one held
-weapon being inspected, not all three loadout weapons. No selection uses the
-global ADS multiplier. Conflicting selected ADS overrides show an error instead
-of silently choosing one. The pinned controls/results show effective tier and speed
+The pinned controls/results show effective Mobility and speed
 to two decimal places. The **Δ vs no sources** heading gives each speed's signed change against the
 same class and activity with no active optional sources. A stat row shows **Capped: Forward** (or
 Strafe or Crouch) only when a cap actually limits that speed.

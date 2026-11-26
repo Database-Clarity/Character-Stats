@@ -96,7 +96,9 @@ describe('cooldown ability groups', () => {
                 Hash: 1,
                 Name: 'Shared name',
                 BaseCooldown: 30,
+                PVPBaseCooldown: 35,
                 ChunkEnergyScalar: 0.5,
+                PVPChunkEnergyScalar: 0.4,
                 ChargeBasedScaling: [0.5],
                 Notes: 'One entry',
             },
@@ -104,7 +106,9 @@ describe('cooldown ability groups', () => {
                 Hash: 2,
                 Name: 'Shared name',
                 BaseCooldown: 30,
+                PVPBaseCooldown: 40,
                 ChunkEnergyScalar: 0.8,
+                PVPChunkEnergyScalar: 0.6,
                 ChargeBasedScaling: [0.8],
                 Notes: 'Another entry',
             },
@@ -176,7 +180,7 @@ describe('nested semantic changes and reverts', () => {
             tab: 'Sources',
             itemKey: String(movementData.Sources[0]!.Hash),
             field: 'Effects.0.Values',
-            before: [3, 5, 6],
+            before: movementData.Sources[0]!.Effects[0]!.Values,
             after: [4, 6, 7],
         });
         const reverted = updateNestedField(next, 'Sources.0.Effects.0.Values', changes[0]!.before);
@@ -386,7 +390,7 @@ describe('item draft creation', () => {
     });
     it('uses spec constraints for required numeric arrays while leaving identity blank', () => {
         const draft = createItemDraft(movementClassSpec, []);
-        expect(draft.BaseMobilityTier).toBe(1);
+        expect(draft.BaseMobility).toBe(1);
         expect(draft.BaseSprintSpeed).toBe(1);
         expect(draft.ClassHash).toBe('');
         expect(draft.Name).toBe('');

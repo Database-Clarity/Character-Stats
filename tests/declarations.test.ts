@@ -40,7 +40,7 @@ describe('character-stats.d.ts', () => {
         expect(await readFile('character-stats.d.ts', 'utf8')).toBe(generated);
         expect(generated).toContain('export interface CharacterStatInfo');
         expect(generated).toContain('export interface UpdateInfo');
-        expect(generated).toContain('Base cooldown in seconds at a stat value of 0.');
+        expect(generated).toContain('Base cooldown in seconds at a stat value of 0 in PvE');
     });
 
     it('type-checks an export and rejects a mistyped one', async () => {

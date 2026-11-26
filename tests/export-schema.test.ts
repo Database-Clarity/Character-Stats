@@ -46,8 +46,17 @@ describe('exports and generated schema', () => {
         expect(result.Movement).toMatchObject({
             Overview: 'Movement.Overview',
             WalkSpeed: 'Movement.WalkSpeed',
-            Rules: { WalkSpeed: [5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4, 6.6, 6.8, 7, 7.2, 7.4, 7.6] },
+            Rules: {
+                MaxMobility: 130,
+            },
         });
+        const exportedWalk = (result.Movement as { Rules: { WalkSpeed: number[] } }).Rules
+            .WalkSpeed;
+        expect(exportedWalk).toHaveLength(131);
+        expect(exportedWalk[0]).toBe(5.6);
+        expect(exportedWalk[30]).toBe(5.6);
+        expect(exportedWalk[100]).toBe(7);
+        expect(exportedWalk[130]).toBe(7.6);
         expect(JSON.stringify(result)).not.toContain('JumpHeight');
         expect(validateExport(result, generateSchema())).toEqual([]);
     });
@@ -80,12 +89,7 @@ describe('exports and generated schema', () => {
         ]) {
             expect(fields.find((field) => field.key === key)?.label).toContain('%');
         }
-        for (const key of [
-            'CooldownScalars',
-            'EnergyGainScalar',
-            'PVPEnergyGainScalar',
-            'ActiveRegenScalars',
-        ]) {
+        for (const key of ['CooldownScalars', 'EnergyGainScalar', 'PVPEnergyGainScalar']) {
             expect(fields.find((field) => field.key === key)?.label?.toLowerCase()).toContain(
                 'scalar',
             );

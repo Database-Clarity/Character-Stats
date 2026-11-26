@@ -57,24 +57,26 @@ export function fixture(): SourceSet {
         movement: {
             Rules: {
                 WalkSpeed: {
-                    Domain: [0, 13],
-                    Segments: [{ Type: 'Expression', From: 0, To: 13, Expression: '5 + 0.2*x' }],
+                    Domain: [0, 130],
+                    Segments: [
+                        { Type: 'Constant', From: 0, To: 29, Value: 5.6 },
+                        { Type: 'Expression', From: 30, To: 130, Expression: '5 + 0.02*x' },
+                    ],
                 },
-                JumpHeight: { Values: Array(14).fill(0) },
+                JumpHeight: { Values: Array(131).fill(0) },
                 StrafeMultiplier: 0.85,
                 CrouchMultiplier: 0.55,
-                ADSMultiplier: 0.75,
                 ForwardSpeedCap: 9,
                 StrafeSpeedCap: 6,
                 CrouchSpeedCap: 4,
-                MaxMobilityTier: 13,
+                MaxMobility: 130,
             },
             Sources: [],
             Classes: [
                 {
                     ClassHash: 3655393761,
                     Name: 'Titan',
-                    BaseMobilityTier: 3,
+                    BaseMobility: 30,
                     BaseSprintSpeed: 8,
                     Notes: 'Do not export',
                 },

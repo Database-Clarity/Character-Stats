@@ -109,7 +109,7 @@ describe('entity validation', () => {
     it('enforces lengthOf and anyOf', () => {
         const override = { Hash: 2, Name: 'O', Requirements: [0, -123, 1] };
         expect(validateEntity(overrideSpec, override)[0]?.message).toBe(
-            'Set Cooldown override, Cooldown scalar or Chunk energy scalar',
+            'Set Cooldown override, PvP cooldown override, Cooldown scalar, PvP cooldown scalar, Chunk energy scalar or PvP chunk energy scalar',
         );
         expect(
             validateEntity(overrideSpec, { ...override, Scalar: [1] }).some((e) =>

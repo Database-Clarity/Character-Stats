@@ -29,33 +29,33 @@ export const weaponsSpec: StatSpec = {
         }),
 
         curve('NonBossDamageIncrease', {
-            help: 'Extra weapon damage against Minor and Elite combatants (below Miniboss and Boss), in %, at each Weapons stat value (0–100). Stat values above 100 use the value at 100.',
+            help: 'Extra weapon damage against Minor and Elite combatants (below Miniboss, Champion, and Boss), in %, at each Weapons stat value (0–100). Stat values above 100 use the value at 100.',
             domain: [0, 100],
             items: { min: 0 },
             label: 'Minor/Elite PvE damage increase (%)',
             description:
                 'Values represent how much increased damage your weapons deal against ' +
-                'Minor and Elite combatants (excluding Minibosses and Bosses).',
+                'Minor and Elite combatants (excluding Minibosses, Champions, and Bosses).',
         }),
 
         curve('SpecialDamageIncrease', {
-            help: 'Extra damage Primary and Special weapons deal to Minibosses and Bosses, in %, for an enhanced Weapons stat (100–200). Stat 100 means no enhancement.',
+            help: 'Extra damage Primary and Special weapons deal to Minibosses, Champions, and Bosses, in %, for an enhanced Weapons stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
-            label: 'Primary/Special weapon vs. Miniboss/Boss damage increase (%)',
+            label: 'Primary/Special weapon vs. Miniboss/Champion/Boss damage increase (%)',
             description:
                 'Values represent how much increased damage Primary and Special weapons deal against ' +
-                'Minibosses and Bosses when the Weapons stat is enhanced.',
+                'Minibosses, Champions, and Bosses when the Weapons stat is enhanced.',
         }),
 
         curve('PowerDamageIncrease', {
-            help: 'Extra damage Power weapons deal to Minibosses and Bosses, in %, for an enhanced Weapons stat (100–200). Stat 100 means no enhancement.',
+            help: 'Extra damage Power weapons deal to Minibosses, Champions, and Bosses, in %, for an enhanced Weapons stat (100–200). Stat 100 means no enhancement.',
             domain: ENHANCED_STAT_DOMAIN,
             items: { min: 0 },
-            label: 'Power weapon vs. Miniboss/Boss damage increase (%)',
+            label: 'Power weapon vs. Miniboss/Champion/Boss damage increase (%)',
             description:
                 'Values represent how much increased damage Power weapons deal against ' +
-                'Minibosses and Bosses when the Weapons stat is enhanced.',
+                'Minibosses, Champions, and Bosses when the Weapons stat is enhanced.',
         }),
 
         curve('PVPDamageIncrease', {

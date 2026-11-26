@@ -11,9 +11,11 @@ import {
     abilitySpec,
     superAbilitySpec,
     overrideSpec,
+    superOverrideSpec,
     type Ability,
     type SuperAbility,
     type Override,
+    type SuperOverride,
 } from '../../core';
 
 export function isPreviewAbility(
@@ -27,10 +29,14 @@ export function isPreviewAbility(
     );
 }
 
-export function isPreviewOverride(value: unknown): value is Record<string, unknown> & Override {
+export function isPreviewOverride(
+    value: unknown,
+): value is Record<string, unknown> & (Override | SuperOverride) {
     return (
         isRecord(value) &&
-        validateEntity(overrideSpec, value).every((issue) => issue.severity !== 'error')
+        [overrideSpec, superOverrideSpec].some((spec) =>
+            validateEntity(spec, value).every((issue) => issue.severity !== 'error'),
+        )
     );
 }
 

@@ -389,7 +389,7 @@ export function FieldInput({
                                 value={value}
                                 onChange={onChange}
                                 integerValues={
-                                    siblings.Type === 'MobilityTiers' &&
+                                    siblings.Type === 'Mobility' &&
                                     (spec.key === 'Values' || spec.key === 'BoostedValues')
                                 }
                                 stackCounts={
